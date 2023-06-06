@@ -19,7 +19,7 @@ const DefaultLayout = () => {
     const host = urlParams.get('host');
     const shop = urlParams.get('shop');
 
-    const appKey = "6c6bdd5180d0848b68f89d106476f116"
+    const appKey = "65909e95fac4682299cfdae29dcd6a1a"
     const config = {
         apiKey: appKey,
         host,

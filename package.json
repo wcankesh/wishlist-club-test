@@ -1,7 +1,7 @@
 {
   "name": "wishlist_new",
   "version": "0.1.0",
-  "homepage": "https://wishlist.thimatic-apps.com/admin",
+  "homepage": "https://rivyo.com/wishlist/admin/",
   "private": true,
   "dependencies": {
     "@shopify/app-bridge": "^3.7.7",

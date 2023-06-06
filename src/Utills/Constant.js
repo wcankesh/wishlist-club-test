@@ -2,7 +2,7 @@ import { ApiService } from "./ApiService"
 
 
 
-export const baseUrl = "/admin"
+export const baseUrl = "/wishlist/admin"
 
 export const apiService = new ApiService();
 
