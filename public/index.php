@@ -1,0 +1,1 @@
+<?php header("Content-Security-Policy: frame-ancestors https://" . $_REQUEST['shop'] . " https://admin.shopify.com;"); ?>
