@@ -1,0 +1,1 @@
+export const SHOP_DETAILS = "SHOP_DETAILS"

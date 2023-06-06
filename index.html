@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <!-- Ensures that the UI is properly scaled in the Shopify Mobile app -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script type="module">
+      if (!import.meta.env || !import.meta.env.PROD) {
+        // Because the base HTML is rendered in the server side, we need to manually embed the code to enable HMR in our
+        // code, so that the vite server is properly enabled to run HMR
+        const script = document.createElement('script');
+        script.setAttribute('type', "module");
+        script.setAttribute('src', "./dev_embed.js");
+        document.getElementsByTagName('head')[0].append(script);
+      }
+    </script>
+  </head>
+  <body>
+    <div id="app"><!--index.jsx injects App.jsx here--></div>
+    <script type="module" src="/index.jsx"></script>
+    <script type="text/javascript">
+      ! function(e, t, n) {
+        function a() {
+          var e = t.getElementsByTagName("script")[0],
+                  n = t.createElement("script");
+          n.type = "text/javascript", n.async = !0, n.src = "https://beacon-v2.helpscout.net", e.parentNode.insertBefore(n, e)
+        }
+        if (e.Beacon = n = function(t, n, a) {
+          e.Beacon.readyQueue.push({
+            method: t,
+            options: n,
+            data: a
+          })
+        }, n.readyQueue = [], "complete" === t.readyState) return a();
+        e.attachEvent ? e.attachEvent("onload", a) : e.addEventListener("load", a, !1)
+      }(window, document, window.Beacon || function() {});
+    </script>
+    <script type="text/javascript">
+      let urlParams = new URLSearchParams(window.location.search);
+      const shop = urlParams.get('shop');
+      window.Beacon('init', 'fdd01693-6067-46e3-a570-e60a88f4da46')
+      window.Beacon('identify', {
+        "app-name": "Wishlist",
+        "store-url": shop,
+      })
+    </script>
+  </body>
+</html>
