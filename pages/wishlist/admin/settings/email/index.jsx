@@ -46,9 +46,7 @@ export default function Email() {
             checked: emailSetting.is_email_reminder_on_off_restock == 0,
         }
     ]
-    const onBack = () => {
-        navigate(`${baseUrl}/settings`)
-    }
+
     useEffect(() => {
         const EmailSetting = async () => {
             setIsLoading(false);
@@ -98,6 +96,9 @@ export default function Email() {
         saveEmailSetting({[e.target.name]: e.target.value})
     }
 
+    const onBack = () => {
+        navigate(`${baseUrl}/settings`)
+    }
 
     return (
         <Fragment>
@@ -177,8 +178,6 @@ export default function Email() {
 
                                 </LegacyCard>
                             </Layout.AnnotatedSection>
-
-
                         </Layout>
                     </Layout.Section>
                 </Layout>

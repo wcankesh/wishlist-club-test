@@ -13,7 +13,7 @@ import {
 import {useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {apiService, baseUrl} from "../../../../../utils/Constant";
-import {ColorInput,ToastMessage} from "../../../../../components";
+import {ColorInput, ToastMessage} from "../../../../../components";
 
 
 const initialSate = {
@@ -50,7 +50,7 @@ const initialSate = {
     }
 };
 
-export default function PriceDropAlert(){
+export default function PriceDropAlert() {
     const [emailSetting, setEmailSetting] = useState(initialSate);
     const navigate = useNavigate()
     const [isLoading, setIsLoading] = useState(false)
@@ -459,9 +459,6 @@ export default function PriceDropAlert(){
                                                                 height: '70px',
                                                                 textAlign: 'center',
                                                                 paddingTop: '20px',
-                                                                // display: 'flex',
-                                                                // justifyContent: 'center',
-                                                                // alignItems: 'center'
                                                             }}>
                                                             {
                                                                 emailSetting.price_drop_branding_type == "2" ?
@@ -593,7 +590,7 @@ export default function PriceDropAlert(){
                                                     <tr className="social-text-wrapper">
                                                         <td colSpan={3} className="social-text color-text-tertiary"
                                                             style={{
-                                                                display: (emailSetting.price_drop_social.instagram !== null && emailSetting.price_drop_social.instagram.trim() !== "" ) ||
+                                                                display: (emailSetting.price_drop_social.instagram !== null && emailSetting.price_drop_social.instagram.trim() !== "") ||
                                                                 (emailSetting.price_drop_social.facebook !== null && emailSetting.price_drop_social.facebook.trim() !== "") ||
                                                                 (emailSetting.price_drop_social.twitter !== null && emailSetting.price_drop_social.twitter.trim() !== "") ||
                                                                 (emailSetting.price_drop_social.telegram !== null && emailSetting.price_drop_social.telegram.trim() !== "") ||

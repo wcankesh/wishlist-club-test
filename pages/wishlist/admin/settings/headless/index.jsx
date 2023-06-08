@@ -28,7 +28,6 @@ export default function Headless(){
         getHeadless();
     }, []);
 
-
     const getHeadlessToken = async () => {
         setIsLoading(false);
         const response = await apiService.getHeadlessToken();
@@ -41,6 +40,7 @@ export default function Headless(){
             setMessage(response.message)
         }
     }
+
     const updateHeadless = async () => {
         setIsTokenLoading(true)
         let payload = {
@@ -56,7 +56,6 @@ export default function Headless(){
             setMessage(response.message)
         }
     }
-
 
     const defaultPasteSplit = (data) => {
         return data.split(',').map(d => d.trim())

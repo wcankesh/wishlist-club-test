@@ -12,7 +12,6 @@ export function CollectionPage({backInStockDesign, setBackInStockDesign, message
         setBackInStockDesign({
             ...backInStockDesign,
             collection_page_widget: {...backInStockDesign.collection_page_widget, [name]: value},
-
         })
     }
     return (

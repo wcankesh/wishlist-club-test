@@ -30,9 +30,7 @@ export function BisStockAnalytics() {
     const [totalAnalytics, setTotalAnalytics] = useState(1)
     const [filter, setFilter] = useState({search: ""})
     const [open, setOpen] = React.useState(false);
-    const toggle = () => {
-        setOpen(!open)
-    };
+
     useEffect(() => {
         BisAnalytics({selected: selected});
     }, [PageNo, state]);
@@ -67,7 +65,6 @@ export function BisStockAnalytics() {
         }
         setPageNo(pCount)
     }
-
 
     const renderData = () => {
         let bisAnalyticsData = [];
@@ -105,8 +102,8 @@ export function BisStockAnalytics() {
         setSelectedDay('Last 30 days')
         setPageNo(1)
         BisAnalytics({selected: selectedTabIndex, search: ""})
-
     }
+
     const handleChange = (e) => {
         setFilter({
             ...filter,
@@ -140,6 +137,9 @@ export function BisStockAnalytics() {
         },
     ];
 
+    const toggle = () => {
+        setOpen(!open)
+    };
     return (
         <Fragment>
             <Layout.Section>

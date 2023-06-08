@@ -21,7 +21,7 @@ import {
 import moment from "moment";
 import {apiService} from "../../../utils/Constant";
 import {useSelector} from "react-redux";
-import {ToastMessage,NoDataFound} from "../../../components";
+import {ToastMessage, NoDataFound} from "../../../components";
 
 export default function WishlistItems() {
     const limit = 10;
@@ -47,7 +47,6 @@ export default function WishlistItems() {
     const totalPageCountUser = Math.ceil(userPage / limit)
     const totalPageCountEmail = Math.ceil(emailPage / limit)
 
-
     useEffect(() => {
         WishlistAnalytics();
     }, [PageNo, ProductPage])
@@ -55,7 +54,6 @@ export default function WishlistItems() {
     useEffect(() => {
         Email();
     }, [EmailPageNo])
-
 
     const WishlistAnalytics = async () => {
         setIsLoading(true);
@@ -75,6 +73,7 @@ export default function WishlistItems() {
             setIsLoading(false)
         }
     }
+
     const Email = async () => {
         const payload = {
             page_no: EmailPageNo,
@@ -89,12 +88,14 @@ export default function WishlistItems() {
             setIsLoading(false)
         }
     }
+
     const Export = async () => {
         const payload = {
             shop: shopDetails.shop
         }
         const response = await apiService.getExport(payload);
     }
+
     const Import = async () => {
         setIsImportLoading(true)
         const formData = new FormData();
@@ -129,7 +130,6 @@ export default function WishlistItems() {
         [],
     );
 
-
     const fileUpload = !file && <DropZone.FileUpload/>;
     const uploadedFile = file && (
         <LegacyStack alignment={"center"} vertical>
@@ -152,6 +152,7 @@ export default function WishlistItems() {
         }
         setPageNo(pCount)
     }
+
     const onChangePaginationProduct = (value) => {
         let pCount = ProductPage
         if (value === "plus") {
@@ -161,6 +162,7 @@ export default function WishlistItems() {
         }
         setProductPage(pCount)
     }
+
     const onChangePaginationEmail = (value) => {
         let pCount = EmailPageNo
         if (value === "plus") {
@@ -170,6 +172,7 @@ export default function WishlistItems() {
         }
         setEmailPageNo(pCount)
     }
+
     const tabs = [
         {
             id: 'all-customers-1',

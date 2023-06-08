@@ -1,7 +1,6 @@
 
 import {ApiService} from "../hooks"
 
-
 export const baseUrl = "/wishlist/admin"
 
 export const apiService = new ApiService();

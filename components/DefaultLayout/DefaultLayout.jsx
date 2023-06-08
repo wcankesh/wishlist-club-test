@@ -9,12 +9,12 @@ import Routes from "../../Routes";
 
 export function DefaultLayout({pages}) {
     const dispatch = useDispatch()
-    const [isLoading, setIsLoading] = useState(true);
-
     const urlParams = new URLSearchParams(window.location.search);
     const shopDetails = useSelector((state) => state.shopDetails)
     const shop = urlParams.get('shop');
     let navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(true);
+
     useEffect(() => {
         const getInstall = async () => {
             const response = await apiService.Install({shop: shop})
@@ -54,7 +54,6 @@ export function DefaultLayout({pages}) {
     const activator = <Button onClick={handleChange}>Open</Button>;
 
     return (
-
         isLoading ? <div className="main_spinner"><Spinner/></div> :
             <Fragment>
                 {
@@ -83,8 +82,6 @@ export function DefaultLayout({pages}) {
                     </div>
                 </FooterHelp>
             </Fragment>
-
-
     );
 }
 

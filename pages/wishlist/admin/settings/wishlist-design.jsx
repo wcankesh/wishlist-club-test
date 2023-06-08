@@ -1,8 +1,8 @@
 import React, {Fragment, useState, useCallback, useEffect} from 'react';
-import { LegacyTabs, Layout, Page, PageActions} from "@shopify/polaris";
+import {LegacyTabs, Layout, Page, PageActions} from "@shopify/polaris";
 import {useNavigate} from "react-router-dom";
 import {apiService, baseUrl} from "../../../../utils/Constant";
-import {CollectionDesign,ProductDesign} from "../../../../components";
+import {CollectionDesign, ProductDesign} from "../../../../components";
 import {ToastMessage} from "../../../../components";
 
 const initialState = {
@@ -40,7 +40,7 @@ const initialState = {
     product_collection_button_border_color_after: "#ffffff",
     icon: ""
 }
-export default function WishlistDesign (){
+export default function WishlistDesign() {
     const navigate = useNavigate()
     const [selected, setSelected] = useState(0);
     const [wishlistSetting, setWishlistSetting] = useState(initialState)
@@ -52,6 +52,7 @@ export default function WishlistDesign (){
     useEffect(() => {
         getLauncher()
     }, []);
+
     const getLauncher = async () => {
         setIsLoading(false);
         const response = await apiService.getLauncher();
@@ -63,6 +64,7 @@ export default function WishlistDesign (){
 
         }
     }
+
     const updateLauncher = async () => {
         setIsLoading(true)
         let payload = {
@@ -78,6 +80,7 @@ export default function WishlistDesign (){
             setMessage(response.message)
         }
     }
+
     const updateIcon = async () => {
         setIsSVGLoading(true)
         const formData = new FormData();
@@ -131,7 +134,6 @@ export default function WishlistDesign (){
         [],
     );
 
-
     return (
         <Fragment>
             <ToastMessage message={message} setMessage={setMessage}/>
@@ -165,7 +167,6 @@ export default function WishlistDesign (){
                     </Layout>
                     }
                 </LegacyTabs>
-
                 <Layout.Section>
                     <PageActions
                         primaryAction={{
@@ -175,9 +176,7 @@ export default function WishlistDesign (){
                         }}
                     />
                 </Layout.Section>
-
             </Page>
-
         </Fragment>
     );
 };

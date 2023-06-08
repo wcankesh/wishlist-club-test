@@ -43,9 +43,6 @@ const initialState = {
 }
 export default function Language (){
     const navigate = useNavigate()
-    const onBack = () => {
-        navigate(`${baseUrl}/settings`)
-    }
     const [labelData, setLabelData] = useState(initialState)
     const [isLoading, setIsLoading] = useState(false)
     const [message, setMessage] = useState("")
@@ -78,6 +75,7 @@ export default function Language (){
             setMessage(response.message)
         }
     }
+
     const handleChange = (e) => {
         const {name, value} = e.target;
         setLabelData({
@@ -309,6 +307,9 @@ export default function Language (){
         }
     ]
 
+    const onBack = () => {
+        navigate(`${baseUrl}/settings`)
+    }
     return (
         <Fragment>
             <Page title={"Language"} backAction={{content: 'Settings', onAction: onBack}}
@@ -361,7 +362,6 @@ export default function Language (){
                     </Layout.Section>
                 </Layout>
             </Page>
-
         </Fragment>
     );
 };

@@ -40,7 +40,6 @@ export default function Settings() {
             path: "settings/headless"
         },
     ]
-
     return (
         <Fragment>
             <Page title={"Settings"}>
@@ -83,7 +82,6 @@ export default function Settings() {
                 </Layout>
             </Page>
         </Fragment>
-
     );
 };
 

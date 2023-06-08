@@ -54,6 +54,7 @@ export function OnBoarding() {
         }
         getThemes();
     }, [])
+
     const onSubmitMail = async () => {
         setIsLoading(true)
         const themeName = themeList.find((x) => x.value == selectedValue) || {value: ''}
@@ -88,7 +89,9 @@ export function OnBoarding() {
         setSetUpChecked(clone)
     }
     const handleToggle = useCallback(() => setOpen((open) => !open), []);
+
     const handleModalChange = useCallback(() => setActive(!active), [active]);
+
     const handleClose = () => {
         handleModalChange();
     };

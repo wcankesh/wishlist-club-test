@@ -13,7 +13,7 @@ import {
 } from "@shopify/polaris";
 import {apiService, baseUrl} from "../../../../../utils/Constant";
 import {useNavigate} from "react-router-dom";
-import {ColorInput,ToastMessage} from "../../../../../components";
+import {ColorInput, ToastMessage} from "../../../../../components";
 import {useSelector} from "react-redux";
 
 const initialSate = {
@@ -47,7 +47,7 @@ const initialSate = {
         view_product_button_text: ""
     }
 };
-export default function RestockAlert(){
+export default function RestockAlert() {
     const navigate = useNavigate()
     const [emailSetting, setEmailSetting] = useState(initialSate);
     const [isLoading, setIsLoading] = useState(false)
@@ -275,7 +275,8 @@ export default function RestockAlert(){
                                                        }
                                                    })
                                                }}/>
-                                    <TextField label='"Add to cart" label' value={emailSetting.restock_content.add_to_cart_button_text}
+                                    <TextField label='"Add to cart" label'
+                                               value={emailSetting.restock_content.add_to_cart_button_text}
                                                onChange={(value) => {
                                                    restockOnChangeContent({
                                                        target: {
@@ -287,7 +288,8 @@ export default function RestockAlert(){
                                     />
                                 </FormLayout.Group>
                                 <FormLayout.Group condensed>
-                                    <TextField label='"Visit product" label' value={emailSetting.restock_content.view_product_button_text}
+                                    <TextField label='"Visit product" label'
+                                               value={emailSetting.restock_content.view_product_button_text}
                                                onChange={(value) => {
                                                    restockOnChangeContent({
                                                        target: {
@@ -448,9 +450,6 @@ export default function RestockAlert(){
                                                                 height: '70px',
                                                                 textAlign: 'center',
                                                                 paddingTop: '20px',
-                                                                // display: 'flex',
-                                                                // justifyContent: 'center',
-                                                                // alignItems: 'center'
                                                             }}>
                                                             {
                                                                 emailSetting.restock_branding_type == "2" ?

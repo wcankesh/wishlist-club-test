@@ -13,7 +13,7 @@ import {
 import {useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {apiService, baseUrl} from "../../../../../utils/Constant";
-import {ColorInput,ToastMessage} from "../../../../../components";
+import {ColorInput, ToastMessage} from "../../../../../components";
 
 const initialSate = {
     subject: "Wishlist1 Club Products!!!",
@@ -26,7 +26,6 @@ const initialSate = {
     wishlist_branding_type: 1,
     wishlist_logo: "",
     stock_down_show_footer: 0,
-
 
     wishlist_style: {
         primary_color: "#020bf7",
@@ -52,14 +51,13 @@ const initialSate = {
 
 };
 
-export default function WishlistEmail (){
+export default function WishlistEmail() {
     const navigate = useNavigate()
     const [emailSetting, setEmailSetting] = useState(initialSate);
     const [isLoading, setIsLoading] = useState(false)
     const [message, setMessage] = useState("")
     const [selectedWlLogo, setSelectedWlLogo] = useState("");
     const shopDetails = useSelector((state) => state.shopDetails);
-
 
     const options = [
         {label: '1 Day', value: '1'},
@@ -84,9 +82,6 @@ export default function WishlistEmail (){
         {label: "Tahoma", value: "Tahoma"},
     ]
 
-    const onBack = () => {
-        navigate(`${baseUrl}/settings/email`)
-    }
     useEffect(() => {
         const EmailSetting = async () => {
             setIsLoading(false);
@@ -101,6 +96,7 @@ export default function WishlistEmail (){
         }
         EmailSetting()
     }, []);
+
     const saveEmailSetting = async () => {
         setIsLoading(true);
         if (emailSetting.wishlist_branding_type == "1") {
@@ -196,6 +192,9 @@ export default function WishlistEmail (){
         setSelectedWlLogo(acceptedFiles[0])
     }
 
+    const onBack = () => {
+        navigate(`${baseUrl}/settings/email`)
+    }
     return (
         <Fragment>
             <Page title={"Wishlist Items"} backAction={{content: 'Settings', onAction: onBack}}
@@ -229,7 +228,6 @@ export default function WishlistEmail (){
                                             }
                                         })}
                                     />
-
                                     <RadioButton
                                         label={"Both"}
                                         id="both"
@@ -321,7 +319,6 @@ export default function WishlistEmail (){
                                     <div></div>
                                 </FormLayout.Group>
                                 <Divider/>
-
 
                                 <TextField label="Email subject" value={emailSetting.subject}
                                            helpText="Add this {{shop_name}} variable"
@@ -482,9 +479,6 @@ export default function WishlistEmail (){
                                                             height: '70px',
                                                             textAlign: 'center',
                                                             paddingTop: '20px',
-                                                            // display: 'flex',
-                                                            // justifyContent: 'center',
-                                                            // alignItems: 'center'
                                                         }}>
                                                             {
                                                                 emailSetting.wishlist_branding_type == "2" ?
@@ -528,7 +522,6 @@ export default function WishlistEmail (){
                                                             {emailSetting.email_body}
                                                         </td>
                                                     </tr>
-
                                                     <tr>
                                                         <table>
                                                             <tr>
@@ -697,8 +690,6 @@ export default function WishlistEmail (){
                                                             </tr>
                                                         </table>
                                                     </tr>
-
-
                                                     <tr className="social-text-wrapper">
                                                         <td colSpan={3} className="social-text color-text-tertiary"
                                                             style={{

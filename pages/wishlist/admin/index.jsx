@@ -3,7 +3,6 @@ import {Layout, Page, ProgressBar, Text, LegacyStack, Banner} from "@shopify/pol
 import {TopProducts, HelpDesk, OnBoarding} from "../../../components";
 import {useSelector} from "react-redux";
 
-
 export default function HomePage() {
     let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     let dayName = days[new Date().getDay()];
@@ -27,7 +26,6 @@ export default function HomePage() {
             <Page
                 title={`Good ${hours < 12 ? "Morning" : hours >= 12 && hours <= 17 ? "Afternoon" : hours >= 17 && hours <= 24 ? "Evening" : ""} , ${shopDetails.store_name}`}
                 subtitle={`Happy ${dayName} from the WebContrive team`}>
-
                 <Layout>
                     {
                         shopDetails.notification.length > 0 ?

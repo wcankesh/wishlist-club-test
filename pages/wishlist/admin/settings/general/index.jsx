@@ -94,7 +94,6 @@ export default function General () {
                                                       onChange={handleChange} name="app_enable"
                                         />
                                     </LegacyStack.Item>
-
                                     <LegacyStack.Item fill>
                                         <LegacyStack spacing='extraTight' vertical>
                                             <Text fontWeight='semibold'>App enable</Text>
@@ -168,13 +167,11 @@ export default function General () {
                                     </LegacyStack.Item>
                                 </LegacyStack>
                             </Grid.Cell>
-
                         </Grid>
                     </LegacyCard>
                 </LegacyStack.Item>
             </Page>
         </Fragment>
-    )
-        ;
+    );
 };
 

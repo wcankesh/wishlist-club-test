@@ -1,4 +1,3 @@
-
 const intialState = {
     currency: "INR",
     email_count: "",
@@ -27,7 +26,6 @@ export const StoreReducer = (state = intialState, action) => {
                 ...state,
                 ...action.payload
             }
-
         default:
             return state;
     }

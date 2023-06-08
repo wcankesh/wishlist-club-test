@@ -33,7 +33,6 @@ export function CountAnalytics () {
                 setIsLoading(false)
             } else {
                 setIsLoading(false)
-
             }
         }
         getAnalytics();
@@ -137,7 +136,6 @@ export function CountAnalytics () {
                         }
                     </LegacyStack.Item>
                 </LegacyStack>
-
             </Layout.Section>
         </Fragment>
     );

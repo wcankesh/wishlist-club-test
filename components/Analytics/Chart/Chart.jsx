@@ -48,7 +48,6 @@ export function Chart() {
             setWishlistAddDateWise(wishlistAddDate);
             setWishlistPageViewDateWise(wishlistPageViewDate);
         } else {
-
         }
     }
 
@@ -57,6 +56,7 @@ export function Chart() {
         setSelectedDay(range.label ? range.label : "Custom Range")
         setOpen(!open)
     };
+
     const options = {
         chart: {
             borderWidth: 0,
@@ -101,7 +101,7 @@ export function Chart() {
         }
 
     };
-    const orientation = window.matchMedia("(max-width: 700px)").matches ? 'vertical' : 'horizontal'
+
     return (
         <Fragment>
             <Layout.Section>

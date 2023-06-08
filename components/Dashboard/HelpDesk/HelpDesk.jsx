@@ -1,7 +1,7 @@
 import React, {Fragment} from 'react';
 import {Grid, LegacyCard, Button, Text} from "@shopify/polaris";
 
-export function HelpDesk () {
+export function HelpDesk() {
     const brandingList = [
         {
             icon: <svg viewBox="0 0 496 496" className="Polaris-CalloutCard__Image mx-auto text-center"
