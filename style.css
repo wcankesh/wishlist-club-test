@@ -162,12 +162,8 @@
 }
 
 .branding-icon svg {
-    /*margin-bottom: 20px;*/
-    /*margin-top: 10px;*/
     width: 70px;
     text-align: center !important;
-    /*margin-left: auto;*/
-    /*margin-right: auto;*/
     margin: 10px auto 20px;
 }
 
@@ -396,7 +392,6 @@ ul.boringListNav li.is-active-nav:before {
     width: calc(100% + 44px);
 }
 
-
 .switch-button {
     align-items: center;
     display: flex;
@@ -404,13 +399,11 @@ ul.boringListNav li.is-active-nav:before {
 }
 
 .switch-button input.switch-btn-input {
-    /*display: none;*/
     margin: 0;
     width: 0;
     height: 0;
     opacity: 0;
     visibility: hidden;
-
 }
 
 .switch-button :checked + .witch-button-label {
@@ -521,10 +514,8 @@ ul.PlanPriceList li.ppl_item .pplContent .icons {
 }
 
 .react-tagsinput .react-tagsinput-tag {
-    /*background-color: #8080803b;*/
     border: 1px solid #8080803b;
     background-color: green;
-    /*color: rgba(0, 0, 0, 0.85);*/
     color: #ffffff;
     margin-bottom: 3px;
     padding: 1px 5px;
@@ -563,13 +554,11 @@ ul.PlanPriceList li.ppl_item .pplContent .icons {
     position: relative;
 }
 
-
 .datepicker [class*="materialui-daterange-picker-makeStyles-header-"] {
     padding: 10px 25px;
 }
 
 @media (max-width: 575px) {
-
     .materialui-daterange-picker-makeStyles-dateRangePicker-2.datepicker {
         position: static;
     }
@@ -584,7 +573,6 @@ ul.PlanPriceList li.ppl_item .pplContent .icons {
         max-width: 100%;
     }
 }
-
 
 @media (max-width: 1024px) {
     .materialui-daterange-picker-MuiGrid-root-35.materialui-daterange-picker-MuiGrid-container-36.materialui-daterange-picker-MuiGrid-wrap-xs-nowrap-42 {
@@ -606,6 +594,7 @@ ul.PlanPriceList li.ppl_item .pplContent .icons {
         min-width: 105px;
         order: 1;
     }
+
     .datepicker [class*="materialui-daterange-picker-makeStyles-header-"] {
         max-width: 290px;
         margin: auto;
@@ -616,9 +605,11 @@ ul.PlanPriceList li.ppl_item .pplContent .icons {
     .datepicker [class*="materialui-daterange-picker-MuiGrid-justify-content-xs-center-"] {
         justify-content: flex-start;
     }
+
     .datepicker [class*="materialui-daterange-picker-makeStyles-header-"] {
         margin: unset;
     }
+
     .datepicker [class*="materialui-daterange-picker-MuiDivider-root-"] {
         max-width: 290px;
     }
