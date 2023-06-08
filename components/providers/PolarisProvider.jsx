@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import React,{ useCallback } from "react";
 import { AppProvider } from "@shopify/polaris";
 import { useNavigate } from "@shopify/app-bridge-react";
 import "@shopify/polaris/build/esm/styles.css";

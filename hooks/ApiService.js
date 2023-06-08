@@ -153,7 +153,9 @@ export class ApiService {
     }
 
     async getExport(payload) {
-        return window.open(`${apiBaseUrl}/api/export?shop=${payload.shop}`, "_blank");
+        let url = `${apiBaseUrl}/api/export?shop=${payload.shop}`
+        console.log("url",url)
+        return window.open(url, "_blank");
     }
 
     async Import(payload, isFormData) {

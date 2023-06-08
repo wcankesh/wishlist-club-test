@@ -3,7 +3,6 @@ import {Icons} from '../utils/Icons'
 import {ToastMessage} from "./ToastMessage";
 import {LegacyStack} from "@shopify/polaris";
 
-
 export function CopyCode  ({value,label})  {
 
     const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';

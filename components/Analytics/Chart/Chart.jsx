@@ -1,20 +1,22 @@
 import React, {Fragment, useEffect, useState} from 'react';
-
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import {Layout, Button, LegacyStack, LegacyCard} from "@shopify/polaris"
-import moment from "moment";
-// import DateRangePicker from "react-bootstrap-daterangepicker";
-// import "bootstrap-daterangepicker/daterangepicker.css";
 import {apiService} from "../../../utils/Constant";
+import moment from "moment";
+import {DateRangePicker} from "materialui-daterange-picker";
 
 
-
-export function Chart () {
-    const [selectedDay, setSelectedDay] = useState('Last 30 days');
-    const [state, setState] = useState({startDate: moment().subtract(29, 'days'), endDate: moment(),});
+export function Chart() {
+    const [selectedDay, setSelectedDay] = useState("Last 30 Days");
+    const [state, setState] = useState({startDate: moment().subtract(29, 'days'), endDate: moment()});
     const [wishlistAddDateWise, setWishlistAddDateWise] = useState([]);
     const [wishlistPageViewDateWise, setWishlistPageViewDateWise] = useState([]);
+    const [open, setOpen] = React.useState(false);
+
+    const toggle = () => {
+        setOpen(!open)
+    };
 
     useEffect(() => {
         Analytics();
@@ -50,9 +52,10 @@ export function Chart () {
         }
     }
 
-    const handleCallback = (start, end, label) => {
-        setState({startDate: start, endDate: end})
-        setSelectedDay(label)
+    const handleCallback = (range) => {
+        setState({startDate: range.startDate, endDate: range.endDate})
+        setSelectedDay(range.label ? range.label : "Custom Range")
+        setOpen(!open)
     };
     const options = {
         chart: {
@@ -98,6 +101,7 @@ export function Chart () {
         }
 
     };
+    const orientation = window.matchMedia("(max-width: 700px)").matches ? 'vertical' : 'horizontal'
     return (
         <Fragment>
             <Layout.Section>
@@ -106,43 +110,16 @@ export function Chart () {
                         <LegacyStack.Item fill>
                         </LegacyStack.Item>
                         <LegacyStack.Item>
-                            {/*<DateRangePicker*/}
-                            {/*    autoApply={true}*/}
-                            {/*    initialSettings={{*/}
-                            {/*        startDate: state.startDate,*/}
-                            {/*        endDate: state.endDate,*/}
-                            {/*        maxDate: new Date(),*/}
-                            {/*        ranges: {*/}
-                            {/*            Today: [moment().toDate(), moment().toDate()],*/}
-                            {/*            Yesterday: [*/}
-                            {/*                moment().subtract(1, 'days').toDate(),*/}
-                            {/*                moment().subtract(1, 'days').toDate(),*/}
-                            {/*            ],*/}
-                            {/*            'Last 7 Days': [*/}
-                            {/*                moment().subtract(6, 'days').toDate(),*/}
-                            {/*                moment().toDate(),*/}
-                            {/*            ],*/}
-                            {/*            'Last 30 Days': [*/}
-                            {/*                moment().subtract(29, 'days').toDate(),*/}
-                            {/*                moment().toDate(),*/}
-                            {/*            ],*/}
-                            {/*            'This Month': [*/}
-                            {/*                moment().startOf('month').toDate(),*/}
-                            {/*                moment().endOf('month').toDate(),*/}
-                            {/*            ],*/}
-                            {/*            'Last Month': [*/}
-                            {/*                moment().subtract(1, 'month').startOf('month').toDate(),*/}
-                            {/*                moment().subtract(1, 'month').endOf('month').toDate(),*/}
-                            {/*            ],*/}
-                            {/*        },*/}
-                            {/*    }}*/}
-                            {/*    onCallback={handleCallback}*/}
-                            {/*>*/}
-                            {/*    <div>*/}
-                            {/*        <Button primary>{selectedDay}</Button>*/}
-                            {/*    </div>*/}
-
-                            {/*</DateRangePicker>*/}
+                            <Button primary onClick={toggle}>{selectedDay}</Button>
+                            <div className="datepicker-contain">
+                                <DateRangePicker
+                                    open={open}
+                                    toggle={toggle}
+                                    onChange={handleCallback}
+                                    wrapperClassName={"datepicker"}
+                                    maxDate={new Date()}
+                                />
+                            </div>
                         </LegacyStack.Item>
                     </LegacyStack>
                     <HighchartsReact

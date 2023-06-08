@@ -6,7 +6,11 @@
     align-items: center;
     justify-content: center;
 }
-.remove-close-icon-modal .Polaris-Modal-CloseButton{display: none}
+
+.remove-close-icon-modal .Polaris-Modal-CloseButton {
+    display: none
+}
+
 .rows {
     display: flex;
     margin-right: -15px;
@@ -80,15 +84,6 @@
     align-items: center;
 }
 
-/*.btn-collection {*/
-/*    padding: 10px;*/
-/*    position: absolute;*/
-/*    top: 0;*/
-/*    !*width: 100%;*!*/
-/*    display: flex;*/
-/*    !*justify-content: center;*!*/
-
-/*}*/
 .btn-collection {
     padding: 10px;
     position: absolute;
@@ -553,8 +548,32 @@ ul.PlanPriceList li.ppl_item .pplContent .icons {
     max-width: 20%;
 }
 
+.materialui-daterange-picker-makeStyles-dateRangePicker-2.datepicker {
+    position: absolute;
+    z-index: 9999;
+    right: 0;
+}
+
+.materialui-daterange-picker-makeStyles-dateRangePicker-2.datepicker
+.materialui-daterange-picker-MuiTypography-displayBlock-167 {
+    white-space: nowrap;
+}
+
+.datepicker-contain {
+    position: relative;
+}
+
+
+.datepicker [class*="materialui-daterange-picker-makeStyles-header-"] {
+    padding: 10px 25px;
+}
 
 @media (max-width: 575px) {
+
+    .materialui-daterange-picker-makeStyles-dateRangePicker-2.datepicker {
+        position: static;
+    }
+
     .col-lg-3 {
         flex: 0 0 100%;
         max-width: 100%;
@@ -565,6 +584,46 @@ ul.PlanPriceList li.ppl_item .pplContent .icons {
         max-width: 100%;
     }
 }
+
+
+@media (max-width: 1024px) {
+    .materialui-daterange-picker-MuiGrid-root-35.materialui-daterange-picker-MuiGrid-container-36.materialui-daterange-picker-MuiGrid-wrap-xs-nowrap-42 {
+        flex-wrap: wrap;
+    }
+
+    .materialui-daterange-picker-makeStyles-dateRangePicker-2.datepicker {
+        position: relative;
+        z-index: 9999;
+        right: 0;
+    }
+
+    .datepicker > div > div > :first-child {
+        min-width: 400px;
+        order: 2;
+    }
+
+    .datepicker > div > div > :last-child {
+        min-width: 105px;
+        order: 1;
+    }
+    .datepicker [class*="materialui-daterange-picker-makeStyles-header-"] {
+        max-width: 290px;
+        margin: auto;
+    }
+}
+
+@media (max-width: 669px) {
+    .datepicker [class*="materialui-daterange-picker-MuiGrid-justify-content-xs-center-"] {
+        justify-content: flex-start;
+    }
+    .datepicker [class*="materialui-daterange-picker-makeStyles-header-"] {
+        margin: unset;
+    }
+    .datepicker [class*="materialui-daterange-picker-MuiDivider-root-"] {
+        max-width: 290px;
+    }
+}
+
 
 
 

@@ -33,7 +33,6 @@ export function OnBoarding() {
     const [message, setMessage] = useState("")
     const shopDetails = useSelector((state) => state.shopDetails)
 
-    console.log("selectedValue",selectedValue)
     useEffect(() => {
         const getThemes = async () => {
             setIsLoading(true)

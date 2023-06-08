@@ -12,15 +12,11 @@ import {
     SkeletonBodyText,
     Thumbnail,
     Badge,
-    IndexTable
 } from '@shopify/polaris';
-
 import {apiService} from "../../../utils/Constant";
 import moment from "moment";
 import {NoDataFound} from "../../NoDataFound";
-// import DateRangePicker from "react-bootstrap-daterangepicker";
-//import "bootstrap/dist/css/bootstrap.css";
-// import "bootstrap-daterangepicker/daterangepicker.css";
+import {DateRangePicker} from "materialui-daterange-picker";
 
 
 export function BisStockAnalytics() {
@@ -33,7 +29,10 @@ export function BisStockAnalytics() {
     const [PageNo, setPageNo] = useState(1)
     const [totalAnalytics, setTotalAnalytics] = useState(1)
     const [filter, setFilter] = useState({search: ""})
-
+    const [open, setOpen] = React.useState(false);
+    const toggle = () => {
+        setOpen(!open)
+    };
     useEffect(() => {
         BisAnalytics({selected: selected});
     }, [PageNo, state]);
@@ -114,12 +113,12 @@ export function BisStockAnalytics() {
             [e.target.name]: e.target.value
         })
         BisAnalytics({selected: selected, search: e.target.value})
-
     }
 
-    const handleCallback = (start, end, label) => {
-        setState({startDate: start, endDate: end})
-        setSelectedDay(label)
+    const handleCallback = (range) => {
+        setState({startDate: range.startDate, endDate: range.endDate})
+        setSelectedDay(range.label ? range.label : "Custom Range")
+        setOpen(!open)
     };
 
     const tabs = [
@@ -161,44 +160,18 @@ export function BisStockAnalytics() {
                                            }}
                                 />
                             </LegacyStack.Item>
-                            {/*<LegacyStack.Item>*/}
-                            {/*    <DateRangePicker*/}
-                            {/*        autoApply={true}*/}
-                            {/*        initialSettings={{*/}
-                            {/*            startDate: state.startDate,*/}
-                            {/*            endDate: state.endDate,*/}
-                            {/*            maxDate: new Date(),*/}
-                            {/*            ranges: {*/}
-                            {/*                Today: [moment().toDate(), moment().toDate()],*/}
-                            {/*                Yesterday: [*/}
-                            {/*                    moment().subtract(1, 'days').toDate(),*/}
-                            {/*                    moment().subtract(1, 'days').toDate(),*/}
-                            {/*                ],*/}
-                            {/*                'Last 7 Days': [*/}
-                            {/*                    moment().subtract(6, 'days').toDate(),*/}
-                            {/*                    moment().toDate(),*/}
-                            {/*                ],*/}
-                            {/*                'Last 30 Days': [*/}
-                            {/*                    moment().subtract(29, 'days').toDate(),*/}
-                            {/*                    moment().toDate(),*/}
-                            {/*                ],*/}
-                            {/*                'This Month': [*/}
-                            {/*                    moment().startOf('month').toDate(),*/}
-                            {/*                    moment().endOf('month').toDate(),*/}
-                            {/*                ],*/}
-                            {/*                'Last Month': [*/}
-                            {/*                    moment().subtract(1, 'month').startOf('month').toDate(),*/}
-                            {/*                    moment().subtract(1, 'month').endOf('month').toDate(),*/}
-                            {/*                ],*/}
-                            {/*            },*/}
-                            {/*        }}*/}
-                            {/*        onCallback={handleCallback}*/}
-                            {/*    >*/}
-                            {/*        <div>*/}
-                            {/*            <Button primary>{selectedDay}</Button>*/}
-                            {/*        </div>*/}
-                            {/*    </DateRangePicker>*/}
-                            {/*</LegacyStack.Item>*/}
+                            <LegacyStack.Item>
+                                <Button primary onClick={toggle}>{selectedDay}</Button>
+                                <div className="datepicker-contain">
+                                    <DateRangePicker
+                                        open={open}
+                                        toggle={toggle}
+                                        onChange={handleCallback}
+                                        wrapperClassName={"datepicker"}
+                                        maxDate={new Date()}
+                                    />
+                                </div>
+                            </LegacyStack.Item>
                         </LegacyStack>
                     </LegacyCard.Section>
                     <DataTable
@@ -225,7 +198,6 @@ export function BisStockAnalytics() {
                                 onNext={() => onChangePagination('plus')}
                             />}
                     />
-
                 </LegacyCard>
             </Layout.Section>
 
