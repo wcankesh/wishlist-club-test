@@ -125,7 +125,6 @@ export default function StockNotification() {
                 }
             }
         })
-        // const payload = JSON.stringify(newBackInStockEmail)
         formData.append("payload", JSON.stringify(newBackInStockEmail))
 
         const response = await apiService.updateBisSetting(formData)

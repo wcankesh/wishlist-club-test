@@ -1,5 +1,5 @@
 import React, {Fragment, useState, useCallback, useEffect} from 'react';
-import {LegacyStack, LegacyTabs, Layout, Page, PageActions} from "@shopify/polaris";
+import { LegacyTabs, Layout, Page, PageActions} from "@shopify/polaris";
 import {useNavigate} from "react-router-dom";
 import {apiService, baseUrl} from "../../../../utils/Constant";
 import {CollectionDesign,ProductDesign} from "../../../../components";

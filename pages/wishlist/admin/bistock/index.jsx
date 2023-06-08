@@ -1,6 +1,6 @@
 import React, {Fragment} from 'react';
 import {LegacyCard, Text, LegacyStack, Page, Layout, Grid, Icon} from "@shopify/polaris";
-import {LanguageMinor, NotificationMajor, PageMajor, SettingsMajor, EmailMajor} from "@shopify/polaris-icons";
+import { NotificationMajor, PageMajor} from "@shopify/polaris-icons";
 import {useNavigate} from "react-router-dom";
 import {baseUrl} from "../../../../utils/Constant";
 

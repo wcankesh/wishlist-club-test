@@ -97,11 +97,8 @@ export default function Headless(){
                                             value={headLess.domain || []}
                                             onChange={(value) => onChange({target: {name: "domain", value}})}
                                             pasteSplit={defaultPasteSplit}
-                                            // validationRegex={domainRegex}
                                             addOnPaste={true}
                                             onlyUnique={true}
-                                            // addKeys={[9, 13, 188]}
-                                            // disabled={shopDetails && shopDetails.client_plan !== 3}
                                             inputProps={{placeholder: 'Enter domain'}}/> vertical spacing={"tight"}
                                     </LegacyStack>
                                     <CopyCode label={"Access Token"} value={headLess.token}/>
