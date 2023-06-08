@@ -3,6 +3,7 @@ node_modules
 
 # Ignore Apple macOS Desktop Services Store
 .DS_Store
+.env
 
 # Logs
 logs
