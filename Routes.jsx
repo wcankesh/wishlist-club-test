@@ -6,7 +6,7 @@ import { Routes as ReactRouterRoutes, Route } from "react-router-dom";
  * To create a new route create a new .jsx file in `/pages` with a default export.
  *
  * Some examples:
- * * `/pages/index.jsx` matches `/`
+ * * `/pages/plan.jsx` matches `/`
  * * `/pages/blog/[id].jsx` matches `/blog/123`
  * * `/pages/[...catchAll].jsx` matches any URL not explicitly matched
  *
