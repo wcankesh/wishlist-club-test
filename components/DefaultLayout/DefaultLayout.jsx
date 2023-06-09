@@ -16,24 +16,13 @@ export function DefaultLayout({pages}) {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const getInstall = async () => {
-            const response = await apiService.Install({shop: shop})
-            if (response.status === 200) {
-                dispatch(Shop_details({...response.data, notification: response.notification}))
-                if (response.data.is_app_embedded === "0") {
-                    document.querySelector("body").classList.add("remove-close-icon-modal")
-                }
-                if (response.data.plan_type == "0" && response.data.is_older_shop == "0") {
-                    navigate(`${baseUrl}/plan`);
-                }
-                setIsLoading(false)
-            } else if (response.status === 201 && response.data.is_install === false) {
-                window.top.location.href = response.data.install_url;
-            } else {
-                setIsLoading(false);
-            }
-        };
-        getInstall();
+        debugger
+        if (shopDetails.is_app_embedded === "0") {
+            document.querySelector("body").classList.add("remove-close-icon-modal")
+        }
+        if (shopDetails.plan_type == "0" && shopDetails.is_older_shop == "0") {
+            navigate(`${baseUrl}/plan`);
+        }
     }, [])
 
     const onAppEmbedded = async () => {
@@ -54,7 +43,6 @@ export function DefaultLayout({pages}) {
     const activator = <Button onClick={handleChange}>Open</Button>;
 
     return (
-        isLoading ? <div className="main_spinner"><Spinner/></div> :
             <Fragment>
                 {
                     shopDetails && shopDetails.is_app_embedded === "0" &&
