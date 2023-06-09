@@ -1,9 +1,9 @@
 import React, {Fragment, useState, useCallback, useEffect} from 'react';
 import {Tabs, Layout, Page, PageActions} from "@shopify/polaris";
 import {useNavigate} from "react-router-dom";
-import {apiService, baseUrl} from "../../../utils/Constant";
-import {CollectionDesign, ProductDesign} from "../../../components";
-import {ToastMessage} from "../../../components";
+import {apiService, baseUrl} from "../../../../utils/Constant";
+import {CollectionDesign, ProductDesign} from "../../../../components";
+import {ToastMessage} from "../../../../components";
 
 const initialState = {
     button_type: "3",

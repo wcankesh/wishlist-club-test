@@ -1,55 +1,37 @@
 import React, {Fragment} from 'react';
 import {LegacyCard, Text, LegacyStack, Page, Layout, Grid, Icon} from "@shopify/polaris";
-import {LanguageMinor, DomainNewMajor, PageMajor, SettingsMajor, EmailMajor} from "@shopify/polaris-icons";
+import { NotificationMajor, PageMajor} from "@shopify/polaris-icons";
 import {useNavigate} from "react-router-dom";
-import {baseUrl} from "../../../utils/Constant";
+import {baseUrl} from "../../../../utils/Constant";
 
 
-export default function Settings() {
+export default function BackInStock() {
     const navigate = useNavigate()
-    const setting = [
+    const BackInStock = [
         {
-            icon: SettingsMajor,
-            tabName: "General",
-            description: "Customize the bundle adjusting fonts, color, background, button, Offer tag, etc.",
-            path: "settings/general"
+            icon: NotificationMajor,
+            tabName: "Back In Stock Email",
+            description: "Switch setting to enable or disable app functionality.",
+            path: "bistock/bistock-email"
         },
         {
             icon: PageMajor,
-            tabName: "Wishlist Design",
+            tabName: "Back In Stock Design",
             description: "Switch setting to enable or disable app functionality.",
-            path: "settings/wishlist-design"
-        },
-        {
-            icon: EmailMajor,
-            tabName: "Wishlist Email",
-            description: "Check and update your Email Notification Setting.",
-            path: "settings/email"
-
-        },
-        {
-            icon: LanguageMinor,
-            tabName: "Language",
-            description: "Provide bundled information in any language to entice clients to make additional purchases.",
-            path: "settings/language"
-        },
-        {
-            icon: DomainNewMajor,
-            tabName: "Headless",
-            description: "Provide bundled information in any language to entice clients to make additional purchases.",
-            path: "settings/headless"
+            path: "bistock/bistock-design"
         },
     ]
+
     return (
         <Fragment>
-            <Page title={"Settings"}>
+            <Page title={"Back In Stock"}>
                 <Layout>
                     <Layout.Section>
                         <LegacyCard>
                             <LegacyStack.Item>
                                 <LegacyCard sectioned>
                                     <Grid>
-                                        {(setting || []).map((x, i) => {
+                                        {(BackInStock || []).map((x, i) => {
                                             return (
                                                 <Grid.Cell columnSpan={{xs: 6, sm: 6, md: 3, lg: 4, xl: 4}} key={i}>
                                                     <div className='setting-pointer' onClick={() => {
@@ -82,6 +64,7 @@ export default function Settings() {
                 </Layout>
             </Page>
         </Fragment>
+
     );
 };
 

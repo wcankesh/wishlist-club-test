@@ -1,6 +1,6 @@
 import React, {Fragment} from 'react';
 import {Layout, Page, ProgressBar, Text, LegacyStack, Banner} from "@shopify/polaris"
-import {TopProducts, HelpDesk, OnBoarding} from "../../components";
+import {TopProducts, HelpDesk, OnBoarding} from "../../../components";
 import {useSelector} from "react-redux";
 
 export default function HomePage() {

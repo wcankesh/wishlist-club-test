@@ -1,6 +1,6 @@
 import React, {Fragment} from 'react'
 import {Grid, Layout, LegacyCard, LegacyStack, List, Page, Text, Link} from '@shopify/polaris'
-import {CopyCode} from '../../../components'
+import {CopyCode} from '../../../../components'
 import {useSelector} from "react-redux";
 
 export default function Installation(){

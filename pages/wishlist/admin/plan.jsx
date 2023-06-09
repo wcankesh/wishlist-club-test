@@ -2,9 +2,9 @@ import React, {Fragment, useState} from 'react';
 import {Page, Layout, LegacyCard, LegacyStack, ProgressBar, Button, Banner, Text,} from "@shopify/polaris";
 import {useDispatch, useSelector} from "react-redux";
 import moment from "moment";
-import {Icons} from "../../utils/Icons";
-import {apiService} from "../../utils/Constant";
-import {Shop_details} from "../../redux/action/action";
+import {Icons} from "../../../utils/Icons";
+import {apiService} from "../../../utils/Constant";
+import {Shop_details} from "../../../redux/action/action";
 
 export default function Plan(){
     const dispatch = useDispatch();

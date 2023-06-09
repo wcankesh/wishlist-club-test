@@ -19,9 +19,9 @@ import {
     DropZone
 } from "@shopify/polaris"
 import moment from "moment";
-import {apiService} from "../../utils/Constant";
+import {apiService} from "../../../utils/Constant";
 import {useSelector} from "react-redux";
-import {ToastMessage, NoDataFound} from "../../components";
+import {ToastMessage, NoDataFound} from "../../../components";
 
 export default function WishlistItems() {
     const limit = 10;

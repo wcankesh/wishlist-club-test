@@ -4,7 +4,7 @@ import {getSessionToken} from "@shopify/app-bridge-utils";
 import qs from "qs";
 
 const instance = axios.create();
-const apiBaseUrl = "https://wishlist.thimatic-apps.com/api/public";
+const apiBaseUrl = "https://rivyo.com/wishlist/api/public";
 
 const urlParams = new URLSearchParams(window.location.search);
 const host = urlParams.get('host');
