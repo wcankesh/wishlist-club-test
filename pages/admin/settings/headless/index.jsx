@@ -3,8 +3,8 @@ import TagsInput from 'react-tagsinput'
 import 'react-tagsinput/react-tagsinput.css'
 import {Page, Layout, LegacyCard, Button, FormLayout, LegacyStack, PageActions} from "@shopify/polaris"
 import {useNavigate} from "react-router-dom";
-import {apiService, baseUrl} from "../../../../../utils/Constant";
-import {ToastMessage,CopyCode} from "../../../../../components";
+import {apiService, baseUrl} from "../../../../utils/Constant";
+import {ToastMessage,CopyCode} from "../../../../components";
 
 export default function Headless(){
     const navigate = useNavigate()

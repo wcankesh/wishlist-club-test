@@ -4,11 +4,11 @@ import {getSessionToken} from "@shopify/app-bridge-utils";
 import qs from "qs";
 
 const instance = axios.create();
-const apiBaseUrl = "https://rivyo.com/wishlist/api/public";
+const apiBaseUrl = "https://wishlist.thimatic-apps.com/api/public/api";
 
 const urlParams = new URLSearchParams(window.location.search);
 const host = urlParams.get('host');
-const appKey = "65909e95fac4682299cfdae29dcd6a1a"
+const appKey = "6c6bdd5180d0848b68f89d106476f116"
 
 if (host && window.self !== window.top) {
     const app = createApp({

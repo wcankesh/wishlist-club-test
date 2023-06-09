@@ -12,8 +12,8 @@ import {
 } from "@shopify/polaris";
 import {useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
-import {apiService, baseUrl} from "../../../../../utils/Constant";
-import {ColorInput, ToastMessage} from "../../../../../components";
+import {apiService, baseUrl} from "../../../../utils/Constant";
+import {ColorInput, ToastMessage} from "../../../../components";
 
 
 const initialSate = {

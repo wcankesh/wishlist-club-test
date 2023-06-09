@@ -1,8 +1,8 @@
 import React, {Fragment, useEffect, useState} from 'react';
 import {Page, Layout, LegacyCard,  TextField, HorizontalGrid,  PageActions} from "@shopify/polaris"
-import {apiService, baseUrl} from "../../../../../utils/Constant";
+import {apiService, baseUrl} from "../../../../utils/Constant";
 import {useNavigate} from "react-router-dom"
-import {ToastMessage,ColorInput} from "../../../../../components";
+import {ToastMessage,ColorInput} from "../../../../components";
 
 
 const initialState = {

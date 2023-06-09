@@ -11,9 +11,9 @@ import {
     Text,
     RadioButton, DropZone, LegacyStack, Thumbnail
 } from "@shopify/polaris";
-import {apiService, baseUrl} from "../../../../../utils/Constant";
+import {apiService, baseUrl} from "../../../../utils/Constant";
 import {useNavigate} from "react-router-dom";
-import {ColorInput, ToastMessage} from "../../../../../components";
+import {ColorInput, ToastMessage} from "../../../../components";
 import {useSelector} from "react-redux";
 
 const initialSate = {

@@ -12,7 +12,7 @@ import { Banner, Layout, Page } from "@shopify/polaris";
  *
  * See: https://shopify.dev/apps/tools/app-bridge/getting-started/using-react
  */
-const SHOPIFY_API_KEY = "65909e95fac4682299cfdae29dcd6a1a"
+const SHOPIFY_API_KEY = "6c6bdd5180d0848b68f89d106476f116"
 export function AppBridgeProvider({ children }) {
   const location = useLocation();
   const navigate = useNavigate();

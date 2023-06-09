@@ -1,8 +1,8 @@
 import React, {Fragment, useCallback, useEffect, useState} from 'react';
-import {apiService, baseUrl} from "../../../../utils/Constant";
+import {apiService, baseUrl} from "../../../utils/Constant";
 import {useNavigate} from "react-router-dom";
 import {LegacyTabs, Layout, Page, PageActions} from "@shopify/polaris";
-import {CollectionPage, ProductPage, HomePage, SubscriberForm, SubscriberMsg} from "../../../../components"
+import {CollectionPage, ProductPage, HomePage, SubscriberForm, SubscriberMsg} from "../../../components"
 
 
 const initialState = {

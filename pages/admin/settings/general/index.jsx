@@ -1,8 +1,8 @@
 import React, {Fragment, useEffect, useState} from 'react';
 import {LegacyCard, LegacyStack, Text, Grid, Page, FormLayout} from '@shopify/polaris'
 import {useNavigate} from "react-router-dom";
-import {apiService, baseUrl} from "../../../../../utils/Constant";
-import {ToastMessage,CopyCode,SwitchButton} from "../../../../../components";
+import {apiService, baseUrl} from "../../../../utils/Constant";
+import {ToastMessage,CopyCode,SwitchButton} from "../../../../components";
 
 export default function General () {
     const navigate = useNavigate();
