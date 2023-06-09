@@ -708,7 +708,7 @@ export default function PriceDropAlert() {
                                     </table>
                                     <p className="unsubscribe-link" style={{textAlign: 'center'}}>If you'd like to
                                         unsubscribe and stop receiving these emails from this shop click <a
-                                            href="None">here</a>.
+                                            >here</a>.
                                     </p>
                                 </div>
                             </div>
