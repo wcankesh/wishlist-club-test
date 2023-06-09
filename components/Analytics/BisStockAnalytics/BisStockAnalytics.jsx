@@ -5,7 +5,7 @@ import {
     Text,
     LegacyStack,
     Layout,
-    LegacyTabs,
+    Tabs,
     TextField,
     Button,
     Pagination,
@@ -144,7 +144,7 @@ export function BisStockAnalytics() {
         <Fragment>
             <Layout.Section>
                 <LegacyCard title={"Back in stock analytics"}>
-                    <LegacyTabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>
+                    <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>
                     <LegacyCard.Section>
                         <LegacyStack>
                             <LegacyStack.Item fill>

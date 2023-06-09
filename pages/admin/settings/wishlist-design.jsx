@@ -1,5 +1,5 @@
 import React, {Fragment, useState, useCallback, useEffect} from 'react';
-import {LegacyTabs, Layout, Page, PageActions} from "@shopify/polaris";
+import {Tabs, Layout, Page, PageActions} from "@shopify/polaris";
 import {useNavigate} from "react-router-dom";
 import {apiService, baseUrl} from "../../../utils/Constant";
 import {CollectionDesign, ProductDesign} from "../../../components";
@@ -139,43 +139,43 @@ export default function WishlistDesign() {
             <ToastMessage message={message} setMessage={setMessage}/>
             <Page title={"Wishlist Design"} backAction={{content: 'Settings', onAction: onBack}}
                   primaryAction={{content: "Save", onAction: updateLauncher, loading: isLoading}}>
-                <LegacyTabs tabs={tabs} selected={selected} onSelect={handleTabChange}>
+                <Layout>
+                    <Layout.Section fullWidth>
+                        <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>
+                    </Layout.Section>
                     {selected == 0 &&
-                    <Layout>
-                        <ProductDesign
-                            wishlistSetting={wishlistSetting}
-                            setWishlistSetting={setWishlistSetting}
-                            file={file}
-                            setFile={setFile}
-                            updateIcon={updateIcon}
-                            deleteIcon={deleteIcon}
-                            isSVGLoading={isSVGLoading}
+                    <ProductDesign
+                        wishlistSetting={wishlistSetting}
+                        setWishlistSetting={setWishlistSetting}
+                        file={file}
+                        setFile={setFile}
+                        updateIcon={updateIcon}
+                        deleteIcon={deleteIcon}
+                        isSVGLoading={isSVGLoading}
 
-                        />
-                    </Layout>}
-                    {selected == 1 &&
-                    <Layout>
-                        <CollectionDesign
-                            wishlistSetting={wishlistSetting}
-                            setWishlistSetting={setWishlistSetting}
-                            file={file}
-                            setFile={setFile}
-                            updateIcon={updateIcon}
-                            deleteIcon={deleteIcon}
-                            isSVGLoading={isSVGLoading}
-                        />
-                    </Layout>
-                    }
-                </LegacyTabs>
-                <Layout.Section>
-                    <PageActions
-                        primaryAction={{
-                            content: 'Save',
-                            onAction: updateLauncher,
-                            loading: isLoading
-                        }}
                     />
-                </Layout.Section>
+                    }
+                    {selected == 1 &&
+                    <CollectionDesign
+                        wishlistSetting={wishlistSetting}
+                        setWishlistSetting={setWishlistSetting}
+                        file={file}
+                        setFile={setFile}
+                        updateIcon={updateIcon}
+                        deleteIcon={deleteIcon}
+                        isSVGLoading={isSVGLoading}
+                    />
+                    }
+                    <Layout.Section fullWidth>
+                        <PageActions
+                            primaryAction={{
+                                content: 'Save',
+                                onAction: updateLauncher,
+                                loading: isLoading
+                            }}
+                        />
+                    </Layout.Section>
+                </Layout>
             </Page>
         </Fragment>
     );

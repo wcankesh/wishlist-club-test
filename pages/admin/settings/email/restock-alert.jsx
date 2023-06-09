@@ -537,20 +537,19 @@ export default function RestockAlert() {
                                                     <tr>
                                                         <td style={{paddingTop: '20px'}}>
                                                             <a className="buy-action-url bg-primary"
-                                                               href="https://wc-ankesh.myshopify.com/cart/add/41288507687091?utm_source=ReStock_EMAIL&utm_medium=cpc_EMAIL&utm_campaign=restockify_campaign_EMAIL&channel=EMAIL&variant=41288507687091"
-                                                               target="_blank" style={{
-                                                                backgroundColor: emailSetting.restock_style.primary_color,
-                                                                color: 'rgb(255, 255, 255)',
-                                                                boxSizing: 'border-box',
-                                                                borderRadius: '10px',
-                                                                display: 'block',
-                                                                fontSize: '18px',
-                                                                fontWeight: 600,
-                                                                lineHeight: '20px',
-                                                                padding: '20px 24px',
-                                                                textAlign: 'center',
-                                                                textDecoration: 'none',
-                                                            }}>
+                                                               style={{
+                                                                   backgroundColor: emailSetting.restock_style.primary_color,
+                                                                   color: 'rgb(255, 255, 255)',
+                                                                   boxSizing: 'border-box',
+                                                                   borderRadius: '10px',
+                                                                   display: 'block',
+                                                                   fontSize: '18px',
+                                                                   fontWeight: 600,
+                                                                   lineHeight: '20px',
+                                                                   padding: '20px 24px',
+                                                                   textAlign: 'center',
+                                                                   textDecoration: 'none',
+                                                               }}>
                                                                 {emailSetting.restock_content.add_to_cart_button_text}
                                                             </a>
                                                         </td>
@@ -559,20 +558,19 @@ export default function RestockAlert() {
                                                     <tr>
                                                         <td style={{paddingTop: '20px'}}>
                                                             <a className="visit-action-url color-primary border-primary"
-                                                               href="https://wc-ankesh.myshopify.com/products/dacia-blouse-offwhite-1?utm_source=ReStock_EMAIL&utm_medium=cpc_EMAIL&utm_campaign=restockify_campaign_EMAIL&channel=EMAIL&variant=41288507687091"
-                                                               target="_blank" style={{
-                                                                color: emailSetting.restock_style.primary_color,
-                                                                border: `1px solid ${emailSetting.restock_style.primary_color}`,
-                                                                boxSizing: 'border-box',
-                                                                borderRadius: '10px',
-                                                                display: 'block',
-                                                                fontSize: '18px',
-                                                                fontWeight: 600,
-                                                                lineHeight: '20px',
-                                                                padding: '18px 24px',
-                                                                textAlign: 'center',
-                                                                textDecoration: 'none'
-                                                            }}>
+                                                               style={{
+                                                                   color: emailSetting.restock_style.primary_color,
+                                                                   border: `1px solid ${emailSetting.restock_style.primary_color}`,
+                                                                   boxSizing: 'border-box',
+                                                                   borderRadius: '10px',
+                                                                   display: 'block',
+                                                                   fontSize: '18px',
+                                                                   fontWeight: 600,
+                                                                   lineHeight: '20px',
+                                                                   padding: '18px 24px',
+                                                                   textAlign: 'center',
+                                                                   textDecoration: 'none'
+                                                               }}>
                                                                 {emailSetting.restock_content.view_product_button_text}
                                                             </a>
                                                         </td>
@@ -672,21 +670,6 @@ export default function RestockAlert() {
                                                             }}><img
                                                                 src="https://storage.googleapis.com/static.shopgram.io/restock-icons/pinterest.png"
                                                                 width={12} alt="pinterest"/></button>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td className="app-branding" colSpan={3} style={{
-                                                            fontSize: '13px',
-                                                            lineHeight: '21px',
-                                                            height: '45px',
-                                                            textAlign: 'center'
-                                                        }}>
-                                                            Powered by <a
-                                                            href="https://apps.shopify.com/bestpush?utm_source=back-in-stock-email"
-                                                            target="_blank" style={{
-                                                            color: 'rgb(0, 128, 96)',
-                                                            display: 'inline-block'
-                                                        }}>Wishlist</a>
                                                         </td>
                                                     </tr>
                                                     <tr>

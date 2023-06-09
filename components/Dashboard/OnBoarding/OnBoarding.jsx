@@ -188,7 +188,7 @@ export function OnBoarding() {
                                                 <List.Item>Add wishlist icon in header</List.Item>
                                                 <List type="number">
                                                     <List.Item>Open your Shopify store Theme<Link
-                                                        url={"https://wc-ankesh.myshopify.com/admin/themes"}
+                                                        url={`https://${shopDetails.shop}/admin/themes`}
                                                         removeUnderline={true} external> open</Link></List.Item>
                                                     <List.Item>Then click on the <Text as={"span"}
                                                                                        fontWeight={"bold"}> Actions</Text> button
@@ -210,7 +210,7 @@ export function OnBoarding() {
                                                 <List.Item>Add wishlist menu in header</List.Item>
                                                 <List type="number">
                                                     <List.Item> Open your Shopify store main navigation<Link
-                                                        url={"https://wc-ankesh.myshopify.com/admin/themes"}
+                                                        url={`https://${shopDetails.shop}/admin/themes`}
                                                         removeUnderline external> open</Link></List.Item>
                                                     <List.Item>Then select your main menu and click on <Text as={"span"}
                                                                                                              fontWeight={"bold"}> Add
@@ -233,7 +233,7 @@ export function OnBoarding() {
                                         <LegacyStack.Item>
                                             <List type={"number"} spacing={"loose"}>
                                                 <List.Item>Open your Shopify store Theme <Link
-                                                    url={"https://wc-ankesh.myshopify.com/admin/themes"} removeUnderline
+                                                    url={`https://${shopDetails.shop}/admin/themes`} removeUnderline
                                                     external> open</Link></List.Item>
                                                 <List.Item>Then click on the <Text as={"span"}
                                                                                    fontWeight={"bold"}>Customize</Text> button.</List.Item>

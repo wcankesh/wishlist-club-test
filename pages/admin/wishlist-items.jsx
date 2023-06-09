@@ -3,7 +3,7 @@ import {
     Page,
     Layout,
     LegacyCard,
-    LegacyTabs,
+    Tabs,
     DataTable,
     Pagination,
     SkeletonBodyText,
@@ -304,7 +304,7 @@ export default function WishlistItems() {
                 <Layout>
                     <Layout.Section>
                         <LegacyCard>
-                            <LegacyTabs tabs={tabs} selected={selected} onSelect={handleTabChange}>
+                            <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}>
                                 {selected == 0 &&
                                 <DataTable
                                     hideScrollIndicator={true}
@@ -380,7 +380,7 @@ export default function WishlistItems() {
                                         />}
                                 />
                                 }
-                            </LegacyTabs>
+                            </Tabs>
                         </LegacyCard>
                     </Layout.Section>
                 </Layout>

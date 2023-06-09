@@ -1,7 +1,7 @@
 import React, {Fragment, useCallback, useEffect, useState} from 'react';
 import {apiService, baseUrl} from "../../../utils/Constant";
 import {useNavigate} from "react-router-dom";
-import {LegacyTabs, Layout, Page, PageActions} from "@shopify/polaris";
+import {Tabs, Layout, Page, PageActions} from "@shopify/polaris";
 import {CollectionPage, ProductPage, HomePage, SubscriberForm, SubscriberMsg} from "../../../components"
 
 
@@ -163,55 +163,58 @@ export default function BisDesign() {
         <Fragment>
             <Page title={"Back In Stock Design"} backAction={{content: 'BackInStock', onAction: onBack}}
                   primaryAction={{content: "Save", onAction: updateBisSetting, loading: isLoading}}>
-                <LegacyTabs tabs={tabs} selected={selected} onSelect={handleTabChange}>
-                    {selected == 0 && <Layout>
-                        <ProductPage
-                            backInStockDesign={backInStockDesign}
-                            setBackInStockDesign={setBackInStockDesign}
-                            message={message}
-                            setMessage={setMessage}
-                        />
-                    </Layout>}
-                    {selected == 1 && <Layout>
-                        <HomePage
-                            backInStockDesign={backInStockDesign}
-                            setBackInStockDesign={setBackInStockDesign}
-                            message={message}
-                            setMessage={setMessage}
-                        />
-                    </Layout>}
-                    {selected == 2 && <Layout>
-                        <CollectionPage
-                            backInStockDesign={backInStockDesign}
-                            setBackInStockDesign={setBackInStockDesign}
-                            message={message}
-                            setMessage={setMessage}
-                        /></Layout>}
-                    {selected == 3 && <Layout><SubscriberForm
+
+                <Layout>
+                    <Layout.Section fullWidth>
+                        <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>
+                    </Layout.Section>
+                    {selected == 0 &&
+                    <ProductPage
                         backInStockDesign={backInStockDesign}
                         setBackInStockDesign={setBackInStockDesign}
                         message={message}
                         setMessage={setMessage}
-                    /></Layout>}
-                    {selected == 4 && <Layout>
-                        <SubscriberMsg
-                            backInStockDesign={backInStockDesign}
-                            setBackInStockDesign={setBackInStockDesign}
-                            message={message}
-                            setMessage={setMessage}
-                        /></Layout>}
-                </LegacyTabs>
-                <Layout.Section>
-                    <PageActions
-                        primaryAction={{
-                            content: 'Save',
-                            onAction: updateBisSetting,
-                            loading: isLoading
-                        }}
                     />
-                </Layout.Section>
+                    }
+                    {selected == 1 &&
+                    <HomePage
+                        backInStockDesign={backInStockDesign}
+                        setBackInStockDesign={setBackInStockDesign}
+                        message={message}
+                        setMessage={setMessage}
+                    />
+                    }
+                    {selected == 2 &&
+                    <CollectionPage
+                        backInStockDesign={backInStockDesign}
+                        setBackInStockDesign={setBackInStockDesign}
+                        message={message}
+                        setMessage={setMessage}
+                    />}
+                    {selected == 3 && <SubscriberForm
+                        backInStockDesign={backInStockDesign}
+                        setBackInStockDesign={setBackInStockDesign}
+                        message={message}
+                        setMessage={setMessage}
+                    />}
+                    {selected == 4 &&
+                    <SubscriberMsg
+                        backInStockDesign={backInStockDesign}
+                        setBackInStockDesign={setBackInStockDesign}
+                        message={message}
+                        setMessage={setMessage}
+                    />}
+                    <Layout.Section fullWidth>
+                        <PageActions
+                            primaryAction={{
+                                content: 'Save',
+                                onAction: updateBisSetting,
+                                loading: isLoading
+                            }}
+                        />
+                    </Layout.Section>
+                </Layout>
             </Page>
-
         </Fragment>
     );
 };

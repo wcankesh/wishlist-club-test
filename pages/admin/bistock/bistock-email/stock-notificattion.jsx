@@ -181,24 +181,29 @@ export default function StockNotification() {
 
     const fileUpload = (!selectedBISLogo && !backInStockEmail.bis_logo) ? <DropZone.FileUpload/> : "";
     const uploadedFiles = (
-        <LegacyStack alignment="center" vertical>
-            <br/>
-            <LegacyStack>
-                {selectedBISLogo ?
-                    <Thumbnail
-                        size="small"
-                        source={window.URL.createObjectURL(selectedBISLogo[0])}
-                    />
-                    : backInStockEmail && backInStockEmail.bis_logo ?
-                        <Thumbnail
-                            size="small"
-                            source={backInStockEmail.bis_logo}
-                        />
-                        :
-                        ""}
-            </LegacyStack>
-            <br/>
-        </LegacyStack>
+        <Fragment>
+            {
+                (selectedBISLogo && !backInStockEmail.bis_logo) &&
+                <LegacyStack alignment={"center"} vertical spacing={"tight"}>
+                    <br/>
+                    <br/>
+                    {
+                        selectedBISLogo ? <Thumbnail
+                                size="small"
+                                source={window.URL.createObjectURL(selectedBISLogo[0])}
+                            />
+                            :
+                            backInStockEmail && backInStockEmail.bis_logo ?
+                                <Thumbnail
+                                    size="small"
+                                    source={backInStockEmail.bis_logo}
+                                /> : ""
+                    }
+                    <br/>
+                    <br/>
+                </LegacyStack>
+            }
+        </Fragment>
     );
 
     return (
@@ -565,7 +570,7 @@ export default function StockNotification() {
                                                             }}>
                                                                 {
                                                                     backInStockEmail.bis_branding_type == "2" ?
-                                                                        <Fragment>{selectedBISLogo && selectedBISLogo.name ?
+                                                                        <Fragment>{selectedBISLogo  ?
                                                                             <img
                                                                                 src={selectedBISLogo ? URL.createObjectURL(selectedBISLogo[0]) : ""}
                                                                                 alt="logo"
@@ -585,7 +590,8 @@ export default function StockNotification() {
                                                                                 backInStockEmail.bis_logo ?
                                                                                     <img src={backInStockEmail.bis_logo}
                                                                                          alt="logo"
-                                                                                         style={{maxHeight: '50px'}}/> : ""}&nbsp; {shopDetails && shopDetails.store_name}
+                                                                                         style={{maxHeight: '50px'}}/>
+                                                                                    : ""}&nbsp; {shopDetails && shopDetails.store_name}
                                                                             </Fragment>
                                                                 }
                                                             </th>
@@ -662,39 +668,37 @@ export default function StockNotification() {
                                                         <tr>
                                                             <td style={{paddingTop: '20px'}}>
                                                                 <a className="buy-action-url bg-primary"
-                                                                   href="https://wc-ankesh.myshopify.com/cart/add/41288507687091?utm_source=ReStock_EMAIL&utm_medium=cpc_EMAIL&utm_campaign=restockify_campaign_EMAIL&channel=EMAIL&variant=41288507687091"
-                                                                   target="_blank" style={{
-                                                                    backgroundColor: backInStockEmail.bis_style.primary_color,
-                                                                    color: 'rgb(255, 255, 255)',
-                                                                    boxSizing: 'border-box',
-                                                                    borderRadius: '10px',
-                                                                    display: 'block',
-                                                                    fontSize: '18px',
-                                                                    fontWeight: 600,
-                                                                    lineHeight: '20px',
-                                                                    padding: '20px 24px',
-                                                                    textAlign: 'center',
-                                                                    textDecoration: 'none'
-                                                                }}>{backInStockEmail.bis_content.add_to_cart_button_text}</a>
+                                                                   style={{
+                                                                       backgroundColor: backInStockEmail.bis_style.primary_color,
+                                                                       color: 'rgb(255, 255, 255)',
+                                                                       boxSizing: 'border-box',
+                                                                       borderRadius: '10px',
+                                                                       display: 'block',
+                                                                       fontSize: '18px',
+                                                                       fontWeight: 600,
+                                                                       lineHeight: '20px',
+                                                                       padding: '20px 24px',
+                                                                       textAlign: 'center',
+                                                                       textDecoration: 'none'
+                                                                   }}>{backInStockEmail.bis_content.add_to_cart_button_text}</a>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td style={{paddingTop: '20px'}}>
                                                                 <a className="visit-action-url color-primary border-primary"
-                                                                   href="https://wc-ankesh.myshopify.com/products/dacia-blouse-offwhite-1?utm_source=ReStock_EMAIL&utm_medium=cpc_EMAIL&utm_campaign=restockify_campaign_EMAIL&channel=EMAIL&variant=41288507687091"
-                                                                   target="_blank" style={{
-                                                                    color: backInStockEmail.bis_style.primary_color,
-                                                                    border: `1px solid ${backInStockEmail.bis_style.primary_color}`,
-                                                                    boxSizing: 'border-box',
-                                                                    borderRadius: '10px',
-                                                                    display: 'block',
-                                                                    fontSize: '18px',
-                                                                    fontWeight: 600,
-                                                                    lineHeight: '20px',
-                                                                    padding: '18px 24px',
-                                                                    textAlign: 'center',
-                                                                    textDecoration: 'none'
-                                                                }}>{backInStockEmail.bis_content.view_product_button_text}</a>
+                                                                   style={{
+                                                                       color: backInStockEmail.bis_style.primary_color,
+                                                                       border: `1px solid ${backInStockEmail.bis_style.primary_color}`,
+                                                                       boxSizing: 'border-box',
+                                                                       borderRadius: '10px',
+                                                                       display: 'block',
+                                                                       fontSize: '18px',
+                                                                       fontWeight: 600,
+                                                                       lineHeight: '20px',
+                                                                       padding: '18px 24px',
+                                                                       textAlign: 'center',
+                                                                       textDecoration: 'none'
+                                                                   }}>{backInStockEmail.bis_content.view_product_button_text}</a>
                                                             </td>
                                                         </tr>
                                                         <tr className="social-text-wrapper">
@@ -793,21 +797,6 @@ export default function StockNotification() {
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td className="app-branding" colSpan={3} style={{
-                                                                fontSize: '13px',
-                                                                lineHeight: '21px',
-                                                                height: '45px',
-                                                                textAlign: 'center'
-                                                            }}>
-                                                                Powered by <a
-                                                                href="https://apps.shopify.com/bestpush?utm_source=back-in-stock-email"
-                                                                target="_blank" style={{
-                                                                color: 'rgb(0, 128, 96)',
-                                                                display: 'inline-block'
-                                                            }}>Wishlist</a>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
                                                             <td className="footer color-text-tertiary" style={{
                                                                 borderTop: '1px solid rgb(201, 202, 204)',
                                                                 fontWeight: 400,
@@ -833,8 +822,7 @@ export default function StockNotification() {
                                             </tbody>
                                         </table>
                                         <p className="unsubscribe-link" style={{textAlign: 'center'}}>If you'd like to
-                                            unsubscribe and stop receiving these emails from this shop click <a
-                                                href="None">here</a>.
+                                            unsubscribe and stop receiving these emails from this shop click <a>here</a>.
                                         </p>
                                     </div>
                                 </div>

@@ -1,5 +1,5 @@
 import React, {Fragment, useState, useEffect, useCallback} from 'react';
-import {FooterHelp, Link, Spinner, Modal, Button, Text} from '@shopify/polaris';
+import {FooterHelp, Link, Modal, Button, Text} from '@shopify/polaris';
 import {useNavigate} from 'react-router-dom';
 import {baseUrl, apiService} from "../../utils/Constant";
 import {useDispatch, useSelector} from "react-redux";
@@ -9,14 +9,11 @@ import Routes from "../../Routes";
 
 export function DefaultLayout({pages}) {
     const dispatch = useDispatch()
-    const urlParams = new URLSearchParams(window.location.search);
     const shopDetails = useSelector((state) => state.shopDetails)
-    const shop = urlParams.get('shop');
     let navigate = useNavigate();
-    const [isLoading, setIsLoading] = useState(true);
+
 
     useEffect(() => {
-        debugger
         if (shopDetails.is_app_embedded === "0") {
             document.querySelector("body").classList.add("remove-close-icon-modal")
         }
@@ -43,33 +40,33 @@ export function DefaultLayout({pages}) {
     const activator = <Button onClick={handleChange}>Open</Button>;
 
     return (
-            <Fragment>
-                {
-                    shopDetails && shopDetails.is_app_embedded === "0" &&
-                    <Modal
-                        activator={activator}
-                        open={shopDetails.is_app_embedded === "0"}
-                        onClose={handleChange}
-                        title="Configure Wishlist Club widget on your theme."
-                    >
-                        <Modal.Section>
-                            <Text>Please click <Link removeUnderline onClick={onAppEmbedded}>here</Link> to activate
-                                embedded block of
-                                Wishlist Club widget from your theme settings. You can deactivate it anytime.
-                            </Text>
-                        </Modal.Section>
-                    </Modal>
-                }
-                <Routes pages={pages}/>
-                <FooterHelp>
-                    <div className="FooterHelp__Content">
-                        {Icons.footerAlert}if you need any help, please &nbsp;
-                        <Link url="https://help.shopify.com/manual/orders/fulfill-orders">
-                            Contact us
-                        </Link>
-                    </div>
-                </FooterHelp>
-            </Fragment>
+        <Fragment>
+            {
+                shopDetails && shopDetails.is_app_embedded === "0" &&
+                <Modal
+                    activator={activator}
+                    open={shopDetails.is_app_embedded === "0"}
+                    onClose={handleChange}
+                    title="Configure Wishlist Club widget on your theme."
+                >
+                    <Modal.Section>
+                        <Text>Please click <Link removeUnderline onClick={onAppEmbedded}>here</Link> to activate
+                            embedded block of
+                            Wishlist Club widget from your theme settings. You can deactivate it anytime.
+                        </Text>
+                    </Modal.Section>
+                </Modal>
+            }
+            <Routes pages={pages}/>
+            <FooterHelp>
+                <div className="FooterHelp__Content">
+                    {Icons.footerAlert}if you need any help, please &nbsp;
+                    <Link onClick={() => window.Beacon("toggle")}>
+                        Contact us
+                    </Link>
+                </div>
+            </FooterHelp>
+        </Fragment>
     );
 }
 

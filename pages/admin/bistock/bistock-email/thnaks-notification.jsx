@@ -18,7 +18,7 @@ import {useNavigate} from "react-router-dom"
 import {useSelector} from "react-redux";
 import {Icons} from "../../../../utils/Icons";
 import {apiService, baseUrl} from "../../../../utils/Constant";
-import {ToastMessage,ColorInput} from "../../../../components";
+import {ToastMessage, ColorInput} from "../../../../components";
 
 
 const initialState = {
@@ -93,7 +93,7 @@ const initialState = {
 
 }
 
-export default function ThankYouNotification () {
+export default function ThankYouNotification() {
     const navigate = useNavigate()
     const [backInStockEmail, setbackInStockEmail] = useState(initialState);
     const [selectedTYLogo, setSelectedTYLogo] = useState("");
@@ -212,24 +212,29 @@ export default function ThankYouNotification () {
     );
     const fileUpload = (!selectedTYLogo && !backInStockEmail.thankyou_logo) ? <DropZone.FileUpload/> : "";
     const uploadedFiles = (
-        <LegacyStack alignment="center" vertical>
-            <br/>
-            <LegacyStack>
-                {selectedTYLogo ?
-                    <Thumbnail
-                        size="small"
-                        source={window.URL.createObjectURL(selectedTYLogo[0])}
-                    />
-                    : backInStockEmail && backInStockEmail.thankyou_logo ?
-                        <Thumbnail
-                            size="small"
-                            source={backInStockEmail.thankyou_logo}
-                        />
-                        :
-                        ""}
-            </LegacyStack>
-            <br/>
-        </LegacyStack>
+        <Fragment>
+            {
+                (selectedTYLogo && !backInStockEmail.thankyou_logo) &&
+                <LegacyStack alignment={"center"} vertical spacing={"tight"}>
+                    <br/>
+                    <br/>
+                    {
+                        selectedTYLogo ? <Thumbnail
+                                size="small"
+                                source={window.URL.createObjectURL(selectedTYLogo[0])}
+                            />
+                            :
+                            backInStockEmail && backInStockEmail.thankyou_logo ?
+                                <Thumbnail
+                                    size="small"
+                                    source={backInStockEmail.thankyou_logo}
+                                /> : ""
+                    }
+                    <br/>
+                    <br/>
+                </LegacyStack>
+            }
+        </Fragment>
     );
     return (
         <Fragment>
@@ -554,7 +559,7 @@ export default function ThankYouNotification () {
                                                                 {
                                                                     backInStockEmail.thankyou_branding_type == "2" ?
                                                                         <Fragment>
-                                                                            {selectedTYLogo && selectedTYLogo.name ?
+                                                                            {selectedTYLogo  ?
                                                                                 <img
                                                                                     src={selectedTYLogo ? URL.createObjectURL(selectedTYLogo[0]) : ""}
                                                                                     alt="logo"
@@ -580,7 +585,9 @@ export default function ThankYouNotification () {
                                                                                         <img
                                                                                             src={backInStockEmail.thankyou_logo}
                                                                                             alt="logo"
-                                                                                            style={{maxHeight: '50px'}}/> : ""} &nbsp; {shopDetails && shopDetails.store_name}
+                                                                                            style={{maxHeight: '50px'}}/> :
+                                                                                        <img src={""} alt="logo"
+                                                                                             style={{maxHeight: '50px'}}/>}&nbsp; {shopDetails && shopDetails.store_name}
                                                                             </Fragment>
                                                                 }
                                                             </th>
@@ -616,20 +623,19 @@ export default function ThankYouNotification () {
                                                         <tr>
                                                             <td style={{paddingTop: '20px'}}>
                                                                 <a className="buy-action-url bg-primary"
-                                                                   href="https://wc-ankesh.myshopify.com/cart/add/41288507687091?utm_source=ReStock_EMAIL&utm_medium=cpc_EMAIL&utm_campaign=restockify_campaign_EMAIL&channel=EMAIL&variant=41288507687091"
-                                                                   target="_blank" style={{
-                                                                    backgroundColor: backInStockEmail.thankyou_style.primary_color,
-                                                                    color: 'rgb(255, 255, 255)',
-                                                                    boxSizing: 'border-box',
-                                                                    borderRadius: '10px',
-                                                                    display: 'block',
-                                                                    fontSize: '18px',
-                                                                    fontWeight: 600,
-                                                                    lineHeight: '20px',
-                                                                    padding: '20px 24px',
-                                                                    textAlign: 'center',
-                                                                    textDecoration: 'none'
-                                                                }}>{backInStockEmail.thankyou_content.button_text}</a>
+                                                                   style={{
+                                                                       backgroundColor: backInStockEmail.thankyou_style.primary_color,
+                                                                       color: 'rgb(255, 255, 255)',
+                                                                       boxSizing: 'border-box',
+                                                                       borderRadius: '10px',
+                                                                       display: 'block',
+                                                                       fontSize: '18px',
+                                                                       fontWeight: 600,
+                                                                       lineHeight: '20px',
+                                                                       padding: '20px 24px',
+                                                                       textAlign: 'center',
+                                                                       textDecoration: 'none'
+                                                                   }}>{backInStockEmail.thankyou_content.button_text}</a>
                                                             </td>
                                                         </tr>
 
@@ -729,21 +735,6 @@ export default function ThankYouNotification () {
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td className="app-branding" colSpan={3} style={{
-                                                                fontSize: '13px',
-                                                                lineHeight: '21px',
-                                                                height: '45px',
-                                                                textAlign: 'center'
-                                                            }}>
-                                                                Powered by <a
-                                                                href="https://apps.shopify.com/bestpush?utm_source=back-in-stock-email"
-                                                                target="_blank" style={{
-                                                                color: 'rgb(0, 128, 96)',
-                                                                display: 'inline-block'
-                                                            }}>Wishlist</a>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
                                                             <td className="footer color-text-tertiary" style={{
                                                                 borderTop: '1px solid rgb(201, 202, 204)',
                                                                 fontWeight: 400,
@@ -769,8 +760,7 @@ export default function ThankYouNotification () {
                                             </tbody>
                                         </table>
                                         <p className="unsubscribe-link" style={{textAlign: 'center'}}>If you'd like to
-                                            unsubscribe and stop receiving these emails from this shop click <a
-                                                href="None">here</a>.
+                                            unsubscribe and stop receiving these emails from this shop click <a>here</a>.
                                         </p>
                                     </div>
                                 </div>

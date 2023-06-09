@@ -5,7 +5,7 @@ import {AppBridgeProvider, QueryProvider, PolarisProvider, DefaultLayout} from "
 import {Frame, Spinner} from "@shopify/polaris"
 
 import {baseUrl, apiService, } from "./utils/Constant";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {Shop_details} from "./redux/action/action";
 
 export default function App() {

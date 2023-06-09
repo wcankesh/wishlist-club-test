@@ -1,8 +1,10 @@
 import React, {Fragment} from 'react'
 import {Grid, Layout, LegacyCard, LegacyStack, List, Page, Text, Link} from '@shopify/polaris'
 import {CopyCode} from '../../../components'
+import {useSelector} from "react-redux";
 
 export default function Installation(){
+    const shopDetails = useSelector((state)=>state.shopDetails)
     return (
         <Fragment>
             <Page>
@@ -15,7 +17,7 @@ export default function Installation(){
                             <Grid>
                                 <Grid.Cell columnSpan={{xs: 6, sm: 6, md: 6, lg: 6, xl: 6}}>
                                     <Text variant='bodyMd'>Please click &nbsp;<Link
-                                        url="https://wc-ankesh.myshopify.com/admin/themes/current/editor?context=apps&amp;appEmbed=gid://shopify/OnlineStoreThemeAppEmbed/wishlist-club"
+                                        url={`https://${shopDetails.shop}/admin/themes/current/editor?context=apps&amp;appEmbed=gid://shopify/OnlineStoreThemeAppEmbed/wishlist-club`}
                                         removeUnderline target="_top">here</Link>&nbsp;to activate embedded block of
                                         Wishlist Club widget from your theme settings. You can deactivate it
                                         anytime.</Text>
@@ -43,7 +45,7 @@ export default function Installation(){
                                     <LegacyStack vertical>
                                         <List type="number">
                                             <List.Item> Open your Shopify store Theme <Link
-                                                url="https://wc-ankesh.myshopify.com/admin/themes" target="_blank"
+                                                url={`https://${shopDetails.shop}/admin/themes`} target="_blank"
                                                 removeUnderline>open</Link></List.Item>
                                             <List.Item>Then click on the <Text as={"span"}
                                                                                fontWeight={"bold"}>Actions</Text> button
@@ -174,7 +176,7 @@ export default function Installation(){
                                             <Text fontWeight={"bold"}>3. Please follow the steps to add menu</Text>
                                             <List type="number" spacing="loose">
                                                 <List.Item> Open your Shopify site's main navigation <a
-                                                    href="https://wc-ankesh.myshopify.com/admin/themes" target="_blank"
+                                                    href={`https://${shopDetails.shop}/admin/themes`} target="_blank"
                                                     className='text-decoeation-none'>open</a></List.Item>
                                                 <List.Item>Then select your main menu and click on <Text as={"span"}
                                                                                                          fontWeight={"bold"}>Add
