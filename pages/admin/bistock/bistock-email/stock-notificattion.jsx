@@ -796,34 +796,34 @@ export default function StockNotification() {
                                                                     width={12} alt="pinterest"/></button>
                                                             </td>
                                                         </tr>
-                                                        <tr>
-                                                            <td className="footer color-text-tertiary" style={{
-                                                                borderTop: '1px solid rgb(201, 202, 204)',
-                                                                fontWeight: 400,
-                                                                color: backInStockEmail.bis_style.theme == "1" ? 'rgb(93, 99, 102)' : 'rgb(186, 198, 204)',
-                                                                fontSize: '12px',
-                                                                lineHeight: '16px',
-                                                                height: '45px',
-                                                                textAlign: 'center',
-                                                                paddingTop: '8px',
-                                                                borderBottomRightRadius: '10px',
-                                                                borderBottomLeftRadius: '10px'
-                                                            }}>
-                                                                You are receiving this email because you requested a
-                                                                back in
-                                                                stock notification
-                                                                on {shopDetails && shopDetails.store_name}.
-                                                            </td>
-                                                        </tr>
+                                                        {/*<tr>*/}
+                                                        {/*    <td className="footer color-text-tertiary" style={{*/}
+                                                        {/*        borderTop: '1px solid rgb(201, 202, 204)',*/}
+                                                        {/*        fontWeight: 400,*/}
+                                                        {/*        color: backInStockEmail.bis_style.theme == "1" ? 'rgb(93, 99, 102)' : 'rgb(186, 198, 204)',*/}
+                                                        {/*        fontSize: '12px',*/}
+                                                        {/*        lineHeight: '16px',*/}
+                                                        {/*        height: '45px',*/}
+                                                        {/*        textAlign: 'center',*/}
+                                                        {/*        paddingTop: '8px',*/}
+                                                        {/*        borderBottomRightRadius: '10px',*/}
+                                                        {/*        borderBottomLeftRadius: '10px'*/}
+                                                        {/*    }}>*/}
+                                                        {/*        You are receiving this email because you requested a*/}
+                                                        {/*        back in*/}
+                                                        {/*        stock notification*/}
+                                                        {/*        on {shopDetails && shopDetails.store_name}.*/}
+                                                        {/*    </td>*/}
+                                                        {/*</tr>*/}
                                                         </tbody>
                                                     </table>
                                                 </td>
                                             </tr>
                                             </tbody>
                                         </table>
-                                        <p className="unsubscribe-link" style={{textAlign: 'center'}}>If you'd like to
-                                            unsubscribe and stop receiving these emails from this shop click <a>here</a>.
-                                        </p>
+                                        {/*<p className="unsubscribe-link" style={{textAlign: 'center'}}>If you'd like to*/}
+                                        {/*    unsubscribe and stop receiving these emails from this shop click <a>here</a>.*/}
+                                        {/*</p>*/}
                                     </div>
                                 </div>
                             </LegacyCard.Section>
