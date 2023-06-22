@@ -158,7 +158,7 @@ export function OnBoarding() {
                                             </LegacyStack>
                                         </List>
                                         <CopyCode
-                                            value={`<div className="th_wl_btn" data-product_id="{{product.id}}" data-variant_id={{product.selected_or_first_available_variant.id}}></div>`}/>
+                                            value={`<div class="th_wl_btn" data-product_id="{{product.id}}" data-variant_id={{product.selected_or_first_available_variant.id}}></div>`}/>
                                         <List type="bullet">
                                             <List.Item>Collection Page</List.Item>
                                             <LegacyStack>
@@ -175,7 +175,7 @@ export function OnBoarding() {
                                             </LegacyStack>
                                         </List>
                                         <CopyCode
-                                            value={`<div className="th_wl_btn" data-product_id="{{product.id}}" data-variant_id={{product.selected_or_first_available_variant.id}}></div>`}/>
+                                            value={`<div class="th_wl_btn" data-product_id="{{product.id}}" data-variant_id={{product.selected_or_first_available_variant.id}}></div>`}/>
                                     </LegacyStack>
                                 )}
                                 {selectedBoarding === 1 && (

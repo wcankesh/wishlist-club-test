@@ -28,14 +28,27 @@ const initialState = {
     bis_logo: "",
     bis_style:
         {
-            primary_color: "#000000",
             background_color: "#ffffff",
             theme: 1,
             font_family: "roboto",
             title_font_size: 24,
             description_font_size: 16,
             discount_font_size: 16,
-            seconday_color: "#ffffff",
+            add_to_cart_btn_bg_color: "",
+            add_to_cart_btn_text_color: "",
+            add_to_cart_btn_border_color: "",
+            add_to_cart_btn_border_size: "",
+            add_to_cart_btn_horizontal_padding: "",
+            add_to_cart_btn_vertical_padding: "",
+
+            view_product_btn_bg_color: "",
+            view_product_btn_text_color: "",
+            view_product_btn_border_color: "",
+            view_product_btn_border_size: "",
+            view_product_btn_horizontal_padding: "",
+            view_product_btn_vertical_padding: "",
+
+
         },
 
     bis_content:
@@ -114,8 +127,8 @@ export default function StockNotification() {
             if ((typeof (newBackInStockEmail[x]) === "object") && newBackInStockEmail[x] !== null) {
 
             } else {
-                if (x === "bis_logo" && selectedBISLogo && selectedBISLogo[0]) {
-                    formData.append("bis_logo", selectedBISLogo[0]);
+                if (x === "bis_logo" && selectedBISLogo && selectedBISLogo.name) {
+                    formData.append("bis_logo", selectedBISLogo);
                 } else if (x === "thankyou_logo" && selectedTYLogo?.name) {
                     formData.append("thankyou_logo", selectedTYLogo);
                 } else if (x === "bis_logo" || x === "thankyou_logo") {
@@ -152,7 +165,7 @@ export default function StockNotification() {
     }
     const handleDropZoneDrop = useCallback(
         (_dropFiles, acceptedFiles, _rejectedFiles) =>
-            setSelectedBISLogo([acceptedFiles[0]]),
+            setSelectedBISLogo(acceptedFiles[0]),
         [],
     );
 
@@ -183,14 +196,14 @@ export default function StockNotification() {
     const uploadedFiles = (
         <Fragment>
             {
-                (selectedBISLogo && !backInStockEmail.bis_logo) &&
+                (selectedBISLogo || backInStockEmail.bis_logo) ?
                 <LegacyStack alignment={"center"} vertical spacing={"tight"}>
                     <br/>
                     <br/>
                     {
-                        selectedBISLogo ? <Thumbnail
+                        selectedBISLogo?.name ? <Thumbnail
                                 size="small"
-                                source={window.URL.createObjectURL(selectedBISLogo[0])}
+                                source={window.URL.createObjectURL(selectedBISLogo)}
                             />
                             :
                             backInStockEmail && backInStockEmail.bis_logo ?
@@ -202,6 +215,7 @@ export default function StockNotification() {
                     <br/>
                     <br/>
                 </LegacyStack>
+                    : ""
             }
         </Fragment>
     );
@@ -274,15 +288,10 @@ export default function StockNotification() {
                                     {uploadedFiles}
                                     {fileUpload}
                                 </DropZone>}
-                                <Divider/>
-                                <FormLayout.Group condensed>
-                                    <ColorInput label={"Primary color"} name="primary_color"
-                                                onChange={bisOnChangeStyle}
-                                                value={backInStockEmail.bis_style.primary_color}/>
-                                    <ColorInput label={"Background color"} name="background_color"
-                                                onChange={bisOnChangeStyle}
-                                                value={backInStockEmail.bis_style.background_color}/>
-                                </FormLayout.Group>
+                            </FormLayout>
+                        </LegacyCard>
+                        <LegacyCard sectioned>
+                            <FormLayout>
                                 <FormLayout.Group condensed>
                                     <Select label={"Text color theme"} options={theme}
                                             value={backInStockEmail.bis_style.theme}
@@ -308,7 +317,127 @@ export default function StockNotification() {
                                             }}
                                     />
                                 </FormLayout.Group>
-                                <Divider/>
+                                <FormLayout.Group condensed>
+                                    <ColorInput label={"Background color"} name="background_color"
+                                                onChange={bisOnChangeStyle}
+                                                value={backInStockEmail.bis_style.background_color}/>
+                                    <div></div>
+                                </FormLayout.Group>
+                            </FormLayout>
+
+                        </LegacyCard>
+                        <LegacyCard sectioned title="Add to Cart Button">
+                            <FormLayout>
+                                <FormLayout.Group condensed>
+                                    <ColorInput label={"Button Background color"} name="add_to_cart_btn_bg_color"
+                                                onChange={bisOnChangeStyle}
+                                                value={backInStockEmail.bis_style.add_to_cart_btn_bg_color}/>
+                                    <ColorInput label={"Button Text color"} name="add_to_cart_btn_text_color"
+                                                onChange={bisOnChangeStyle}
+                                                value={backInStockEmail.bis_style.add_to_cart_btn_text_color}/>
+                                </FormLayout.Group>
+                                <FormLayout.Group condensed>
+                                    <ColorInput label={"Button Border color"} name="add_to_cart_btn_border_color"
+                                                onChange={bisOnChangeStyle}
+                                                value={backInStockEmail.bis_style.add_to_cart_btn_border_color}/>
+                                    <TextField label={"Border Width"}
+                                               value={backInStockEmail.bis_style.add_to_cart_btn_border_size}
+                                               type="number"
+                                               suffix="PX"
+                                               onChange={(value) => {
+                                                   bisOnChangeStyle({
+                                                       target: {
+                                                           name: "add_to_cart_btn_border_size",
+                                                           value
+                                                       }
+                                                   })
+                                               }}
+
+                                    />
+                                </FormLayout.Group>
+                                <FormLayout.Group condensed>
+                                    <TextField label="Top & Bottom padding"
+                                               type="number"
+                                               value={backInStockEmail.bis_style.add_to_cart_btn_vertical_padding}
+                                               onChange={(value) => bisOnChangeStyle({
+                                                   target: {
+                                                       name: "add_to_cart_btn_vertical_padding",
+                                                       value
+                                                   }
+                                               })}
+                                               suffix="PX"
+                                    />
+                                    <TextField label="Left & Right padding"
+                                               type="number"
+                                               value={backInStockEmail.bis_style.add_to_cart_btn_horizontal_padding}
+                                               onChange={(value) => bisOnChangeStyle({
+                                                   target: {
+                                                       name: "add_to_cart_btn_horizontal_padding",
+                                                       value
+                                                   }
+                                               })}
+                                               suffix="PX"
+                                    />
+                                </FormLayout.Group>
+                            </FormLayout>
+                        </LegacyCard>
+                        <LegacyCard sectioned title="View Product Button">
+                            <FormLayout>
+                                <FormLayout.Group condensed>
+                                    <ColorInput label={"Button Background color"} name="view_product_btn_bg_color"
+                                                onChange={bisOnChangeStyle}
+                                                value={backInStockEmail.bis_style.view_product_btn_bg_color}/>
+                                    <ColorInput label={"Button Text color"} name="view_product_btn_text_color"
+                                                onChange={bisOnChangeStyle}
+                                                value={backInStockEmail.bis_style.view_product_btn_text_color}/>
+                                </FormLayout.Group>
+                                <FormLayout.Group condensed>
+                                    <ColorInput label={"Button Border color"} name="view_product_btn_border_color"
+                                                onChange={bisOnChangeStyle}
+                                                value={backInStockEmail.bis_style.view_product_btn_border_color}/>
+                                    <TextField label={"Border Width"}
+                                               value={backInStockEmail.bis_style.view_product_btn_border_size}
+                                               type="number"
+                                               suffix="PX"
+                                               onChange={(value) => {
+                                                   bisOnChangeStyle({
+                                                       target: {
+                                                           name: "view_product_btn_border_size",
+                                                           value
+                                                       }
+                                                   })
+                                               }}
+
+                                    />
+                                </FormLayout.Group>
+                                <FormLayout.Group condensed>
+                                    <TextField label="Top & Bottom padding"
+                                               type="number"
+                                               value={backInStockEmail.bis_style.view_product_btn_vertical_padding}
+                                               onChange={(value) => bisOnChangeStyle({
+                                                   target: {
+                                                       name: "view_product_btn_vertical_padding",
+                                                       value
+                                                   }
+                                               })}
+                                               suffix="PX"
+                                    />
+                                    <TextField label="Left & Right padding"
+                                               type="number"
+                                               value={backInStockEmail.bis_style.view_product_btn_horizontal_padding}
+                                               onChange={(value) => bisOnChangeStyle({
+                                                   target: {
+                                                       name: "view_product_btn_horizontal_padding",
+                                                       value
+                                                   }
+                                               })}
+                                               suffix="PX"
+                                    />
+                                </FormLayout.Group>
+                            </FormLayout>
+                        </LegacyCard>
+                        <LegacyCard sectioned>
+                            <FormLayout>
                                 <FormLayout.Group>
                                     <TextField label={"Email Subject"}
                                                multiline={2}
@@ -570,9 +699,9 @@ export default function StockNotification() {
                                                             }}>
                                                                 {
                                                                     backInStockEmail.bis_branding_type == "2" ?
-                                                                        <Fragment>{selectedBISLogo  ?
+                                                                        <Fragment>{selectedBISLogo && selectedBISLogo.name ?
                                                                             <img
-                                                                                src={selectedBISLogo ? URL.createObjectURL(selectedBISLogo[0]) : ""}
+                                                                                src={selectedBISLogo ? URL.createObjectURL(selectedBISLogo) : ""}
                                                                                 alt="logo"
                                                                                 style={{maxHeight: '50px'}}/> :
                                                                             backInStockEmail.bis_logo ?
@@ -582,9 +711,9 @@ export default function StockNotification() {
                                                                                 <img src={""} alt="logo"
                                                                                      style={{maxHeight: '50px'}}/>}</Fragment> :
                                                                         backInStockEmail.bis_branding_type == "1" ? shopDetails && shopDetails.store_name :
-                                                                            <Fragment>{selectedBISLogo ?
+                                                                            <Fragment>{selectedBISLogo?.name ?
                                                                                 <img
-                                                                                    src={selectedBISLogo ? URL.createObjectURL(selectedBISLogo[0]) : ""}
+                                                                                    src={selectedBISLogo ? URL.createObjectURL(selectedBISLogo) : ""}
                                                                                     alt="logo"
                                                                                     style={{maxHeight: '50px'}}/> :
                                                                                 backInStockEmail.bis_logo ?
@@ -669,17 +798,18 @@ export default function StockNotification() {
                                                             <td style={{paddingTop: '20px'}}>
                                                                 <a className="buy-action-url bg-primary"
                                                                    style={{
-                                                                       backgroundColor: backInStockEmail.bis_style.primary_color,
-                                                                       color: 'rgb(255, 255, 255)',
+                                                                       backgroundColor: backInStockEmail.bis_style.add_to_cart_btn_bg_color,
+                                                                       color: backInStockEmail.bis_style.add_to_cart_btn_text_color,
                                                                        boxSizing: 'border-box',
                                                                        borderRadius: '10px',
                                                                        display: 'block',
                                                                        fontSize: '18px',
                                                                        fontWeight: 600,
                                                                        lineHeight: '20px',
-                                                                       padding: '20px 24px',
+                                                                       padding: `${backInStockEmail.bis_style.add_to_cart_btn_vertical_padding}px ${backInStockEmail.bis_style.add_to_cart_btn_horizontal_padding}px`,
                                                                        textAlign: 'center',
-                                                                       textDecoration: 'none'
+                                                                       textDecoration: 'none',
+                                                                       border: `${backInStockEmail.bis_style.add_to_cart_btn_border_size}px solid ${backInStockEmail.bis_style.add_to_cart_btn_border_color}`
                                                                    }}>{backInStockEmail.bis_content.add_to_cart_button_text}</a>
                                                             </td>
                                                         </tr>
@@ -687,115 +817,136 @@ export default function StockNotification() {
                                                             <td style={{paddingTop: '20px'}}>
                                                                 <a className="visit-action-url color-primary border-primary"
                                                                    style={{
-                                                                       color: backInStockEmail.bis_style.primary_color,
-                                                                       border: `1px solid ${backInStockEmail.bis_style.primary_color}`,
+                                                                       backgroundColor: backInStockEmail.bis_style.view_product_btn_bg_color,
+                                                                       color: backInStockEmail.bis_style.view_product_btn_text_color,
+                                                                       border: `${backInStockEmail.bis_style.view_product_btn_border_size}px solid ${backInStockEmail.bis_style.view_product_btn_border_color}`,
                                                                        boxSizing: 'border-box',
                                                                        borderRadius: '10px',
                                                                        display: 'block',
                                                                        fontSize: '18px',
                                                                        fontWeight: 600,
                                                                        lineHeight: '20px',
-                                                                       padding: '18px 24px',
+                                                                       padding: `${backInStockEmail.bis_style.view_product_btn_vertical_padding}px ${backInStockEmail.bis_style.view_product_btn_horizontal_padding}px`,
                                                                        textAlign: 'center',
                                                                        textDecoration: 'none'
                                                                    }}>{backInStockEmail.bis_content.view_product_button_text}</a>
                                                             </td>
                                                         </tr>
-                                                        <tr className="social-text-wrapper">
-                                                            <td colSpan={3} className="social-text color-text-tertiary"
-                                                                style={{
-                                                                    display: (backInStockEmail.bis_social.instagram !== null && backInStockEmail.bis_social.instagram !== "") ||
-                                                                    (backInStockEmail.bis_social.facebook !== null && backInStockEmail.bis_social.facebook !== "") ||
-                                                                    (backInStockEmail.bis_social.twitter !== null && backInStockEmail.bis_social.twitter !== "") ||
-                                                                    (backInStockEmail.bis_social.telegram !== null && backInStockEmail.bis_social.telegram !== "") ||
-                                                                    (backInStockEmail.bis_social.linkedin !== null && backInStockEmail.bis_social.linkedin !== "") ||
-                                                                    (backInStockEmail.bis_social.pinterest !== null && backInStockEmail.bis_social.pinterest !== "")
-                                                                        ? "block" : 'none',
-                                                                    fontWeight: 400,
-                                                                    fontSize: '16px',
-                                                                    textAlign: 'center',
-                                                                    color: 'rgb(116, 124, 128)',
-                                                                    paddingBottom: '10px',
-                                                                    paddingTop: '30px'
-                                                                }}>{backInStockEmail.bis_social.title}</td>
-                                                        </tr>
-                                                        <tr className="social-networks-wrapper">
-                                                            <td className="social-networks"
-                                                                style={{textAlign: 'center', paddingBottom: '20px'}}>
-                                                                <button className="instagram bg-secondary" style={{
-                                                                    border: 'none',
-                                                                    boxSizing: 'border-box',
-                                                                    display: backInStockEmail.bis_social.instagram !== null && backInStockEmail?.bis_social?.instagram.trim() !== "" ? "inline-block" : 'none',
-                                                                    margin: '0px 12px',
-                                                                    backgroundColor: backInStockEmail.bis_style.primary_color,
-                                                                    width: '24px',
-                                                                    height: '24px',
-                                                                    borderRadius: '50%'
-                                                                }}><img
-                                                                    src="https://storage.googleapis.com/static.shopgram.io/restock-icons/instagram.png"
-                                                                    width={12} alt="instagram"/></button>
-                                                                <button className="facebook bg-secondary" style={{
-                                                                    border: 'none',
-                                                                    boxSizing: 'border-box',
-                                                                    display: backInStockEmail.bis_social.facebook !== null && backInStockEmail.bis_social.facebook.trim() !== "" ? "inline-block" : 'none',
-                                                                    margin: '0px 12px',
-                                                                    backgroundColor: backInStockEmail.bis_style.primary_color,
-                                                                    width: '24px',
-                                                                    height: '24px',
-                                                                    borderRadius: '50%'
-                                                                }}><img
-                                                                    src="https://storage.googleapis.com/static.shopgram.io/restock-icons/facebook.png"
-                                                                    width={12} alt="facebook"/></button>
-                                                                <button className="twitter bg-secondary" style={{
-                                                                    border: 'none',
-                                                                    boxSizing: 'border-box',
-                                                                    display: backInStockEmail.bis_social.twitter !== null && backInStockEmail.bis_social.twitter.trim() !== "" ? "inline-block" : 'none',
-                                                                    margin: '0px 12px',
-                                                                    backgroundColor: backInStockEmail.bis_style.primary_color,
-                                                                    width: '24px',
-                                                                    height: '24px',
-                                                                    borderRadius: '50%'
-                                                                }}><img
-                                                                    src="https://storage.googleapis.com/static.shopgram.io/restock-icons/twitter.png"
-                                                                    width={12} alt="twitter"/></button>
-                                                                <button className="telegram bg-secondary" style={{
-                                                                    border: 'none',
-                                                                    boxSizing: 'border-box',
-                                                                    display: backInStockEmail.bis_social.telegram !== null && backInStockEmail.bis_social.telegram.trim() !== "" ? "inline-block" : 'none',
-                                                                    margin: '0px 12px',
-                                                                    backgroundColor: backInStockEmail.bis_style.primary_color,
-                                                                    width: '24px',
-                                                                    height: '24px',
-                                                                    borderRadius: '50%'
-                                                                }}><img
-                                                                    src="https://storage.googleapis.com/static.shopgram.io/restock-icons/telegram.png"
-                                                                    width={12} alt="telegram"/></button>
-                                                                <button className="linkedin bg-secondary" style={{
-                                                                    border: 'none',
-                                                                    boxSizing: 'border-box',
-                                                                    display: backInStockEmail.bis_social.linkedin !== null && backInStockEmail.bis_social.linkedin.trim() !== "" ? "inline-block" : 'none',
-                                                                    margin: '0px 12px',
-                                                                    backgroundColor: backInStockEmail.bis_style.primary_color,
-                                                                    width: '24px',
-                                                                    height: '24px',
-                                                                    borderRadius: '50%'
-                                                                }}><img
-                                                                    src="https://storage.googleapis.com/static.shopgram.io/restock-icons/linkedin.png"
-                                                                    width={12} alt="linkedin"/></button>
-                                                                <button className="pinterest bg-secondary" style={{
-                                                                    border: 'none',
-                                                                    boxSizing: 'border-box',
-                                                                    display: backInStockEmail.bis_social.pinterest !== null && backInStockEmail.bis_social.pinterest.trim() !== "" ? "inline-block" : 'none',
-                                                                    margin: '0px 12px',
-                                                                    backgroundColor: backInStockEmail.bis_style.primary_color,
-                                                                    width: '24px',
-                                                                    height: '24px',
-                                                                    borderRadius: '50%'
-                                                                }}><img
-                                                                    src="https://storage.googleapis.com/static.shopgram.io/restock-icons/pinterest.png"
-                                                                    width={12} alt="pinterest"/></button>
-                                                            </td>
-                                                        </tr>
+                                                        {
+                                                            (backInStockEmail.bis_social.instagram !== null && backInStockEmail.bis_social.instagram !== "") ||
+                                                            (backInStockEmail.bis_social.facebook !== null && backInStockEmail.bis_social.facebook !== "") ||
+                                                            (backInStockEmail.bis_social.twitter !== null && backInStockEmail.bis_social.twitter !== "") ||
+                                                            (backInStockEmail.bis_social.telegram !== null && backInStockEmail.bis_social.telegram !== "") ||
+                                                            (backInStockEmail.bis_social.linkedin !== null && backInStockEmail.bis_social.linkedin !== "") ||
+                                                            (backInStockEmail.bis_social.pinterest !== null && backInStockEmail.bis_social.pinterest !== "") ?
+                                                                <React.Fragment>
+                                                                    <tr className="social-text-wrapper">
+                                                                        <td colSpan={3}
+                                                                            className="social-text color-text-tertiary"
+                                                                            style={{
+                                                                                display: (backInStockEmail.bis_social.instagram !== null && backInStockEmail.bis_social.instagram !== "") ||
+                                                                                (backInStockEmail.bis_social.facebook !== null && backInStockEmail.bis_social.facebook !== "") ||
+                                                                                (backInStockEmail.bis_social.twitter !== null && backInStockEmail.bis_social.twitter !== "") ||
+                                                                                (backInStockEmail.bis_social.telegram !== null && backInStockEmail.bis_social.telegram !== "") ||
+                                                                                (backInStockEmail.bis_social.linkedin !== null && backInStockEmail.bis_social.linkedin !== "") ||
+                                                                                (backInStockEmail.bis_social.pinterest !== null && backInStockEmail.bis_social.pinterest !== "")
+                                                                                    ? "block" : 'none',
+                                                                                fontWeight: 400,
+                                                                                fontSize: '16px',
+                                                                                textAlign: 'center',
+                                                                                color: 'rgb(116, 124, 128)',
+                                                                                paddingBottom: '10px',
+                                                                                paddingTop: '30px'
+                                                                            }}>{backInStockEmail.bis_social.title}</td>
+                                                                    </tr>
+                                                                    <tr className="social-networks-wrapper">
+                                                                        <td className="social-networks"
+                                                                            style={{textAlign: 'center'}}>
+                                                                            <button className="instagram bg-secondary"
+                                                                                    style={{
+                                                                                        border: 'none',
+                                                                                        boxSizing: 'border-box',
+                                                                                        display: backInStockEmail.bis_social.instagram !== null && backInStockEmail?.bis_social?.instagram.trim() !== "" ? "inline-block" : 'none',
+                                                                                        margin: '0px 12px',
+                                                                                        backgroundColor: backInStockEmail.bis_style.add_to_cart_btn_bg_color,
+                                                                                        width: '24px',
+                                                                                        height: '24px',
+                                                                                        borderRadius: '50%'
+                                                                                    }}><img
+                                                                                src="https://storage.googleapis.com/static.shopgram.io/restock-icons/instagram.png"
+                                                                                width={12} alt="instagram"/></button>
+                                                                            <button className="facebook bg-secondary"
+                                                                                    style={{
+                                                                                        border: 'none',
+                                                                                        boxSizing: 'border-box',
+                                                                                        display: backInStockEmail.bis_social.facebook !== null && backInStockEmail.bis_social.facebook.trim() !== "" ? "inline-block" : 'none',
+                                                                                        margin: '0px 12px',
+                                                                                        backgroundColor: backInStockEmail.bis_style.add_to_cart_btn_bg_color,
+                                                                                        width: '24px',
+                                                                                        height: '24px',
+                                                                                        borderRadius: '50%'
+                                                                                    }}><img
+                                                                                src="https://storage.googleapis.com/static.shopgram.io/restock-icons/facebook.png"
+                                                                                width={12} alt="facebook"/></button>
+                                                                            <button className="twitter bg-secondary"
+                                                                                    style={{
+                                                                                        border: 'none',
+                                                                                        boxSizing: 'border-box',
+                                                                                        display: backInStockEmail.bis_social.twitter !== null && backInStockEmail.bis_social.twitter.trim() !== "" ? "inline-block" : 'none',
+                                                                                        margin: '0px 12px',
+                                                                                        backgroundColor: backInStockEmail.bis_style.add_to_cart_btn_bg_color,
+                                                                                        width: '24px',
+                                                                                        height: '24px',
+                                                                                        borderRadius: '50%'
+                                                                                    }}><img
+                                                                                src="https://storage.googleapis.com/static.shopgram.io/restock-icons/twitter.png"
+                                                                                width={12} alt="twitter"/></button>
+                                                                            <button className="telegram bg-secondary"
+                                                                                    style={{
+                                                                                        border: 'none',
+                                                                                        boxSizing: 'border-box',
+                                                                                        display: backInStockEmail.bis_social.telegram !== null && backInStockEmail.bis_social.telegram.trim() !== "" ? "inline-block" : 'none',
+                                                                                        margin: '0px 12px',
+                                                                                        backgroundColor: backInStockEmail.bis_style.add_to_cart_btn_bg_color,
+                                                                                        width: '24px',
+                                                                                        height: '24px',
+                                                                                        borderRadius: '50%'
+                                                                                    }}><img
+                                                                                src="https://storage.googleapis.com/static.shopgram.io/restock-icons/telegram.png"
+                                                                                width={12} alt="telegram"/></button>
+                                                                            <button className="linkedin bg-secondary"
+                                                                                    style={{
+                                                                                        border: 'none',
+                                                                                        boxSizing: 'border-box',
+                                                                                        display: backInStockEmail.bis_social.linkedin !== null && backInStockEmail.bis_social.linkedin.trim() !== "" ? "inline-block" : 'none',
+                                                                                        margin: '0px 12px',
+                                                                                        backgroundColor: backInStockEmail.bis_style.add_to_cart_btn_bg_color,
+                                                                                        width: '24px',
+                                                                                        height: '24px',
+                                                                                        borderRadius: '50%'
+                                                                                    }}><img
+                                                                                src="https://storage.googleapis.com/static.shopgram.io/restock-icons/linkedin.png"
+                                                                                width={12} alt="linkedin"/></button>
+                                                                            <button className="pinterest bg-secondary"
+                                                                                    style={{
+                                                                                        border: 'none',
+                                                                                        boxSizing: 'border-box',
+                                                                                        display: backInStockEmail.bis_social.pinterest !== null && backInStockEmail.bis_social.pinterest.trim() !== "" ? "inline-block" : 'none',
+                                                                                        margin: '0px 12px',
+                                                                                        backgroundColor: backInStockEmail.bis_style.add_to_cart_btn_bg_color,
+                                                                                        width: '24px',
+                                                                                        height: '24px',
+                                                                                        borderRadius: '50%'
+                                                                                    }}><img
+                                                                                src="https://storage.googleapis.com/static.shopgram.io/restock-icons/pinterest.png"
+                                                                                width={12} alt="pinterest"/></button>
+                                                                        </td>
+                                                                    </tr>
+                                                                </React.Fragment>
+                                                                :
+                                                                null
+                                                        }
+
                                                         {/*<tr>*/}
                                                         {/*    <td className="footer color-text-tertiary" style={{*/}
                                                         {/*        borderTop: '1px solid rgb(201, 202, 204)',*/}
@@ -840,7 +991,6 @@ export default function StockNotification() {
                     </Layout.Section>
                 </Layout>
             </Page>
-
         </Fragment>
     );
 };

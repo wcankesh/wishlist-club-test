@@ -27,13 +27,17 @@ const initialState = {
     thankyou_logo: null,
     thankyou_style:
         {
-            primary_color: "#000000",
             background_color: "#ffffff",
             theme: "1",
             font_family: "roboto",
             title_font_size: 24,
             description_font_size: 16,
-            seconday_color: "#ffffff",
+            btn_bg_color: "",
+            btn_text_color: "",
+            btn_border_color: "",
+            btn_border_size: "",
+            btn_horizontal_padding: "",
+            btn_vertical_padding: "",
         }
     ,
     thankyou_social:
@@ -144,10 +148,10 @@ export default function ThankYouNotification() {
             if ((typeof (newBackInStockEmail[x]) === "object") && newBackInStockEmail[x] !== null) {
 
             } else {
-                if (x === "bis_logo" && selectedBISLogo && selectedBISLogo[0]) {
-                    formData.append("bis_logo", selectedBISLogo[0]);
-                } else if (x === "thankyou_logo" && selectedTYLogo[0]) {
-                    formData.append("thankyou_logo", selectedTYLogo[0]);
+                if (x === "bis_logo" && selectedBISLogo && selectedBISLogo.name) {
+                    formData.append("bis_logo", selectedBISLogo);
+                } else if (x === "thankyou_logo" && selectedTYLogo.name) {
+                    formData.append("thankyou_logo", selectedTYLogo);
                 } else if (x === "bis_logo" || x === "thankyou_logo") {
 
                 } else {
@@ -207,21 +211,21 @@ export default function ThankYouNotification() {
 
     const handleDropZoneDrop = useCallback(
         (_dropFiles, acceptedFiles, _rejectedFiles) =>
-            setSelectedTYLogo([acceptedFiles[0]]),
+            setSelectedTYLogo(acceptedFiles[0]),
         [],
     );
     const fileUpload = (!selectedTYLogo && !backInStockEmail.thankyou_logo) ? <DropZone.FileUpload/> : "";
     const uploadedFiles = (
         <Fragment>
             {
-                (selectedTYLogo && !backInStockEmail.thankyou_logo) &&
+                (selectedTYLogo || backInStockEmail.thankyou_logo) ?
                 <LegacyStack alignment={"center"} vertical spacing={"tight"}>
                     <br/>
                     <br/>
                     {
                         selectedTYLogo ? <Thumbnail
                                 size="small"
-                                source={window.URL.createObjectURL(selectedTYLogo[0])}
+                                source={window.URL.createObjectURL(selectedTYLogo)}
                             />
                             :
                             backInStockEmail && backInStockEmail.thankyou_logo ?
@@ -233,6 +237,7 @@ export default function ThankYouNotification() {
                     <br/>
                     <br/>
                 </LegacyStack>
+                    :""
             }
         </Fragment>
     );
@@ -307,15 +312,10 @@ export default function ThankYouNotification() {
                                     {uploadedFiles}
                                     {fileUpload}
                                 </DropZone>}
-                                <Divider/>
-                                <FormLayout.Group condensed>
-                                    <ColorInput label={"Primary color"} name="primary_color"
-                                                onChange={tyOnChangeStyle}
-                                                value={backInStockEmail.thankyou_style.primary_color}/>
-                                    <ColorInput label={"Background color"} name="background_color"
-                                                onChange={tyOnChangeStyle}
-                                                value={backInStockEmail.thankyou_style.background_color}/>
-                                </FormLayout.Group>
+                            </FormLayout>
+                        </LegacyCard>
+                        <LegacyCard sectioned>
+                            <FormLayout>
                                 <FormLayout.Group condensed>
                                     <Select label={"Text color theme"} options={theme}
                                             value={backInStockEmail.thankyou_style.theme}
@@ -340,7 +340,72 @@ export default function ThankYouNotification() {
                                             }}
                                     />
                                 </FormLayout.Group>
-                                <Divider/>
+                                <FormLayout.Group condensed>
+                                    <ColorInput label={"Background color"} name="background_color"
+                                                onChange={tyOnChangeStyle}
+                                                value={backInStockEmail.thankyou_style.background_color}/>
+                                    <div></div>
+                                </FormLayout.Group>
+                            </FormLayout>
+                        </LegacyCard>
+                        <LegacyCard sectioned title="Shopping Button">
+                            <FormLayout>
+                                <FormLayout.Group condensed>
+                                    <ColorInput label={"Button Background color"} name="btn_bg_color"
+                                                onChange={tyOnChangeStyle}
+                                                value={backInStockEmail.thankyou_style.btn_bg_color}/>
+                                    <ColorInput label={"Button Text color"} name="btn_text_color"
+                                                onChange={tyOnChangeStyle}
+                                                value={backInStockEmail.thankyou_style.btn_text_color}/>
+                                </FormLayout.Group>
+                                <FormLayout.Group condensed>
+                                    <ColorInput label={"Button Border color"} name="btn_border_color"
+                                                onChange={tyOnChangeStyle}
+                                                value={backInStockEmail.thankyou_style.btn_border_color}/>
+                                    <TextField label={"Border Width"}
+                                               value={backInStockEmail.thankyou_style.btn_border_size}
+                                               type="number"
+                                               suffix="PX"
+                                               onChange={(value) => {
+                                                   tyOnChangeStyle({
+                                                       target: {
+                                                           name: "btn_border_size",
+                                                           value
+                                                       }
+                                                   })
+                                               }}
+
+                                    />
+                                </FormLayout.Group>
+                                <FormLayout.Group condensed>
+                                    <TextField label="Top & Bottom padding"
+                                               type="number"
+                                               value={backInStockEmail.thankyou_style.btn_vertical_padding}
+                                               onChange={(value) => tyOnChangeStyle({
+                                                   target: {
+                                                       name: "btn_vertical_padding",
+                                                       value
+                                                   }
+                                               })}
+                                               suffix="PX"
+                                    />
+                                    <TextField label="Left & Right padding"
+                                               type="number"
+                                               value={backInStockEmail.thankyou_style.btn_horizontal_padding}
+                                               onChange={(value) => tyOnChangeStyle({
+                                                   target: {
+                                                       name: "btn_horizontal_padding",
+                                                       value
+                                                   }
+                                               })}
+                                               suffix="PX"
+                                    />
+                                </FormLayout.Group>
+                            </FormLayout>
+                        </LegacyCard>
+                        <LegacyCard sectioned>
+                            <FormLayout>
+
                                 <FormLayout.Group>
                                     <TextField label={"Email Subject"}
                                                multiline={2}
@@ -559,9 +624,9 @@ export default function ThankYouNotification() {
                                                                 {
                                                                     backInStockEmail.thankyou_branding_type == "2" ?
                                                                         <Fragment>
-                                                                            {selectedTYLogo  ?
+                                                                            {selectedTYLogo && selectedTYLogo?.name ?
                                                                                 <img
-                                                                                    src={selectedTYLogo ? URL.createObjectURL(selectedTYLogo[0]) : ""}
+                                                                                    src={selectedTYLogo ? URL.createObjectURL(selectedTYLogo) : ""}
                                                                                     alt="logo"
                                                                                     style={{maxHeight: '50px'}}/>
                                                                                 :
@@ -576,9 +641,9 @@ export default function ThankYouNotification() {
                                                                         :
                                                                         backInStockEmail.thankyou_branding_type == "1" ? shopDetails && shopDetails.store_name :
                                                                             <Fragment>
-                                                                                {selectedTYLogo ?
+                                                                                {selectedTYLogo?.name ?
                                                                                     <img
-                                                                                        src={selectedTYLogo ? URL.createObjectURL(selectedTYLogo[0]) : ""}
+                                                                                        src={selectedTYLogo ? URL.createObjectURL(selectedTYLogo) : ""}
                                                                                         alt="logo"
                                                                                         style={{maxHeight: '50px'}}/> :
                                                                                     backInStockEmail.thankyou_logo ?
@@ -624,116 +689,135 @@ export default function ThankYouNotification() {
                                                             <td style={{paddingTop: '20px'}}>
                                                                 <a className="buy-action-url bg-primary"
                                                                    style={{
-                                                                       backgroundColor: backInStockEmail.thankyou_style.primary_color,
-                                                                       color: 'rgb(255, 255, 255)',
+                                                                       backgroundColor: backInStockEmail.thankyou_style.btn_bg_color,
+                                                                       color: backInStockEmail.thankyou_style.btn_text_color,
                                                                        boxSizing: 'border-box',
                                                                        borderRadius: '10px',
                                                                        display: 'block',
                                                                        fontSize: '18px',
                                                                        fontWeight: 600,
                                                                        lineHeight: '20px',
-                                                                       padding: '20px 24px',
+                                                                       padding: `${backInStockEmail.thankyou_style.btn_vertical_padding}px ${backInStockEmail.thankyou_style.btn_horizontal_padding}px`,
                                                                        textAlign: 'center',
-                                                                       textDecoration: 'none'
+                                                                       textDecoration: 'none',
+                                                                       border: `${backInStockEmail.thankyou_style.btn_border_size}px solid ${backInStockEmail.thankyou_style.btn_border_color}`
                                                                    }}>{backInStockEmail.thankyou_content.button_text}</a>
                                                             </td>
                                                         </tr>
+                                                        {
+                                                            (backInStockEmail.thankyou_social.instagram !== null && backInStockEmail.thankyou_social.instagram !== "") ||
+                                                            (backInStockEmail.thankyou_social.facebook !== null && backInStockEmail.thankyou_social.facebook !== "") ||
+                                                            (backInStockEmail.thankyou_social.twitter !== null && backInStockEmail.thankyou_social.twitter !== "") ||
+                                                            (backInStockEmail.thankyou_social.telegram !== null && backInStockEmail.thankyou_social.telegram !== "") ||
+                                                            (backInStockEmail.thankyou_social.linkedin !== null && backInStockEmail.thankyou_social.linkedin !== "") ||
+                                                            (backInStockEmail.thankyou_social.pinterest !== null && backInStockEmail.thankyou_social.pinterest !== "") ?
+                                                                <React.Fragment>
+                                                                    <tr className="social-text-wrapper">
+                                                                        <td colSpan={3}
+                                                                            className="social-text color-text-tertiary"
+                                                                            style={{
+                                                                                display: (backInStockEmail.thankyou_social.instagram !== null && backInStockEmail.thankyou_social.instagram !== "") ||
+                                                                                (backInStockEmail.thankyou_social.facebook !== null && backInStockEmail.thankyou_social.facebook !== "") ||
+                                                                                (backInStockEmail.thankyou_social.twitter !== null && backInStockEmail.thankyou_social.twitter !== "") ||
+                                                                                (backInStockEmail.thankyou_social.telegram !== null && backInStockEmail.thankyou_social.telegram !== "") ||
+                                                                                (backInStockEmail.thankyou_social.linkedin !== null && backInStockEmail.thankyou_social.linkedin !== "") ||
+                                                                                (backInStockEmail.thankyou_social.pinterest !== null && backInStockEmail.thankyou_social.pinterest !== "")
+                                                                                    ? "block" : 'none',
+                                                                                fontWeight: 400,
+                                                                                fontSize: '16px',
+                                                                                textAlign: 'center',
+                                                                                color: 'rgb(116, 124, 128)',
+                                                                                paddingBottom: '10px',
+                                                                                paddingTop: '30px'
+                                                                            }}>{backInStockEmail.thankyou_social.title}</td>
+                                                                    </tr>
+                                                                    <tr className="social-networks-wrapper">
+                                                                        <td className="social-networks"
+                                                                            style={{textAlign: 'center'}}>
+                                                                            <button className="instagram bg-secondary"
+                                                                                    style={{
+                                                                                        border: 'none',
+                                                                                        boxSizing: 'border-box',
+                                                                                        display: backInStockEmail.thankyou_social.instagram !== null && backInStockEmail.thankyou_social.instagram.trim() !== "" ? "inline-block" : 'none',
+                                                                                        margin: '0px 12px',
+                                                                                        backgroundColor: backInStockEmail.thankyou_style.btn_bg_color,
+                                                                                        width: '24px',
+                                                                                        height: '24px',
+                                                                                        borderRadius: '50%'
+                                                                                    }}><img
+                                                                                src="https://storage.googleapis.com/static.shopgram.io/restock-icons/instagram.png"
+                                                                                width={12} alt="instagram"/></button>
+                                                                            <button className="facebook bg-secondary"
+                                                                                    style={{
+                                                                                        border: 'none',
+                                                                                        boxSizing: 'border-box',
+                                                                                        display: backInStockEmail.thankyou_social.facebook !== null && backInStockEmail.thankyou_social.facebook.trim() !== "" ? "inline-block" : 'none',
+                                                                                        margin: '0px 12px',
+                                                                                        backgroundColor: backInStockEmail.thankyou_style.btn_bg_color,
+                                                                                        width: '24px',
+                                                                                        height: '24px',
+                                                                                        borderRadius: '50%'
+                                                                                    }}><img
+                                                                                src="https://storage.googleapis.com/static.shopgram.io/restock-icons/facebook.png"
+                                                                                width={12} alt="facebook"/></button>
+                                                                            <button className="twitter bg-secondary"
+                                                                                    style={{
+                                                                                        border: 'none',
+                                                                                        boxSizing: 'border-box',
+                                                                                        display: backInStockEmail.thankyou_social.twitter !== null && backInStockEmail.thankyou_social.twitter.trim() !== "" ? "inline-block" : 'none',
+                                                                                        margin: '0px 12px',
+                                                                                        backgroundColor: backInStockEmail.thankyou_style.btn_bg_color,
+                                                                                        width: '24px',
+                                                                                        height: '24px',
+                                                                                        borderRadius: '50%'
+                                                                                    }}><img
+                                                                                src="https://storage.googleapis.com/static.shopgram.io/restock-icons/twitter.png"
+                                                                                width={12} alt="twitter"/></button>
+                                                                            <button className="telegram bg-secondary"
+                                                                                    style={{
+                                                                                        border: 'none',
+                                                                                        boxSizing: 'border-box',
+                                                                                        display: backInStockEmail.thankyou_social.telegram !== null && backInStockEmail.thankyou_social.telegram.trim() !== "" ? "inline-block" : 'none',
+                                                                                        margin: '0px 12px',
+                                                                                        backgroundColor: backInStockEmail.thankyou_style.btn_bg_color,
+                                                                                        width: '24px',
+                                                                                        height: '24px',
+                                                                                        borderRadius: '50%'
+                                                                                    }}><img
+                                                                                src="https://storage.googleapis.com/static.shopgram.io/restock-icons/telegram.png"
+                                                                                width={12} alt="telegram"/></button>
+                                                                            <button className="linkedin bg-secondary"
+                                                                                    style={{
+                                                                                        border: 'none',
+                                                                                        boxSizing: 'border-box',
+                                                                                        display: backInStockEmail.thankyou_social.linkedin !== null && backInStockEmail.thankyou_social.linkedin.trim() !== "" ? "inline-block" : 'none',
+                                                                                        margin: '0px 12px',
+                                                                                        backgroundColor: backInStockEmail.thankyou_style.btn_bg_color,
+                                                                                        width: '24px',
+                                                                                        height: '24px',
+                                                                                        borderRadius: '50%'
+                                                                                    }}><img
+                                                                                src="https://storage.googleapis.com/static.shopgram.io/restock-icons/linkedin.png"
+                                                                                width={12} alt="linkedin"/></button>
+                                                                            <button className="pinterest bg-secondary"
+                                                                                    style={{
+                                                                                        border: 'none',
+                                                                                        boxSizing: 'border-box',
+                                                                                        display: backInStockEmail.thankyou_social.pinterest !== null && backInStockEmail.thankyou_social.pinterest.trim() !== "" ? "inline-block" : 'none',
+                                                                                        margin: '0px 12px',
+                                                                                        backgroundColor: backInStockEmail.thankyou_style.btn_bg_color,
+                                                                                        width: '24px',
+                                                                                        height: '24px',
+                                                                                        borderRadius: '50%'
+                                                                                    }}><img
+                                                                                src="https://storage.googleapis.com/static.shopgram.io/restock-icons/pinterest.png"
+                                                                                width={12} alt="pinterest"/></button>
+                                                                        </td>
+                                                                    </tr>
+                                                                </React.Fragment> : null
+                                                        }
 
-                                                        <tr className="social-text-wrapper">
-                                                            <td colSpan={3} className="social-text color-text-tertiary"
-                                                                style={{
-                                                                    display: (backInStockEmail.thankyou_social.instagram !== null && backInStockEmail.thankyou_social.instagram !== "") ||
-                                                                    (backInStockEmail.thankyou_social.facebook !== null && backInStockEmail.thankyou_social.facebook !== "") ||
-                                                                    (backInStockEmail.thankyou_social.twitter !== null && backInStockEmail.thankyou_social.twitter !== "") ||
-                                                                    (backInStockEmail.thankyou_social.telegram !== null && backInStockEmail.thankyou_social.telegram !== "") ||
-                                                                    (backInStockEmail.thankyou_social.linkedin !== null && backInStockEmail.thankyou_social.linkedin !== "") ||
-                                                                    (backInStockEmail.thankyou_social.pinterest !== null && backInStockEmail.thankyou_social.pinterest !== "")
-                                                                        ? "block" : 'none',
-                                                                    fontWeight: 400,
-                                                                    fontSize: '16px',
-                                                                    textAlign: 'center',
-                                                                    color: 'rgb(116, 124, 128)',
-                                                                    paddingBottom: '10px',
-                                                                    paddingTop: '30px'
-                                                                }}>{backInStockEmail.thankyou_social.title}</td>
-                                                        </tr>
-                                                        <tr className="social-networks-wrapper">
-                                                            <td className="social-networks"
-                                                                style={{textAlign: 'center', paddingBottom: '20px'}}>
-                                                                <button className="instagram bg-secondary" style={{
-                                                                    border: 'none',
-                                                                    boxSizing: 'border-box',
-                                                                    display: backInStockEmail.thankyou_social.instagram !== null && backInStockEmail.thankyou_social.instagram.trim() !== "" ? "inline-block" : 'none',
-                                                                    margin: '0px 12px',
-                                                                    backgroundColor: backInStockEmail.thankyou_style.primary_color,
-                                                                    width: '24px',
-                                                                    height: '24px',
-                                                                    borderRadius: '50%'
-                                                                }}><img
-                                                                    src="https://storage.googleapis.com/static.shopgram.io/restock-icons/instagram.png"
-                                                                    width={12} alt="instagram"/></button>
-                                                                <button className="facebook bg-secondary" style={{
-                                                                    border: 'none',
-                                                                    boxSizing: 'border-box',
-                                                                    display: backInStockEmail.thankyou_social.facebook !== null && backInStockEmail.thankyou_social.facebook.trim() !== "" ? "inline-block" : 'none',
-                                                                    margin: '0px 12px',
-                                                                    backgroundColor: backInStockEmail.thankyou_style.primary_color,
-                                                                    width: '24px',
-                                                                    height: '24px',
-                                                                    borderRadius: '50%'
-                                                                }}><img
-                                                                    src="https://storage.googleapis.com/static.shopgram.io/restock-icons/facebook.png"
-                                                                    width={12} alt="facebook"/></button>
-                                                                <button className="twitter bg-secondary" style={{
-                                                                    border: 'none',
-                                                                    boxSizing: 'border-box',
-                                                                    display: backInStockEmail.thankyou_social.twitter !== null && backInStockEmail.thankyou_social.twitter.trim() !== "" ? "inline-block" : 'none',
-                                                                    margin: '0px 12px',
-                                                                    backgroundColor: backInStockEmail.thankyou_style.primary_color,
-                                                                    width: '24px',
-                                                                    height: '24px',
-                                                                    borderRadius: '50%'
-                                                                }}><img
-                                                                    src="https://storage.googleapis.com/static.shopgram.io/restock-icons/twitter.png"
-                                                                    width={12} alt="twitter"/></button>
-                                                                <button className="telegram bg-secondary" style={{
-                                                                    border: 'none',
-                                                                    boxSizing: 'border-box',
-                                                                    display: backInStockEmail.thankyou_social.telegram !== null && backInStockEmail.thankyou_social.telegram.trim() !== "" ? "inline-block" : 'none',
-                                                                    margin: '0px 12px',
-                                                                    backgroundColor: backInStockEmail.thankyou_style.primary_color,
-                                                                    width: '24px',
-                                                                    height: '24px',
-                                                                    borderRadius: '50%'
-                                                                }}><img
-                                                                    src="https://storage.googleapis.com/static.shopgram.io/restock-icons/telegram.png"
-                                                                    width={12} alt="telegram"/></button>
-                                                                <button className="linkedin bg-secondary" style={{
-                                                                    border: 'none',
-                                                                    boxSizing: 'border-box',
-                                                                    display: backInStockEmail.thankyou_social.linkedin !== null && backInStockEmail.thankyou_social.linkedin.trim() !== "" ? "inline-block" : 'none',
-                                                                    margin: '0px 12px',
-                                                                    backgroundColor: backInStockEmail.thankyou_style.primary_color,
-                                                                    width: '24px',
-                                                                    height: '24px',
-                                                                    borderRadius: '50%'
-                                                                }}><img
-                                                                    src="https://storage.googleapis.com/static.shopgram.io/restock-icons/linkedin.png"
-                                                                    width={12} alt="linkedin"/></button>
-                                                                <button className="pinterest bg-secondary" style={{
-                                                                    border: 'none',
-                                                                    boxSizing: 'border-box',
-                                                                    display: backInStockEmail.thankyou_social.pinterest !== null && backInStockEmail.thankyou_social.pinterest.trim() !== "" ? "inline-block" : 'none',
-                                                                    margin: '0px 12px',
-                                                                    backgroundColor: backInStockEmail.thankyou_style.primary_color,
-                                                                    width: '24px',
-                                                                    height: '24px',
-                                                                    borderRadius: '50%'
-                                                                }}><img
-                                                                    src="https://storage.googleapis.com/static.shopgram.io/restock-icons/pinterest.png"
-                                                                    width={12} alt="pinterest"/></button>
-                                                            </td>
-                                                        </tr>
+
                                                         {/*<tr>*/}
                                                         {/*    <td className="footer color-text-tertiary" style={{*/}
                                                         {/*        borderTop: '1px solid rgb(201, 202, 204)',*/}

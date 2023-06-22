@@ -27,12 +27,22 @@ const initialSate = {
 
     price_drop_style:
         {
-            primary_color: "#020bf7",
-            seconday_color: "#ffffff",
             background_color: "#f2f2f3",
             font_family: "roboto",
             description_font_size: "16",
-            theme: "1"
+            theme: "1",
+            add_to_cart_btn_bg_color: "",
+            add_to_cart_btn_text_color: "",
+            add_to_cart_btn_border_color: "",
+            add_to_cart_btn_border_size: "",
+            add_to_cart_btn_horizontal_padding: "",
+            add_to_cart_btn_vertical_padding: "",
+            view_product_btn_bg_color: "",
+            view_product_btn_text_color: "",
+            view_product_btn_border_color: "",
+            view_product_btn_border_size: "",
+            view_product_btn_horizontal_padding: "",
+            view_product_btn_vertical_padding: "",
         },
     price_drop_social:
         {
@@ -241,14 +251,24 @@ export default function PriceDropAlert() {
                                     {uploadedFiles}
                                     {fileUpload}
                                 </DropZone>}
-                                <Divider/>
+                            </FormLayout>
+                        </LegacyCard>
+                        <LegacyCard sectioned>
+                            <FormLayout>
                                 <FormLayout.Group condensed>
-                                    <ColorInput label="Primary color" name="primary_color"
-                                                value={emailSetting.price_drop_style.primary_color}
-                                                onChange={priceOnChangeStyle}/>
                                     <ColorInput label="Background color" name="background_color"
                                                 value={emailSetting.price_drop_style.background_color}
                                                 onChange={priceOnChangeStyle}/>
+                                    <TextField type="number" label="Email body font size" suffix="PX"
+                                               value={emailSetting.price_drop_style.description_font_size}
+                                               onChange={(value) => {
+                                                   priceOnChangeStyle({
+                                                       target: {
+                                                           name: "description_font_size",
+                                                           value
+                                                       }
+                                                   })
+                                               }}/>
                                 </FormLayout.Group>
                                 <FormLayout.Group condensed>
                                     <Select label={"Text color theme"} options={theme}
@@ -274,16 +294,7 @@ export default function PriceDropAlert() {
                                     />
                                 </FormLayout.Group>
                                 <FormLayout.Group condensed>
-                                    <TextField type="number" label="Email body font size" suffix="PX"
-                                               value={emailSetting.price_drop_style.description_font_size}
-                                               onChange={(value) => {
-                                                   priceOnChangeStyle({
-                                                       target: {
-                                                           name: "description_font_size",
-                                                           value
-                                                       }
-                                                   })
-                                               }}/>
+
                                     <TextField label='"Add to cart" label'
                                                value={emailSetting.price_drop_content.add_to_cart_button_text}
                                                onChange={(value) => {
@@ -295,8 +306,6 @@ export default function PriceDropAlert() {
                                                    })
                                                }}
                                     />
-                                </FormLayout.Group>
-                                <FormLayout.Group condensed>
                                     <TextField label='"Visit product" label'
                                                value={emailSetting.price_drop_content.view_product_button_text}
                                                onChange={(value) => {
@@ -308,9 +317,121 @@ export default function PriceDropAlert() {
                                                    })
                                                }}
                                     />
-                                    <div></div>
                                 </FormLayout.Group>
-                                <Divider/>
+                            </FormLayout>
+                        </LegacyCard>
+                        <LegacyCard sectioned title="Add to Cart Button">
+                            <FormLayout>
+                                <FormLayout.Group condensed>
+                                    <ColorInput label={"Button Background color"} name="add_to_cart_btn_bg_color"
+                                                onChange={priceOnChangeStyle}
+                                                value={emailSetting.price_drop_style.add_to_cart_btn_bg_color}/>
+                                    <ColorInput label={"Button Text color"} name="add_to_cart_btn_text_color"
+                                                onChange={priceOnChangeStyle}
+                                                value={emailSetting.price_drop_style.add_to_cart_btn_text_color}/>
+                                </FormLayout.Group>
+                                <FormLayout.Group condensed>
+                                    <ColorInput label={"Button Border color"} name="add_to_cart_btn_border_color"
+                                                onChange={priceOnChangeStyle}
+                                                value={emailSetting.price_drop_style.add_to_cart_btn_border_color}/>
+                                    <TextField label={"Border Width"}
+                                               value={emailSetting.price_drop_style.add_to_cart_btn_border_size}
+                                               type="number"
+                                               suffix="PX"
+                                               onChange={(value) => {
+                                                   priceOnChangeStyle({
+                                                       target: {
+                                                           name: "add_to_cart_btn_border_size",
+                                                           value
+                                                       }
+                                                   })
+                                               }}
+
+                                    />
+                                </FormLayout.Group>
+                                <FormLayout.Group condensed>
+                                    <TextField label="Top & Bottom padding"
+                                               type="number"
+                                               value={emailSetting.price_drop_style.add_to_cart_btn_vertical_padding}
+                                               onChange={(value) => priceOnChangeStyle({
+                                                   target: {
+                                                       name: "add_to_cart_btn_vertical_padding",
+                                                       value
+                                                   }
+                                               })}
+                                               suffix="PX"
+                                    />
+                                    <TextField label="Left & Right padding"
+                                               type="number"
+                                               value={emailSetting.price_drop_style.add_to_cart_btn_horizontal_padding}
+                                               onChange={(value) => priceOnChangeStyle({
+                                                   target: {
+                                                       name: "add_to_cart_btn_horizontal_padding",
+                                                       value
+                                                   }
+                                               })}
+                                               suffix="PX"
+                                    />
+                                </FormLayout.Group>
+                            </FormLayout>
+                        </LegacyCard>
+                        <LegacyCard sectioned title="View Product Button">
+                            <FormLayout>
+                                <FormLayout.Group condensed>
+                                    <ColorInput label={"Button Background color"} name="view_product_btn_bg_color"
+                                                onChange={priceOnChangeStyle}
+                                                value={emailSetting.price_drop_style.view_product_btn_bg_color}/>
+                                    <ColorInput label={"Button Text color"} name="view_product_btn_text_color"
+                                                onChange={priceOnChangeStyle}
+                                                value={emailSetting.price_drop_style.view_product_btn_text_color}/>
+                                </FormLayout.Group>
+                                <FormLayout.Group condensed>
+                                    <ColorInput label={"Button Border color"} name="view_product_btn_border_color"
+                                                onChange={priceOnChangeStyle}
+                                                value={emailSetting.price_drop_style.view_product_btn_border_color}/>
+                                    <TextField label={"Border Width"}
+                                               value={emailSetting.price_drop_style.view_product_btn_border_size}
+                                               type="number"
+                                               suffix="PX"
+                                               onChange={(value) => {
+                                                   priceOnChangeStyle({
+                                                       target: {
+                                                           name: "view_product_btn_border_size",
+                                                           value
+                                                       }
+                                                   })
+                                               }}
+
+                                    />
+                                </FormLayout.Group>
+                                <FormLayout.Group condensed>
+                                    <TextField label="Top & Bottom padding"
+                                               type="number"
+                                               value={emailSetting.price_drop_style.view_product_btn_vertical_padding}
+                                               onChange={(value) => priceOnChangeStyle({
+                                                   target: {
+                                                       name: "view_product_btn_vertical_padding",
+                                                       value
+                                                   }
+                                               })}
+                                               suffix="PX"
+                                    />
+                                    <TextField label="Left & Right padding"
+                                               type="number"
+                                               value={emailSetting.price_drop_style.view_product_btn_horizontal_padding}
+                                               onChange={(value) => priceOnChangeStyle({
+                                                   target: {
+                                                       name: "view_product_btn_horizontal_padding",
+                                                       value
+                                                   }
+                                               })}
+                                               suffix="PX"
+                                    />
+                                </FormLayout.Group>
+                            </FormLayout>
+                        </LegacyCard>
+                        <LegacyCard sectioned>
+                            <FormLayout>
                                 <TextField label="Email subject"
                                            helpText="Add this {{product_name}} {{shop_name}} variable"
                                            value={emailSetting.price_drop_email_subject}
@@ -546,19 +667,20 @@ export default function PriceDropAlert() {
                                                     <tr>
                                                         <td style={{paddingTop: '20px'}}>
                                                             <a className="buy-action-url bg-primary"
-                                                                style={{
-                                                                backgroundColor: emailSetting.price_drop_style.primary_color,
-                                                                color: 'rgb(255, 255, 255)',
-                                                                boxSizing: 'border-box',
-                                                                borderRadius: '10px',
-                                                                display: 'block',
-                                                                fontSize: '18px',
-                                                                fontWeight: 600,
-                                                                lineHeight: '20px',
-                                                                padding: '20px 24px',
-                                                                textAlign: 'center',
-                                                                textDecoration: 'none',
-                                                            }}>
+                                                               style={{
+                                                                   backgroundColor: emailSetting.price_drop_style.add_to_cart_btn_bg_color,
+                                                                   color: emailSetting.price_drop_style.add_to_cart_btn_text_color,
+                                                                   boxSizing: 'border-box',
+                                                                   borderRadius: '10px',
+                                                                   display: 'block',
+                                                                   fontSize: '18px',
+                                                                   fontWeight: 600,
+                                                                   lineHeight: '20px',
+                                                                   padding: `${emailSetting.price_drop_style.add_to_cart_btn_vertical_padding}px ${emailSetting.price_drop_style.add_to_cart_btn_horizontal_padding}px`,
+                                                                   textAlign: 'center',
+                                                                   textDecoration: 'none',
+                                                                   border: `${emailSetting.price_drop_style.add_to_cart_btn_border_size}px solid ${emailSetting.price_drop_style.add_to_cart_btn_border_color}`
+                                                               }}>
                                                                 {emailSetting.price_drop_content.add_to_cart_button_text}
                                                             </a>
                                                         </td>
@@ -568,18 +690,19 @@ export default function PriceDropAlert() {
                                                         <td style={{paddingTop: '20px'}}>
                                                             <a className="visit-action-url color-primary border-primary"
                                                                style={{
-                                                                color: emailSetting.price_drop_style.primary_color,
-                                                                border: `1px solid ${emailSetting.price_drop_style.primary_color}`,
-                                                                boxSizing: 'border-box',
-                                                                borderRadius: '10px',
-                                                                display: 'block',
-                                                                fontSize: '18px',
-                                                                fontWeight: 600,
-                                                                lineHeight: '20px',
-                                                                padding: '18px 24px',
-                                                                textAlign: 'center',
-                                                                textDecoration: 'none'
-                                                            }}>
+                                                                   backgroundColor: emailSetting.price_drop_style.view_product_btn_bg_color,
+                                                                   color: emailSetting.price_drop_style.view_product_btn_text_color,
+                                                                   border: `${emailSetting.price_drop_style.view_product_btn_border_size}px solid ${emailSetting.price_drop_style.view_product_btn_border_color}`,
+                                                                   boxSizing: 'border-box',
+                                                                   borderRadius: '10px',
+                                                                   display: 'block',
+                                                                   fontSize: '18px',
+                                                                   fontWeight: 600,
+                                                                   lineHeight: '20px',
+                                                                   padding: `${emailSetting.price_drop_style.view_product_btn_vertical_padding}px ${emailSetting.price_drop_style.view_product_btn_horizontal_padding}px`,
+                                                                   textAlign: 'center',
+                                                                   textDecoration: 'none'
+                                                               }}>
                                                                 {emailSetting.price_drop_content.view_product_button_text}
                                                             </a>
                                                         </td>
@@ -612,7 +735,7 @@ export default function PriceDropAlert() {
                                                                 boxSizing: 'border-box',
                                                                 display: emailSetting.price_drop_social.instagram !== null && emailSetting.price_drop_social.instagram.trim() !== "" ? "inline-block" : 'none',
                                                                 margin: '0px 12px',
-                                                                backgroundColor: emailSetting.price_drop_style.primary_color,
+                                                                backgroundColor: emailSetting.price_drop_style.add_to_cart_btn_bg_color,
                                                                 width: '24px',
                                                                 height: '24px',
                                                                 borderRadius: '50%'
@@ -624,7 +747,7 @@ export default function PriceDropAlert() {
                                                                 boxSizing: 'border-box',
                                                                 display: emailSetting.price_drop_social.facebook !== null && emailSetting.price_drop_social.facebook.trim() !== "" ? "inline-block" : 'none',
                                                                 margin: '0px 12px',
-                                                                backgroundColor: emailSetting.price_drop_style.primary_color,
+                                                                backgroundColor: emailSetting.price_drop_style.add_to_cart_btn_bg_color,
                                                                 width: '24px',
                                                                 height: '24px',
                                                                 borderRadius: '50%'
@@ -636,7 +759,7 @@ export default function PriceDropAlert() {
                                                                 boxSizing: 'border-box',
                                                                 display: emailSetting.price_drop_social.twitter !== null && emailSetting.price_drop_social.twitter.trim() !== "" ? "inline-block" : 'none',
                                                                 margin: '0px 12px',
-                                                                backgroundColor: emailSetting.price_drop_style.primary_color,
+                                                                backgroundColor: emailSetting.price_drop_style.add_to_cart_btn_bg_color,
                                                                 width: '24px',
                                                                 height: '24px',
                                                                 borderRadius: '50%'
@@ -648,7 +771,7 @@ export default function PriceDropAlert() {
                                                                 boxSizing: 'border-box',
                                                                 display: emailSetting.price_drop_social.telegram !== null && emailSetting.price_drop_social.telegram.trim() !== "" ? "inline-block" : 'none',
                                                                 margin: '0px 12px',
-                                                                backgroundColor: emailSetting.price_drop_style.primary_color,
+                                                                backgroundColor: emailSetting.price_drop_style.add_to_cart_btn_bg_color,
                                                                 width: '24px',
                                                                 height: '24px',
                                                                 borderRadius: '50%'
@@ -660,7 +783,7 @@ export default function PriceDropAlert() {
                                                                 boxSizing: 'border-box',
                                                                 display: emailSetting.price_drop_social.linkedin !== null && emailSetting.price_drop_social.linkedin.trim() !== "" ? "inline-block" : 'none',
                                                                 margin: '0px 12px',
-                                                                backgroundColor: emailSetting.price_drop_style.primary_color,
+                                                                backgroundColor: emailSetting.price_drop_style.add_to_cart_btn_bg_color,
                                                                 width: '24px',
                                                                 height: '24px',
                                                                 borderRadius: '50%'
@@ -672,7 +795,7 @@ export default function PriceDropAlert() {
                                                                 boxSizing: 'border-box',
                                                                 display: emailSetting?.price_drop_social?.pinterest !== null && emailSetting?.price_drop_social?.pinterest?.trim() !== "" ? "inline-block" : 'none',
                                                                 margin: '0px 12px',
-                                                                backgroundColor: emailSetting.price_drop_style.primary_color,
+                                                                backgroundColor: emailSetting.price_drop_style.add_to_cart_btn_bg_color,
                                                                 width: '24px',
                                                                 height: '24px',
                                                                 borderRadius: '50%'
