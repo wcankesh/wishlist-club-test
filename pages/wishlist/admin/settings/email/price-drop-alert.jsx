@@ -150,7 +150,6 @@ export default function PriceDropAlert() {
         })
     }
     const priceOnChangeSocial = (e) => {
-        debugger
         const {name, value} = e.target;
         setEmailSetting({
             ...emailSetting,
