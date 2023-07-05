@@ -69,11 +69,10 @@ export default function Plan(){
 
         },
         {
-            plan: "Enterprise",
+            plan: "Plus",
             planType: "8",
             price: "19.99",
-            btn_text: "Uprade"
-
+            btn_text: "Upgrade"
         },
     ]
 
@@ -88,30 +87,83 @@ export default function Plan(){
         },
         {
             title: 'Unlimited Wishlist',
+            free: true,
+            basic: true,
+            pro: true,
+            advance: true,
+            enterprise: true,
         },
         {
             title: 'Back In Stock',
+            free: true,
+            basic: true,
+            pro: true,
+            advance: true,
+            enterprise: true,
         },
         {
             title: 'Share Wishlist',
+            free: true,
+            basic: true,
+            pro: true,
+            advance: true,
+            enterprise: true,
         },
         {
             title: 'Import/Export Wishlist',
+            free: true,
+            basic: true,
+            pro: true,
+            advance: true,
+            enterprise: true,
         },
         {
             title: 'Button Customization',
+            free: true,
+            basic: true,
+            pro: true,
+            advance: true,
+            enterprise: true,
         },
         {
             title: 'Advance Analytics',
+            free: true,
+            basic: true,
+            pro: true,
+            advance: true,
+            enterprise: true,
         },
         {
             title: 'Email Customization',
+            free: true,
+            basic: true,
+            pro: true,
+            advance: true,
+            enterprise: true,
         },
         {
             title: 'Guest Wishlist',
+            free: true,
+            basic: true,
+            pro: true,
+            advance: true,
+            enterprise: true,
         },
         {
             title: 'Multiple Wishlist',
+            free: true,
+            basic: true,
+            pro: true,
+            advance: true,
+            enterprise: true,
+        },
+        {
+            title: 'Headless Integration',
+            free: false,
+            basic: false,
+            pro: false,
+            advance: false,
+            enterprise: true,
         },
 
     ];
@@ -180,16 +232,11 @@ export default function Plan(){
                                                     <div className="pplLabel">{y.title}</div>
                                                     <div className="pplContent">
                                                         <div className="row">
-                                                            <div className="col col-5">{y?.free ? y.free :
-                                                                <span className="icons">{Icons.rightIcon}</span>}</div>
-                                                            <div className='col col-5'>{y?.basic ? y.basic :
-                                                                <span className="icons">{Icons.rightIcon}</span>}</div>
-                                                            <div className='col col-5'>{y?.pro ? y.pro :
-                                                                <span className="icons">{Icons.rightIcon}</span>}</div>
-                                                            <div className='col col-5'>{y?.advance ? y.advance :
-                                                                <span className="icons">{Icons.rightIcon}</span>}</div>
-                                                            <div className='col col-5'>{y?.enterprise ? y.enterprise :
-                                                                <span className="icons">{Icons.rightIcon}</span>}</div>
+                                                            <div className="col col-5">{(y.free === true || y.free === false) ? <span className="icons">{y.free === true ? Icons.rightIcon : Icons.cancelIcon}</span> :y.free}</div>
+                                                            <div className="col col-5">{y.basic === true || y.basic === false ? <span className="icons">{y.basic === true ? Icons.rightIcon : Icons.cancelIcon}</span>:y .basic}</div>
+                                                            <div className="col col-5">{(y.pro === true || y.pro === false) ? <span className="icons">{y.pro === true ? Icons.rightIcon : Icons.cancelIcon}</span> : y.pro}</div>
+                                                            <div className="col col-5">{(y.advance === true || y.advance === false) ? <span className="icons">{y.advance === true ? Icons.rightIcon : Icons.cancelIcon}</span> : y.advance}</div>
+                                                            <div className="col col-5">{(y.enterprise === true || y.enterprise === false) ? <span className="icons">{y.enterprise === true? Icons.rightIcon : Icons.cancelIcon}</span> : y.enterprise}</div>
                                                         </div>
                                                     </div>
                                                 </li>
