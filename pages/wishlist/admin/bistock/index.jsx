@@ -1,6 +1,6 @@
 import React, {Fragment} from 'react';
 import {LegacyCard, Text, LegacyStack, Page, Layout, Grid, Icon} from "@shopify/polaris";
-import { NotificationMajor, PageMajor} from "@shopify/polaris-icons";
+import {EmailMajor, ThemesMajor} from "@shopify/polaris-icons";
 import {useNavigate} from "react-router-dom";
 import {baseUrl} from "../../../../utils/Constant";
 
@@ -9,15 +9,15 @@ export default function BackInStock() {
     const navigate = useNavigate()
     const BackInStock = [
         {
-            icon: NotificationMajor,
+            icon: EmailMajor,
             tabName: "Back In Stock Email",
-            description: "Switch setting to enable or disable app functionality.",
+            description: "Manage your preferences for back-in-stock notifications and thank-you notifications using this section.",
             path: "bistock/bistock-email"
         },
         {
-            icon: PageMajor,
+            icon: ThemesMajor,
             tabName: "Back In Stock Design",
-            description: "Switch setting to enable or disable app functionality.",
+            description: "Customize the design of your back-in-stock notifications for the home & collection page, subscriber form, and subscriber message.",
             path: "bistock/bistock-design"
         },
     ]
@@ -47,7 +47,7 @@ export default function BackInStock() {
                                                                 <LegacyStack spacing='extraTight' vertical>
                                                                     <Text as='h6'
                                                                           fontWeight="semibold">{x.tabName}</Text>
-                                                                    <Text>{x.description}</Text>
+                                                                    <Text color={"subdued"}>{x.description}</Text>
                                                                 </LegacyStack>
                                                             </LegacyStack.Item>
                                                         </LegacyStack>

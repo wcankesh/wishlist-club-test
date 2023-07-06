@@ -178,24 +178,31 @@ export default function WishlistEmail() {
     }
     const fileUpload = (!selectedWlLogo && !emailSetting.wishlist_logo) ? <DropZone.FileUpload/> : "";
     const uploadedFiles = (
-        <LegacyStack alignment="center" vertical>
-            <br/>
-            <LegacyStack>
-                {selectedWlLogo?.name ?
-                    <Thumbnail
-                        size="small"
-                        source={window.URL.createObjectURL(selectedWlLogo)}
-                    />
-                    : emailSetting && emailSetting.wishlist_logo ?
-                        <Thumbnail
-                            size="small"
-                            source={emailSetting.wishlist_logo}
-                        />
-                        :
-                        ""}
-            </LegacyStack>
-            <br/>
-        </LegacyStack>
+        <Fragment>
+            {
+                (selectedWlLogo || emailSetting.wishlist_logo) ?
+                    <LegacyStack alignment="center" vertical spacing={"tight"}>
+                        <br/>
+                        <br/>
+                        {selectedWlLogo?.name ?
+                            <Thumbnail
+                                size="small"
+                                source={window.URL.createObjectURL(selectedWlLogo)}
+                            />
+                            : emailSetting && emailSetting.wishlist_logo ?
+                                <Thumbnail
+                                    size="small"
+                                    source={emailSetting.wishlist_logo}
+                                />
+                                :
+                                ""}
+                        <br/>
+                        <br/>
+                    </LegacyStack>
+                    : ""
+            }
+        </Fragment>
+
     );
     const handleDropZoneDrop = (_dropFiles, acceptedFiles, _rejectedFiles) => {
         setSelectedWlLogo(acceptedFiles[0])
@@ -950,5 +957,6 @@ export default function WishlistEmail() {
             </Page>
         </Fragment>
     );
-};
+}
+;
 

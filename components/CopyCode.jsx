@@ -38,8 +38,8 @@ export function CopyCode  ({value,label})  {
             <LegacyStack vertical spacing={"tight"}>
                 {label && <label>{label}</label> }
                 <div className='copy-code' id={`cc_${firstId}_copy`} >
-                    <input readOnly className='cc-input-text' value={value} id={`cc_${secondId}_text`} />
-                    <button className='cc-copy' onClick={() => onCopyCode(`cc_${firstId}_copy`, `cc_${secondId}_text`)}>{Icons.copyIcon}{Icons.copyIconTrue}</button>
+                    <input readOnly className='cc-input-text' value={value} id={`cc_${secondId}_text`} disabled={!value}/>
+                    <button className='cc-copy' onClick={() => onCopyCode(`cc_${firstId}_copy`, `cc_${secondId}_text`)} disabled={!value}>{Icons.copyIcon}{Icons.copyIconTrue}</button>
                 </div>
             </LegacyStack>
         </Fragment>

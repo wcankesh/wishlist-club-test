@@ -171,24 +171,33 @@ export default function PriceDropAlert() {
     }
     const fileUpload = (!selectedPriceLogo && !emailSetting.price_drop_logo) ? <DropZone.FileUpload/> : "";
     const uploadedFiles = (
-        <LegacyStack alignment="center" vertical>
-            <br/>
-            <LegacyStack>
-                {selectedPriceLogo?.name ?
-                    <Thumbnail
-                        size="small"
-                        source={window.URL.createObjectURL(selectedPriceLogo)}
-                    />
-                    : emailSetting && emailSetting.price_drop_logo ?
-                        <Thumbnail
-                            size="small"
-                            source={emailSetting.price_drop_logo}
-                        />
-                        :
-                        ""}
-            </LegacyStack>
-            <br/>
-        </LegacyStack>
+        <Fragment>
+            {
+                (selectedPriceLogo || emailSetting.price_drop_logo) ?
+                    <LegacyStack alignment="center" vertical spacing={"tight"}>
+                        <br/>
+                        <br/>
+
+                        {selectedPriceLogo?.name ?
+                            <Thumbnail
+                                size="small"
+                                source={window.URL.createObjectURL(selectedPriceLogo)}
+                            />
+                            : emailSetting && emailSetting.price_drop_logo ?
+                                <Thumbnail
+                                    size="small"
+                                    source={emailSetting.price_drop_logo}
+                                />
+                                :
+                                ""}
+
+                        <br/>
+                        <br/>
+                    </LegacyStack>
+                    : ""
+            }
+
+        </Fragment>
     );
     const handleDropZoneDrop = (_dropFiles, acceptedFiles, _rejectedFiles) => {
         setSelectedPriceLogo(acceptedFiles[0])

@@ -143,24 +143,32 @@ export default function RestockAlert() {
     }
     const fileUpload = (!selectedRestockLogo && !emailSetting.restock_logo) ? <DropZone.FileUpload/> : "";
     const uploadedFiles = (
-        <LegacyStack alignment="center" vertical>
-            <br/>
-            <LegacyStack>
-                {selectedRestockLogo?.name ?
-                    <Thumbnail
-                        size="small"
-                        source={window.URL.createObjectURL(selectedRestockLogo)}
-                    />
-                    : emailSetting && emailSetting.restock_logo ?
-                        <Thumbnail
-                            size="small"
-                            source={emailSetting.restock_logo}
-                        />
-                        :
-                        ""}
-            </LegacyStack>
-            <br/>
-        </LegacyStack>
+        <Fragment>
+            {
+                (selectedRestockLogo || emailSetting.restock_logo) ?
+                    <LegacyStack alignment="center" vertical spacing={"tight"}>
+                        <br/>
+                        <br/>
+                        {selectedRestockLogo?.name ?
+                            <Thumbnail
+                                size="small"
+                                source={window.URL.createObjectURL(selectedRestockLogo)}
+                            />
+                            : emailSetting && emailSetting.restock_logo ?
+                                <Thumbnail
+                                    size="small"
+                                    source={emailSetting.restock_logo}
+                                />
+                                :
+                                ""}
+                        <br/>
+                        <br/>
+                    </LegacyStack>
+                    :""
+            }
+        </Fragment>
+
+
     );
     const handleDropZoneDrop = (_dropFiles, acceptedFiles, _rejectedFiles) => {
         setSelectedRestockLogo(acceptedFiles[0])

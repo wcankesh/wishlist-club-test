@@ -1,12 +1,12 @@
 import React, {Fragment, useEffect, useState} from 'react';
 import TagsInput from 'react-tagsinput'
 import 'react-tagsinput/react-tagsinput.css'
-import {Page, Layout, LegacyCard, Button, FormLayout, LegacyStack, PageActions} from "@shopify/polaris"
+import {Page, Layout, LegacyCard, Button, FormLayout, LegacyStack, PageActions, Text,} from "@shopify/polaris"
 import {useNavigate} from "react-router-dom";
 import {apiService, baseUrl} from "../../../../../utils/Constant";
-import {ToastMessage,CopyCode} from "../../../../../components";
+import {ToastMessage, CopyCode} from "../../../../../components";
 
-export default function Headless(){
+export default function Headless() {
     const navigate = useNavigate()
     const [isLoading, setIsLoading] = useState(false)
     const [isTokenLoading, setIsTokenLoading] = useState(false)
@@ -80,15 +80,33 @@ export default function Headless(){
                       loading: isTokenLoading
                   }}>
                 <Layout>
-                    <Layout.Section>
-                        <LegacyCard title={"Headless Settings"}
-                                    actions={{
-                                        content: <Button onClick={getHeadlessToken} loading={isLoading}>Generate
-                                            Token</Button>
-                                    }}
-                                    sectioned>
-                            <FormLayout>
-                                <FormLayout.Group>
+                    <Layout.AnnotatedSection
+                        id="storeDetails"
+                        title="Headless Settings"
+                        description={
+                            <LegacyStack>
+                                <Text color={"subdued"}>Enhance your store's capabilities by integrating our API. By
+                                    establishing a
+                                    connection to our API, you gain the ability to fetch wishlist products and
+                                    seamlessly
+                                    integrate them into the frontend presentation of your store.
+                                    This integration provides you with the flexibility to customize and personalize the
+                                    design and layout to meet your exact requirements and create a unique shopping
+                                    experience
+                                    for your customers."</Text>
+                                <Button
+                                    onClick={() => window.open("https://documenter.getpostman.com/view/17366629/2s93eVVYTr","_blank")}>API
+                                    Document</Button>
+                            </LegacyStack>
+                        }
+
+                    >
+                        <LegacyCard>
+                            <LegacyCard.Header>
+                                <Button onClick={getHeadlessToken} loading={isLoading}>Generate Token</Button>
+                            </LegacyCard.Header>
+                            <LegacyCard.Section>
+                                <FormLayout>
                                     <LegacyStack vertical spacing={"tight"}>
                                         <label>Domain</label>
                                         <TagsInput
@@ -100,11 +118,18 @@ export default function Headless(){
                                             onlyUnique={true}
                                             inputProps={{placeholder: 'Enter domain'}}/> vertical spacing={"tight"}
                                     </LegacyStack>
+
                                     <CopyCode label={"Access Token"} value={headLess.token}/>
-                                </FormLayout.Group>
-                            </FormLayout>
+                                    <Text color={"critical"}><Text as={"span"} fontWeight={"bold"}>Please Note</Text>:
+                                        Reach out to our dedicated support team and provide them with the domain you
+                                        want to use with the API. They will guide you through the whitelisting process
+                                        and ensure that the API is enabled for your specified domain. Without
+                                        whitelisting the domain API will not work.</Text>
+                                </FormLayout>
+                            </LegacyCard.Section>
+
                         </LegacyCard>
-                    </Layout.Section>
+                    </Layout.AnnotatedSection>
                     <Layout.Section>
                         <PageActions
                             primaryAction={{
@@ -115,6 +140,43 @@ export default function Headless(){
                         />
                     </Layout.Section>
                 </Layout>
+
+                {/*<Layout>*/}
+                {/*    <Layout.Section>*/}
+                {/*        <LegacyCard title={"Headless Settings"}*/}
+                {/*                    actions={{*/}
+                {/*                        content: <Button onClick={getHeadlessToken} loading={isLoading}>Generate*/}
+                {/*                            Token</Button>*/}
+                {/*                    }}*/}
+                {/*                    sectioned>*/}
+                {/*            <FormLayout>*/}
+                {/*                <FormLayout.Group>*/}
+                {/*                    <LegacyStack vertical spacing={"tight"}>*/}
+                {/*                        <label>Domain</label>*/}
+                {/*                        <TagsInput*/}
+                {/*                            className={`react-tagsinput`}*/}
+                {/*                            value={headLess.domain || []}*/}
+                {/*                            onChange={(value) => onChange({target: {name: "domain", value}})}*/}
+                {/*                            pasteSplit={defaultPasteSplit}*/}
+                {/*                            addOnPaste={true}*/}
+                {/*                            onlyUnique={true}*/}
+                {/*                            inputProps={{placeholder: 'Enter domain'}}/> vertical spacing={"tight"}*/}
+                {/*                    </LegacyStack>*/}
+                {/*                    <CopyCode label={"Access Token"} value={headLess.token}/>*/}
+                {/*                </FormLayout.Group>*/}
+                {/*            </FormLayout>*/}
+                {/*        </LegacyCard>*/}
+                {/*    </Layout.Section>*/}
+                {/*    <Layout.Section>*/}
+                {/*        <PageActions*/}
+                {/*            primaryAction={{*/}
+                {/*                content: 'Save',*/}
+                {/*                onAction: updateHeadless,*/}
+                {/*                loading: isTokenLoading*/}
+                {/*            }}*/}
+                {/*        />*/}
+                {/*    </Layout.Section>*/}
+                {/*</Layout>*/}
             </Page>
         </Fragment>
     );

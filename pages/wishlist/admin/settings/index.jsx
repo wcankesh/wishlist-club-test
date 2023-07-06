@@ -1,6 +1,6 @@
 import React, {Fragment} from 'react';
 import {LegacyCard, Text, LegacyStack, Page, Layout, Grid, Icon} from "@shopify/polaris";
-import {LanguageMinor, DomainNewMajor, PageMajor, SettingsMajor, EmailMajor} from "@shopify/polaris-icons";
+import {LanguageMinor, DomainNewMajor, ThemesMajor, SettingsMajor, EmailMajor} from "@shopify/polaris-icons";
 import {useNavigate} from "react-router-dom";
 import {baseUrl} from "../../../../utils/Constant";
 
@@ -11,32 +11,32 @@ export default function Settings() {
         {
             icon: SettingsMajor,
             tabName: "General",
-            description: "Customize the bundle adjusting fonts, color, background, button, Offer tag, etc.",
+            description: "Unlock a range of options to customize your wishlist's general settings.",
             path: "settings/general"
         },
         {
-            icon: PageMajor,
+            icon: ThemesMajor,
             tabName: "Wishlist Design",
-            description: "Switch setting to enable or disable app functionality.",
+            description: "Manage the design settings of your wishlist specifically for the product and collection pages.",
             path: "settings/wishlist-design"
         },
         {
             icon: EmailMajor,
             tabName: "Wishlist Email",
-            description: "Check and update your Email Notification Setting.",
+            description: "Adjust your email preferences for wishlist items, price-drop alerts, and restock notifications for products in your wishlist.",
             path: "settings/email"
 
         },
         {
             icon: LanguageMinor,
             tabName: "Language",
-            description: "Provide bundled information in any language to entice clients to make additional purchases.",
+            description: "Customize the wishlist alert message, wishlist page, and popup label here.",
             path: "settings/language"
         },
         {
             icon: DomainNewMajor,
             tabName: "Headless",
-            description: "Provide bundled information in any language to entice clients to make additional purchases.",
+            description: "Utilize this API to personalize your wishlist according to your unique needs.",
             path: "settings/headless"
         },
     ]
@@ -65,7 +65,7 @@ export default function Settings() {
                                                                 <LegacyStack spacing='extraTight' vertical>
                                                                     <Text as='h6'
                                                                           fontWeight="semibold">{x.tabName}</Text>
-                                                                    <Text>{x.description}</Text>
+                                                                    <Text color={"subdued"}>{x.description}</Text>
                                                                 </LegacyStack>
                                                             </LegacyStack.Item>
                                                         </LegacyStack>
