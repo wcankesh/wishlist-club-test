@@ -88,7 +88,6 @@ export default function PriceDropAlert() {
             const response = await apiService.emailSetting();
             if (response.status === 200) {
                 setEmailSetting(response.data)
-                console.log(response.data)
                 setIsLoading(false)
             } else {
                 setIsLoading(false)
@@ -203,7 +202,6 @@ export default function PriceDropAlert() {
         setSelectedPriceLogo(acceptedFiles[0])
     }
 
-    console.log(emailSetting.price_drop_social.pinterest)
     return (
         <Fragment>
             <Page title={"Price Drop Alerts"} backAction={{content: 'Settings', onAction: onBack}}

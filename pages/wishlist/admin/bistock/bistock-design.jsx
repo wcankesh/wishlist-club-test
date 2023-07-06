@@ -109,7 +109,6 @@ export default function BisDesign() {
 
         formData.append("payload", JSON.stringify(backInStockDesign))
         const response = await apiService.updateBisSetting(formData)
-        console.log("reponse", response)
         if (response.status === 200) {
             setIsLoading(false)
             setMessage(response.message)

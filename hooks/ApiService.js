@@ -154,7 +154,6 @@ export class ApiService {
 
     async getExport(payload) {
         let url = `${apiBaseUrl}/api/export?shop=${payload.shop}`
-        console.log("url",url)
         return window.open(url, "_blank");
     }
 
