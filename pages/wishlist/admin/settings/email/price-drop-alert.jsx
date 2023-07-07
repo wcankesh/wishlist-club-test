@@ -616,9 +616,9 @@ export default function PriceDropAlert() {
                                                                                         src={emailSetting.price_drop_logo}
                                                                                         alt="logo"
                                                                                         style={{maxHeight: '50px'}}/>
-                                                                                    : ""
+                                                                                    : <img src={""} alt="logo"
+                                                                                           style={{maxHeight: '50px'}}/>}&nbsp; {shopDetails && shopDetails.store_name
                                                                             }
-                                                                            &nbsp; {shopDetails && shopDetails.store_name}
                                                                         </Fragment>
                                                             }
                                                         </th>

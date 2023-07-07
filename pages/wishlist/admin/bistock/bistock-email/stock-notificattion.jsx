@@ -719,8 +719,9 @@ export default function StockNotification() {
                                                                                 backInStockEmail.bis_logo ?
                                                                                     <img src={backInStockEmail.bis_logo}
                                                                                          alt="logo"
-                                                                                         style={{maxHeight: '50px'}}/>
-                                                                                    : ""}&nbsp; {shopDetails && shopDetails.store_name}
+                                                                                         style={{maxHeight: '50px'}}/>:
+                                                                                    <img src={""} alt="logo"
+                                                                                         style={{maxHeight: '50px'}}/>}&nbsp; {shopDetails && shopDetails.store_name}
                                                                             </Fragment>
                                                                 }
                                                             </th>

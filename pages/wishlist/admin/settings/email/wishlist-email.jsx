@@ -110,6 +110,7 @@ export default function WishlistEmail() {
         setIsLoading(true);
         if (emailSetting.wishlist_branding_type == "1") {
             delete emailSetting.wishlist_logo;
+
         }
         if (emailSetting.price_drop_branding_type == "1") {
             delete emailSetting.price_drop_logo;
@@ -620,15 +621,19 @@ export default function WishlistEmail() {
                                                                             <img src={""} alt="logo"
                                                                                  style={{maxHeight: '50px'}}/>}</Fragment> :
                                                                     emailSetting.wishlist_branding_type == "1" ? shopDetails && shopDetails.store_name :
-                                                                        <Fragment>{selectedWlLogo?.name ?
-                                                                            <img
-                                                                                src={selectedWlLogo ? URL.createObjectURL(selectedWlLogo) : ""}
-                                                                                alt="logo"
-                                                                                style={{maxHeight: '50px'}}/> :
-                                                                            emailSetting.wishlist_logo ?
-                                                                                <img src={emailSetting.wishlist_logo}
-                                                                                     alt="logo"
-                                                                                     style={{maxHeight: '50px'}}/> : ""}&nbsp; {shopDetails && shopDetails.store_name}
+                                                                        <Fragment>
+                                                                            {selectedWlLogo?.name ?
+                                                                                <img
+                                                                                    src={selectedWlLogo ? URL.createObjectURL(selectedWlLogo) : ""}
+                                                                                    alt="logo"
+                                                                                    style={{maxHeight: '50px'}}/> :
+                                                                                emailSetting.wishlist_logo ?
+                                                                                    <img
+                                                                                        src={emailSetting.wishlist_logo}
+                                                                                        alt="logo"
+                                                                                        style={{maxHeight: '50px'}}/> :
+                                                                                    <img src={""} alt="logo"
+                                                                                         style={{maxHeight: '50px'}}/>}&nbsp; {shopDetails && shopDetails.store_name}
                                                                         </Fragment>
                                                             }
                                                         </th>

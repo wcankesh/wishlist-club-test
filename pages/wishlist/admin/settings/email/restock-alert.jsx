@@ -164,7 +164,7 @@ export default function RestockAlert() {
                         <br/>
                         <br/>
                     </LegacyStack>
-                    :""
+                    : ""
             }
         </Fragment>
 
@@ -609,9 +609,9 @@ export default function RestockAlert() {
                                                                                         src={emailSetting.restock_logo}
                                                                                         alt="logo"
                                                                                         style={{maxHeight: '50px'}}/>
-                                                                                    : ""
+                                                                                    : <img src={""} alt="logo"
+                                                                                           style={{maxHeight: '50px'}}/>}&nbsp; {shopDetails && shopDetails.store_name
                                                                             }
-                                                                            &nbsp; {shopDetails && shopDetails.store_name}
                                                                         </Fragment>
                                                             }
                                                         </th>
@@ -678,7 +678,7 @@ export default function RestockAlert() {
                                                                    padding: `${emailSetting.restock_style.add_to_cart_btn_vertical_padding}px ${emailSetting.restock_style.add_to_cart_btn_horizontal_padding}px`,
                                                                    textAlign: 'center',
                                                                    textDecoration: 'none',
-                                                                   border:`${emailSetting.restock_style.add_to_cart_btn_border_size}px solid ${emailSetting.restock_style.add_to_cart_btn_border_color}`
+                                                                   border: `${emailSetting.restock_style.add_to_cart_btn_border_size}px solid ${emailSetting.restock_style.add_to_cart_btn_border_color}`
                                                                }}>
                                                                 {emailSetting.restock_content.add_to_cart_button_text}
                                                             </a>
@@ -689,7 +689,7 @@ export default function RestockAlert() {
                                                         <td style={{paddingTop: '20px'}}>
                                                             <a className="visit-action-url color-primary border-primary"
                                                                style={{
-                                                                   backgroundColor:emailSetting.restock_style.view_product_btn_bg_color,
+                                                                   backgroundColor: emailSetting.restock_style.view_product_btn_bg_color,
                                                                    color: emailSetting.restock_style.view_product_btn_text_color,
                                                                    border: `${emailSetting.restock_style.view_product_btn_border_size}px solid ${emailSetting.restock_style.view_product_btn_border_color}`,
                                                                    boxSizing: 'border-box',

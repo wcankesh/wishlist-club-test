@@ -63,7 +63,6 @@ const initialState = {
     bis_logo: "",
     bis_style:
         {
-            primary_color: "#000000",
             background_color: "#ffffff",
             theme: 1,
             font_family: "roboto",

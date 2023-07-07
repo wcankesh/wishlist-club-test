@@ -1,10 +1,10 @@
 import React, {Fragment, useEffect, useState} from 'react';
-import {LegacyCard, LegacyStack, Text, Grid, Page, FormLayout} from '@shopify/polaris'
+import {LegacyCard, LegacyStack, Text, Grid, Page, FormLayout, Modal} from '@shopify/polaris'
 import {useNavigate} from "react-router-dom";
 import {apiService, baseUrl} from "../../../../../utils/Constant";
-import {ToastMessage,CopyCode,SwitchButton} from "../../../../../components";
+import {ToastMessage, CopyCode, SwitchButton} from "../../../../../components";
 
-export default function General () {
+export default function General() {
     const navigate = useNavigate();
     const [setting, setSetting] = useState({
         app_enable: "1",
@@ -14,8 +14,13 @@ export default function General () {
         is_dispaly_add_to_cart_all: "1",
         is_variant_wishlist: "1",
     })
-    const [isloading, setIsLoading] = useState(false)
+
     const [message, setMessage] = useState("")
+    const [isLoading, setIsLoading] = useState(false)
+    const [activeGuestModal, setActiveGuestModal] = useState(false);
+    const handleChangeModal = () => {
+        setActiveGuestModal(!activeGuestModal)
+    }
 
     const general = [
         {
@@ -45,41 +50,60 @@ export default function General () {
     ]
     useEffect(() => {
         const Setting = async () => {
-            setIsLoading(true);
             const response = await apiService.getSetting();
             if (response.status === 200) {
                 setSetting(response.data)
-                setIsLoading(false)
-            } else {
-                setIsLoading(false)
-
-            }
+            } else {}
         }
         Setting();
     }, []);
 
     const handleChange = async (e) => {
         const {name, value} = e.target;
-        setSetting({
-            ...setting,
-            [name]: value
-        })
-        let payload = {
-            ...setting,
-            [name]: value
-        }
-        const response = await apiService.updateSetting(payload, setting.id)
-        if (response.status === 200) {
-            setMessage(response.message)
+        if (name === "guest_wishlist" && value == 0) {
+            setActiveGuestModal(true)
         } else {
-            setMessage(response.message)
+            setSetting({
+                ...setting,
+                [name]: value
+            })
+            let payload = {
+                ...setting,
+                [name]: value
+            }
+            const response = await apiService.updateSetting(payload, setting.id)
+            if (response.status === 200) {
+                setMessage(response.message)
+            } else {
+                setMessage(response.message)
+            }
         }
+
     }
     const onBack = () => {
         navigate(`${baseUrl}/settings`)
     }
 
-
+    const GuestWishlistConfirmation = async () => {
+        setIsLoading(true)
+        setSetting({
+            ...setting,
+            guest_wishlist: "0"
+        })
+        let payload = {
+            ...setting,
+            guest_wishlist: "0"
+        }
+        const response = await apiService.updateSetting(payload, setting.id)
+        if (response.status === 200) {
+            setMessage(response.message)
+            setIsLoading(false)
+            setActiveGuestModal(false);
+        } else {
+            setMessage(response.message)
+            setIsLoading(false)
+        }
+    }
     return (
         <Fragment>
             <ToastMessage message={message} setMessage={setMessage}/>
@@ -112,8 +136,9 @@ export default function General () {
                                     <Grid.Cell columnSpan={{xs: 6, sm: 6, md: 4, lg: 4, xl: 4}} key={i}>
                                         <LegacyStack wrap={false}>
                                             <LegacyStack.Item>
-                                                <SwitchButton checked={x.checked}
-                                                              onChange={handleChange} name={x.name}
+                                                <SwitchButton
+                                                    checked={x.checked}
+                                                    onChange={handleChange} name={x.name}
                                                 />
                                             </LegacyStack.Item>
                                             <LegacyStack.Item fill>
@@ -125,7 +150,6 @@ export default function General () {
                                         </LegacyStack>
                                     </Grid.Cell>
                                 )
-
                             })
                             }
                         </Grid>
@@ -171,6 +195,33 @@ export default function General () {
                     </LegacyCard>
                 </LegacyStack.Item>
             </Page>
+            {
+                activeGuestModal &&
+                <Modal
+                    open={activeGuestModal}
+                    onClose={handleChangeModal}
+                    title={"Guest Wishlist"}
+                    primaryAction={{
+                        content: 'Yes',
+                        onAction: GuestWishlistConfirmation,
+                        loading:isLoading
+                    }}
+                    secondaryActions={[
+                        {
+                            content: 'No',
+                            onAction: handleChangeModal,
+                        },
+                    ]}
+
+                >
+                    <Modal.Section>
+                        <p>
+                            Disabling the Guest Wishlist will result in the permanent removal of both the user and the product added by the guest user to the wishlist.
+                        </p>
+                    </Modal.Section>
+                </Modal>
+            }
+
         </Fragment>
     );
 };
