@@ -357,7 +357,7 @@ ul.boringListNav li.is-active-nav:before {
 }
 
 .color_picker input[type=color]:focus ~ label::after {
-    box-shadow: 0 0 0 2px #458fff FF;
+    box-shadow: 0 0 0 2px #458FFFFF;
 }
 
 .color_picker input[type=color]:disabled {
