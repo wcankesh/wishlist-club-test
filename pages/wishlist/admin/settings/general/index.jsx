@@ -200,7 +200,7 @@ export default function General() {
                 <Modal
                     open={activeGuestModal}
                     onClose={handleChangeModal}
-                    title={"Guest Wishlist"}
+                    title={"Really want to deactivate Guest Wishlist?"}
                     primaryAction={{
                         content: 'Yes',
                         onAction: GuestWishlistConfirmation,
@@ -215,9 +215,9 @@ export default function General() {
 
                 >
                     <Modal.Section>
-                        <p>
-                            Disabling the Guest Wishlist will result in the permanent removal of both the user and the product added by the guest user to the wishlist.
-                        </p>
+                        <Text>
+                           <Text as={"span"} color={"warning"} fontWeight={"semibold"}>WARNING!</Text> All the Guest Customers Product Information will be removed from our server and there is no way back. Are you sure you want to do this?
+                        </Text>
                     </Modal.Section>
                 </Modal>
             }
