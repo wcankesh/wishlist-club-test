@@ -105,16 +105,16 @@ export default function Installation(){
                                                          fontWeight={"bold"}> product-template.liquid </Text> file.</Text>
                                             <Text>Please add the below code under your add to cart button.</Text>
                                             <CopyCode
-                                                value={`<div class="th_wl_btn" data-product_id="{{  product.id }}" data-variant_id={{ product.selected_or_first_available_variant.id }}></div>`}/>
+                                                value={`<div class="th_prd_wl_btn" data-product_id="{{product.id}}" data-variant_id="{{product.selected_or_first_available_variant.id}}"></div>`}/>
                                         </LegacyStack>
                                     </Grid.Cell>
                                     <Grid.Cell columnSpan={{xs: 6, sm: 6, md: 6, lg: 6, xl: 6}}>
                                         <LegacyStack vertical>
                                             <Link
-                                                url='https://wishlist.thimatic-apps.com/api/public/assets/images/wl_product.png'
+                                                url='https://wishlist.thimatic-apps.com/api/public/assets/images/wl_product1.png'
                                                 external>
                                                 <img className='install-img'
-                                                     src="https://wishlist.thimatic-apps.com/api/public/assets/images/wl_product.png"
+                                                     src="https://wishlist.thimatic-apps.com/api/public/assets/images/wl_product1.png"
                                                      width="100%" height="100%"/>
                                             </Link>
                                             <Link
@@ -146,7 +146,7 @@ export default function Installation(){
                                                          fontWeight={"bold"}>product-grid-item.liquid </Text>file.</Text>
                                             <Text>Please add the below code under the product price.</Text>
                                             <CopyCode
-                                                value={`<div class="th_wl_btn" data-product_id="{{  product.id }}" data-variant_id={{ product.selected_or_first_available_variant.id }}></div>`}/>
+                                                value={`<div class="th_wl_col_btn" data-product_id="{{product.id}}" data-variant_id="{{product.selected_or_first_available_variant.id}}"></div>`}/>
                                         </LegacyStack>
                                     </Grid.Cell>
                                     <Grid.Cell columnSpan={{xs: 6, sm: 6, md: 6, lg: 6, xl: 6}}>
