@@ -64,6 +64,7 @@ export  function ProductDesign ({wishlistSetting, setWishlistSetting, updateIcon
                                  width:${wishlistSetting.button_position == "4" ? "100%" : "auto"}
                 }
                 .wishlist_btn_before svg path{fill: ${wishlistSetting.button_color_before}}
+                .wishlist_btn_before svg, .wishlist_btn_after svg{width: 26px;height:23px}
                 .wishlist_position{justify-content:${wishlistSetting.button_position == "1" ? "left" : wishlistSetting.button_position == "2" ? "right" : wishlistSetting.button_position == "3" || wishlistSetting.button_position == "4" ? "center" : ''} }            
                 .wishlist_btn_after svg path{fill: ${wishlistSetting.button_color_after}}
                 .wishlist_btn_after{border:${wishlistSetting.button_border_width}px solid ${wishlistSetting.button_border_color_after};border-radius:${wishlistSetting.button_border_radius}px;padding:${wishlistSetting.button_top_bottom_padding}px ${wishlistSetting.button_left_right_padding}px; color: ${wishlistSetting.button_color_after};background-color:${wishlistSetting.button_bg_color_after};

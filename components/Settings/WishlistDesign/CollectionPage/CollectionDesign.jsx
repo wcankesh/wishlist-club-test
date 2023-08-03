@@ -60,7 +60,9 @@ export function CollectionDesign({wishlistSetting, setWishlistSetting, file, set
                                 />
                                 :
                                 wishlistSetting && wishlistSetting.icon ?
-                                    <div dangerouslySetInnerHTML={{__html: wishlistSetting && wishlistSetting.icon}}/> : ""
+                                    <LegacyStack.Item fill>
+                                      <div className="wl_logo" dangerouslySetInnerHTML={{__html: wishlistSetting && wishlistSetting.icon}}/>
+                                    </LegacyStack.Item> : ""
                         }
                         <br/>
                         <br/>
@@ -79,6 +81,7 @@ export function CollectionDesign({wishlistSetting, setWishlistSetting, file, set
                                         color: ${wishlistSetting.product_collection_button_color_before};background-color:${wishlistSetting.product_collection_button_type === "1" ? "transparent" : wishlistSetting.product_collection_button_bg_color_before};
                                         width:${wishlistSetting.product_collection_button_position == "4" ? "100%" : "auto"}
                                         }
+                  .wl_collection_btn_before svg, .wl_collection_btn_after svg{width: 26px;height:23px}
                  .wl_collection_btn_before svg path{fill: ${wishlistSetting.product_collection_button_color_before}}                                          
                 .wl_collection_btn_position{justify-content:${wishlistSetting.product_collection_button_position == "1" ? "left" : wishlistSetting.product_collection_button_position == "2" ? "right" : wishlistSetting.product_collection_button_position == "3" || wishlistSetting.product_collection_button_position == "4" ? "center" : ''}}
                 .wl_collection_btn_after svg path {fill: ${wishlistSetting.product_collection_button_color_after}} 
