@@ -174,8 +174,7 @@ export default function Plan(){
                 <Layout.Section>
                     <LegacyStack distribution={"fill"}>
                         <LegacyCard
-                            title={<Text as={"h4"} variant={"headingLg"} fontWeight={"semibold"}>Current Plan :
-                                Basic</Text>} sectioned>
+                            title={<Text as={"h4"} variant={"headingLg"} fontWeight={"semibold"}>Current Plan :{shopDetails.plan_type === "0" ? "Free" : shopDetails.plan_type === "5" ? "Basic" : shopDetails.plan_type === "6" ? "Pro" : shopDetails.plan_type === "7" ? "Advance" : shopDetails.plan_type === "Plus" ? "10000" : ""}</Text>} sectioned>
                             <LegacyStack vertical>
                                 <Text>{moment(shopDetails?.billing_schedule?.billing_start_date).format("MMMM DD")} - {moment(shopDetails?.billing_schedule?.billing_end_date).format("MMMM DD")}</Text>
                                 <Text as={"span"}>Mail
