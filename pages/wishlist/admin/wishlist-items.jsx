@@ -280,7 +280,7 @@ export default function WishlistItems() {
             email.lists.map((z, k) => {
                 let Obj = [
                     <Text as={"span"}>{z.email}</Text>,
-                    <Text>{`${z.type == 1 ? "Wishlist reminder" : z.type == 2 ? "Price drop alert" : z.type == 3 ? "Restock alert" : ''}`}</Text>,
+                    <Text>{`${z.type == 1 ? "Wishlist reminder" : z.type == 2 ? "Price drop alert" : z.type == 3 ? "Restock alert" : z.type == 4 ? "Share wishlist" : z.type == 5 ? "BackInStock thankyou":z.type == 6 ? "BackInStock alert":""}`}</Text>,
                     <Text>{z.created_at}</Text>,
                     <Text>{z.message_id ? <Badge status="success">Sent</Badge> : ""}</Text>,
 
@@ -299,8 +299,8 @@ export default function WishlistItems() {
     return (
         <Fragment>
             <ToastMessage message={message} setMessage={setMessage}/>
-            <Page title={"Wishlist Items"} primaryAction={{content: 'Import', onAction: handleChange}}
-                  secondaryActions={[{content: 'Export', onAction: Export}]}>
+            <Page title={"Wishlist Items"} primaryAction={selected === 0 ?{content: 'Import', onAction: handleChange}:null}
+                  secondaryActions={ selected === 0 ?[{content: 'Export', onAction: Export}] :[]}>
                 <Layout>
                     <Layout.Section>
                         <LegacyCard>
