@@ -28,7 +28,7 @@ export default function Plan(){
     }
 
     let productPercent = 0;
-    if (shopDetails.plan_type === "0") {
+    if (shopDetails.plan_type === "0" || shopDetails.plan_type === "1") {
         productPercent = (shopDetails.sent_email * 100 / 50)
     } else if (shopDetails.plan_type === "5") {
         productPercent = (shopDetails.sent_email * 100 / 500)
@@ -174,11 +174,11 @@ export default function Plan(){
                 <Layout.Section>
                     <LegacyStack distribution={"fill"}>
                         <LegacyCard
-                            title={<Text as={"h4"} variant={"headingLg"} fontWeight={"semibold"}>Current Plan :{shopDetails.plan_type === "0" ? "Free" : shopDetails.plan_type === "5" ? "Basic" : shopDetails.plan_type === "6" ? "Pro" : shopDetails.plan_type === "7" ? "Advance" : shopDetails.plan_type === "Plus" ? "10000" : ""}</Text>} sectioned>
+                            title={<Text as={"h4"} variant={"headingLg"} fontWeight={"semibold"}>Current Plan :{(shopDetails.plan_type === "0" || shopDetails.plan_type === "1") ? "Free" : shopDetails.plan_type === "5" ? "Basic" : shopDetails.plan_type === "6" ? "Pro" : shopDetails.plan_type === "7" ? "Advance" : shopDetails.plan_type === "Plus" ? "10000" : ""}</Text>} sectioned>
                             <LegacyStack vertical>
                                 <Text>{moment(shopDetails?.billing_schedule?.billing_start_date).format("MMMM DD")} - {moment(shopDetails?.billing_schedule?.billing_end_date).format("MMMM DD")}</Text>
                                 <Text as={"span"}>Mail
-                                    sent {`${shopDetails.sent_email}/${shopDetails.plan_type === "0" ? "50" : shopDetails.plan_type === "5" ? "500" : shopDetails.plan_type === "6" ? "2000" : shopDetails.plan_type === "7" ? "5000" : shopDetails.plan_type === "8" ? "10000" : ""}`}</Text>
+                                    sent {`${shopDetails.sent_email}/${(shopDetails.plan_type === "0" || shopDetails.plan_type === "1") ? "50" : shopDetails.plan_type === "5" ? "500" : shopDetails.plan_type === "6" ? "2000" : shopDetails.plan_type === "7" ? "5000" : shopDetails.plan_type === "8" ? "10000" : ""}`}</Text>
                                 <ProgressBar progress={productPercent} size="small" color={"success"}/>
                             </LegacyStack>
                         </LegacyCard>

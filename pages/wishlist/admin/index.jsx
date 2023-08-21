@@ -10,7 +10,7 @@ export default function HomePage() {
     const shopDetails = useSelector((state) => state.shopDetails)
 
     let productPercent = 0;
-    if (shopDetails.plan_type === "0") {
+    if (shopDetails.plan_type === "0" || shopDetails.plan_type === "1") {
         productPercent = (shopDetails.sent_email * 100 / 50)
     } else if (shopDetails.plan_type === "5") {
         productPercent = (shopDetails.sent_email * 100 / 500)
@@ -46,7 +46,7 @@ export default function HomePage() {
                     }
                     <Layout.Section>
                         <Text as={"span"}>Mail
-                            sent {`${shopDetails.sent_email}/${shopDetails.plan_type === "0" ? "50" : shopDetails.plan_type === "5" ? "500" : shopDetails.plan_type === "6" ? "2000" : shopDetails.plan_type === "7" ? "5000" : shopDetails.plan_type === "8" ? "10000" : ""}`}</Text>
+                            sent {`${shopDetails.sent_email}/${(shopDetails.plan_type === "0" || shopDetails.plan_type === "1") ? "50" : shopDetails.plan_type === "5" ? "500" : shopDetails.plan_type === "6" ? "2000" : shopDetails.plan_type === "7" ? "5000" : shopDetails.plan_type === "8" ? "10000" : ""}`}</Text>
                         <LegacyStack alignment={"center"}>
                             <LegacyStack.Item fill>
                                 <ProgressBar progress={productPercent} size="small" color={"success"}/>
