@@ -141,8 +141,24 @@ export default function Email() {
                                     </FormLayout>
                                 </LegacyCard>
                             </Layout.AnnotatedSection>
-                            <Layout.AnnotatedSection id="storeDetails" title="Email Customization"
-                                                     description={'Send alerts when the products are on Wishlist. Also, send price drop & restock alerts for the products in Wishlist.'}>
+                            <Layout.AnnotatedSection
+                                id="storeDetails"
+                                title="Email Customization"
+                                description={
+                                    <LegacyStack vertical>
+                                        <Text as={"p"} color={"subdued"}>
+                                            Send alerts when the products are on Wishlist. Also,
+                                            send price drop & restock alerts for the products in
+                                            Wishlist.
+                                        </Text>
+                                        <Text as={"p"} color={"critical"}>
+                                            <b>Note: </b> These all the
+                                            notifications(Wishlist Items, Price Drop Alerts, and
+                                            Restock Alerts) are sent to customers if the <b>Guest
+                                            Wishlist</b> option disable.
+                                        </Text>
+                                    </LegacyStack>
+                                }>
                                 <LegacyCard>
                                     {(Customization_Email || []).map((x, i) => {
                                         return (
