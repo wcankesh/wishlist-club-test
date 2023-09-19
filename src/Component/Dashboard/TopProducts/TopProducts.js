@@ -9,6 +9,9 @@ import {
 import {apiService, currencySymbol} from "../../../utils/Constant";
 import moment from "moment"
 import {useSelector} from "react-redux";
+import {
+  ImageMajor
+} from '@shopify/polaris-icons';
 
 const TopProducts = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -39,44 +42,44 @@ const TopProducts = () => {
   };
 
   return (
-    <Fragment>
-      <LegacyCard title={"Top 10 Product in Wishlists"}>
-        <IndexTable
-          resourceName={resourceNameWishlistProduct}
-          itemCount={isLoading ? 0 : topProducts.top10Products.length}
-          loading={isLoading}
-          emptyState={<EmptySearchResult title={'No product wishlist found'}
-                                         withIllustration={(!isLoading) || !isLoading}/>}
-          hasMoreItems={isLoading}
-          headings={[
-            {title: 'Product'},
-            {title: 'Price', alignment: 'end'},
-            {title: 'Item Count', alignment: 'end'},
-          ]}
-          selectable={false}
-        >{(topProducts.top10Products || []).map((x, i) => {
-          return (
-            <IndexTable.Row key={i} id={i}>
-              <IndexTable.Cell>
-                <LegacyStack alignment="center" wrap={false}>
-                  <Thumbnail size={"small"} source={x.product.image}/>
-                  <LegacyStack.Item fill>
-                    <Text as={"span"}>{x.product.title}</Text>
-                  </LegacyStack.Item>
-                </LegacyStack>
-              </IndexTable.Cell>
-              <IndexTable.Cell>
-                <Text alignment={"end"}>{currencySymbol[shopDetails.currency]}{x.product.price}</Text>
-              </IndexTable.Cell>
-              <IndexTable.Cell>
-                <Text alignment={"end"}>{x.total}</Text>
-              </IndexTable.Cell>
-            </IndexTable.Row>
-          )
-        })}
-        </IndexTable>
-      </LegacyCard>
-    </Fragment>
+      <Fragment>
+        <LegacyCard title={"Top 10 Product in Wishlists"}>
+          <IndexTable
+              resourceName={resourceNameWishlistProduct}
+              itemCount={isLoading ? 0 : topProducts.top10Products.length}
+              loading={isLoading}
+              emptyState={<EmptySearchResult title={'No product wishlist found'}
+                                             withIllustration={(!isLoading) || !isLoading}/>}
+              hasMoreItems={isLoading}
+              headings={[
+                {title: 'Product'},
+                {title: 'Price', alignment: 'end'},
+                {title: 'Item Count', alignment: 'end'},
+              ]}
+              selectable={false}
+          >{(topProducts.top10Products || []).map((x, i) => {
+            return (
+                <IndexTable.Row key={i} id={i}>
+                  <IndexTable.Cell>
+                    <LegacyStack alignment="center" wrap={false}>
+                      <Thumbnail size={"small"} source={x?.product?.image ? x?.product?.image : ImageMajor}/>
+                      <LegacyStack.Item fill>
+                        <Text as={"span"}>{x?.product?.title || ""}</Text>
+                      </LegacyStack.Item>
+                    </LegacyStack>
+                  </IndexTable.Cell>
+                  <IndexTable.Cell>
+                    <Text alignment={"end"}>{currencySymbol[shopDetails.currency]}{x?.product?.price || ""}</Text>
+                  </IndexTable.Cell>
+                  <IndexTable.Cell>
+                    <Text alignment={"end"}>{x.total}</Text>
+                  </IndexTable.Cell>
+                </IndexTable.Row>
+            )
+          })}
+          </IndexTable>
+        </LegacyCard>
+      </Fragment>
   );
 };
 
