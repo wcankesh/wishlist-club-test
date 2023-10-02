@@ -20,8 +20,8 @@ const DefaultLayout = () => {
         forceRedirect: process.env.NODE_ENV === 'development' ? false : true
     };
     useEffect(() => {
-        if(shopDetails.plan_type == "0"){
-            navigate(`${baseUrl}/plan`)
+        if(shopDetails.plan_type == "0" || shopDetails.is_older_shop == 1){
+            navigate(`${baseUrl}/settings/plan`)
         }
     }, [])
 

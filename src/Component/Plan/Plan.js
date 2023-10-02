@@ -170,11 +170,11 @@ const Plan = () => {
 
     const newBackInStockPlan = () => {
         return (
-            <Layout>
+            <Fragment>
                 <Layout.Section>
                     <LegacyStack distribution={"fill"}>
                         <LegacyCard
-                            title={<Text as={"h4"} variant={"headingLg"} fontWeight={"semibold"}>Current Plan :{(shopDetails.plan_type === "0" || shopDetails.plan_type === "1") ? "Free" : shopDetails.plan_type === "5" ? "Basic" : shopDetails.plan_type === "6" ? "Pro" : shopDetails.plan_type === "7" ? "Advance" : shopDetails.plan_type === "Plus" ? "10000" : ""}</Text>} sectioned>
+                            title={<Text as={"h4"} variant={"headingLg"} fontWeight={"semibold"}>Current Plan :{(shopDetails.plan_type === "0" || shopDetails.plan_type === "1") ? "Free" : shopDetails.plan_type === "5" ? "Basic" : shopDetails.plan_type === "6" ? "Pro" : shopDetails.plan_type === "7" ? "Advance" : shopDetails.plan_type === "8" ? "Plus" : ""}</Text>} sectioned>
                             <LegacyStack vertical>
                                 <Text>{moment(shopDetails?.billing_schedule?.billing_start_date).format("MMMM DD")} - {moment(shopDetails?.billing_schedule?.billing_end_date).format("MMMM DD")}</Text>
                                 <Text as={"span"}>Mail
@@ -248,21 +248,23 @@ const Plan = () => {
                         </LegacyCard>
                     </LegacyStack.Item>
                 </Layout.Section>
-            </Layout>
+            </Fragment>
         )
     }
     return (
         <Fragment>
             <Page title={"Plan & Price"} fullWidth>
-                {shopDetails.is_older_shop == 1 ? <Banner
-                    title="Our Plan and Pricing have been updated."
-                    status="warning"
-                >
-                    <p>
-                        We kindly request you to upgrade your plan to reflect the new changes.
-                    </p>
-                </Banner> : ""}
-                {newBackInStockPlan()}
+                <Layout>
+                    {shopDetails.is_older_shop == 1 ?  <Layout.Section><Banner
+                        title="Update your plan"
+                        status="warning"
+                    >
+                        <p>
+                            Please revise your plan by or before September 30th 2023. Failure to do so will result in the app's backend and frontend functionality being disabled.
+                        </p>
+                    </Banner></Layout.Section> : ""}
+                    {newBackInStockPlan()}
+                </Layout>
             </Page>
         </Fragment>
     );

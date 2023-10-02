@@ -337,12 +337,12 @@ ul.boringListNav li.is-active-nav:before {
 .copy-code button.cc-copy svg {
     width: 16px;
     height: 16px;
-    fill: #fff;
+    fill: #000000;
 }
 
 .copy-code button.cc-copy svg.cc-true-icon {
     display: none;
-    fill: #fff;
+    fill: #000000;
 }
 
 .copy-code.copy-true button.cc-copy svg.cc-copy-icon {

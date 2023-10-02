@@ -37,6 +37,6 @@ export const routes = [
     {path: `${baseUrl}/settings/email/restock-alert`, component: <RestockAlertEmail/>},
     {path: `${baseUrl}/settings/language`, component: <Language/>},
     {path: `${baseUrl}/settings/headless`, component: <Headless/>},
-    {path: `${baseUrl}/plan`, component: <Plan/>},
-    {path: `${baseUrl}/installation`, component: <Installation/>},
+    {path: `${baseUrl}/settings/plan`, component: <Plan/>},
+    {path: `${baseUrl}/settings/installation`, component: <Installation/>},
 ]

@@ -42,13 +42,13 @@ const Settings = () => {
             icon: BillingStatementDollarMajor,
             tabName: "Plan & Price",
             description: "This option displays the pricing plans that are available.",
-            path: "plan"
+            path: "settings/plan"
         },
         {
             icon: InstallMinor,
             tabName: "Installation",
             description: "The manual installation processes are displayed in this option.",
-            path: "installation"
+            path: "settings/installation"
         },
     ]
     return (

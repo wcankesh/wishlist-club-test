@@ -1,7 +1,6 @@
 import React, {Fragment} from 'react';
 import {Layout, Page, ProgressBar, Text, LegacyStack, Banner} from "@shopify/polaris"
 import OnBoarding from "./OnBoarding/OnBoarding";
-import TopProducts from "./TopProducts/TopProducts"
 import HelpDesk from "./HelpDesk/HelpDesk"
 import {useSelector} from "react-redux";
 import Feedback from "./Feedback/Feedback";
@@ -25,53 +24,50 @@ const Dashboard = () => {
     productPercent = (shopDetails.sent_email * 100 / 10000)
   }
   return (
-    <Fragment>
-      <Page
-        title={`Good ${hours < 12 ? "Morning" : hours >= 12 && hours <= 17 ? "Afternoon" : hours >= 17 && hours <= 24 ? "Evening" : ""} , ${shopDetails.store_name}`}
-        subtitle={`Happy ${dayName} from the WebContrive team`}>
-        <Layout>
-          {
-            shopDetails.notification.length > 0 ?
-              shopDetails.notification.map((x, i) => {
-                return (
-                  <Layout.Section>
-                    <Banner
-                      title={x.notification_title}
-                      status={x.type}
-                    >
-                                            <span
-                                              dangerouslySetInnerHTML={{__html: x.notification_description}}/>
-                    </Banner>
-                  </Layout.Section>
-                )
-              })
-              : ''
-          }
-          <Layout.Section>
-            <Text as={"span"}>Mail
-              sent {`${shopDetails.sent_email}/${(shopDetails.plan_type === "0" || shopDetails.plan_type === "1") ? "50" : shopDetails.plan_type === "5" ? "500" : shopDetails.plan_type === "6" ? "2000" : shopDetails.plan_type === "7" ? "5000" : shopDetails.plan_type === "8" ? "10000" : ""}`}</Text>
-            <LegacyStack alignment={"center"}>
-              <LegacyStack.Item fill>
-                <ProgressBar progress={productPercent} size="small" color={"success"}/>
-              </LegacyStack.Item>
-              <Text>{productPercent}%</Text>
-            </LegacyStack>
-          </Layout.Section>
-          <Layout.Section>
-            <OnBoarding/>
-          </Layout.Section>
-          <Layout.Section>
-            <TopProducts/>
-          </Layout.Section>
-          <Layout.Section>
-            <HelpDesk/>
-          </Layout.Section>
-          <Layout.Section>
-            <Feedback/>
-          </Layout.Section>
-        </Layout>
-      </Page>
-    </Fragment>
+      <Fragment>
+        <Page
+            title={`Good ${hours < 12 ? "Morning" : hours >= 12 && hours <= 17 ? "Afternoon" : hours >= 17 && hours <= 24 ? "Evening" : ""} , ${shopDetails.store_name}`}
+            subtitle={`Happy ${dayName} from the WebContrive team`}>
+          <Layout>
+            {
+              shopDetails.notification.length > 0 ?
+                  shopDetails.notification.map((x, i) => {
+                    return (
+                        <Layout.Section>
+                          <Banner
+                              title={x.notification_title}
+                              status={x.type}
+                          >
+                            <span dangerouslySetInnerHTML={{__html: x.notification_description}}/>
+                          </Banner>
+                        </Layout.Section>
+                    )
+                  })
+                  : ''
+            }
+            <Layout.Section>
+              <Text as={"span"}>Mail
+                sent {`${shopDetails.sent_email}/${(shopDetails.plan_type === "0" || shopDetails.plan_type === "1") ? "50" : shopDetails.plan_type === "5" ? "500" : shopDetails.plan_type === "6" ? "2000" : shopDetails.plan_type === "7" ? "5000" : shopDetails.plan_type === "8" ? "10000" : ""}`}</Text>
+              <LegacyStack alignment={"center"}>
+                <LegacyStack.Item fill>
+                  <ProgressBar progress={productPercent} size="small" color={"success"}/>
+                </LegacyStack.Item>
+                <Text>{productPercent}%</Text>
+              </LegacyStack>
+            </Layout.Section>
+            <Layout.Section>
+              <OnBoarding/>
+            </Layout.Section>
+
+            <Layout.Section>
+              <HelpDesk/>
+            </Layout.Section>
+            <Layout.Section>
+              <Feedback/>
+            </Layout.Section>
+          </Layout>
+        </Page>
+      </Fragment>
   );
 };
 

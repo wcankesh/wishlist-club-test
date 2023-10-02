@@ -314,23 +314,6 @@ const CollectionDesign = ({
                         </LegacyCard.Section>
                     }
                 </LegacyCard>
-
-                <LegacyCard title={"Wishlist page layout"} sectioned>
-                    <FormLayout>
-                        <Select
-                            options={options}
-                            value={wishlistSetting.layout_type}
-                            onChange={(value) => {
-                                handleChange({
-                                    target: {
-                                        name: "layout_type",
-                                        value
-                                    }
-                                })
-                            }}
-                        />
-                    </FormLayout>
-                </LegacyCard>
             </Layout.Section>
 
 

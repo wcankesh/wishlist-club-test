@@ -48,8 +48,7 @@ const TopProducts = () => {
               resourceName={resourceNameWishlistProduct}
               itemCount={isLoading ? 0 : topProducts.top10Products.length}
               loading={isLoading}
-              emptyState={<EmptySearchResult title={'No product wishlist found'}
-                                             withIllustration={(!isLoading) || !isLoading}/>}
+              emptyState={<EmptySearchResult title={'No product wishlist found'} withIllustration={!isLoading}/>}
               hasMoreItems={isLoading}
               headings={[
                 {title: 'Product'},

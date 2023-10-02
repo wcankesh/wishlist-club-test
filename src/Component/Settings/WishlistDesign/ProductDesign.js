@@ -283,11 +283,11 @@ const ProductDesign = ({wishlistSetting, setWishlistSetting, updateIcon, file, s
                         </LegacyCard.Section>
                     }
                 </LegacyCard>
-                <LegacyCard title={"Wishlist page layout"} sectioned>
+                {selected === 0 && <LegacyCard title={"Wishlist page layout"} sectioned>
                     <FormLayout>
                         <Select
                             options={options}
-                            value={wishlistSetting.layout_type}
+                            value={wishlistSetting.layout_type.toString()}
                             onChange={(value) => {
                                 handleChange({
                                     target: {
@@ -298,7 +298,7 @@ const ProductDesign = ({wishlistSetting, setWishlistSetting, updateIcon, file, s
                             }}
                         />
                     </FormLayout>
-                </LegacyCard>
+                </LegacyCard>}
             </Layout.Section>
             <Layout.Section oneHalf>
                 <LegacyCard title="Preview (before adding to wishlist)" sectioned>
