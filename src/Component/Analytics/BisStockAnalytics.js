@@ -111,94 +111,97 @@ const BisStockAnalytics = () => {
     plural: 'sent notification',
   };
   return (
-    <Fragment>
-      <Layout.Section>
-        <LegacyCard title={"Back in stock analytics"}>
-          <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>
-          <LegacyCard.Section>
-            <LegacyStack>
-              <LegacyStack.Item fill>
-                <TextField name="search" value={filter.search}
-                           placeholder="Filter by product"
-                           onChange={(value) => {
-                             handleChange({
-                               target: {
-                                 name: "search",
-                                 value
-                               }
-                             })
-                           }}
-                />
-              </LegacyStack.Item>
-              <LegacyStack.Item>
-                <div className="datepicker-contain">
-                  <DateRangePicker
-                    onChange={handleCallback}
+      <Fragment>
+        <Layout.Section>
+          <LegacyCard title={"Back in stock analytics"}>
+            <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>
+            <LegacyCard.Section>
+              <LegacyStack>
+                <LegacyStack.Item fill>
+                  <TextField name="search" value={filter.search}
+                             placeholder="Filter by product"
+                             onChange={(value) => {
+                               handleChange({
+                                 target: {
+                                   name: "search",
+                                   value
+                                 }
+                               })
+                             }}
                   />
-                </div>
-              </LegacyStack.Item>
-            </LegacyStack>
-          </LegacyCard.Section>
-          <IndexTable
-            resourceName={selected === 0 ? resourceNameRequest :selected === 1 ? resourceNameAwaitingStock : selected === 2 ? resourceNameSentNotification : null }
-            itemCount={isLoading ? 0 : bisAnalytics.length}
-            loading={isLoading}
-            emptyState={<EmptySearchResult title={selected === 0 ? 'No Request found':selected === 1 ? 'No Awaiting Stock found' : selected === 2 ? 'No Sent Notifications Found':null}
-                                           withIllustration={(!isLoading) || !isLoading}/>}
-            hasMoreItems={isLoading}
-            headings={[
-              {title: 'Product'},
-              {title: 'Email'},
-              {title: 'Request Status'},
-              {title: 'Request Time'},
-            ]}
-            selectable={false}
-          >{(bisAnalytics || []).map((x, i) => {
-            return (
-              <IndexTable.Row key={i} id={i}>
+                </LegacyStack.Item>
+                <LegacyStack.Item>
+                  <div className="datepicker-contain">
+                    <DateRangePicker
+                        onChange={handleCallback}
+                    />
+                  </div>
+                </LegacyStack.Item>
+              </LegacyStack>
+            </LegacyCard.Section>
+            <IndexTable
+                resourceName={selected === 0 ? resourceNameRequest :selected === 1 ? resourceNameAwaitingStock : selected === 2 ? resourceNameSentNotification : null }
+                itemCount={isLoading ? 0 : bisAnalytics.length}
+                loading={isLoading}
+                emptyState={<EmptySearchResult title={selected === 0 ? 'No Request found':selected === 1 ? 'No Awaiting Stock found' : selected === 2 ? 'No Sent Notifications Found':null}
+                                               withIllustration={(!isLoading) || !isLoading}/>}
+                hasMoreItems={isLoading}
+                headings={[
+                  {title: 'Product'},
+                  {title: 'Email'},
+                  {title: 'Request Status'},
+                  {title: 'Request Time'},
+                ]}
+                selectable={false}
+            >{(bisAnalytics || []).map((x, i) => {
+              return (
+                  <IndexTable.Row key={i} id={i}>
+                    <IndexTable.Cell>
+                      <LegacyStack alignment="center" wrap={false}>
+                        <Thumbnail size={"small"} source={x.image}/>
+                        <LegacyStack.Item fill>
+                          <Text as={"span"}>{x.title}</Text>
+                        </LegacyStack.Item>
+                      </LegacyStack>
+                    </IndexTable.Cell>
+                    <IndexTable.Cell>
+                      <Text>{x.email}</Text>
+                    </IndexTable.Cell>
+                    <IndexTable.Cell>
+                      <Fragment>{x.is_in_stock == 0 ? <Badge status="info">Awaiting stock</Badge> : <Badge status="success">Available stock</Badge>}</Fragment>
+                    </IndexTable.Cell>
+                    <IndexTable.Cell>
+                      <Text>{moment(x.created_at).format('L')}</Text>
+                    </IndexTable.Cell>
+                  </IndexTable.Row>
+              )
+            })}
+              <IndexTable.Row>
                 <IndexTable.Cell>
-                  <LegacyStack alignment="center" wrap={false}>
-                    <Thumbnail size={"small"} source={x.image}/>
-                    <LegacyStack.Item fill>
-                      <Text as={"span"}>{x.title}</Text>
-                    </LegacyStack.Item>
-                  </LegacyStack>
+                  &nbsp;
                 </IndexTable.Cell>
                 <IndexTable.Cell>
-                  <Text>{x.email}</Text>
+                  &nbsp;
                 </IndexTable.Cell>
                 <IndexTable.Cell>
-                  <Fragment>{x.is_in_stock == 0 ? <Badge status="info">Awaiting stock</Badge> : <Badge status="success">Available stock</Badge>}</Fragment>
+                  &nbsp;
                 </IndexTable.Cell>
                 <IndexTable.Cell>
-                  <Text>{moment(x.created_at).format('L')}</Text>
+                  <div className={"d-flex"} style={{justifyContent: "end"}}>
+                    <Pagination
+                        label={PageNo}
+                        hasPrevious={PageNo > 1}
+                        onPrevious={() => onChangePagination('minus')}
+                        hasNext={PageNo < totalPageCount}
+                        onNext={() => onChangePagination('plus')}
+                    />
+                  </div>
                 </IndexTable.Cell>
               </IndexTable.Row>
-            )
-          })}
-            <IndexTable.Row>
-              <IndexTable.Cell>
-                &nbsp;
-              </IndexTable.Cell>
-              <IndexTable.Cell>
-                &nbsp;
-              </IndexTable.Cell>
-              <IndexTable.Cell>
-                <div className={"d-flex"} style={{justifyContent: "end"}}>
-                  <Pagination
-                    label={PageNo}
-                    hasPrevious={PageNo > 1}
-                    onPrevious={() => onChangePagination('minus')}
-                    hasNext={PageNo < totalPageCount}
-                    onNext={() => onChangePagination('plus')}
-                  />
-                </div>
-              </IndexTable.Cell>
-            </IndexTable.Row>
-          </IndexTable>
-        </LegacyCard>
-      </Layout.Section>
-    </Fragment>
+            </IndexTable>
+          </LegacyCard>
+        </Layout.Section>
+      </Fragment>
   );
 };
 

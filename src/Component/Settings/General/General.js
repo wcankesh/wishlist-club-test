@@ -135,77 +135,75 @@ const General = () =>  {
                     {message !== "" && isError === false ? <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer}/> : ""}
                     <CustomErrorBanner message={message} setMessage={setMessage} setIsError={setIsError} isError={isError} link={""}/>
                     <Layout.Section>
-                         <LegacyCard >
-                        <LegacyCard.Section>
-                            <LegacyStack wrap={false}>
-                                <LegacyStack.Item>
-                                    <SwitchButton checked={setting.app_enable == "1"} onChange={handleChange} name="app_enable"/>
-                                </LegacyStack.Item>
-                                <LegacyStack.Item fill>
-                                    <LegacyStack spacing='extraTight' vertical>
-                                        <Text fontWeight='semibold'>App enable</Text>
-                                        <Text>Switch setting to enable or disable app functionality. </Text>
-                                    </LegacyStack>
-                                </LegacyStack.Item>
-                            </LegacyStack>
-                        </LegacyCard.Section>
-                        {general.map((x, i) => {
-                            return (
-                                <LegacyCard.Section key={i}>
-                                    <LegacyStack wrap={false}>
-                                        <LegacyStack.Item>
-                                            <SwitchButton
-                                                checked={x.checked}
-                                                onChange={handleChange} name={x.name}
-                                            />
-                                        </LegacyStack.Item>
-                                        <LegacyStack.Item fill>
-                                            <LegacyStack spacing='extraTight' vertical>
-                                                <Text fontWeight='semibold'>{x.title}</Text>
-                                                <Text>{x.description}</Text>
-                                            </LegacyStack>
-                                        </LegacyStack.Item>
-                                    </LegacyStack>
-                                </LegacyCard.Section>
-                            )
-                        })
-                        }
-                        <LegacyCard.Section>
-                            <LegacyStack wrap={false}>
-                                <LegacyStack.Item>
-                                    <SwitchButton checked={setting.is_variant_wishlist == "1"}
-                                                  onChange={handleChange} name="is_variant_wishlist"
-                                    />
-                                </LegacyStack.Item>
-                                <LegacyStack.Item fill>
-                                    <LegacyStack spacing='extraTight' vertical>
-                                        <Text fontWeight='semibold'>Product variant wishlists</Text>
-                                        <Text>If enabled, wishlists will be shown based on the product variant,
-                                            whereas disabling it will result in wishlists being displayed solely
-                                            based on products.</Text>
-                                        <Text color="critical">Please note: If you wish to see the wishlist for a
-                                            specific product variant, you will need to add this shortcode.</Text>
-                                        <Text color="critical">If you choose variant wishlist, make sure to add the
-                                            below shortcode. Otherwise, the wishlist will not be shown.</Text>
-                                        <FormLayout>
-                                            <FormLayout.Group>
-                                                <LegacyStack vertical spacing={"tight"}>
-                                                    <Text>Product page shortcode</Text>
-                                                    <CopyCode
-                                                        value={`<div class="th_wl_btn" data-product_id="{{  product.id }}" data-variant_id={{ product.selected_or_first_available_variant.id }}></div>`}/>
+                        <LegacyCard >
+                            <LegacyCard.Section>
+                                <LegacyStack wrap={false}>
+                                    <LegacyStack.Item>
+                                        <SwitchButton checked={setting.app_enable == "1"} onChange={handleChange} name="app_enable"/>
+                                    </LegacyStack.Item>
+                                    <LegacyStack.Item fill>
+                                        <LegacyStack spacing='extraTight' vertical>
+                                            <Text fontWeight='semibold'>App enable</Text>
+                                            <Text>Switch setting to enable or disable app functionality. </Text>
+                                        </LegacyStack>
+                                    </LegacyStack.Item>
+                                </LegacyStack>
+                            </LegacyCard.Section>
+                            {general.map((x, i) => {
+                                return (
+                                    <LegacyCard.Section key={i}>
+                                        <LegacyStack wrap={false}>
+                                            <LegacyStack.Item>
+                                                <SwitchButton
+                                                    checked={x.checked}
+                                                    onChange={handleChange} name={x.name}
+                                                />
+                                            </LegacyStack.Item>
+                                            <LegacyStack.Item fill>
+                                                <LegacyStack spacing='extraTight' vertical>
+                                                    <Text fontWeight='semibold'>{x.title}</Text>
+                                                    <Text>{x.description}</Text>
                                                 </LegacyStack>
-                                                <LegacyStack vertical spacing={"tight"}>
-                                                    <Text>Collection page shortcode</Text>
-                                                    <CopyCode
-                                                        value={`<div class="th_wl_btn" data-product_id="{{  product.id }}" data-variant_id={{ product.selected_or_first_available_variant.id }}></div>`}/>
-                                                </LegacyStack>
-                                            </FormLayout.Group>
-                                        </FormLayout>
-                                    </LegacyStack>
-                                </LegacyStack.Item>
-                            </LegacyStack>
-                        </LegacyCard.Section>
-                    </LegacyCard>
+                                            </LegacyStack.Item>
+                                        </LegacyStack>
+                                    </LegacyCard.Section>
+                                )
+                            })
+                            }
+                            <LegacyCard.Section>
+                                <LegacyStack wrap={false}>
+                                    <LegacyStack.Item>
+                                        <SwitchButton checked={setting.is_variant_wishlist == "1"}
+                                                      onChange={handleChange} name="is_variant_wishlist"
+                                        />
+                                    </LegacyStack.Item>
+                                    <LegacyStack.Item fill>
+                                        <LegacyStack spacing='extraTight' vertical>
+                                            <Text fontWeight='semibold'>Product variant wishlists</Text>
+                                            <Text>If enabled, wishlists will be shown based on the product variant,
+                                                whereas disabling it will result in wishlists being displayed solely
+                                                based on products.</Text>
+                                            <Text color="critical">Please note: If you wish to see the wishlist for a
+                                                specific product variant, you will need to add this shortcode.</Text>
+                                            <Text color="critical">If you choose variant wishlist, make sure to add the
+                                                below shortcode. Otherwise, the wishlist will not be shown.</Text>
+                                            <FormLayout>
+                                                <FormLayout.Group>
+                                                    <LegacyStack vertical spacing={"tight"}>
+                                                        <Text>Product page shortcode</Text>
+                                                        <CopyCode value={`<div class="th_prd_wl_btn" data-product_id="{{product.id}}" data-variant_id="{{product.selected_or_first_available_variant.id}}"></div>`}/>
+                                                    </LegacyStack>
+                                                    <LegacyStack vertical spacing={"tight"}>
+                                                        <Text>Collection page shortcode</Text>
+                                                        <CopyCode value={`<div class="th_wl_col_btn" data-product_id="{{product.id}}" data-variant_id="{{product.selected_or_first_available_variant.id}}"></div>`}/>
+                                                    </LegacyStack>
+                                                </FormLayout.Group>
+                                            </FormLayout>
+                                        </LegacyStack>
+                                    </LegacyStack.Item>
+                                </LegacyStack>
+                            </LegacyCard.Section>
+                        </LegacyCard>
                     </Layout.Section>
                 </Layout>
             </Page>
@@ -230,7 +228,7 @@ const General = () =>  {
                 >
                     <Modal.Section>
                         <Text>
-                           <Text as={"span"} color={"warning"} fontWeight={"semibold"}>WARNING!</Text> All the Guest Customers Product Information will be removed from our server and there is no way back. Are you sure you want to do this?
+                            <Text as={"span"} color={"warning"} fontWeight={"semibold"}>WARNING!</Text> All the Guest Customers Product Information will be removed from our server and there is no way back. Are you sure you want to do this?
                         </Text>
                     </Modal.Section>
                 </Modal>

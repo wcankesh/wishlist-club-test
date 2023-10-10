@@ -532,9 +532,9 @@ ul.PlanPriceList li.ppl_item .pplContent .icons {
     bottom: 0;
     top: 100%;
 }
-.Polaris-IndexTable__TableRow.Polaris-IndexTable__TableRow--hovered, .Polaris-IndexTable__TableRow.Polaris-IndexTable__TableRow--hovered .Polaris-IndexTable__TableCell--first, .Polaris-IndexTable__TableRow.Polaris-IndexTable__TableRow--hovered .Polaris-IndexTable__TableCell--first + .Polaris-IndexTable__TableCell, .Polaris-IndexTable__Table--unselectable .Polaris-IndexTable__TableRow--hovered .Polaris-IndexTable__TableCell:first-child{
-    background-color: #ffffff;
-}
+/*.Polaris-IndexTable__TableRow.Polaris-IndexTable__TableRow--hovered, .Polaris-IndexTable__TableRow.Polaris-IndexTable__TableRow--hovered .Polaris-IndexTable__TableCell--first, .Polaris-IndexTable__TableRow.Polaris-IndexTable__TableRow--hovered .Polaris-IndexTable__TableCell--first + .Polaris-IndexTable__TableCell, .Polaris-IndexTable__Table--unselectable .Polaris-IndexTable__TableRow--hovered .Polaris-IndexTable__TableCell:first-child{*/
+/*    background-color: #ffffff;*/
+/*}*/
 .custom-badge {
     font-size: 12px;
     color: #096dd9;

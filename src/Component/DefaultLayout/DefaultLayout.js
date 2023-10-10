@@ -50,6 +50,10 @@ const DefaultLayout = () => {
                             destination: `${baseUrl}/wishlist-items`
                         },
                         {
+                            label: 'Email History',
+                            destination: `${baseUrl}/email-history`
+                        },
+                        {
                             label: 'Settings',
 
                             destination: `${baseUrl}/settings`

@@ -249,9 +249,9 @@ const Installation = () => {
                                                 or <Text as={"span"}
                                                          fontWeight={"bold"}>product-grid-item.liquid </Text>file.</Text>
                                             <Text>Please add the below code under the product price.</Text>
-                                            <CopyCode
-                                                value={`<div class="th_wl_btn" data-product_id="{{  product.id }}" data-variant_id={{ product.selected_or_first_available_variant.id }}></div>`}/>
                                         </LegacyStack>
+                                        <CopyCode
+                                            value={`<div class="wc_wl_bis_btn" data-product_id="{{ product.id }}" data-variant_id="{{ product.selected_or_first_available_variant.id }}"></div>`}/>
                                     </Grid.Cell>
                                     <Grid.Cell columnSpan={{xs: 6, sm: 6, md: 6, lg: 6, xl: 6}}>
                                         <LegacyStack vertical>

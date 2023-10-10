@@ -18,6 +18,7 @@ import Headless from "../Component/Settings/Headless/Headless";
 import Plan from "../Component/Plan/Plan";
 import Installation from "../Component/Installation/Installation";
 import BackInStockDesign from "../Component/BackInStock/BackInStockDesign/BackInStockDesign";
+import EmailHistory from "../Component/EmailHistory/EmailHistory";
 
 export const routes = [
     {path: `${baseUrl}/dashboard`, component: <Dashboard/>},
@@ -39,4 +40,5 @@ export const routes = [
     {path: `${baseUrl}/settings/headless`, component: <Headless/>},
     {path: `${baseUrl}/settings/plan`, component: <Plan/>},
     {path: `${baseUrl}/settings/installation`, component: <Installation/>},
+    {path: `${baseUrl}/email-history`, component: <EmailHistory/>},
 ]
