@@ -1,7 +1,7 @@
 import React, {useEffect, useState, Fragment} from 'react';
 import TagsInput from 'react-tagsinput'
 import 'react-tagsinput/react-tagsinput.css'
-import {Page, Layout, LegacyCard, Button, FormLayout, LegacyStack, PageActions, Text,} from "@shopify/polaris"
+import {Page, Layout, Button, FormLayout, PageActions, Text, Card, BlockStack, Box, InlineStack} from "@shopify/polaris"
 import {useNavigate} from "react-router-dom";
 import {apiService, baseUrl, capitalizeMessage} from "../../../utils/Constant";
 import ToastMessage from "../../Comman/ToastMessage"
@@ -101,8 +101,8 @@ const Headless = () => {
                         id="storeDetails"
                         title="Headless Settings"
                         description={
-                            <LegacyStack>
-                                <Text color={"subdued"}>Enhance your store's capabilities by integrating our API. By
+                            <BlockStack gap={"400"}>
+                                <Text tone={"subdued"}>Enhance your store's capabilities by integrating our API. By
                                     establishing a
                                     connection to our API, you gain the ability to fetch wishlist products and
                                     seamlessly
@@ -111,20 +111,23 @@ const Headless = () => {
                                     design and layout to meet your exact requirements and create a unique shopping
                                     experience
                                     for your customers."</Text>
+                                <InlineStack>
                                 <Button
                                     onClick={() => window.open("https://documenter.getpostman.com/view/17366629/2s93eVVYTr","_blank")}>API
                                     Document</Button>
-                            </LegacyStack>
+                                </InlineStack>
+                            </BlockStack>
                         }
 
                     >
-                        <LegacyCard>
-                            <LegacyCard.Header>
+                        <Card padding={"0"}>
+                            <Box padding={"500"}>
+                            <BlockStack gap={"500"}>
+                            <InlineStack align={"end"}>
                                 <Button onClick={getHeadlessToken} loading={isLoading}>Generate Token</Button>
-                            </LegacyCard.Header>
-                            <LegacyCard.Section>
+                            </InlineStack>
                                 <FormLayout>
-                                    <LegacyStack vertical spacing={"tight"}>
+                                    <BlockStack gap={"100"}>
                                         <label>Domain</label>
                                         <TagsInput
                                             className={`react-tagsinput`}
@@ -134,18 +137,18 @@ const Headless = () => {
                                             addOnPaste={true}
                                             onlyUnique={true}
                                             inputProps={{placeholder: 'Enter domain'}}/> vertical spacing={"tight"}
-                                    </LegacyStack>
+                                    </BlockStack>
 
                                     <CopyCode label={"Access Token"} value={headLess.token}/>
-                                    <Text color={"critical"}><Text as={"span"} fontWeight={"bold"}>Please Note</Text>:
+                                    <Text tone={"critical"}><Text as={"span"} fontWeight={"bold"}>Please Note</Text>:
                                         Reach out to our dedicated support team and provide them with the domain you
                                         want to use with the API. They will guide you through the whitelisting process
                                         and ensure that the API is enabled for your specified domain. Without
                                         whitelisting the domain API will not work.</Text>
                                 </FormLayout>
-                            </LegacyCard.Section>
-
-                        </LegacyCard>
+                            </BlockStack>
+                            </Box>
+                        </Card>
                     </Layout.AnnotatedSection>
                     <Layout.Section>
                         <PageActions
@@ -157,43 +160,6 @@ const Headless = () => {
                         />
                     </Layout.Section>
                 </Layout>
-
-                {/*<Layout>*/}
-                {/*    <Layout.Section>*/}
-                {/*        <LegacyCard title={"Headless Settings"}*/}
-                {/*                    actions={{*/}
-                {/*                        content: <Button onClick={getHeadlessToken} loading={isLoading}>Generate*/}
-                {/*                            Token</Button>*/}
-                {/*                    }}*/}
-                {/*                    sectioned>*/}
-                {/*            <FormLayout>*/}
-                {/*                <FormLayout.Group>*/}
-                {/*                    <LegacyStack vertical spacing={"tight"}>*/}
-                {/*                        <label>Domain</label>*/}
-                {/*                        <TagsInput*/}
-                {/*                            className={`react-tagsinput`}*/}
-                {/*                            value={headLess.domain || []}*/}
-                {/*                            onChange={(value) => onChange({target: {name: "domain", value}})}*/}
-                {/*                            pasteSplit={defaultPasteSplit}*/}
-                {/*                            addOnPaste={true}*/}
-                {/*                            onlyUnique={true}*/}
-                {/*                            inputProps={{placeholder: 'Enter domain'}}/> vertical spacing={"tight"}*/}
-                {/*                    </LegacyStack>*/}
-                {/*                    <CopyCode label={"Access Token"} value={headLess.token}/>*/}
-                {/*                </FormLayout.Group>*/}
-                {/*            </FormLayout>*/}
-                {/*        </LegacyCard>*/}
-                {/*    </Layout.Section>*/}
-                {/*    <Layout.Section>*/}
-                {/*        <PageActions*/}
-                {/*            primaryAction={{*/}
-                {/*                content: 'Save',*/}
-                {/*                onAction: updateHeadless,*/}
-                {/*                loading: isTokenLoading*/}
-                {/*            }}*/}
-                {/*        />*/}
-                {/*    </Layout.Section>*/}
-                {/*</Layout>*/}
             </Page>
         </Fragment>
     );

@@ -1,4 +1,3 @@
-
 import React, {useState, useEffect} from 'react';
 import {
     Page,
@@ -6,8 +5,9 @@ import {
     Pagination,
     Badge,
     Text,
+    Card,
     IndexTable,
-    EmptySearchResult, LegacyCard, Button, Popover, ResourceList, LegacyStack, Thumbnail
+    EmptySearchResult, Button, Popover, ResourceList, Thumbnail, InlineStack,
 } from "@shopify/polaris"
 import {apiService, capitalizeMessage,} from "../../utils/Constant";
 import ToastMessage from "../Comman/ToastMessage";
@@ -89,7 +89,7 @@ const EmailHistory = () => {
                                link={""}/>
             <Layout>
                 <Layout.Section>
-                    <LegacyCard>
+                    <Card padding={"050"}>
                         <IndexTable
                             resourceName={resourceNameEmail}
                             itemCount={isLoading ? 0 : email.lists.length}
@@ -118,7 +118,7 @@ const EmailHistory = () => {
                                             <IndexTable.Cell>
                                                 <Popover
                                                     active={selectedProductIndex === i}
-                                                    activator={<Button plain removeUnderline onClick={() => togglePopoverActive(i)} disclosure={selectedProductIndex === i ? 'up' : 'down'}>{z.type == 1 || z.type == 2 || z.type == 3 || z.type == 4 ? `${z.wishlist_products.length} Products` : `${z.bis_products.length} Products`}</Button>}
+                                                    activator={<Button variant={"plain"} removeUnderline onClick={() => togglePopoverActive(i)} disclosure={selectedProductIndex === i ? 'up' : 'down'}>{z.type == 1 || z.type == 2 || z.type == 3 || z.type == 4 ? `${z.wishlist_products.length} Products` : `${z.bis_products.length} Products`}</Button>}
                                                     onClose={() => togglePopoverActive(i)}
                                                 >
                                                     <Popover.Pane>
@@ -126,10 +126,10 @@ const EmailHistory = () => {
                                                             const {title} = item
                                                             return (
                                                                 <ResourceList.Item>
-                                                                    <LegacyStack alignment="center" spacing={"extraTight"} wrap={false}>
+                                                                    <InlineStack blockAlign={"center"} gap="200" wrap={false} >
                                                                         <Thumbnail size={"small"} source={item.image}/>
                                                                         <Text as={"span"}>{title}</Text>
-                                                                    </LegacyStack>
+                                                                    </InlineStack>
                                                                 </ResourceList.Item>
                                                             )
                                                         }}/>
@@ -140,7 +140,7 @@ const EmailHistory = () => {
                                                 <Text>{z.created_at}</Text>
                                             </IndexTable.Cell>
                                             <IndexTable.Cell>
-                                                <Text>{z.message_id ? <Badge status="success">Sent</Badge> : ""}</Text>
+                                                <Text>{z.message_id ? <Badge tone="success">Sent</Badge> : ""}</Text>
                                             </IndexTable.Cell>
                                         </IndexTable.Row>
                                     )
@@ -172,7 +172,7 @@ const EmailHistory = () => {
                                 </IndexTable.Cell>
                             </IndexTable.Row>
                         </IndexTable>
-                    </LegacyCard>
+                    </Card>
                 </Layout.Section>
             </Layout>
         </Page>

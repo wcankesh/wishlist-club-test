@@ -3,8 +3,10 @@ import {
     FormLayout,
     TextField,
     Layout,
-    LegacyCard,
-    LegacyStack,
+    Box,
+    Card,
+    InlineStack,
+    BlockStack,
     RadioButton,
     Thumbnail,
     DropZone,
@@ -95,264 +97,341 @@ const ProductDesign = ({wishlistSetting, setWishlistSetting, updateIcon, file, s
                 `
             }]}>
             </Helmet>
-            <Layout.Section oneHalf>
-                <LegacyCard>
-                    <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>
-                </LegacyCard>
-                <LegacyCard>
+
+            <Layout.Section variant={"oneHalf"}>
+                <BlockStack gap={"300"}>
+                    <Card padding={"0"}>
+                        <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>
+                    </Card>
+                    <Card padding={"0"}>
                     {
-                        selected === 0 && <LegacyCard.Section>
+                        selected === 0 &&
                             <FormLayout>
-                                <FormLayout.Group condensed>
-                                    <RadioButton label={Icons.wishlistIcon}
-                                                 checked={wishlistSetting.button_type === '1'} id="disabled"
-                                                 name="button_type" value={wishlistSetting.button_type}
-                                                 onChange={() => handleChange({
-                                                     target: {
-                                                         name: "button_type",
-                                                         value: "1"
-                                                     }
-                                                 })}/>
-                                    <RadioButton label={
-                                        <LegacyStack><LegacyStack.Item>{Icons.wishlistIcon}</LegacyStack.Item><LegacyStack.Item>Wishlist</LegacyStack.Item></LegacyStack>}
-                                                 id="optional" name="button_type"
-                                                 checked={wishlistSetting.button_type === '3'}
-                                                 onChange={() => handleChange({
-                                                     target: {
-                                                         name: "button_type",
-                                                         value: "3"
-                                                     }
-                                                 })} value={wishlistSetting.button_type}/>
-                                    <div/>
-                                </FormLayout.Group>
-                                <FormLayout.Group>
-                                    <LegacyStack vertical spacing={"extraTight"}>
-                                        <DropZone
-                                            label={<div className={"Polaris-Label-full"}>
-                                                <LegacyStack spacing={"none"} alignment={"baseline"}>
-                                                    <LegacyStack.Item fill>Select Icon</LegacyStack.Item>
-                                                    <LegacyStack.Item>{file &&
-                                                    <Button size={"slim"} outline onClick={updateIcon}
-                                                            loading={isSVGLoading}>Upload</Button>}{wishlistSetting.icon &&
-                                                    <Button size={"slim"} outline onClick={deleteIcon}
-                                                            loading={isSVGLoading}>Remove</Button>}</LegacyStack.Item>
-                                                </LegacyStack>
-                                            </div>}
-                                            accept=".svg"
-                                            allowMultiple={false}
-                                            errorOverlayText="File type must be.svg"
-                                            onDrop={handleDropZoneDrop}
-                                        >
-                                            {uploadedFile}
-                                            {fileUpload}
-                                        </DropZone>
-                                        <Text color={"critical"}>Note: You can add only svg</Text>
-                                    </LegacyStack>
-                                </FormLayout.Group>
+                                <Box padding={"400"}>
+                                    <BlockStack gap={"300"}>
 
-                                <FormLayout.Group condensed>
-                                    <TextField label="Border width"
-                                               type="number"
-                                               value={wishlistSetting.button_border_width}
-                                               onChange={(value) => handleChange({
-                                                   target: {
-                                                       name: "button_border_width",
-                                                       value
-                                                   }
-                                               })}
-                                               suffix="PX"
-                                    />
-                                    <TextField label="Border Radius" type="number"
-                                               value={wishlistSetting.button_border_radius}
-                                               onChange={(value) => handleChange({
-                                                   target: {
-                                                       name: "button_border_radius",
-                                                       value
-                                                   }
-                                               })}
-                                               suffix="PX"/>
-                                </FormLayout.Group>
-                                <FormLayout.Group condensed>
-                                    <TextField label="Top & Bottom padding" type="number"
-                                               value={wishlistSetting.button_top_bottom_padding}
-                                               onChange={(value) => handleChange({
-                                                   target: {
-                                                       name: "button_top_bottom_padding",
-                                                       value
-                                                   }
-                                               })}
-                                               suffix="PX"/>
-                                    <TextField label="Left & Right padding" type="number"
-                                               value={wishlistSetting.button_left_right_padding}
-                                               onChange={(value) => handleChange({
-                                                   target: {
-                                                       name: "button_left_right_padding",
-                                                       value
-                                                   }
-                                               })}
-                                               suffix="PX"/>
-                                </FormLayout.Group>
-                                <FormLayout.Group condensed>
-                                    <Select label="Button Postion"
-                                            options={btn_options}
-                                            value={wishlistSetting.button_position}
-                                            onChange={(value) => {
-                                                handleChange({target: {name: "button_position", value}})
-                                            }}
-                                    />
-                                    <div></div>
-                                </FormLayout.Group>
-                                <FormLayout.Group>
-                                    <Checkbox
-                                        label="Show how many times the product has been added to the wishlist."
-                                        checked={wishlistSetting.total_count == "1"}
-                                        onChange={(checked) => {
-                                            handleChange({target: {name: "total_count", value: checked ? "1" : "0"}})
-                                        }}
-                                    />
-                                </FormLayout.Group>
+                                        <FormLayout.Group condense>
+                                            <InlineStack align={"space-between"}>
+                                                <RadioButton label={Icons.wishlistIcon}
+                                                             checked={wishlistSetting.button_type === '1'} id="disabled"
+                                                             name="button_type" value={wishlistSetting.button_type}
+                                                             onChange={() => handleChange({
+                                                                 target: {
+                                                                     name: "button_type",
+                                                                     value: "1"
+                                                                 }
+                                                             })}
+                                                />
+                                                <RadioButton label={<InlineStack gap={"400"}>{Icons.wishlistIcon}Wishlist</InlineStack>}
+                                                             id="optional" name="button_type"
+                                                             checked={wishlistSetting.button_type === '3'}
+                                                             onChange={() => handleChange({
+                                                                 target: {
+                                                                     name: "button_type",
+                                                                     value: "3"
+                                                                 }
+                                                             })} value={wishlistSetting.button_type}
+                                                />
+                                                &nbsp;
+                                                <div></div>
+                                            </InlineStack>
+                                        </FormLayout.Group>
+
+                                        <FormLayout.Group>
+                                            <BlockStack gap={"100"}>
+                                            <DropZone
+                                                label={
+                                                    <div className={"Polaris-Label-full"}>
+                                                        <InlineStack align={"space-between"}>
+                                                            Select Icon
+                                                            {file &&
+                                                                <Button size={"slim"} outline onClick={updateIcon} loading={isSVGLoading}>Upload</Button>
+                                                            }
+                                                            {wishlistSetting.icon &&
+                                                                    <Button size={"slim"} outline onClick={deleteIcon} loading={isSVGLoading}>Remove</Button>
+                                                            }
+                                                        </InlineStack>
+                                                    </div>}
+                                                accept=".svg"
+                                                allowMultiple={false}
+                                                errorOverlayText="File type must be.svg"
+                                                onDrop={handleDropZoneDrop}
+                                            >
+                                                {uploadedFile}
+                                                {fileUpload}
+                                            </DropZone>
+                                            <Text tone={"critical"}>Note: You can add only svg</Text>
+                                            </BlockStack>
+                                        </FormLayout.Group>
+
+                                        <FormLayout.Group condensed>
+                                            <TextField label="Border width"
+                                                       type="number"
+                                                       value={wishlistSetting.button_border_width}
+                                                       onChange={(value) => handleChange({
+                                                           target: {
+                                                               name: "button_border_width",
+                                                               value
+                                                           }
+                                                       })}
+                                                       suffix="PX"
+                                            />
+                                            <TextField label="Border Radius" type="number"
+                                                       value={wishlistSetting.button_border_radius}
+                                                       onChange={(value) => handleChange({
+                                                           target: {
+                                                               name: "button_border_radius",
+                                                               value
+                                                           }
+                                                       })}
+                                                       suffix="PX"
+                                            />
+                                        </FormLayout.Group>
+
+                                        <FormLayout.Group condensed>
+                                            <TextField label="Top & Bottom padding" type="number"
+                                                       value={wishlistSetting.button_top_bottom_padding}
+                                                       onChange={(value) => handleChange({
+                                                           target: {
+                                                               name: "button_top_bottom_padding",
+                                                               value
+                                                           }
+                                                       })}
+                                                       suffix="PX"/>
+                                            <TextField label="Left & Right padding" type="number"
+                                                       value={wishlistSetting.button_left_right_padding}
+                                                       onChange={(value) => handleChange({
+                                                           target: {
+                                                               name: "button_left_right_padding",
+                                                               value
+                                                           }
+                                                       })}
+                                                       suffix="PX"
+                                            />
+                                        </FormLayout.Group>
+
+                                        <FormLayout.Group condensed>
+                                            <Select label="Button Postion"
+                                                    options={btn_options}
+                                                    value={wishlistSetting.button_position}
+                                                    onChange={(value) => {
+                                                        handleChange({target: {name: "button_position", value}})
+                                                    }}
+                                            />
+                                            <div></div>
+                                        </FormLayout.Group>
+
+                                        <FormLayout.Group>
+                                            <Checkbox
+                                                label="Show how many times the product has been added to the wishlist."
+                                                checked={wishlistSetting.total_count == "1"}
+                                                onChange={(checked) => {
+                                                    handleChange({target: {name: "total_count", value: checked ? "1" : "0"}})
+                                                }}
+                                            />
+                                        </FormLayout.Group>
+
+                                    </BlockStack>
+                                </Box>
                             </FormLayout>
-                        </LegacyCard.Section>
                     }
                     {
-                        selected === 1 && <LegacyCard.Section>
-                            {wishlistSetting.button_type === '1' ? <FormLayout>
-                                <FormLayout.Group condensed>
-                                    <ColorInput label={"Button color"} name="button_color_before"
-                                                onChange={handleChange} value={wishlistSetting.button_color_before}/>
-                                    <div/>
-                                </FormLayout.Group>
-                            </FormLayout> : <FormLayout>
-                                <FormLayout.Group condensed>
-                                    <TextField label="Button text" value={wishlistSetting.button_text_before}
-                                               onChange={(value) => handleChange({
-                                                   target: {
-                                                       name: "button_text_before",
-                                                       value
-                                                   }
-                                               })}/>
-                                    <ColorInput label={"Button color"} name="button_color_before"
-                                                onChange={handleChange} value={wishlistSetting.button_color_before}/>
-                                </FormLayout.Group>
-                                <FormLayout.Group condensed>
-                                    <ColorInput label={"Button background color"} name="button_bg_color_before"
-                                                value={wishlistSetting.button_bg_color_before} onChange={handleChange}/>
-                                    <ColorInput label={"Border Color"} name="button_border_color_before"
-                                                value={wishlistSetting.button_border_color_before}
-                                                onChange={handleChange}/>
-                                </FormLayout.Group>
-                            </FormLayout>
-                            }
-
-                        </LegacyCard.Section>
-                    }
-                    {
-                        selected === 2 && <LegacyCard.Section>
+                        selected === 1 && <Fragment>
                             {wishlistSetting.button_type === '1' ?
                                 <FormLayout>
-                                    <FormLayout.Group condensed>
-                                        <ColorInput label={"Button color"} name="button_color_after"
-                                                    onChange={handleChange}
-                                                    value={wishlistSetting.button_color_after}/>
-                                        <div/>
-                                    </FormLayout.Group>
-                                </FormLayout> : <FormLayout>
-                                    <FormLayout.Group condensed>
-                                        <TextField label="Button text"
-                                                   value={wishlistSetting.button_text_after}
-                                                   onChange={(value) => handleChange({
-                                                       target: {
-                                                           name: "button_text_after",
-                                                           value
-                                                       }
-                                                   })}/>
-                                        <ColorInput label={"Button color"} name="button_color_after"
-                                                    onChange={handleChange}
-                                                    value={wishlistSetting.button_color_after}/>
-                                    </FormLayout.Group>
-                                    <FormLayout.Group condensed>
-                                        <ColorInput label={"Button background color"} name="button_bg_color_after"
-                                                    value={wishlistSetting.button_bg_color_after}
-                                                    onChange={handleChange}/>
-                                        <ColorInput label={"Border Color"} name="button_border_color_after"
-                                                    value={wishlistSetting.button_border_color_after}
-                                                    onChange={handleChange}/>
-                                    </FormLayout.Group>
+                                    <Box padding={"400"}>
+                                        <FormLayout.Group condensed>
+                                            <ColorInput
+                                                label={"Button color"}
+                                                name="button_color_before"
+                                                onChange={handleChange}
+                                                value={wishlistSetting.button_color_before}
+                                            />
+                                            <div/>
+                                        </FormLayout.Group>
+                                    </Box>
+                                </FormLayout> :
+                                <FormLayout>
+                                    <Box padding={"400"}>
+                                        <FormLayout.Group condensed>
+                                            <TextField
+                                                label="Button text"
+                                                value={wishlistSetting.button_text_before}
+                                                onChange={(value) => handleChange({
+                                                    target: {
+                                                        name: "button_text_before",
+                                                        value
+                                                    }
+                                                })}
+                                            />
+                                            <ColorInput
+                                                label={"Button color"}
+                                                name="button_color_before"
+                                                onChange={handleChange}
+                                                value={wishlistSetting.button_color_before}
+                                            />
+                                        </FormLayout.Group>
+                                        <FormLayout.Group condensed>
+                                            <ColorInput
+                                                label={"Button background color"}
+                                                name="button_bg_color_before"
+                                                value={wishlistSetting.button_bg_color_before}
+                                                onChange={handleChange}
+                                            />
+                                            <ColorInput
+                                                label={"Border Color"}
+                                                name="button_border_color_before"
+                                                value={wishlistSetting.button_border_color_before}
+                                                onChange={handleChange}
+                                            />
+                                        </FormLayout.Group>
+                                    </Box>
                                 </FormLayout>
                             }
-                        </LegacyCard.Section>
+                        </Fragment>
                     }
-                </LegacyCard>
-                {selected === 0 && <LegacyCard title={"Wishlist page layout"} sectioned>
-                    <FormLayout>
-                        <Select
-                            options={options}
-                            value={wishlistSetting.layout_type.toString()}
-                            onChange={(value) => {
-                                handleChange({
-                                    target: {
-                                        name: "layout_type",
-                                        value
-                                    }
-                                })
-                            }}
-                        />
-                    </FormLayout>
-                </LegacyCard>}
+                    {
+                        selected === 2 && <Fragment>
+                            {wishlistSetting.button_type === '1' ?
+                                <FormLayout>
+                                    <Box padding={"400"}>
+                                        <FormLayout.Group condensed>
+                                            <ColorInput
+                                                label={"Button color"}
+                                                name="button_color_after"
+                                                onChange={handleChange}
+                                                value={wishlistSetting.button_color_after}
+                                            />
+                                            <div/>
+                                        </FormLayout.Group>
+                                    </Box>
+                                </FormLayout> :
+                                <FormLayout>
+                                    <Box padding={"400"}>
+                                        <FormLayout.Group condensed>
+                                            <TextField
+                                                label="Button text"
+                                                value={wishlistSetting.button_text_after}
+                                                onChange={(value) => handleChange({
+                                                           target: {
+                                                               name: "button_text_after",
+                                                               value
+                                                           }
+                                                       })}
+                                            />
+                                            <ColorInput
+                                                label={"Button color"}
+                                                name="button_color_after"
+                                                onChange={handleChange}
+                                                value={wishlistSetting.button_color_after}
+                                            />
+                                        </FormLayout.Group>
+                                        <FormLayout.Group condensed>
+                                            <ColorInput
+                                                label={"Button background color"}
+                                                name="button_bg_color_after"
+                                                value={wishlistSetting.button_bg_color_after}
+                                                onChange={handleChange}/>
+                                            <ColorInput
+                                                label={"Border Color"}
+                                                name="button_border_color_after"
+                                                value={wishlistSetting.button_border_color_after}
+                                                onChange={handleChange}
+                                            />
+                                        </FormLayout.Group>
+                                    </Box>
+                                </FormLayout>
+                            }
+                        </Fragment>
+                    }
+                    </Card>
+                        {selected === 0 && 
+                        <Card>
+                            <BlockStack gap={"400"}>
+                                <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Wishlist page layout</Text>
+                                <FormLayout>
+                                    <Select
+                                        options={options}
+                                        value={wishlistSetting.layout_type.toString()}
+                                        onChange={(value) => {
+                                            handleChange({
+                                                target: {
+                                                    name: "layout_type",
+                                                    value
+                                                }
+                                            })
+                                        }}
+                                    />
+                                </FormLayout>
+                            </BlockStack>
+                        </Card>}
+                </BlockStack>
             </Layout.Section>
-            <Layout.Section oneHalf>
-                <LegacyCard title="Preview (before adding to wishlist)" sectioned>
-                    <LegacyStack wrap distribution={"center"}>
-                        <img src={"https://wishlist.thimatic-apps.com/assets/images/product1.jpg"} width={"140px"}/>
-                        <LegacyStack.Item fill>
-                            <LegacyStack spacing='tight' vertical>
-                                <Text as='h3' fontWeight={"bold"}>AKAMAI TOP // PALMS COLLIDE</Text>
-                                <Text>Rs. 80.00</Text>
-                                <Button outline>Add to cart</Button>
-                                <div className="d-flex wishlist_position">
-                                    <button className="wl_btn wishlist_btn_before">
-                                        {wishlistSetting && wishlistSetting.icon ?
-                                            <div
-                                                dangerouslySetInnerHTML={{__html: wishlistSetting && wishlistSetting.icon}}/>
-                                            :
-                                            Icons.wishlistIcon
-                                        }
-                                        &nbsp;
-                                        {wishlistSetting.button_type == "3" ? wishlistSetting.button_text_before : ""}
-                                        &nbsp;
-                                        {wishlistSetting.total_count == "1" ? "(10)" : ""}
-                                    </button>
-                                </div>
-                            </LegacyStack>
-                        </LegacyStack.Item>
-                    </LegacyStack>
-                </LegacyCard>
-                <LegacyCard title="Preview (after adding to wishlist)" sectioned>
-                    <LegacyStack wrap distribution={"center"}>
-                        <img src={"https://wishlist.thimatic-apps.com/assets/images/product1.jpg"} width={"140px"}/>
-                        <LegacyStack.Item fill>
-                            <LegacyStack spacing='tight' vertical>
-                                <Text as='h3' fontWeight={"bold"}>AKAMAI TOP // PALMS COLLIDE</Text>
-                                <Text>Rs. 80.00</Text>
-                                <Button outline>Add to cart</Button>
-                                <div className=" d-flex wishlist_position">
-                                    <button className="wl_btn wishlist_btn_after">
-                                        {wishlistSetting && wishlistSetting.icon ?
-                                            <div
-                                                dangerouslySetInnerHTML={{__html: wishlistSetting && wishlistSetting.icon}}/>
-                                            :
-                                            Icons.wishlistIconFill
-                                        }
-                                        &nbsp;
-                                        {wishlistSetting.button_type == "3" ? wishlistSetting.button_text_after : ""}
-                                        &nbsp;
-                                        {wishlistSetting.total_count == "1" ? "(10)" : ""}
-                                    </button>
-                                </div>
-                            </LegacyStack>
-                        </LegacyStack.Item>
-                    </LegacyStack>
-                </LegacyCard>
+
+            <Layout.Section variant={"oneHalf"}>
+                <BlockStack gap={"300"}>
+
+                    <Card padding={"500"}>
+                        <BlockStack gap={"500"}>
+                            <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Preview (before adding to wishlist)</Text>
+                            <InlineStack gap={"400"}>
+                                <img src={"https://wishlist.thimatic-apps.com/assets/images/product1.jpg"} width={"140px"}/>
+                                <BlockStack gap={"200"}>
+                                    <Text as='h3' fontWeight={"bold"}>AKAMAI TOP // PALMS COLLIDE</Text>
+                                    <Text>Rs. 80.00</Text>
+                                    <InlineStack>
+                                    <Button size={"large"}>Add to cart</Button>
+                                    </InlineStack>
+                                    <div className="d-flex wishlist_position">
+                                        <button className="wl_btn wishlist_btn_before">
+                                            {wishlistSetting && wishlistSetting.icon ?
+                                                <div
+                                                    dangerouslySetInnerHTML={{__html: wishlistSetting && wishlistSetting.icon}}/>
+                                                :
+                                                Icons.wishlistIcon
+                                            }
+                                            &nbsp;
+                                            {wishlistSetting.button_type == "3" ? wishlistSetting.button_text_before : ""}
+                                            &nbsp;
+                                            {wishlistSetting.total_count == "1" ? "(10)" : ""}
+                                        </button>
+                                    </div>
+                                </BlockStack>
+                            </InlineStack>
+                        </BlockStack>
+                    </Card>
+
+                    <Card padding={"500"}>
+                        <BlockStack gap={"500"}>
+                            <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Preview (after adding to wishlist)</Text>
+                            <InlineStack gap={"400"}>
+                                <img src={"https://wishlist.thimatic-apps.com/assets/images/product1.jpg"} width={"140px"}/>
+                                <BlockStack gap={"200"}>
+                                    <Text as='h3' fontWeight={"bold"}>AKAMAI TOP // PALMS COLLIDE</Text>
+                                    <Text>Rs. 80.00</Text>
+                                    <InlineStack>
+                                    <Button outline>Add to cart</Button>
+                                    </InlineStack>
+                                    <div className=" d-flex wishlist_position">
+                                        <button className="wl_btn wishlist_btn_after">
+                                            {wishlistSetting && wishlistSetting.icon ?
+                                                <div
+                                                    dangerouslySetInnerHTML={{__html: wishlistSetting && wishlistSetting.icon}}/>
+                                                :
+                                                Icons.wishlistIconFill
+                                            }
+                                            &nbsp;
+                                            {wishlistSetting.button_type == "3" ? wishlistSetting.button_text_after : ""}
+                                            &nbsp;
+                                            {wishlistSetting.total_count == "1" ? "(10)" : ""}
+                                        </button>
+                                    </div>
+                                </BlockStack>
+                        </InlineStack>
+                    </BlockStack>
+                </Card>
+
+                </BlockStack>
             </Layout.Section>
         </Fragment>
     );

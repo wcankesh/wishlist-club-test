@@ -1,9 +1,9 @@
 import React,{useState, useEffect, useRef, } from "react";
-import {useBreakpoints, Button, Popover, HorizontalGrid, Box, OptionList, Select, VerticalStack, HorizontalStack, DatePicker, TextField, Icon} from "@shopify/polaris";
+import {useBreakpoints, Button, Popover, InlineGrid, Box, OptionList, Select, BlockStack, InlineStack, DatePicker, TextField, Icon} from "@shopify/polaris";
 import {CalendarMinor, ArrowRightMinor} from "@shopify/polaris-icons";
 import moment from "moment";
 
-const DateRangePicker = ({ onChange }) =>  {
+const DateRangePicker = ({ onChange, fullWidth }) =>  {
     const { mdDown, lgUp } = useBreakpoints();
     const shouldShowMultiMonth = lgUp;
     const today = new Date(new Date().setHours(0, 0, 0, 0));
@@ -158,10 +158,10 @@ const DateRangePicker = ({ onChange }) =>  {
             relatedTarget != null && isNodeWithinPopover(relatedTarget);
         // If focus moves from the TextField to the Popover
         // we don't want to close the popover
-        if (isRelatedTargetWithinPopover) {
-            return;
-        }
-        setPopoverActive(false);
+        // if (isRelatedTargetWithinPopover) {
+        //     return;
+        // }
+        // setPopoverActive(false);
     }
     function handleMonthChange(month, year) {
         setDate({ month, year });
@@ -232,9 +232,12 @@ const DateRangePicker = ({ onChange }) =>  {
             fluidContent
             sectioned={false}
             fullHeight
+            zIndexOverride={"1050"}
             activator={
                 <Button
                     icon={CalendarMinor}
+                    size={"large"}
+                    fullWidth={fullWidth}
                     onClick={() => setPopoverActive(!popoverActive)}
                 >
                     {buttonValue}
@@ -244,7 +247,7 @@ const DateRangePicker = ({ onChange }) =>  {
         >
             <Popover.Pane>
                 {/*<Scrollable style={{ height: "334px" }}>*/}
-                <HorizontalGrid
+                <InlineGrid
                     columns={{
                         xs: "1fr",
                         mdDown: "1fr",
@@ -256,8 +259,8 @@ const DateRangePicker = ({ onChange }) =>  {
                     <Box
                         maxWidth={mdDown ? "516px" : "212px"}
                         width={mdDown ? "100%" : "212px"}
-                        padding={{ xs: 5, md: 0 }}
-                        paddingBlockEnd={{ xs: 1, md: 0 }}
+                        padding={{ xs: "500", md: "0" }}
+                        paddingBlockEnd={{ xs: "100", md: "0" }}
                     >
                         {mdDown ? (
                             <Select
@@ -289,9 +292,9 @@ const DateRangePicker = ({ onChange }) =>  {
 
                         )}
                     </Box>
-                    <Box padding={{ xs: 5 }} maxWidth={mdDown ? "320px" : "516px"}>
-                        <VerticalStack gap="4">
-                            <HorizontalStack gap="2">
+                    <Box padding={{ xs: 500 }} maxWidth={mdDown ? "320px" : "516px"}>
+                        <BlockStack gap={"400"}>
+                            <InlineStack gap={"200"}>
                                 <div style={{ flexGrow: 1 }}>
                                     <TextField
                                         role="combobox"
@@ -317,7 +320,7 @@ const DateRangePicker = ({ onChange }) =>  {
                                         autoComplete="off"
                                     />
                                 </div>
-                            </HorizontalStack>
+                            </InlineStack>
                             <div>
                                 <DatePicker
                                     month={month}
@@ -333,21 +336,23 @@ const DateRangePicker = ({ onChange }) =>  {
                                     allowRange
                                 />
                             </div>
-                        </VerticalStack>
+                        </BlockStack>
                     </Box>
-                </HorizontalGrid>
+                </InlineGrid>
                 {/*</Scrollable>*/}
             </Popover.Pane>
+            <Box padding={{ xs: "300" }}>
             <Popover.Pane fixed>
                 <Popover.Section>
-                    <HorizontalStack align="end">
+                    <InlineStack align={"end"}>
                         <Button onClick={cancel}>Cancel</Button>&nbsp;&nbsp;&nbsp;&nbsp;
-                        <Button primary onClick={apply}>
+                        <Button variant={"primary"} onClick={apply}>
                             Apply
                         </Button>
-                    </HorizontalStack>
+                    </InlineStack>
                 </Popover.Section>
             </Popover.Pane>
+            </Box>
         </Popover>
     )
 }

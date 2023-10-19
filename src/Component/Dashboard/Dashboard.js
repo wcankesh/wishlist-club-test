@@ -1,5 +1,5 @@
 import React, {Fragment} from 'react';
-import {Layout, Page, ProgressBar, Text, LegacyStack, Banner} from "@shopify/polaris"
+import {Layout, Page, ProgressBar, Text, BlockStack, InlineStack, Banner} from "@shopify/polaris"
 import OnBoarding from "./OnBoarding/OnBoarding";
 import HelpDesk from "./HelpDesk/HelpDesk"
 import {useSelector} from "react-redux";
@@ -36,7 +36,7 @@ const Dashboard = () => {
                         <Layout.Section>
                           <Banner
                               title={x.notification_title}
-                              status={x.type}
+                              tone={x.type}
                           >
                             <span dangerouslySetInnerHTML={{__html: x.notification_description}}/>
                           </Banner>
@@ -48,12 +48,12 @@ const Dashboard = () => {
             <Layout.Section>
               <Text as={"span"}>Mail
                 sent {`${shopDetails.sent_email}/${(shopDetails.plan_type === "0" || shopDetails.plan_type === "1") ? "50" : shopDetails.plan_type === "5" ? "500" : shopDetails.plan_type === "6" ? "2000" : shopDetails.plan_type === "7" ? "5000" : shopDetails.plan_type === "8" ? "10000" : ""}`}</Text>
-              <LegacyStack alignment={"center"}>
-                <LegacyStack.Item fill>
-                  <ProgressBar progress={productPercent} size="small" color={"success"}/>
-                </LegacyStack.Item>
-                <Text>{productPercent}%</Text>
-              </LegacyStack>
+              <BlockStack>
+                <InlineStack wrap={false} blockAlign={"center"} gap="400">
+                  <ProgressBar progress={productPercent} size="small" tone="primary"/>
+                  <Text>{productPercent}%</Text>
+                </InlineStack >
+              </BlockStack>
             </Layout.Section>
             <Layout.Section>
               <OnBoarding/>

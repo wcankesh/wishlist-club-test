@@ -1,5 +1,5 @@
 import React, {Fragment, useState, useCallback, useEffect} from 'react';
-import {Tabs, Layout, Page, PageActions, LegacyCard} from "@shopify/polaris";
+import {Tabs, Layout, Page, PageActions, Card} from "@shopify/polaris";
 import {useNavigate} from "react-router-dom";
 import {apiService, baseUrl, capitalizeMessage} from "../../../utils/Constant";
 import ToastMessage from "../../Comman/ToastMessage";
@@ -144,9 +144,11 @@ const  WishlistDesign = () => {
             panelID: 'accepts-marketing-content-1',
         },
     ];
+
     const onBack = () => {
         navigate(`${baseUrl}/settings`)
     }
+
     const handleTabChange = useCallback(
         (selectedTabIndex) => setSelected(selectedTabIndex),
         [],
@@ -161,10 +163,9 @@ const  WishlistDesign = () => {
                     {message !== "" && isError === false ? <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer}/> : ""}
                     <CustomErrorBanner message={message} setMessage={setMessage} setIsError={setIsError} isError={isError} link={""}/>
                     <Layout.Section fullWidth>
-                        <LegacyCard>
+                        <Card padding={"0"}>
                             <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>
-                        </LegacyCard>
-
+                        </Card>
                     </Layout.Section>
                     {selected == 0 &&
                     <ProductDesign

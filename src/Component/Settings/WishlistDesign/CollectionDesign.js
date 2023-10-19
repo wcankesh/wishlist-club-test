@@ -3,8 +3,10 @@ import {
     FormLayout,
     TextField,
     Layout,
-    LegacyCard,
-    LegacyStack,
+    Box,
+    Card,
+    InlineStack,
+    BlockStack,
     RadioButton,
     Thumbnail,
     DropZone,
@@ -108,43 +110,43 @@ const CollectionDesign = ({
                 `
             }]}>
             </Helmet>
-            <Layout.Section oneHalf>
-                <LegacyCard>
+
+            <Layout.Section variant={"oneHalf"}>
+                <BlockStack gap={"300"}>
+                <Card padding={"0"}>
                     <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>
-                </LegacyCard>
-                <LegacyCard>
+                </Card>
+                <Card padding={"0"}>
                     {
-                        selected === 0 && <LegacyCard.Section>
+                        selected === 0 &&
                             <FormLayout>
-                                <FormLayout.Group condensed>
-                                    <RadioButton label={Icons.wishlistIcon} checked={wishlistSetting.product_collection_button_type === "1"} id="disabled" name="product_collection_button_type" value={wishlistSetting.product_collection_button_type} onChange={() => handleChange({
-                                            target: {
-                                                name: "product_collection_button_type",
-                                                value: "1"
-                                            }
-                                        })}/>
-                                    <RadioButton label={<LegacyStack>
-                                                <LegacyStack.Item>
-                                                    {Icons.wishlistIcon}
-                                                </LegacyStack.Item>
-                                                <LegacyStack.Item>
-                                                    Wishlist
-                                                </LegacyStack.Item>
-                                            </LegacyStack>} id="optional" name="product_collection_button_type" checked={wishlistSetting.product_collection_button_type === "3"} value={wishlistSetting.product_collection_button_type} onChange={() => handleChange({target: {name: "product_collection_button_type", value: "3"}})}/>
-                                    <div/>
-                                </FormLayout.Group>
+                                <Box padding={"400"}>
+                                    <BlockStack gap={"300"}>
+                                        <FormLayout.Group condensed>
+                                            <InlineStack align={"space-between"}>
+                                            <RadioButton label={Icons.wishlistIcon} checked={wishlistSetting.product_collection_button_type === "1"} id="disabled" name="product_collection_button_type" value={wishlistSetting.product_collection_button_type} onChange={() => handleChange({
+                                                    target: {
+                                                        name: "product_collection_button_type",
+                                                        value: "1"
+                                                    }
+                                                })}/>
+                                            <RadioButton label={<InlineStack gap={"400"}>{Icons.wishlistIcon}Wishlist</InlineStack>} id="optional" name="product_collection_button_type" checked={wishlistSetting.product_collection_button_type === "3"} value={wishlistSetting.product_collection_button_type} onChange={() => handleChange({target: {name: "product_collection_button_type", value: "3"}})}/>
+                                                &nbsp;
+                                                <div></div>
+                                            </InlineStack>
+                                        </FormLayout.Group>
                                 <FormLayout.Group>
-                                    <LegacyStack vertical spacing={"extraTight"}>
+                                    <BlockStack gap={"100"}>
                                         <DropZone
                                             label={
                                                 <div className={"Polaris-Label-full"}>
-                                                    <LegacyStack spacing={"none"} alignment={"baseline"}>
-                                                        <LegacyStack.Item fill>Select Icon</LegacyStack.Item>
-                                                        <LegacyStack.Item>{file &&
+                                                    <InlineStack align={"space-between"}>
+                                                        Select Icon
+                                                        {file &&
                                                         <Button size={"slim"} outline onClick={updateIcon} loading={isSVGLoading}>Upload</Button>}
                                                             {wishlistSetting.icon &&
-                                                            <Button size={"slim"} outline onClick={deleteIcon} loading={isSVGLoading}>Remove</Button>}</LegacyStack.Item>
-                                                    </LegacyStack>
+                                                            <Button size={"slim"} outline onClick={deleteIcon} loading={isSVGLoading}>Remove</Button>}
+                                                    </InlineStack>
                                                 </div>
                                             }
                                             accept=".svg"
@@ -155,8 +157,8 @@ const CollectionDesign = ({
                                             {uploadedFile}
                                             {fileUpload}
                                         </DropZone>
-                                        <Text color={"critical"}>Note: You can add only svg</Text>
-                                    </LegacyStack>
+                                        <Text tone={"critical"}>Note: You can add only svg</Text>
+                                    </BlockStack>
                                 </FormLayout.Group>
                                 <FormLayout.Group condensed>
                                     <TextField label="Border width"
@@ -233,19 +235,25 @@ const CollectionDesign = ({
                                         }}
                                     />
                                 </FormLayout.Group>
+                                    </BlockStack>
+                                </Box>
                             </FormLayout>
-                        </LegacyCard.Section>
                     }
                     {
-                        selected === 1 && <LegacyCard.Section>
-                            {wishlistSetting.product_collection_button_type === '1' ? <FormLayout>
+                        selected === 1 && <Fragment>
+                            {wishlistSetting.product_collection_button_type === '1' ?
+                                <FormLayout>
+                                    <Box padding={"400"}>
                                 <FormLayout.Group condensed>
                                     <ColorInput label={"Button color"}
                                                 value={wishlistSetting.product_collection_button_color_before}
                                                 name="product_collection_button_color_before" onChange={handleChange}/>
                                     <div/>
                                 </FormLayout.Group>
-                            </FormLayout> : <FormLayout>
+                                    </Box>
+                            </FormLayout> :
+                                <FormLayout>
+                                    <Box padding={"400"}>
                                 <FormLayout.Group condensed>
                                     <TextField label="Button text"
                                                value={wishlistSetting.product_collection_button_text_before}
@@ -270,20 +278,26 @@ const CollectionDesign = ({
                                                 name="product_collection_button_border_color_before"
                                                 onChange={handleChange}/>
                                 </FormLayout.Group>
+                                    </Box>
                             </FormLayout>
                             }
-                        </LegacyCard.Section>
+                        </Fragment>
                     }
                     {
-                        selected === 2 && <LegacyCard.Section>
-                            {wishlistSetting.product_collection_button_type === '1' ? <FormLayout>
+                        selected === 2 && <Fragment>
+                            {wishlistSetting.product_collection_button_type === '1' ?
+                                <FormLayout>
+                                    <Box padding={"400"}>
                                 <FormLayout.Group>
                                     <ColorInput label={"Button color"}
                                                 value={wishlistSetting.product_collection_button_color_after}
                                                 name="product_collection_button_color_after" onChange={handleChange}/>
                                     <div></div>
                                 </FormLayout.Group>
-                            </FormLayout> : <FormLayout>
+                                    </Box>
+                            </FormLayout> :
+                                <FormLayout>
+                                    <Box padding={"400"}>
                                 <FormLayout.Group condensed>
                                     <TextField label="Button text"
                                                value={wishlistSetting.product_collection_button_text_after}
@@ -309,16 +323,20 @@ const CollectionDesign = ({
                                                 name="product_collection_button_border_color_after"
                                                 onChange={handleChange}/>
                                 </FormLayout.Group>
+                                    </Box>
                             </FormLayout>
                             }
-                        </LegacyCard.Section>
+                        </Fragment>
                     }
-                </LegacyCard>
+                </Card>
+                </BlockStack>
             </Layout.Section>
 
-
-            <Layout.Section oneHalf>
-                <LegacyCard title="Preview (before adding to wishlist)" sectioned>
+            <Layout.Section variant={"oneHalf"}>
+                <BlockStack gap={"300"}>
+                <Card padding={"500"}>
+                    <BlockStack gap={"500"}>
+                    <Text as={"h2"} variant={"headingMd"}>Preview (before adding to wishlist)</Text>
                     <Grid>
                         {
                             Array.from(Array(2)).map((_, i) => {
@@ -339,9 +357,11 @@ const CollectionDesign = ({
                             })
                         }
                     </Grid>
-
-                </LegacyCard>
-                <LegacyCard title="Preview (after adding to wishlist)" sectioned>
+                    </BlockStack>
+                </Card>
+                <Card padding={"500"}>
+                    <BlockStack gap={"500"}>
+                    <Text as={"h2"} variant={"headingMd"}>Preview (after adding to wishlist)</Text>
                     <Grid>
                         {
                             Array.from(Array(2)).map((_, i) => {
@@ -374,8 +394,11 @@ const CollectionDesign = ({
                             })
                         }
                     </Grid>
-                </LegacyCard>
+                    </BlockStack>
+                </Card>
+                </BlockStack>
             </Layout.Section>
+
         </Fragment>
     );
 }

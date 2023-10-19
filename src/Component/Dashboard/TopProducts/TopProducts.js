@@ -1,10 +1,10 @@
 import React, {Fragment, useEffect, useState} from 'react';
 import {
-  LegacyCard,
-  LegacyStack,
+    InlineStack,
+    Card,
   Thumbnail,
   Text,
-  EmptySearchResult, IndexTable,
+  EmptySearchResult, IndexTable,Box
 } from '@shopify/polaris';
 import {apiService, currencySymbol} from "../../../utils/Constant";
 import moment from "moment"
@@ -43,7 +43,11 @@ const TopProducts = () => {
 
   return (
       <Fragment>
-        <LegacyCard title={"Top 10 Product in Wishlists"}>
+        <Card padding={"0"}>
+            <Box padding={"500"}>
+                <Text as={"h2"} fontWeight={"medium"} variant={"headingMd"}>Top 10 Product in Wishlists</Text>
+            </Box>
+
           <IndexTable
               resourceName={resourceNameWishlistProduct}
               itemCount={isLoading ? 0 : topProducts.top10Products.length}
@@ -60,12 +64,10 @@ const TopProducts = () => {
             return (
                 <IndexTable.Row key={i} id={i}>
                   <IndexTable.Cell>
-                    <LegacyStack alignment="center" wrap={false}>
-                      <Thumbnail size={"small"} source={x?.product?.image ? x?.product?.image : ImageMajor}/>
-                      <LegacyStack.Item fill>
-                        <Text as={"span"}>{x?.product?.title || ""}</Text>
-                      </LegacyStack.Item>
-                    </LegacyStack>
+                      <InlineStack blockAlign={"center"} gap="200" wrap={false} >
+                          <Thumbnail size={"small"} source={x?.product?.image ? x?.product?.image : ImageMajor}/>
+                          <Text as={"span"}>{x?.product?.title || ""}</Text>
+                      </InlineStack>
                   </IndexTable.Cell>
                   <IndexTable.Cell>
                     <Text alignment={"end"}>{currencySymbol[shopDetails.currency]}{x?.product?.price || ""}</Text>
@@ -77,7 +79,7 @@ const TopProducts = () => {
             )
           })}
           </IndexTable>
-        </LegacyCard>
+        </Card>
       </Fragment>
   );
 };

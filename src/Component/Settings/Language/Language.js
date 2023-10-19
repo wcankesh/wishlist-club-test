@@ -1,5 +1,5 @@
 import React, {Fragment, useEffect, useState} from 'react';
-import {Page, Layout, LegacyCard, TextField, HorizontalGrid, PageActions, Tabs} from "@shopify/polaris"
+import {Page, Layout, TextField, PageActions, Tabs, Card, BlockStack, Grid} from "@shopify/polaris"
 import {useNavigate} from "react-router-dom"
 import {apiService, baseUrl, capitalizeMessage} from "../../../utils/Constant";
 import ColorInput from "../../Comman/ColorInput"
@@ -353,13 +353,15 @@ const Language = () => {
                     {message !== "" && isError === false ? <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer}/> : ""}
                     <CustomErrorBanner message={message} setMessage={setMessage} setIsError={setIsError} isError={isError} link={""}/>
                     <Layout.Section>
-                        <LegacyCard>
+                        <BlockStack gap={"300"}>
+                        <Card padding={"0"}>
                             <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>
-                        </LegacyCard>
+                        </Card>
                         {(Langaguge || []).map((x, i) => {
                             return (
-                               x.tab === selected && <LegacyCard  sectioned key={i}>
-                                    <HorizontalGrid gap="4" columns={{xs: 1, sm: 2, md: 2, lg: 3, xl: 3}}
+                               x.tab === selected &&
+                               <Card padding={"500"} key={i}>
+                                    <Grid gap="4" columns={{xs: 1, sm: 2, md: 2, lg: 3, xl: 3}}
                                                     alignItems="end">
                                         {(x.PageLabel || []).map((y, j) => {
                                             return (
@@ -383,11 +385,12 @@ const Language = () => {
                                             )
                                         })
                                         }
-                                    </HorizontalGrid>
-                                </LegacyCard>
+                                    </Grid>
+                                </Card>
                             )
                         })
                         }
+                        </BlockStack>
                     </Layout.Section>
                     <Layout.Section>
                         <PageActions

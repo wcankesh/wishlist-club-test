@@ -3,15 +3,18 @@ import {
     FormLayout,
     TextField,
     Layout,
-    LegacyCard,
-    LegacyStack,
+    Box,
+    Card,
+    InlineStack,
+    BlockStack,
+    Divider,
     RadioButton,
     DropZone,
     Text,
     Select,
     PageActions,
     Page,
-    Thumbnail, Tabs
+    Thumbnail, Tabs, Bleed, Button
 } from "@shopify/polaris";
 import {useNavigate} from "react-router-dom"
 import {useSelector} from "react-redux";
@@ -20,6 +23,7 @@ import {apiService, baseUrl, capitalizeMessage} from "../../../utils/Constant";
 import ToastMessage from "../../Comman/ToastMessage";
 import ColorInput from "../../Comman/ColorInput";
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
+import SwitchButton from "../../Comman/SwitchButton";
 
 const initialState = {
     thankyou_from_mail: "",
@@ -283,7 +287,7 @@ const ThankYouNotification = () => {
                     return "";
                 }
             case "thankyou_from_mail":
-                if (value.trim() !== "" && !value.match(/^\w+([.-]?\w+)@\w+([.-]?\w+)(\.\w{2,3})+$/)) {
+                if (value && !value?.match(/^\w+([.-]?\w+)@\w+([.-]?\w+)(\.\w{2,3})+$/)) {
                     return "Enter a valid email address";
                 } else {
                     return "";
@@ -304,6 +308,34 @@ const ThankYouNotification = () => {
         if (IsTabChange) {
             setSelected(selectedTabIndex)
         }
+    }
+
+    const handleSwitch = async (e) => {
+        let obj = {...backInStockEmail, [e.target.name]: e.target.value}
+        setbackInStockEmail(obj)
+        if (obj.bis_branding_type == "1") {
+            delete obj.bis_logo;
+        }
+
+        if (obj.thankyou_branding_type == "1") {
+            delete obj.thankyou_logo;
+        }
+
+        let newBackInStockEmail = {...obj, id: obj.id ? obj.id : ""}
+        const formData = new FormData();
+        const payload = JSON.stringify(newBackInStockEmail)
+        formData.append("payload", payload)
+        const response = await apiService.updateBisSetting(formData)
+        if (response.status === 200) {
+            setMessage(capitalizeMessage(response.message))
+        } else if (response.status === 500) {
+            setMessage(capitalizeMessage(response.message))
+            setIsErrorServer(true);
+        } else {
+            setMessage(capitalizeMessage(response.message))
+            setIsError(true)
+        }
+
     }
 
     const tabs = [
@@ -351,20 +383,32 @@ const ThankYouNotification = () => {
     return (
         <Fragment>
             <Page title={"Thank You Message"} backAction={{content: 'Settings', onAction: onBack}}
-                  primaryAction={{content: "Save", onAction: onSaveBISEmail, loading: isLoading}}>
+                  secondaryActions={
+                      <Fragment>
+                          <SwitchButton
+                              checked={backInStockEmail.is_thankyou_email_enable == 1}
+                              onChange={handleSwitch} name={"is_thankyou_email_enable"}
+                          />&nbsp;&nbsp;
+                          <Button variant="primary" onClick={onSaveBISEmail} loading={isLoading}> Save</Button>
+                      </Fragment>
+                  }
+            >
 
                 <Layout>
                     {message !== "" && isError === false ? <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer}/> : ""}
                     <CustomErrorBanner message={message} setMessage={setMessage} setIsError={setIsError} isError={isError} link={""}/>
-                    <Layout.Section oneHalf>
-                        <LegacyCard>
+                    <Layout.Section variant={"oneHalf"}>
+                        <BlockStack gap={400}>
+                        <Card padding={0} roundedAbove={"md"}>
                             <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>
-                        </LegacyCard>
-                        <LegacyCard>
+                        </Card>
+                        <Card padding={"0"}>
                             {
-                                selected === 0 && <LegacyCard.Section>
+                                selected === 0 &&
                                     <FormLayout>
+                                        <Box padding={"400"}>
                                         <FormLayout.Group>
+                                            <BlockStack gap={"500"}>
                                             <TextField label="Sender Email"
                                                        value={backInStockEmail.thankyou_from_mail}
                                                        onChange={(value) => {
@@ -396,7 +440,9 @@ const ThankYouNotification = () => {
                                                        error={backInStockEmailError.email_subject}
                                                        helpText={"Add this {{product_name}} {{shop_name}} variable"}
                                             />
-                                        </FormLayout.Group>
+                                        {/*    </BlockStack>*/}
+                                        {/*</FormLayout.Group>*/}
+                                        {/*<BlockStack gap={400}>*/}
                                         <TextField label={"Email Title"}
                                                    multiline={2}
                                                    value={backInStockEmail.thankyou_content.email_title}
@@ -444,12 +490,16 @@ const ThankYouNotification = () => {
                                                    error={backInStockEmailError.button_text}
 
                                         />
+                                            </BlockStack>
+                                        </FormLayout.Group>
+                                        </Box>
                                     </FormLayout>
-                                </LegacyCard.Section>
                             }
                             {
-                                selected === 1 && <LegacyCard.Section>
+                                selected === 1 &&
                                     <FormLayout>
+                                        <Box padding={"400"}>
+                                            <BlockStack gap={"300"}>
                                         <FormLayout.Group>
                                             <TextField label={"Social networks title"}
                                                        value={backInStockEmail.thankyou_social.title}
@@ -535,13 +585,18 @@ const ThankYouNotification = () => {
                                                        }}
                                             />
                                         </FormLayout.Group>
+                                        </BlockStack>
+                                        </Box>
                                     </FormLayout>
-                                </LegacyCard.Section>
                             }
                             {
-                                selected === 2 && <Fragment>
-                                    <LegacyCard.Section title={"Email logo"}>
+                                selected === 2 &&
+                                <Fragment>
+                                    <Box padding={"500"}>
+                                        <Text as={"h3"} variant={"bodyLg"} fontWeight={"medium"}>Email logo</Text>
+                                        <Bleed marginInlineStart={"200"}>
                                         <FormLayout>
+                                            <BlockStack gap={"500"}>
                                             <FormLayout.Group condensed>
                                                 <RadioButton
                                                     label="Logo"
@@ -591,10 +646,16 @@ const ThankYouNotification = () => {
                                                     {fileUpload}
                                                 </DropZone>
                                             </div>}
+                                    </BlockStack>
                                         </FormLayout>
-                                    </LegacyCard.Section>
-                                    <LegacyCard.Section title={"Email body customization"}>
+                                        </Bleed>
+                                    </Box>
+                                                <Divider />
+                                        <Box padding={"500"}>
+                                        <Text as={"h3"} fontWeight={"medium"}>Email body customization</Text>
+                                            <Bleed marginInlineStart={"200"}>
                                         <FormLayout>
+                                            <BlockStack gap={400}>
                                             <FormLayout.Group condensed>
                                                 <Select label={"Text color theme"} options={theme}
                                                         value={backInStockEmail.thankyou_style.theme}
@@ -649,10 +710,16 @@ const ThankYouNotification = () => {
                                                 />
                                                 <div/>
                                             </FormLayout.Group>
+                                            </BlockStack>
                                         </FormLayout>
-                                    </LegacyCard.Section>
-                                    <LegacyCard.Section title={"Shopping button customization"}>
+                                            </Bleed>
+                                        </Box>
+                                                <Divider />
+                                        <Box padding={"500"}>
+                                        <Text as={"h3"} fontWeight={"medium"}>Shopping button customization</Text>
+                                            <Bleed marginInlineStart={"200"}>
                                         <FormLayout>
+                                            <BlockStack gap={400}>
                                             <FormLayout.Group condensed>
                                                 <ColorInput label={"Button Background color"} name="btn_bg_color"
                                                             onChange={tyOnChangeStyle}
@@ -704,31 +771,35 @@ const ThankYouNotification = () => {
                                                            suffix="PX"
                                                 />
                                             </FormLayout.Group>
+                                            </BlockStack>
                                         </FormLayout>
-                                    </LegacyCard.Section>
+                                            </Bleed>
+                                        </Box>
                                 </Fragment>
                             }
-                        </LegacyCard>
+                        </Card>
+                        </BlockStack>
                     </Layout.Section>
-                    <Layout.Section oneHalf>
-                        <LegacyCard>
-                            <LegacyCard.Section>
-                                <LegacyStack alignment={"leading"}>
+                    <Layout.Section variant={"oneHalf"}>
+                        <Card>
+                            <BlockStack gap={400}>
+                                <InlineStack gap={400}>
                                     <div className="email-logo-preview">{Icons.email}</div>
-                                    <LegacyStack vertical spacing={"tight"}>
+                                    <BlockStack>
                                         <Text variant={"bodyLg"}>
                                             {backInStockEmail.thankyou_content.email_subject}
                                         </Text>
-                                        <LegacyStack spacing={"tight"}>
+                                        <BlockStack>
                                             <Text as={"h3"}
                                                   fontWeight={"bold"}>{shopDetails && shopDetails.store_name}</Text>
                                             <Text
                                                 className="d-inline-block">{backInStockEmail.thankyou_from_mail}</Text>
-                                        </LegacyStack>
-                                    </LegacyStack>
-                                </LegacyStack>
-                            </LegacyCard.Section>
-                            <LegacyCard.Section>
+                                        </BlockStack>
+                                    </BlockStack>
+                                </InlineStack>
+                                <Divider />
+                            </BlockStack>
+                            <BlockStack>
                                 <div className="email-template-live-preview-wrapper">
                                     <div className="email-template-body"
                                          style={{fontFamily: backInStockEmail.thankyou_style.font_family}}>
@@ -983,8 +1054,8 @@ const ThankYouNotification = () => {
                                         {/*</p>*/}
                                     </div>
                                 </div>
-                            </LegacyCard.Section>
-                        </LegacyCard>
+                            </BlockStack>
+                        </Card>
                     </Layout.Section>
                     <Layout.Section>
                         <PageActions

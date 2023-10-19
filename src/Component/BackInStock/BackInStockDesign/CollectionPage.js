@@ -1,5 +1,5 @@
 import React, {Fragment} from 'react';
-import {Layout, LegacyCard, FormLayout, TextField, Checkbox, LegacyStack, Text, Button, Tooltip} from "@shopify/polaris"
+import {Layout, FormLayout, TextField, Checkbox, Text, Button, Tooltip, BlockStack, Card, InlineStack, Bleed} from "@shopify/polaris"
 import SwitchButton from "../../Comman/SwitchButton";
 import ColorInput from "../../Comman/ColorInput";
 
@@ -30,18 +30,21 @@ const CollectionPage = ({backInStockDesign, setBackInStockDesign,}) => {
             }]}>
             </Helmet>
 
-            <Layout.Section oneHalf>
-                <LegacyCard>
-                    <LegacyCard.Header title={"Customize Collection Page Button"}>
+            <Layout.Section variant={"oneHalf"}>
+                <Card padding={"500"}>
+                    <BlockStack gap={"400"}>
+                    <InlineStack align={"space-between"}>
+                        <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Customize Collection Page Button</Text>
                         <Tooltip dismissOnMouseOut preferredPosition="above"
                                  content={`Collection page ${backInStockDesign.collection_page_widget.is_active == 1 ? "enabled" : "disabled"} in back in stock`}>
                             <SwitchButton
                                 checked={backInStockDesign.collection_page_widget.is_active == 1}
                                 onChange={handleChange} name={"is_active"}/>
                         </Tooltip>
-                    </LegacyCard.Header>
-                    <LegacyCard.Section>
+                    </InlineStack>
                         <FormLayout>
+                            <BlockStack gap={"300"}>
+                                <Bleed marginInlineStart={"150"}>
                             <FormLayout.Group condensed>
                                 <TextField
                                     label="Text"
@@ -61,7 +64,8 @@ const CollectionPage = ({backInStockDesign, setBackInStockDesign,}) => {
                                             value={backInStockDesign.collection_page_widget.text_color}
                                 />
                             </FormLayout.Group>
-
+                                </Bleed>
+                                <Bleed marginInlineStart={"150"}>
                             <FormLayout.Group condensed>
                                 <ColorInput label={"Background Color"}
                                             name="bg_color"
@@ -83,7 +87,8 @@ const CollectionPage = ({backInStockDesign, setBackInStockDesign,}) => {
                                     }}
                                 />
                             </FormLayout.Group>
-
+                                </Bleed>
+                                <Bleed marginInlineStart={"150"}>
                             <FormLayout.Group condensed>
                                 <ColorInput label={"Border Color"}
                                             name="border_color"
@@ -105,6 +110,8 @@ const CollectionPage = ({backInStockDesign, setBackInStockDesign,}) => {
                                     }}
                                 />
                             </FormLayout.Group>
+                                </Bleed>
+                                <Bleed marginInlineStart={"150"}>
                             <FormLayout.Group condensed>
                                 <TextField
                                     label="Top & Bottom Padding"
@@ -135,6 +142,8 @@ const CollectionPage = ({backInStockDesign, setBackInStockDesign,}) => {
                                     }}
                                 />
                             </FormLayout.Group>
+                                </Bleed>
+                                <Bleed marginInlineStart={"150"}>
                             <FormLayout.Group>
                                 <Checkbox
                                     label="Show icon"
@@ -149,6 +158,8 @@ const CollectionPage = ({backInStockDesign, setBackInStockDesign,}) => {
                                     }}
                                 />
                             </FormLayout.Group>
+                                </Bleed>
+                                <Bleed marginInlineStart={"150"}>
                             <FormLayout.Group condensed>
                                 <ColorInput label={"Icon Color"}
                                             name="icon_color"
@@ -157,27 +168,34 @@ const CollectionPage = ({backInStockDesign, setBackInStockDesign,}) => {
                                 />
                                 <div></div>
                             </FormLayout.Group>
+                                </Bleed>
+                            </BlockStack>
                         </FormLayout>
-                    </LegacyCard.Section>
-                </LegacyCard>
+                    </BlockStack>
+                </Card>
 
             </Layout.Section>
-            <Layout.Section oneHalf>
-                <LegacyCard title={"Preview"} sectioned>
-                    <LegacyStack wrap distribution={"center"}>
+            <Layout.Section variant={"oneHalf"}>
+                <Card padding={"500"}>
+                    <BlockStack gap={"400"}>
+                    <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Preview</Text>
+                        <BlockStack inlineAlign={"center"} align={"center"} gap={"400"}>
                         <img src={"https://wishlist.thimatic-apps.com/assets/images/product3.jpg"} width={"200px"}/>
-                        <LegacyStack>
-                            <LegacyStack spacing='tight' vertical>
+                        <InlineStack>
+                            <BlockStack gap={"300"}>
                                 <Text as='h3' fontWeight={"bold"}>AKAMAI TOP // PALMS COLLIDE</Text>
                                 <Text>Rs. 80.00</Text>
-                                <Button outline>Add to cart</Button>
+                                <InlineStack>
+                                <Button size={"large"}>Add to cart</Button>
+                                </InlineStack>
                                 <button className="wl_btn_common wl_collection_preview">
                                     {backInStockDesign.collection_page_widget.button_type == "1" ? Icons.notifyIcon : ""} {backInStockDesign.collection_page_widget.text}
                                 </button>
-                            </LegacyStack>
-                        </LegacyStack>
-                    </LegacyStack>
-                </LegacyCard>
+                            </BlockStack>
+                        </InlineStack>
+                        </BlockStack>
+                    </BlockStack>
+                </Card>
 
             </Layout.Section>
         </Fragment>

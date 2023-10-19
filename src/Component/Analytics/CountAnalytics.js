@@ -1,5 +1,5 @@
 import React, {Fragment, useEffect, useState} from 'react';
-import {LegacyCard, LegacyStack, Text, Layout} from "@shopify/polaris";
+import {Text, Layout, Card, Grid} from "@shopify/polaris";
 import moment from "moment";
 import {apiService, currencySymbol} from "../../utils/Constant";
 
@@ -74,69 +74,64 @@ const CountAnalytics = () => {
     return (
         <Fragment>
             <Layout.Section>
-                <LegacyStack alignment="center" distribution="fill">
-                    <LegacyStack.Item>
-                        <LegacyCard sectioned>
+                <Grid>
+                    <Grid.Cell columnSpan={{xs: 6, sm: 6, md: 6, lg: 3, xl: 3}}>
+                        <Card padding={"500"}>
                             <br/><br/><br/>
-                            <Text as={"h6"} alignment={"center"} variant={"headingSm"} color={"subdued"}>Revenue
+                            <Text as={"h6"} alignment={"center"} variant={"headingSm"} fontWeight={"medium"}
+                                  tone={"subdued"}>Revenue
                                 Generated</Text>
-                            <Text as={"h3"} alignment={"center"}
+                            <Text as={"h3"} alignment={"center"} fontWeight={"medium"}
                                   variant={"headingLg"}>{currencySymbol[currency]}{analytics.wishlistOrderAmount ? analytics.wishlistOrderAmount : 0}</Text>
                             <br/><br/>
-                        </LegacyCard>
-                    </LegacyStack.Item>
+                        </Card>
+                    </Grid.Cell>
+                    {
+                        (analyticsCard || []).map((x, i) => {
+                            return (
+                                <Grid.Cell columnSpan={{xs: 6, sm: 6, md: 6, lg: 9, xl: 9}}>
+                                    <Grid>
+                                        {(x.analytics1 || []).map((y, j) => {
+                                            return (
+                                                <Grid.Cell columnSpan={{xs: 6, sm: 3, md: 2, lg: 4, xl: 4}}>
+                                                    <Card key={j} padding={"500"}>
+                                                        <Text variant={"headingSm"} as={"h6"}
+                                                              tone={"subdued"} fontWeight={"medium"}>
+                                                            {y.title}
+                                                        </Text>
+                                                        <Text variant={"headingLg"} as={"h3"} fontWeight={"medium"}>
+                                                            {y.value ? y.value : 0}
+                                                        </Text>
+                                                    </Card>
+                                                </Grid.Cell>
+                                            )
+                                        })
+                                        }
 
-                    <LegacyStack.Item>
-                        {
-                            (analyticsCard || []).map((x, i) => {
-                                return (
-                                    <LegacyStack vertical key={i}>
-                                        <LegacyStack.Item >
-                                            <LegacyStack distribution={"fillEvenly"}>
-                                                {(x.analytics1 || []).map((y, j) => {
-                                                    return (
-                                                        <LegacyStack.Item key={j}>
-                                                            <LegacyCard sectioned>
-                                                                <Text variant={"headingSm"} as={"h6"}
-                                                                      color={"subdued"}>
-                                                                    {y.title}
-                                                                </Text>
-                                                                <Text variant={"headingLg"} as={"h3"}>
-                                                                    {y.value ? y.value : 0}
-                                                                </Text>
-                                                            </LegacyCard>
-                                                        </LegacyStack.Item>
-                                                    )
-                                                })
-                                                }
-                                            </LegacyStack>
-                                        </LegacyStack.Item>
-                                        <LegacyStack.Item>
-                                            <LegacyStack distribution={"fillEvenly"}>
-                                                {(x.analytics2 || []).map((z, k) => {
-                                                    return (
-                                                        <LegacyStack.Item key={k}>
-                                                            <LegacyCard sectioned>
-                                                                <Text variant={"headingSm"} as={"h6"}
-                                                                      color={"subdued"}>
-                                                                    {z.title}
-                                                                </Text>
-                                                                <Text variant={"headingLg"} as={"h3"}>
-                                                                    {z.value ? z.value : 0}
-                                                                </Text>
-                                                            </LegacyCard>
-                                                        </LegacyStack.Item>
-                                                    )
-                                                })
-                                                }
-                                            </LegacyStack>
-                                        </LegacyStack.Item>
-                                    </LegacyStack>
-                                )
-                            })
-                        }
-                    </LegacyStack.Item>
-                </LegacyStack>
+                                        {(x.analytics2 || []).map((z, k) => {
+                                            return (
+                                                <Grid.Cell columnSpan={{xs: 6, sm: 3, md: 2, lg: 4, xl: 4}}>
+                                                    <Card key={k} padding={"500"}>
+                                                        <Text variant={"headingSm"} as={"h6"}
+                                                              tone={"subdued"} fontWeight={"medium"}>
+                                                            {z.title}
+                                                        </Text>
+                                                        <Text variant={"headingLg"} as={"h3"} fontWeight={"medium"}>
+                                                            {z.value ? z.value : 0}
+                                                        </Text>
+                                                    </Card>
+                                                </Grid.Cell>
+                                            )
+                                        })
+                                        }
+                                    </Grid>
+                                </Grid.Cell>
+                            )
+                        })
+                    }
+
+                </Grid>
+
             </Layout.Section>
         </Fragment>
     );

@@ -1,5 +1,5 @@
 import React, {Fragment} from 'react';
-import {LegacyCard, Text, LegacyStack, Page, Layout, Thumbnail, Button} from "@shopify/polaris";
+import {Text, Page, Layout, Icon, BlockStack, InlineStack, Card, Divider, Box} from "@shopify/polaris";
 import {LanguageMinor, DomainNewMajor, ThemesMajor, SettingsMajor, EmailMajor, BillingStatementDollarMajor, InstallMinor} from "@shopify/polaris-icons";
 import {useNavigate} from "react-router-dom";
 import {baseUrl} from "../../utils/Constant";
@@ -56,32 +56,28 @@ const Settings = () => {
             <Page title={"Settings"}>
                 <Layout>
                     <Layout.Section>
-                        <LegacyCard>
+                        <Card padding={"0"}>
                                 {(setting || []).map((x, i) => {
                                     return (
-                                        <LegacyCard.Section key={i}>
-                                            <LegacyStack wrap={false}>
-                                                <LegacyStack.Item>
-                                                    <Thumbnail source={x.icon} size={"small"}/>
-                                                </LegacyStack.Item>
-                                                <LegacyStack.Item fill>
-                                                    <LegacyStack spacing='extraTight' vertical>
-                                                        <Text as='h6' fontWeight="semibold">{x.tabName}</Text>
-                                                        <Text color={"subdued"}>{x.description}</Text>
-                                                    </LegacyStack>
-                                                </LegacyStack.Item>
-                                                <LegacyStack.Item>
-                                                    <Button onClick={() => {navigate(`${baseUrl}/${x.path}`)}}>
-                                                        Edit
-                                                    </Button>
-                                                </LegacyStack.Item>
-                                            </LegacyStack>
-                                        </LegacyCard.Section>
+                                        <div className={"cursor-pointer"} onClick={() => navigate(`${baseUrl}/${x.path}`)}>
+                                            <Box padding={"500"}>
+                                                <InlineStack wrap={false} gap={"400"} blockAlign={"start"}>
+                                                    <div className={"sgi_icon"}><Icon source={x.icon} tone={"subdued"}/></div>
+                                                    <BlockStack>
+                                                        <Text fontWeight='medium'>{x.tabName}</Text>
+                                                        <Text tone={"subdued"}>{x.description}</Text>
+                                                    </BlockStack>
+                                                </InlineStack>
+                                            </Box>
+                                            {
+                                                setting.length - 1 === i ? "" : <Divider/>
+                                            }
+                                        </div>
                                     )
                                 })
                                 }
 
-                        </LegacyCard>
+                        </Card>
                     </Layout.Section>
                 </Layout>
             </Page>

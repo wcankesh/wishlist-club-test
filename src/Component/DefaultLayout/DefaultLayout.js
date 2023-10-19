@@ -4,7 +4,6 @@ import {Outlet, useLocation, useNavigate} from 'react-router-dom';
 import {baseUrl} from "../../utils/Constant"
 import {useSelector} from 'react-redux';
 import {Provider, RoutePropagator, NavigationMenu} from "@shopify/app-bridge-react";
-import {Icons} from "../../utils/Icons";
 
 const apiKey = '65909e95fac4682299cfdae29dcd6a1a';
 
@@ -67,7 +66,7 @@ const DefaultLayout = () => {
                     <Outlet/>
                     <FooterHelp>
                         <div className="FooterHelp__Content">
-                            {Icons.footerAlert}if you need any help, please &nbsp;
+                           if you need any help, please &nbsp;
                             <Link onClick={() => window.Beacon("toggle")}>
                                 Contact us
                             </Link>

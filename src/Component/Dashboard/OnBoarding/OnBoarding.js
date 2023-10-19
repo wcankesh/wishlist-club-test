@@ -2,10 +2,10 @@ import React, {Fragment, useCallback, useEffect, useState} from 'react';
 import {
     Text,
     Button,
-    LegacyCard,
-    LegacyStack,
+    BlockStack,
+    Card,
+    InlineStack,
     Collapsible,
-    List,
     Modal,
     Icon,
     Link,
@@ -13,9 +13,9 @@ import {
     FormLayout,
     Checkbox,
     TextField,
-    Divider
+    Divider, Box
 } from "@shopify/polaris"
-import {CaretUpMinor, CaretDownMinor, ThumbsUpMajor, ThumbsDownMajor} from "@shopify/polaris-icons"
+import {CaretUpMinor, CaretDownMinor} from "@shopify/polaris-icons"
 import ToastMessage from "../../Comman/ToastMessage";
 import CopyCode from '../../Comman/CopyCode'
 import {apiService} from "../../../utils/Constant";
@@ -118,161 +118,181 @@ const OnBoarding = () => {
         <Fragment>
             <ToastMessage message={message} setMessage={setMessage} isErrorServer={false}/>
 
-            <div className={"reb-card"}>
-                <div className={"reb-card-section"}>
+            <Card padding={"0"}>
+
+                <Box padding={"400"}>
                     <div className={"reb-card-heading-boding"} onClick={handleToggle}>
-                        <LegacyStack vertical spacing={"tight"}>
-                            <LegacyStack alignment={"center"} wrap={false}>
-                                <LegacyStack.Item fill>
-                                    <Text variant="headingSm" as="h2"
-                                          breakWord={true}>{"Wishlist app setting is easy just follow 1 to 4 steps to set up and display wishlist icon on your store."}</Text>
-                                </LegacyStack.Item>
-                                <LegacyStack.Item>
-                                    <div onClick={handleToggle}><Icon source={open ? CaretUpMinor : CaretDownMinor}/>
-                                    </div>
-                                </LegacyStack.Item>
-                            </LegacyStack>
-                        </LegacyStack>
+                        <BlockStack>
+                            <InlineStack wrap={false} align={"space-between"}>
+                                <Text variant="headingSm" as="h2" fontWeight={"medium"}
+                                      breakWord={true}>{"Wishlist app setting is easy just follow 1 to 4 steps to set up and display wishlist icon on your store."}</Text>
+                                <div onClick={handleToggle}><Icon source={open ? CaretUpMinor : CaretDownMinor}/>
+                                </div>
+                            </InlineStack>
+                        </BlockStack>
                     </div>
-                </div>
+                </Box>
+
                 <Collapsible
                     open={open} id="basic-collapsible" expandOnPrint
                     transition={{duration: "500ms", timingFunction: "ease-in-out"}}>
+
                     <Divider/>
-                    <div className={"reb-card-section"}>
+
+                    <Box padding={"200"}>
                         {
                             (boardingOptions || []).map((x, i) => {
                                 return (
                                     <Fragment key={i}>
-                                        <div className={"mb-1 cursor-pointer"}
-                                             onClick={() => setSelectedBoarding(x.selected)}>
+                                        <div onClick={() => setSelectedBoarding(x.selected)}>
                                             <div className={"reb-card-analytics"}
-                                                 style={{background: selectedBoarding === x.selected ? 'var(--p-color-bg-subdued)' : ""}}>
-                                                <LegacyStack spacing={"extraTight"} wrap={false}>
-                                                    <LegacyStack.Item>
-                                                        <div
-                                                            className={`boding-count ${selectedBoarding === x.selected ? "boding-count-active" : ""}`}>{i + 1}</div>
-                                                        &nbsp;
-                                                        &nbsp;
-                                                        &nbsp;
-                                                        &nbsp;
-                                                    </LegacyStack.Item>
-                                                    <LegacyStack.Item fill>
-                                                        <LegacyStack> <LegacyStack.Item>{selectedBoarding === x.selected ?
-                                                            <Text variant="headingSm" as="h3">{x.title}</Text> :
-                                                            <Text variant="headingSm" as="h3"
-                                                                  fontWeight={"regular"}>{x.title}</Text>}
-                                                        </LegacyStack.Item>
-                                                        </LegacyStack>
+                                                 style={{background: selectedBoarding === x.selected ? 'var(--p-color-bg-surface-secondary)' : ""}}>
+                                                <BlockStack gap={"0"}>
+                                                    <InlineStack wrap={false} align={"space-between"}>
+                                                        <InlineStack gap="300" wrap={false}>
+                                                            <div
+                                                                className={`boding-count ${selectedBoarding === x.selected ? "boding-count-active" : ""}`}>
+                                                                {i + 1}
+                                                            </div>
+                                                            {selectedBoarding === x.selected ?
+                                                                <Text variant="headingSm" as="h3"
+                                                                      fontWeight={"medium"}>{x.title}</Text> :
+                                                                <Text variant="headingSm" as="h3"
+                                                                      fontWeight={"regular"}>{x.title}</Text>}
+                                                        </InlineStack>
+                                                        <InlineStack>
+                                                            {selectedBoarding === x.selected && x.selected === 0 ?
+                                                                <Button variant="primary" size={"slim"}
+                                                                        onClick={handleModalChange}>
+                                                                    Request code setup
+                                                                </Button> : ""
+                                                            }
+                                                        </InlineStack>
+                                                    </InlineStack>
+
+                                                    <InlineStack>
                                                         {selectedBoarding === x.selected && x.selected === 0 && (
-                                                            <div style={{marginTop: 12}}>
-                                                                <LegacyStack vertical>
-                                                                    <LegacyStack.Item>
-                                                                        <LegacyStack spacing={"tight"} vertical>
-                                                                            <LegacyStack.Item><Text variant="headingSm" as="h3">Product Page</Text></LegacyStack.Item>
-                                                                            <LegacyStack.Item><Text>Open <Text as={"span"} fontWeight={"bold"}>product-form.liquid</Text> file or <Text as={"span"} fontWeight={"bold"}>main-product.liquid</Text> file or <Text as={"span"} fontWeight={"bold"}>product-template.liquid</Text> file.</Text></LegacyStack.Item>
-                                                                            <LegacyStack.Item><Text>Please add the below code where you want to show the wishlist icon.</Text></LegacyStack.Item>
-                                                                            <LegacyStack.Item>
-                                                                                <CopyCode value={`<div class="th_prd_wl_btn" data-product_id="{{product.id}}" data-variant_id="{{product.selected_or_first_available_variant.id}}"></div>`}/>
-                                                                            </LegacyStack.Item>
-                                                                        </LegacyStack>
-                                                                    </LegacyStack.Item>
-                                                                    <LegacyStack.Item>
-                                                                        <LegacyStack spacing={"tight"} vertical>
-                                                                            <LegacyStack.Item><Text variant="headingSm" as="h3">Collection Page</Text></LegacyStack.Item>
-                                                                            <LegacyStack.Item><Text>Open <Text as={"span"} fontWeight={"bold"}>card-product.liquid</Text> file or <Text as={"span"} fontWeight={"bold"}>product-card-grid.liquid </Text>file or <Text as={"span"} fontWeight={"bold"}>product-card-list.liquid </Text>file or<Text as={"span"} fontWeight={"bold"}>product-grid-item.liquid </Text> file.</Text></LegacyStack.Item>
-                                                                            <LegacyStack.Item><Text>Please add the below code where you want to show the wishlist icon.</Text></LegacyStack.Item>
-                                                                            <LegacyStack.Item> <CopyCode value={`<div class="th_wl_col_btn" data-product_id="{{product.id}}" data-variant_id="{{product.selected_or_first_available_variant.id}}"></div>`}/></LegacyStack.Item>
-                                                                        </LegacyStack>
-                                                                    </LegacyStack.Item>
-                                                                </LegacyStack>
+                                                            <div style={{paddingLeft: 32}}>
+                                                                <BlockStack gap={"400"}>
+                                                                    <BlockStack gap={"100"}>
+                                                                        <Text variant="headingSm" as="h3"
+                                                                              fontWeight={"medium"}>Product Page</Text>
+                                                                        <Text>Open <Text as={"span"}
+                                                                                         fontWeight={"bold"}>product-form.liquid</Text> file
+                                                                            or <Text as={"span"}
+                                                                                     fontWeight={"bold"}>main-product.liquid</Text> file
+                                                                            or <Text as={"span"}
+                                                                                     fontWeight={"bold"}>product-template.liquid</Text> file.</Text>
+                                                                        <Text>Please add the below code where you want
+                                                                            to show the wishlist icon.</Text>
+                                                                        <CopyCode
+                                                                            value={`<div class="th_prd_wl_btn" data-product_id="{{product.id}}" data-variant_id="{{product.selected_or_first_available_variant.id}}"></div>`}/>
+                                                                    </BlockStack>
+                                                                    <BlockStack gap={"100"}>
+                                                                        <Text variant="headingSm" as="h3"
+                                                                              fontWeight={"medium"}>Collection
+                                                                            Page</Text>
+                                                                        <Text>Open <Text as={"span"}
+                                                                                         fontWeight={"bold"}>card-product.liquid</Text> file
+                                                                            or <Text as={"span"}
+                                                                                     fontWeight={"bold"}>product-card-grid.liquid </Text>file
+                                                                            or <Text as={"span"}
+                                                                                     fontWeight={"bold"}>product-card-list.liquid </Text>file
+                                                                            or<Text as={"span"}
+                                                                                    fontWeight={"bold"}>product-grid-item.liquid </Text> file.</Text>
+                                                                        <Text>Please add the below code where you want
+                                                                            to show the wishlist icon.</Text>
+                                                                        <CopyCode
+                                                                            value={`<div class="th_wl_col_btn" data-product_id="{{product.id}}" data-variant_id="{{product.selected_or_first_available_variant.id}}"></div>`}/>
+                                                                    </BlockStack>
+                                                                </BlockStack>
                                                             </div>
                                                         )}
                                                         {selectedBoarding === x.selected && x.selected === 2 && (
-                                                            <div style={{marginTop: 12}}>
-                                                                <LegacyStack vertical>
-                                                                    <LegacyStack.Item>
-                                                                        <LegacyStack spacing={"tight"} vertical>
-                                                                            <LegacyStack.Item><Text>1. Open your Shopify store Theme <Link url={`https://${shopDetails.shop}/admin/themes`} removeUnderline external> open</Link></Text></LegacyStack.Item>
-                                                                            <LegacyStack.Item><Text>2. Then click on the <Text as={"span"} fontWeight={"bold"}>Customize</Text> button.</Text></LegacyStack.Item>
-                                                                            <LegacyStack.Item><Text>3. Then click on the <Text as={"span"} fontWeight={"bold"}>Theme settings</Text> button and click on <Text as={"span"} fontWeight={"bold"}>App embeds</Text>tab.</Text></LegacyStack.Item>
-                                                                            <LegacyStack.Item><Text>4. Then turn on <Text as={"span"} fontWeight={"bold"}>Wishlist Club</Text> App.</Text></LegacyStack.Item>
-                                                                            <LegacyStack.Item>
-                                                                                <Link
-                                                                                    url={"https://wishlist.thimatic-apps.com/api/public/assets/images/start-our-app.png"}
-                                                                                    external>
-                                                                                    <img
-                                                                                        src="https://wishlist.thimatic-apps.com/api/public/assets/images/start-our-app.png"
-                                                                                        alt="Black choker necklace"
-                                                                                        className={"install-img"}
-                                                                                    />
-                                                                                </Link>
-                                                                            </LegacyStack.Item>
-                                                                        </LegacyStack>
-                                                                    </LegacyStack.Item>
-                                                                </LegacyStack>
+                                                            <div style={{paddingLeft: 32}}>
+                                                                <BlockStack gap="400">
+                                                                    <BlockStack gap={"100"}>
+                                                                        <Text>1. Open your Shopify store Theme <Link
+                                                                            url={`https://${shopDetails.shop}/admin/themes`}
+                                                                            removeUnderline external> open</Link></Text>
+                                                                        <Text>2. Then click on the <Text as={"span"}
+                                                                                                         fontWeight={"bold"}>Customize</Text> button.</Text>
+                                                                        <Text>3. Then click on the <Text as={"span"}
+                                                                                                         fontWeight={"bold"}>Theme
+                                                                            settings</Text> button and click on <Text
+                                                                            as={"span"} fontWeight={"bold"}>App
+                                                                            embeds</Text>tab.</Text>
+                                                                        <Text>4. Then turn on <Link url={"https://wishlist.thimatic-apps.com/api/public/assets/images/start-our-app.png"} removeUnderline external><Text as={"span"} fontWeight={"bold"}>Wishlist Club</Text></Link> App.</Text>
+                                                                    </BlockStack>
+                                                                </BlockStack>
                                                             </div>
 
                                                         )}
                                                         {selectedBoarding === x.selected && x.selected === 3 && (
-                                                            <div style={{marginTop: 12}}>
-                                                            <LegacyStack vertical>
-                                                                <LegacyStack.Item>
-                                                                    <Text> Check your wishlist preview directly from here.</Text>
-                                                                </LegacyStack.Item>
-                                                                <LegacyStack.Item>
-                                                                    <Button primary onClick={() => window.open(`https://${shopDetails.shop}`)}>Preview
-                                                                        Wishlist</Button>
-                                                                </LegacyStack.Item>
-                                                            </LegacyStack>
+                                                            <div style={{paddingLeft: 32}}>
+                                                                <BlockStack gap={"300"}>
+                                                                    <Text> Check your wishlist preview directly from
+                                                                        here.</Text>
+                                                                    <InlineStack>
+                                                                        <Button variant={"primary"}
+                                                                                onClick={() => window.open(`https://${shopDetails.shop}`)}>Preview
+                                                                            Wishlist</Button>
+                                                                    </InlineStack>
+                                                                </BlockStack>
                                                             </div>
                                                         )}
                                                         {selectedBoarding === x.selected && x.selected === 1 && (
-                                                            <div style={{marginTop: 12}}>
-                                                                <LegacyStack vertical>
-                                                                    <LegacyStack.Item>
-                                                                        <LegacyStack spacing={"tight"} vertical>
-                                                                            <LegacyStack.Item><Text variant="headingSm" as="h3">Add wishlist icon in header</Text></LegacyStack.Item>
-                                                                            <LegacyStack.Item><Text>Open <Text as={"span"} fontWeight={"bold"}>product-form.liquid</Text> file or <Text as={"span"} fontWeight={"bold"}>main-product.liquid</Text> file or <Text as={"span"} fontWeight={"bold"}>product-template.liquid</Text> file.</Text></LegacyStack.Item>
-                                                                            <LegacyStack.Item><Text>Please add the below code where you want to show the wishlist icon.</Text></LegacyStack.Item>
-                                                                            <LegacyStack.Item>
-                                                                                <CopyCode value={`<div class="th_prd_wl_btn" data-product_id="{{product.id}}" data-variant_id="{{product.selected_or_first_available_variant.id}}"></div>`}/>
-                                                                            </LegacyStack.Item>
-                                                                        </LegacyStack>
-                                                                    </LegacyStack.Item>
-                                                                    <LegacyStack.Item>
-                                                                        <LegacyStack spacing={"tight"} vertical>
-                                                                            <LegacyStack.Item><Text variant="headingSm" as="h3">Add wishlist menu in header</Text></LegacyStack.Item>
-                                                                            <LegacyStack.Item><Text>1. Open your Shopify store main navigation<Link url={`https://${shopDetails.shop}/admin/themes`} removeUnderline external> open</Link></Text></LegacyStack.Item>
-                                                                            <LegacyStack.Item><Text>2. Then select your main menu and click on <Text as={"span"} fontWeight={"bold"}> Add menu item</Text> to add a new menu item.</Text></LegacyStack.Item>
-                                                                            <LegacyStack.Item><Text>3. Choose menu name.</Text></LegacyStack.Item>
-                                                                            <LegacyStack.Item><Text>4. Paste the following link into the Link text box: <Text as={"span"} fontWeight={"bold"}>/apps/wishlist/</Text></Text></LegacyStack.Item>
-                                                                            <LegacyStack.Item><Text>5. Click on Save Menu</Text></LegacyStack.Item>
-                                                                        </LegacyStack>
-                                                                    </LegacyStack.Item>
-                                                                </LegacyStack>
+                                                            <div style={{paddingLeft: 32}}>
+                                                                <BlockStack gap={"400"}>
+                                                                    <BlockStack gap={"100"}>
+                                                                        <Text variant="headingSm" as="h3"
+                                                                              fontWeight={"medium"}>Add wishlist icon in
+                                                                            header</Text>
+                                                                        <Text>Open <Text as={"span"}
+                                                                                         fontWeight={"bold"}>product-form.liquid</Text> file
+                                                                            or <Text as={"span"}
+                                                                                     fontWeight={"bold"}>main-product.liquid</Text> file
+                                                                            or <Text as={"span"}
+                                                                                     fontWeight={"bold"}>product-template.liquid</Text> file.</Text>
+                                                                        <Text>Please add the below code where you want
+                                                                            to show the wishlist icon.</Text>
+                                                                        <CopyCode
+                                                                            value={`<div class="th_prd_wl_btn" data-product_id="{{product.id}}" data-variant_id="{{product.selected_or_first_available_variant.id}}"></div>`}/>
+                                                                    </BlockStack>
+                                                                    <BlockStack gap={"100"}>
+                                                                        <Text variant="headingSm" as="h3"
+                                                                              fontWeight={"medium"}>Add wishlist menu in
+                                                                            header</Text>
+                                                                        <Text>1. Open your Shopify store main navigation<Link
+                                                                            url={`https://${shopDetails.shop}/admin/themes`}
+                                                                            removeUnderline external> open</Link></Text>
+                                                                        <Text>2. Then select your main menu and click
+                                                                            on <Text as={"span"}
+                                                                                     fontWeight={"bold"}> Add menu
+                                                                                item</Text> to add a new menu
+                                                                            item.</Text>
+                                                                        <Text>3. Choose menu name.</Text>
+                                                                        <Text>4. Paste the following link into the Link
+                                                                            text box: <Text as={"span"}
+                                                                                            fontWeight={"bold"}>/apps/wishlist/</Text></Text>
+                                                                        <Text>5. Click on Save Menu</Text>
+                                                                    </BlockStack>
+                                                                </BlockStack>
                                                             </div>
 
-                                                            )}
-                                                    </LegacyStack.Item>
-
-                                                    <LegacyStack.Item>
-                                                        {selectedBoarding === x.selected && x.selected === 0 ?
-                                                        <Button size={"slim"} primary onClick={handleModalChange}>Request
-                                                            code setup</Button> : <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div> }
-                                                    </LegacyStack.Item>
-                                                </LegacyStack>
+                                                        )}
+                                                    </InlineStack>
+                                                </BlockStack>
                                             </div>
                                         </div>
                                     </Fragment>
                                 )
                             })
                         }
-                    </div>
-
+                    </Box>
                 </Collapsible>
+            </Card>
 
-            </div>
             <Modal
                 open={active}
                 onClose={handleClose}
@@ -290,19 +310,17 @@ const OnBoarding = () => {
                 ]}
             >
                 <Modal.Section>
-                    <LegacyStack vertical>
-                        <LegacyStack.Item>
-                            <Select
-                                name={"theme"}
-                                label="Theme"
-                                options={themeList}
-                                onChange={(value) => setSelectedValue(value)}
-                                value={selectedValue}
-                                helpText={"Please select the theme you would like us to install the Wishlist Club on."}
-                            />
-                        </LegacyStack.Item>
-                        <LegacyStack.Item>
-                            <Text as={"h5"} fontWeight={"semibold"}>Where do you want to display wishlist icon?</Text>
+                    <BlockStack gap={400}>
+                        <Select
+                            name={"theme"}
+                            label="Theme"
+                            options={themeList}
+                            onChange={(value) => setSelectedValue(value)}
+                            value={selectedValue}
+                            helpText={"Please select the theme you would like us to install the Wishlist Club on."}
+                        />
+                        <BlockStack>
+                            <Text as={"h5"} fontWeight={"medium"}>Where do you want to display wishlist icon?</Text>
                             <FormLayout>
                                 <FormLayout.Group>
                                     <Checkbox
@@ -329,8 +347,8 @@ const OnBoarding = () => {
                                     />
                                 </FormLayout.Group>
                             </FormLayout>
-                        </LegacyStack.Item>
-                        <LegacyStack.Item>
+                        </BlockStack>
+                        <InlineStack>
                             <TextField
                                 multiline={4}
                                 label={"Message"}
@@ -338,8 +356,8 @@ const OnBoarding = () => {
                                 onChange={(e) => setRequestMsg(e)}
                                 helpText={"You can speed things up by providing your your collaborator request code if your store requires one."}
                             />
-                        </LegacyStack.Item>
-                    </LegacyStack>
+                        </InlineStack>
+                    </BlockStack>
                 </Modal.Section>
             </Modal>
         </Fragment>

@@ -2,12 +2,13 @@ import React, {Fragment, useState, useCallback, useEffect} from 'react';
 import {
   Page,
   Layout,
-  LegacyCard,
+    BlockStack,
+    InlineStack,
+    Card,
   Tabs,
   Pagination,
   Badge,
   Link,
-  LegacyStack,
   Thumbnail,
   Text,
   Popover,
@@ -139,7 +140,10 @@ const WishlistItems = () => {
       (selectedTabIndex) => setSelected(selectedTabIndex),
       [],
   );
-  const handleChange = useCallback(() => setActive(!active), [active]);
+  const handleChange = () => {
+    setActive(!active);
+    setFile("");
+  };
 
   const togglePopoverActive = (index) => {
     setPopoverActive((prevIndex) => (prevIndex === index ? null : index))
@@ -153,7 +157,7 @@ const WishlistItems = () => {
 
   const fileUpload = !file && <DropZone.FileUpload/>;
   const uploadedFile = file && (
-      <LegacyStack alignment={"center"} vertical>
+      <BlockStack align={"center"} inlineAlign={"center"} gap={"400" }>
         <br/>
         <div>
           {file.name}{' '}
@@ -161,7 +165,7 @@ const WishlistItems = () => {
             {file.size} bytes
           </Text>
         </div>
-      </LegacyStack>
+      </BlockStack>
   );
 
   const onChangePaginationUser = (value) => {
@@ -237,7 +241,7 @@ const WishlistItems = () => {
             <CustomErrorBanner message={message} setMessage={setMessage} setIsError={setIsError} isError={isError}
                                link={""}/>
             <Layout.Section>
-              <LegacyCard>
+              <Card padding={"0"}>
                 <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>
                 {
                   selected === 0 && <IndexTable
@@ -258,12 +262,10 @@ const WishlistItems = () => {
                     return (
                         <IndexTable.Row key={i} id={i} position={i}>
                           <IndexTable.Cell>
-                            <LegacyStack alignment="center" wrap={false}>
+                            <InlineStack blockAlign={"center"} gap={"400"} wrap={false}>
                               <Thumbnail size={"small"} source={x.product.image}/>
-                              <LegacyStack.Item fill>
-                                <Text as={"span"}>{x.product.title}</Text>
-                              </LegacyStack.Item>
-                            </LegacyStack>
+                              <Text as={"span"}>{x.product.title}</Text>
+                            </InlineStack>
                           </IndexTable.Cell>
                           <IndexTable.Cell>
                             <Text alignment={"end"}>{currencySymbol[shopDetails.currency]}{x.product.price}</Text>
@@ -326,7 +328,7 @@ const WishlistItems = () => {
                                 <Popover
                                     sectioned
                                     active={popoverActive === i}
-                                    activator={<Button textAlign={"end"} plain
+                                    activator={<Button variant={"plain"} textAlign={"end"}
                                                        disclosure={popoverActive === i ? 'up' : 'down'}
                                                        onClick={() => togglePopoverActive(i)}>{y.products.length} Products</Button>}
                                     onClose={() => togglePopoverActive(i)}
@@ -337,10 +339,10 @@ const WishlistItems = () => {
                                       const {title} = item
                                       return (
                                           <ResourceList.Item>
-                                            <LegacyStack alignment="center" spacing={"extraTight"} wrap={false}>
+                                            <InlineStack gap={"400"} blockAlign={"center"} wrap={false}>
                                               <Thumbnail size={"small"} source={item.image}/>
                                               <Text as={"span"}>{title}</Text>
-                                            </LegacyStack>
+                                            </InlineStack>
                                           </ResourceList.Item>
                                       )
                                     }}/>
@@ -399,7 +401,7 @@ const WishlistItems = () => {
                         return (
                             <IndexTable.Row key={k} id={k}>
                               <IndexTable.Cell>
-                                <Text as={"span"}>{z?.status == 0 ? <Badge status="critical">Fail</Badge> : z?.status == 1 ? <Badge status="success">Success</Badge> :z?.status == 2 ? <Badge status="attention">Fail</Badge> : null  }</Text>
+                                <Text as={"span"}>{z?.status == 0 ? <Badge tone="critical">Fail</Badge> : z?.status == 1 ? <Badge tone="success">Success</Badge> :z?.status == 2 ? <Badge tone="attention">Fail</Badge> : null  }</Text>
                               </IndexTable.Cell>
                               <IndexTable.Cell>
                                 <Text as={"span"}>{z?.created_at}</Text>
@@ -440,7 +442,7 @@ const WishlistItems = () => {
                   </IndexTable>
                 }
 
-              </LegacyCard>
+              </Card>
             </Layout.Section>
           </Layout>
           <Modal
@@ -460,7 +462,7 @@ const WishlistItems = () => {
               ]}
           >
             <Modal.Section>
-              <LegacyStack vertical spacing={"baseTight"}>
+              <BlockStack gap={"400"}>
                 <Text>If you are not known to the CSV template, download a <Link
                     url="https://wishlist.thimatic-apps.com/assets/images/WishListClubData.csv"
                     removeUnderline download> Sample
@@ -474,7 +476,7 @@ const WishlistItems = () => {
                   {uploadedFile}
                   {fileUpload}
                 </DropZone>
-              </LegacyStack>
+              </BlockStack>
             </Modal.Section>
           </Modal>
         </Page>

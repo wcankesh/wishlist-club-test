@@ -13,7 +13,7 @@ const CustomErrorBanner = ({message, setMessage,setIsError, isError, link}) => {
             <Layout.Section fullWidth>
                 <Banner
                     title={"Error"}
-                    status="critical"
+                    tone="critical"
                     onDismiss={onDismissBanner}
                     action={link ? {content: "Get support", onAction: () => window.open(link, "_blank")} : ""}
                 >

@@ -3,8 +3,10 @@ import {
     FormLayout,
     TextField,
     Layout,
-    LegacyCard,
-    LegacyStack,
+    BlockStack,
+    Card,
+    InlineStack,
+    Divider,
     RadioButton,
     DropZone,
     Text,
@@ -13,7 +15,7 @@ import {
     Page,
     Thumbnail,
     PageActions,
-    Tabs
+    Tabs, Box, Bleed, Button
 } from "@shopify/polaris";
 import {Icons} from "../../../utils/Icons";
 import {apiService, baseUrl, capitalizeMessage} from "../../../utils/Constant";
@@ -22,6 +24,7 @@ import {useSelector} from "react-redux";
 import ToastMessage from "../../Comman/ToastMessage";
 import ColorInput from "../../Comman/ColorInput";
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
+import SwitchButton from "../../Comman/SwitchButton";
 
 const initialState = {
     bis_from_mail: "",
@@ -127,7 +130,33 @@ const StockNotification = () => {
             setIsError(true)
         }
     }
+    const handleSwitch = async (e) => {
+        let obj = {...backInStockEmail, [e.target.name]: e.target.value}
+        setbackInStockEmail(obj)
+        if (obj.bis_branding_type == "1") {
+            delete obj.bis_logo;
+        }
 
+        if (obj.thankyou_branding_type == "1") {
+            delete obj.thankyou_logo;
+        }
+
+        let newBackInStockEmail = {...obj, id: obj.id ? obj.id : ""}
+        const formData = new FormData();
+        const payload = JSON.stringify(newBackInStockEmail)
+        formData.append("payload", payload)
+        const response = await apiService.updateBisSetting(formData)
+        if (response.status === 200) {
+            setMessage(capitalizeMessage(response.message))
+        } else if (response.status === 500) {
+            setMessage(capitalizeMessage(response.message))
+            setIsErrorServer(true);
+        } else {
+            setMessage(capitalizeMessage(response.message))
+            setIsError(true)
+        }
+
+    }
     const onSaveBISEmail = async () => {
         let validationErrors = {};
         const tempObj = {...backInStockEmail.bis_content, bis_from_mail: backInStockEmail.bis_from_mail}
@@ -176,7 +205,6 @@ const StockNotification = () => {
             setSelectedBISLogo("")
         } else if (response.status === 500) {
             setMessage(capitalizeMessage(response.message))
-            setIsErrorServer(true);
             setIsLoading(false)
         } else {
             setIsLoading(false)
@@ -217,6 +245,7 @@ const StockNotification = () => {
 
         })
     }
+
     const bisOnChangeContent = (e) => {
         const {name, value} = e.target;
         setbackInStockEmail({
@@ -230,6 +259,7 @@ const StockNotification = () => {
             })
         }
     }
+
     const bisOnChangeSocial = (e) => {
         const {name, value} = e.target;
         setbackInStockEmail({
@@ -324,7 +354,7 @@ const StockNotification = () => {
                     return "";
                 }
             case "bis_from_mail":
-                if (value.trim() !== "" && !value.match(/^\w+([.-]?\w+)@\w+([.-]?\w+)(\.\w{2,3})+$/)) {
+                if (value && !value?.match(/^\w+([.-]?\w+)@\w+([.-]?\w+)(\.\w{2,3})+$/)) {
                     return "Enter a valid email address";
                 } else {
                     return "";
@@ -337,23 +367,36 @@ const StockNotification = () => {
 
     return (
         <Fragment>
-            {message !== "" && isError === false ?
-                <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
-                              setIsErrorServer={setIsErrorServer}/> : ""}
-            <CustomErrorBanner message={message} setMessage={setMessage} setIsError={setIsError} isError={isError}
-                               link={""}/>
+
             <Page title={"Back In Stock Notification"} backAction={{content: 'Settings', onAction: onBack}}
-                  primaryAction={{content: "Save", onAction: onSaveBISEmail, loading: isLoading}}>
+                  secondaryActions={
+                      <Fragment>
+                          <SwitchButton
+                              checked={backInStockEmail.is_bis_email_enable == 1}
+                              onChange={handleSwitch} name={"is_bis_email_enable"}
+                          />&nbsp;&nbsp;
+                          <Button variant="primary" onClick={onSaveBISEmail} loading={isLoading}> Save</Button>
+                      </Fragment>
+
+                  }>
                 <Layout>
-                    <Layout.Section oneHalf>
-                        <LegacyCard>
+                    {message !== "" && isError === false ?
+                        <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
+                                      setIsErrorServer={setIsErrorServer}/> : ""}
+                    <CustomErrorBanner message={message} setMessage={setMessage} setIsError={setIsError} isError={isError}
+                                       link={""}/>
+                    <Layout.Section variant={"oneHalf"}>
+                        <BlockStack gap={400}>
+                        <Card padding={0} roundedAbove={"md"}>
                             <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>
-                        </LegacyCard>
-                        <LegacyCard>
+                        </Card>
+                        <Card padding={"0"}>
                             {
-                                selected === 0 && <LegacyCard.Section>
+                                selected === 0 &&
                                     <FormLayout>
+                                        <Box padding={"400"}>
                                         <FormLayout.Group>
+                                <BlockStack gap={"500"}>
                                             <TextField label="Sender Email"
                                                        value={backInStockEmail.bis_from_mail}
                                                        onChange={(value) => {
@@ -462,13 +505,16 @@ const StockNotification = () => {
                                                        }}
                                             />
                                             }
+                                </BlockStack>
                                         </FormLayout.Group>
+                                        </Box>
                                     </FormLayout>
-                                </LegacyCard.Section>
                             }
                             {
-                                selected === 1 && <LegacyCard.Section>
+                                selected === 1 &&
                                     <FormLayout>
+                                        <Box padding={"400"}>
+                                <BlockStack gap={"300"}>
                                         <FormLayout.Group>
                                             <TextField label={"Social networks title"}
                                                        value={backInStockEmail.bis_social.title}
@@ -554,13 +600,18 @@ const StockNotification = () => {
                                                        }}
                                             />
                                         </FormLayout.Group>
+                                </BlockStack>
+                                        </Box>
                                     </FormLayout>
-                                </LegacyCard.Section>
                             }
                             {
-                                selected === 2 && <Fragment>
-                                    <LegacyCard.Section title={"Email logo"}>
+                                selected === 2 &&
+                                <Fragment>
+                                        <Box padding={"500"}>
+                                        <Text as={"h3"} variant={"bodyLg"} fontWeight={"medium"}>Email logo</Text>
+                                            <Bleed marginInlineStart={"200"}>
                                         <FormLayout>
+                                            <BlockStack gap={"500"}>
                                             <FormLayout.Group condensed>
                                                 <RadioButton
                                                     label="Logo"
@@ -608,10 +659,16 @@ const StockNotification = () => {
                                                 </DropZone>
                                             </div>
                                                 }
+                                            </BlockStack>
                                         </FormLayout>
-                                    </LegacyCard.Section>
-                                    <LegacyCard.Section title={"Email body customization"}>
+                                            </Bleed>
+                                        </Box>
+                                            <Divider />
+                                        <Box padding={"500"}>
+                                        <Text as={"h3"} fontWeight={"medium"}>Email body customization</Text>
+                                            <Bleed marginInlineStart={"200"}>
                                         <FormLayout>
+                                            <BlockStack gap={400}>
                                             <FormLayout.Group condensed>
                                                 <Select label={"Text color theme"} options={theme}
                                                         value={backInStockEmail.bis_style.theme}
@@ -671,10 +728,16 @@ const StockNotification = () => {
                                                                    })
                                                                }}/> : <div/>}
                                             </FormLayout.Group>
+                                            </BlockStack>
                                         </FormLayout>
-                                    </LegacyCard.Section>
-                                    <LegacyCard.Section title={"Add to Cart Button customization"}>
+                                            </Bleed>
+                                        </Box>
+                                                <Divider  />
+                                        <Box padding={"500"}>
+                                        <Text as={"h3"} fontWeight={"medium"}>Add to Cart Button customization</Text>
+                                            <Bleed marginInlineStart={"200"}>
                                         <FormLayout>
+                                            <BlockStack gap={400}>
                                             <FormLayout.Group condensed>
                                                 <ColorInput label={"Button Background color"}
                                                             name="add_to_cart_btn_bg_color"
@@ -729,10 +792,16 @@ const StockNotification = () => {
                                                            suffix="PX"
                                                 />
                                             </FormLayout.Group>
+                                            </BlockStack>
                                         </FormLayout>
-                                    </LegacyCard.Section>
-                                    <LegacyCard.Section title={"View Product Button customization"}>
+                                            </Bleed>
+                                        </Box>
+                                            <Divider />
+                                        <Box padding={"500"}>
+                                        <Text as={"h3"} fontWeight={"medium"}>View Product Button customization</Text>
+                                            <Bleed marginInlineStart={"200"}>
                                         <FormLayout>
+                                            <BlockStack gap={500}>
                                             <FormLayout.Group condensed>
                                                 <ColorInput label={"Button Background color"}
                                                             name="view_product_btn_bg_color"
@@ -787,30 +856,36 @@ const StockNotification = () => {
                                                            suffix="PX"
                                                 />
                                             </FormLayout.Group>
+                                            </BlockStack>
                                         </FormLayout>
-                                    </LegacyCard.Section>
+                                            </Bleed>
+                                        </Box>
                                 </Fragment>
                             }
-                        </LegacyCard>
+                        </Card>
+                        </BlockStack>
                     </Layout.Section>
-                    <Layout.Section oneHalf>
-                        <LegacyCard>
-                            <LegacyCard.Section>
-                                <LegacyStack alignment={"leading"}>
+                    <Layout.Section variant={"oneHalf"}>
+                        <Card padding={"0"}>
+                            <Box padding={"500"}>
+                                <BlockStack gap={400}>
+                                    <InlineStack gap={400}>
                                     <div className="email-logo-preview">{Icons.email}</div>
-                                    <LegacyStack vertical spacing={"tight"}>
+                                    <BlockStack>
                                         <Text variant={"bodyLg"}>
                                             {backInStockEmail.bis_content.email_subject}
                                         </Text>
-                                        <LegacyStack spacing={"tight"}>
+                                        <BlockStack>
                                             <Text as={"h3"}
                                                   fontWeight={"bold"}>{shopDetails && shopDetails.store_name}</Text>
                                             <Text>{backInStockEmail.bis_from_mail}</Text>
-                                        </LegacyStack>
-                                    </LegacyStack>
-                                </LegacyStack>
-                            </LegacyCard.Section>
-                            <LegacyCard.Section>
+                                        </BlockStack>
+                                    </BlockStack>
+                                    </InlineStack>
+                                </BlockStack>
+                            </Box>
+                            <Divider />
+                            <BlockStack>
                                 <div className="email-template-live-preview-wrapper">
                                     <div className="email-template-body"
                                          style={{fontFamily: backInStockEmail.bis_style.font_family}}>
@@ -1119,8 +1194,8 @@ const StockNotification = () => {
                                         {/*</p>*/}
                                     </div>
                                 </div>
-                            </LegacyCard.Section>
-                        </LegacyCard>
+                            </BlockStack>
+                        </Card>
                     </Layout.Section>
                     <Layout.Section>
                         <PageActions

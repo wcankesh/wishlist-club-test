@@ -1,7 +1,7 @@
 import React, {Fragment, useEffect, useState} from 'react';
 import {apiService, baseUrl, capitalizeMessage} from "../../../utils/Constant";
 import {useNavigate} from "react-router-dom";
-import {Tabs, Layout, Page, PageActions, LegacyCard} from "@shopify/polaris";
+import {Tabs, Layout, Page, PageActions, Card,} from "@shopify/polaris";
 import CollectionPage from "./CollectionPage";
 import ProductPage from "./ProductPage";
 import HomePage from "./HomePage";
@@ -239,9 +239,9 @@ const BackInStockDesign = () => {
                     {message !== "" && isError === false ? <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer}/> : ""}
                     <CustomErrorBanner message={message} setMessage={setMessage} setIsError={setIsError} isError={isError} link={""}/>
                     <Layout.Section fullWidth>
-                        <LegacyCard>
+                        <Card padding={0} roundedAbove={"md"}>
                             <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>
-                        </LegacyCard>
+                        </Card>
                     </Layout.Section>
                     {selected == 0 &&
                     <ProductPage

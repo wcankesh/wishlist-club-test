@@ -2,12 +2,12 @@ import React, {Fragment, useEffect, useState} from 'react';
 import {
     Page,
     Layout,
-    LegacyCard,
     FormLayout,
+    BlockStack, Box, Divider, Card, Text,
     TextField,
     PageActions,
     Select,
-    DropZone, Thumbnail, RadioButton, Tabs
+    DropZone, Thumbnail, RadioButton, Tabs, Button
 } from "@shopify/polaris";
 import {useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
@@ -109,27 +109,29 @@ const PriceDropAlertEmail = () => {
         EmailSetting()
     }, []);
 
-    const saveEmailSetting = async () => {
-        let validationErrors = {};
-        let tempObj = {price_drop_email_subject: emailSetting.price_drop_email_subject,
-            price_drop_email_body: emailSetting.price_drop_email_body,
-            price_drop_email_reply_to_email: emailSetting.price_drop_email_reply_to_email,
-            add_to_cart_button_text: emailSetting.price_drop_content.add_to_cart_button_text,
-            view_product_button_text: emailSetting.price_drop_content.view_product_button_text,
-        };
-        Object.keys(tempObj).forEach((name) => {
-            const error = formValidate(name, tempObj[name]);
-            if (error && error.length > 0) {
-                validationErrors[name] = error;
-            }
-        });
+    const saveEmailSetting = async (record, isLoad) => {
+       if(isLoad){
+           let validationErrors = {};
+           let tempObj = {price_drop_email_subject: emailSetting.price_drop_email_subject,
+               price_drop_email_body: emailSetting.price_drop_email_body,
+               price_drop_email_reply_to_email: emailSetting.price_drop_email_reply_to_email,
+               add_to_cart_button_text: emailSetting.price_drop_content.add_to_cart_button_text,
+               view_product_button_text: emailSetting.price_drop_content.view_product_button_text,
+           };
+           Object.keys(tempObj).forEach((name) => {
+               const error = formValidate(name, tempObj[name]);
+               if (error && error.length > 0) {
+                   validationErrors[name] = error;
+               }
+           });
 
-        if (Object.keys(validationErrors).length > 0) {
-            setEmailSettingError(validationErrors);
-            return;
-        }
+           if (Object.keys(validationErrors).length > 0) {
+               setEmailSettingError(validationErrors);
+               return;
+           }
+       }
 
-        setIsLoading(true);
+        setIsLoading(isLoad);
         if (emailSetting.price_drop_branding_type == "1") {
             delete emailSetting.price_drop_logo;
         }
@@ -139,7 +141,7 @@ const PriceDropAlertEmail = () => {
         if (emailSetting.restock_branding_type == "1") {
             delete emailSetting.restock_logo;
         }
-        let newEmailSetting = {...emailSetting}
+        let newEmailSetting = {...emailSetting, ...record}
 
         const formData = new FormData();
         Object.keys(newEmailSetting).forEach((x) => {
@@ -262,7 +264,7 @@ const PriceDropAlertEmail = () => {
                     return "";
                 }
             case "price_drop_email_reply_to_email":
-                if (value.trim() !== "" && !value.match(/^\w+([.-]?\w+)@\w+([.-]?\w+)(\.\w{2,3})+$/)) {
+                if (value && !value?.match(/^\w+([.-]?\w+)@\w+([.-]?\w+)(\.\w{2,3})+$/)) {
                     return "Enter a valid reply to email address";
                 } else {
                     return "";
@@ -304,22 +306,54 @@ const PriceDropAlertEmail = () => {
         },
 
     ];
-
+    const handleSwitch = async (e) => {
+        setEmailSetting({
+            ...emailSetting,
+            [e.target.name]: e.target.value
+        })
+        saveEmailSetting({[e.target.name]: e.target.value}, false)
+    }
     return (
         <Fragment>
             <Page title={"Price Drop Alerts"} backAction={{content: 'Settings', onAction: onBack}}
-                  primaryAction={{content: "Save", onAction: saveEmailSetting, loading: isLoading}}>
+                  secondaryActions={
+                      <Fragment>
+                          <div className='switch-button'>
+                              <input type="checkbox"
+                                     className="switch-btn-input"
+                                     id={"is_email_reminder_on_off_price"}
+                                     name={"is_email_reminder_on_off_price"}
+                                     onChange={(e) => handleSwitch({
+                                         target: {
+                                             name: "is_email_reminder_on_off_price",
+                                             value: e.target.checked ? 0 : 1
+                                         }
+                                     })}
+                                     checked={emailSetting.is_email_reminder_on_off_price == 0}
+                              />
+                              <label className="witch-button-label" htmlFor={"is_email_reminder_on_off_price"}/>
+                          </div>&nbsp;&nbsp;
+                          <Button variant="primary" onClick={() => saveEmailSetting("", true)} loading={isLoading}> Save</Button>
+                      </Fragment>
+                  }
+                >
                 {message !== "" && isError === false ? <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer}/> : ""}
                 <CustomErrorBanner message={message} setMessage={setMessage} setIsError={setIsError} isError={isError} link={""}/>
                 <Layout>
-                    <Layout.Section oneHalf>
-                        <LegacyCard>
+
+                    <Layout.Section variant={"oneHalf"}>
+                    <BlockStack gap={"300"}>
+
+                        <Card padding={"0"}>
                             <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>
-                        </LegacyCard>
-                        <LegacyCard>
+                        </Card>
+
+                        <Card padding={"0"}>
                             {
-                                selected === 0 && <LegacyCard.Section>
+                                selected === 0 &&
+                                <Box padding={"500"}>
                                     <FormLayout>
+                                        <BlockStack gap={"400"}>
                                         <TextField label="Email subject"
                                                    helpText="Add this {{product_name}} {{shop_name}} variable"
                                                    value={emailSetting.price_drop_email_subject}
@@ -389,13 +423,15 @@ const PriceDropAlertEmail = () => {
                                                    onBlur={onBlur}
                                                    error={emailSettingError.view_product_button_text}
                                         />
+                                        </BlockStack>
                                     </FormLayout>
-
-                                </LegacyCard.Section>
+                                </Box>
                             }
                             {
-                                selected === 1 && <LegacyCard.Section>
+                                selected === 1 && <Box padding={"400"}>
                                     <FormLayout>
+                                        <BlockStack gap={"300"}>
+                                        <FormLayout.Group>
                                         <TextField label={"Social networks title"}
                                                    value={emailSetting.price_drop_social.title}
                                                    onChange={(value) => {
@@ -407,6 +443,7 @@ const PriceDropAlertEmail = () => {
                                                        })
                                                    }}
                                         />
+                                        </FormLayout.Group>
                                         <FormLayout.Group condensed>
                                             <TextField label={"Instagram"} prefix={"@"}
                                                        value={emailSetting.price_drop_social.instagram}
@@ -478,12 +515,15 @@ const PriceDropAlertEmail = () => {
                                                        }}
                                             />
                                         </FormLayout.Group>
+                                        </BlockStack>
                                     </FormLayout>
-                                </LegacyCard.Section>
+                                </Box>
                             }
                             {
                                 selected === 2 && <Fragment>
-                                    <LegacyCard.Section title={"Email logo"}>
+                                    <Box padding={"500"}>
+                                        <BlockStack gap={"200"}>
+                                        <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Email logo</Text>
                                         <FormLayout>
                                             <FormLayout.Group condensed>
                                                 <RadioButton
@@ -533,8 +573,12 @@ const PriceDropAlertEmail = () => {
                                                 </DropZone>
                                             </div>}
                                         </FormLayout>
-                                    </LegacyCard.Section>
-                                    <LegacyCard.Section title={"Email body customization"}>
+                                        </BlockStack>
+                                    </Box>
+                                    <Divider />
+                                    <Box padding={"500"}>
+                                        <BlockStack gap={"200"}>
+                                            <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Email body customization</Text>
                                         <FormLayout>
                                             <FormLayout.Group condensed>
                                                 <ColorInput label="Background color" name="background_color"
@@ -575,8 +619,12 @@ const PriceDropAlertEmail = () => {
                                                 />
                                             </FormLayout.Group>
                                         </FormLayout>
-                                    </LegacyCard.Section>
-                                    <LegacyCard.Section title={"Add to Cart Button customization"}>
+                                        </BlockStack>
+                                    </Box>
+                                    <Divider />
+                                    <Box padding={"500"}>
+                                        <BlockStack gap={"200"}>
+                                            <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Add to Cart Button customization</Text>
                                         <FormLayout>
                                             <FormLayout.Group condensed>
                                                 <ColorInput label={"Button Background color"} name="add_to_cart_btn_bg_color"
@@ -630,8 +678,12 @@ const PriceDropAlertEmail = () => {
                                                 />
                                             </FormLayout.Group>
                                         </FormLayout>
-                                    </LegacyCard.Section>
-                                    <LegacyCard.Section title={"View Product Button customization"}>
+                                        </BlockStack>
+                                    </Box>
+                                    <Divider />
+                                    <Box padding={"500"}>
+                                        <BlockStack gap={"200"}>
+                                            <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>View Product Button customization</Text>
                                         <FormLayout>
                                             <FormLayout.Group condensed>
                                                 <ColorInput label={"Button Background color"} name="view_product_btn_bg_color"
@@ -685,14 +737,20 @@ const PriceDropAlertEmail = () => {
                                                 />
                                             </FormLayout.Group>
                                         </FormLayout>
-                                    </LegacyCard.Section>
+                                        </BlockStack>
+                                    </Box>
+                                    <Divider />
                                 </Fragment>
                             }
-                        </LegacyCard>
+                        </Card>
 
+                    </BlockStack>
                     </Layout.Section>
-                    <Layout.Section oneHalf>
-                        <LegacyCard sectioned title={emailSetting.price_drop_email_subject}>
+
+                    <Layout.Section variant={"oneHalf"}>
+                        <Card padding={"0"}>
+                            <Box padding={"500"}>
+                            <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>{emailSetting.price_drop_email_subject}</Text>
                             <div className="email-template-live-preview-wrapper">
                                 <div className="email-template-body"
                                      style={{fontFamily: emailSetting.price_drop_style.font_family}}>
@@ -975,8 +1033,10 @@ const PriceDropAlertEmail = () => {
                                     {/*</p>*/}
                                 </div>
                             </div>
-                        </LegacyCard>
+                            </Box>
+                        </Card>
                     </Layout.Section>
+
                     <Layout.Section>
                         <PageActions
                             primaryAction={{
@@ -986,6 +1046,7 @@ const PriceDropAlertEmail = () => {
                             }}
                         />
                     </Layout.Section>
+
                 </Layout>
             </Page>
         </Fragment>

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
-import {Layout, LegacyStack, LegacyCard} from "@shopify/polaris"
+import {Layout, Card, BlockStack, InlineStack} from "@shopify/polaris"
 import {apiService} from "../../utils/Constant";
 import moment from "moment";
 import DateRangePicker from "../Comman/DateRangePicker";
@@ -186,23 +186,23 @@ const Chart = () => {
 
   return (
         <Layout.Section>
-            <LegacyCard sectioned>
-                <LegacyStack>
-                    <LegacyStack.Item fill>
-                    </LegacyStack.Item>
-                    <LegacyStack.Item>
+            <Card sectioned>
+                <BlockStack>
+                    <InlineStack>
+                    </InlineStack>
+                    <InlineStack align={"end"}>
                         <div className="datepicker-contain">
                             <DateRangePicker
                                 onChange={handleCallback}
                             />
                         </div>
-                    </LegacyStack.Item>
-                </LegacyStack>
+                    </InlineStack>
+                </BlockStack>
                 <HighchartsReact
                     highcharts={Highcharts}
                     options={renderOption()}
                 />
-            </LegacyCard>
+            </Card>
         </Layout.Section>
     );
 };

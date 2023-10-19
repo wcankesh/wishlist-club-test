@@ -1,5 +1,5 @@
 import React, {Fragment} from 'react';
-import {Layout, LegacyCard, FormLayout, TextField, LegacyStack, Text} from "@shopify/polaris"
+import {Layout, FormLayout, TextField, Text, BlockStack, Card, InlineStack, Bleed, Box} from "@shopify/polaris"
 import ColorInput from "../../Comman/ColorInput";
 import {Helmet} from "react-helmet";
 
@@ -36,9 +36,13 @@ const SubscriberForm = ({backInStockDesign, setBackInStockDesign, setBackInStock
             }]}>
             </Helmet>
 
-            <Layout.Section oneHalf>
-                <LegacyCard title={"Customize Subscriber Form"} sectioned>
+            <Layout.Section variant={"oneHalf"}>
+                <Card padding={"500"}>
+                    <BlockStack gap={"400"}>
+                    <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Customize Subscriber Form</Text>
                     <FormLayout>
+                        <BlockStack gap={"300"}>
+                            <Bleed marginInlineStart={"150"}>
                         <FormLayout.Group condensed>
                             <TextField
                                 label="Title"
@@ -65,6 +69,8 @@ const SubscriberForm = ({backInStockDesign, setBackInStockDesign, setBackInStock
                                 }}
                             />
                         </FormLayout.Group>
+                            </Bleed>
+                            <Bleed marginInlineStart={"150"}>
                         <FormLayout.Group condensed>
                             <TextField
                                 label="Email Placeholder"
@@ -91,6 +97,8 @@ const SubscriberForm = ({backInStockDesign, setBackInStockDesign, setBackInStock
                                 }}
                             />
                         </FormLayout.Group>
+                            </Bleed>
+                            <Bleed marginInlineStart={"150"}>
                         <FormLayout.Group condensed>
                             <TextField
                                 label="Submit Button Text"
@@ -113,6 +121,8 @@ const SubscriberForm = ({backInStockDesign, setBackInStockDesign, setBackInStock
                                         value={backInStockDesign.subscription_form.text_color}
                             />
                         </FormLayout.Group>
+                            </Bleed>
+                            <Bleed marginInlineStart={"150"}>
                         <FormLayout.Group condensed>
                             <ColorInput label={"Background Color"}
                                         name="background_color"
@@ -134,6 +144,8 @@ const SubscriberForm = ({backInStockDesign, setBackInStockDesign, setBackInStock
                                 }}
                             />
                         </FormLayout.Group>
+                            </Bleed>
+                            <Bleed marginInlineStart={"150"}>
                         <FormLayout.Group condensed>
                             <ColorInput label={"Border Color"}
                                         name="border_color"
@@ -155,6 +167,8 @@ const SubscriberForm = ({backInStockDesign, setBackInStockDesign, setBackInStock
                                 }}
                             />
                         </FormLayout.Group>
+                            </Bleed>
+                            <Bleed marginInlineStart={"150"}>
                         <FormLayout.Group condensed>
                             <TextField
                                 label="Top & Bottom Padding"
@@ -185,27 +199,37 @@ const SubscriberForm = ({backInStockDesign, setBackInStockDesign, setBackInStock
                                 }}
                             />
                         </FormLayout.Group>
+                            </Bleed>
+                        </BlockStack>
                     </FormLayout>
-                </LegacyCard>
+                    </BlockStack>
+                </Card>
 
             </Layout.Section>
-            <Layout.Section oneHalf>
-                <LegacyCard title={"Preview Popup"} sectioned>
-                    <LegacyCard title={backInStockDesign.subscription_form.title} sectioned>
+            <Layout.Section variant={"oneHalf"}>
+                <Card padding={"500"}>
+                    <BlockStack gap={"400"}>
+                    <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Preview Popup</Text>
+                    <Box padding={"400"} shadow={"400"} borderRadius={"200"}>
+                        <BlockStack gap={"400"}>
+                        <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Notify me via</Text>
                         <FormLayout>
                             <FormLayout.Group>
                                 <TextField label={backInStockDesign.subscription_form.email_lable}
                                            placeholder={backInStockDesign.subscription_form.email_placeholder}
                                            helpText={<Text
-                                               color={"critical"}>{backInStockDesign.subscription_form.email_validation_message}</Text>}/>
+                                               tone={"critical"}>{backInStockDesign.subscription_form.email_validation_message}</Text>}/>
                             </FormLayout.Group>
                         </FormLayout>
-                        <LegacyStack distribution={"center"}>
+                        <InlineStack align={"center"}>
                             <button
                                 className="wl_btn_common wl_subscription_form_preview">{backInStockDesign.subscription_form.submit_button_text}</button>
-                        </LegacyStack>
-                    </LegacyCard>
-                </LegacyCard>
+                            <div></div>
+                        </InlineStack>
+                        </BlockStack>
+                    </Box>
+                    </BlockStack>
+                </Card>
             </Layout.Section>
         </Fragment>
     );

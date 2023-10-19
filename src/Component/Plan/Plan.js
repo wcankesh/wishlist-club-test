@@ -1,16 +1,17 @@
 import React, {Fragment, useState} from 'react';
-import {Page, Layout, LegacyCard, LegacyStack, ProgressBar, Button, Banner, Text,} from "@shopify/polaris";
+import {Page, Layout, ProgressBar, Button, Banner, Grid, Text, BlockStack, InlineStack, Card} from "@shopify/polaris";
 import {useDispatch, useSelector} from "react-redux";
 import moment from "moment";
 import {Icons} from "../../utils/Icons";
-import {apiService} from "../../utils/Constant";
+import {apiService, baseUrl} from "../../utils/Constant";
 import {Shop_details} from "../../redux/action/action";
+import {useNavigate} from "react-router-dom";
 
 const Plan = () => {
     const dispatch = useDispatch();
     const [isLoading, setIsLoading] = useState("");
     const shopDetails = useSelector(state => state.shopDetails);
-
+    const navigate = useNavigate();
     const onUpdatePlan = async (planType) => {
         setIsLoading(planType)
         const response = await apiService.upgradePlan({planType: planType, plan_interval: "0"})
@@ -172,95 +173,106 @@ const Plan = () => {
         return (
             <Fragment>
                 <Layout.Section>
-                    <LegacyStack distribution={"fill"}>
-                        <LegacyCard
-                            title={<Text as={"h4"} variant={"headingLg"} fontWeight={"semibold"}>Current Plan :{(shopDetails.plan_type === "0" || shopDetails.plan_type === "1") ? "Free" : shopDetails.plan_type === "5" ? "Basic" : shopDetails.plan_type === "6" ? "Pro" : shopDetails.plan_type === "7" ? "Advance" : shopDetails.plan_type === "8" ? "Plus" : ""}</Text>} sectioned>
-                            <LegacyStack vertical>
-                                <Text>{moment(shopDetails?.billing_schedule?.billing_start_date).format("MMMM DD")} - {moment(shopDetails?.billing_schedule?.billing_end_date).format("MMMM DD")}</Text>
-                                <Text as={"span"}>Mail
-                                    sent {`${shopDetails.sent_email}/${(shopDetails.plan_type === "0" || shopDetails.plan_type === "1") ? "50" : shopDetails.plan_type === "5" ? "500" : shopDetails.plan_type === "6" ? "2000" : shopDetails.plan_type === "7" ? "5000" : shopDetails.plan_type === "8" ? "10000" : ""}`}</Text>
-                                <ProgressBar progress={productPercent} size="small" color={"success"}/>
-                            </LegacyStack>
-                        </LegacyCard>
+                    <Grid>
+                        <Grid.Cell columnSpan={{xs: 6, sm: 2, md: 2, lg: 4, xl: 2}}>
+                            <Card padding={"500"}>
+                                <BlockStack gap={"400"}>
+                                    <Text as={"h4"} variant={"headingLg"} fontWeight={"semibold"}>Current Plan
+                                        :{(shopDetails.plan_type === "0" || shopDetails.plan_type === "1") ? "Free" : shopDetails.plan_type === "5" ? "Basic" : shopDetails.plan_type === "6" ? "Pro" : shopDetails.plan_type === "7" ? "Advance" : shopDetails.plan_type === "8" ? "Plus" : ""}</Text>
+                                    <Text>{moment(shopDetails?.billing_schedule?.billing_start_date).format("MMMM DD")} - {moment(shopDetails?.billing_schedule?.billing_end_date).format("MMMM DD")}</Text>
+                                    <Text as={"span"}>Mail
+                                        sent {`${shopDetails.sent_email}/${(shopDetails.plan_type === "0" || shopDetails.plan_type === "1") ? "50" : shopDetails.plan_type === "5" ? "500" : shopDetails.plan_type === "6" ? "2000" : shopDetails.plan_type === "7" ? "5000" : shopDetails.plan_type === "8" ? "10000" : ""}`}</Text>
+                                    <ProgressBar progress={productPercent} size="small" tone="primary"/>
+                                </BlockStack>
+                            </Card>
+                        </Grid.Cell>
                         {(plan || []).map((x, i) => {
                             return (
-                                <LegacyStack.Item key={i}>
-                                    <LegacyStack distribution={"fillEvenly"}>
-                                        <LegacyStack.Item>
-                                            <LegacyCard sectioned>
-                                                <LegacyStack distribution={"fillEvenly"} vertical>
-                                                    <Text as={"h4"} variant={"headingLg"} fontWeight={"semibold"}
-                                                          alignment={"center"}>{x.plan}</Text>
-                                                    <div>
-                                                        <Text as={"h1"} variant={"headingXl"} alignment={"center"}>
-                                                            <Text as={"span"} variant={"bodyLg"}><sup>$</sup></Text>
-                                                            {x.price}
-                                                            <Text as={"span"}
-                                                                  variant={"bodyLg"}><sub>/month</sub></Text>
-                                                        </Text>
-                                                    </div>
+                                <Grid.Cell columnSpan={{xs: 6, sm: 3, md: 2, lg: 4, xl: 2}}>
+                                    <Card padding={"500"}>
+                                        <BlockStack gap={"400"}>
+                                            <Text as={"h4"} variant={"headingLg"} fontWeight={"semibold"}
+                                                  alignment={"center"}>{x.plan}</Text>
+                                            <div>
+                                                <Text as={"h1"} variant={"headingXl"} alignment={"center"}>
+                                                    <Text as={"span"} variant={"bodyLg"}><sup>$</sup></Text>
+                                                    {x.price}
+                                                    <Text as={"span"}
+                                                          variant={"bodyLg"}><sub>/month</sub></Text>
+                                                </Text>
+                                            </div>
 
-                                                    <LegacyStack distribution={"center"}>
-                                                        <Button
-                                                            primary
-                                                            onClick={() => onUpdatePlan(x.planType)}
-                                                            loading={isLoading == x.planType}
-                                                            disabled={shopDetails.plan_type == x.planType ? true : false}>
-                                                            {shopDetails.plan_type == x.planType ? "Activated" : shopDetails.is_older_shop == 1 ? "Upgrade" : shopDetails.plan_type < x.planType ? "Upgrade" : "Downgrade"}
-                                                        </Button>
-
-                                                    </LegacyStack>
-                                                </LegacyStack>
-                                            </LegacyCard>
-                                        </LegacyStack.Item>
-                                    </LegacyStack>
-                                </LegacyStack.Item>
+                                            <InlineStack align={"center"}>
+                                                <Button
+                                                    variant={"primary"}
+                                                    onClick={() => onUpdatePlan(x.planType)}
+                                                    loading={isLoading == x.planType}
+                                                    disabled={shopDetails.plan_type == x.planType ? true : false}>
+                                                    {shopDetails.plan_type == x.planType ? "Activated" : shopDetails.is_older_shop == 1 ? "Upgrade" : shopDetails.plan_type < x.planType ? "Upgrade" : "Downgrade"}
+                                                </Button>
+                                            </InlineStack>
+                                        </BlockStack>
+                                    </Card>
+                                </Grid.Cell>
                             )
                         })}
-                    </LegacyStack>
+                    </Grid>
                 </Layout.Section>
                 <Layout.Section>
-                    <LegacyStack.Item>
-                        <LegacyCard>
-                            <div className="planpriceWrap">
-                                <ul className="PlanPriceList ">
-                                    {
-                                        (planTable || []).map((y, j) => {
-                                            return (
-                                                <li className="ppl_item" key={j}>
-                                                    <div className="pplLabel">{y.title}</div>
-                                                    <div className="pplContent">
-                                                        <div className="row">
-                                                            <div className="col col-5">{(y.free === true || y.free === false) ? <span className="icons">{y.free === true ? Icons.rightIcon : Icons.cancelIcon}</span> :y.free}</div>
-                                                            <div className="col col-5">{y.basic === true || y.basic === false ? <span className="icons">{y.basic === true ? Icons.rightIcon : Icons.cancelIcon}</span>:y .basic}</div>
-                                                            <div className="col col-5">{(y.pro === true || y.pro === false) ? <span className="icons">{y.pro === true ? Icons.rightIcon : Icons.cancelIcon}</span> : y.pro}</div>
-                                                            <div className="col col-5">{(y.advance === true || y.advance === false) ? <span className="icons">{y.advance === true ? Icons.rightIcon : Icons.cancelIcon}</span> : y.advance}</div>
-                                                            <div className="col col-5">{(y.enterprise === true || y.enterprise === false) ? <span className="icons">{y.enterprise === true? Icons.rightIcon : Icons.cancelIcon}</span> : y.enterprise}</div>
-                                                        </div>
+                    <Card padding={"0"}>
+                        <div className="planpriceWrap">
+                            <ul className="PlanPriceList ">
+                                {
+                                    (planTable || []).map((y, j) => {
+                                        return (
+                                            <li className="ppl_item" key={j}>
+                                                <div className="pplLabel">{y.title}</div>
+                                                <div className="pplContent">
+                                                    <div className="row">
+                                                        <div
+                                                            className="col col-5">{(y.free === true || y.free === false) ?
+                                                            <span
+                                                                className="icons">{y.free === true ? Icons.rightIcon : Icons.cancelIcon}</span> : y.free}</div>
+                                                        <div
+                                                            className="col col-5">{y.basic === true || y.basic === false ?
+                                                            <span
+                                                                className="icons">{y.basic === true ? Icons.rightIcon : Icons.cancelIcon}</span> : y.basic}</div>
+                                                        <div
+                                                            className="col col-5">{(y.pro === true || y.pro === false) ?
+                                                            <span
+                                                                className="icons">{y.pro === true ? Icons.rightIcon : Icons.cancelIcon}</span> : y.pro}</div>
+                                                        <div
+                                                            className="col col-5">{(y.advance === true || y.advance === false) ?
+                                                            <span
+                                                                className="icons">{y.advance === true ? Icons.rightIcon : Icons.cancelIcon}</span> : y.advance}</div>
+                                                        <div
+                                                            className="col col-5">{(y.enterprise === true || y.enterprise === false) ?
+                                                            <span
+                                                                className="icons">{y.enterprise === true ? Icons.rightIcon : Icons.cancelIcon}</span> : y.enterprise}</div>
                                                     </div>
-                                                </li>
-                                            )
-                                        })
-                                    }
-
-                                </ul>
-                            </div>
-                        </LegacyCard>
-                    </LegacyStack.Item>
+                                                </div>
+                                            </li>
+                                        )
+                                    })
+                                }
+                            </ul>
+                        </div>
+                    </Card>
                 </Layout.Section>
             </Fragment>
         )
     }
     return (
         <Fragment>
-            <Page title={"Plan & Price"} fullWidth>
+            <Page title={"Plan & Price"} fullWidth backAction={shopDetails.plan_type == "0" || shopDetails.is_older_shop == 1 ? "" :{content: 'BAckInStock', onAction: () => navigate(`${baseUrl}/settings`)}}>
                 <Layout>
-                    {shopDetails.is_older_shop == 1 ?  <Layout.Section><Banner
+                    {shopDetails.is_older_shop == 1 ? <Layout.Section><Banner
                         title="Update your plan"
-                        status="warning"
+                        tone="warning"
                     >
                         <p>
-                            Please revise your plan by or before September 30th 2023. Failure to do so will result in the app's backend and frontend functionality being disabled.
+                            Please revise your plan by or before September 30th 2023. Failure to do so will result in
+                            the app's backend and frontend functionality being disabled.
                         </p>
                     </Banner></Layout.Section> : ""}
                     {newBackInStockPlan()}

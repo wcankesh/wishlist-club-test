@@ -2,11 +2,13 @@ import React, {Fragment, useEffect, useState} from 'react';
 import {
     Page,
     Layout,
-    LegacyCard,
+    Card,
+    BlockStack, Box, Divider,
     FormLayout,
+    Text,
     TextField,
     Select,
-    PageActions, RadioButton, DropZone, Thumbnail, Tabs
+    PageActions, RadioButton, DropZone, Thumbnail, Tabs, Button
 } from "@shopify/polaris";
 import {useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
@@ -119,25 +121,27 @@ const WishlistItemsEmail = () => {
         EmailSetting()
     }, []);
 
-    const saveEmailSetting = async () => {
-        let validationErrors = {};
-        let tempObj = { subject: emailSetting.subject,
-            email_body: emailSetting.email_body,
-            reply_to_mail: emailSetting.reply_to_mail,
-            add_to_cart_button_text: emailSetting.wishlist_content.add_to_cart_button_text,
-            view_product_button_text: emailSetting.wishlist_content.view_product_button_text,
-        };
-        Object.keys(tempObj).forEach((name) => {
-            const error = formValidate(name, tempObj[name]);
-            if (error && error.length > 0) {
-                validationErrors[name] = error;
+    const saveEmailSetting = async (record, isLoad) => {debugger
+        if(isLoad){
+            let validationErrors = {};
+            let tempObj = { subject: emailSetting.subject,
+                email_body: emailSetting.email_body,
+                reply_to_mail: emailSetting.reply_to_mail,
+                add_to_cart_button_text: emailSetting.wishlist_content.add_to_cart_button_text,
+                view_product_button_text: emailSetting.wishlist_content.view_product_button_text,
+            };
+            Object.keys(tempObj).forEach((name) => {
+                const error = formValidate(name, tempObj[name]);
+                if (error && error.length > 0) {
+                    validationErrors[name] = error;
+                }
+            });
+            if (Object.keys(validationErrors).length > 0) {
+                setEmailSettingError(validationErrors);
+                return;
             }
-        });
-        if (Object.keys(validationErrors).length > 0) {
-            setEmailSettingError(validationErrors);
-            return;
         }
-        setIsLoading(true);
+        setIsLoading(isLoad);
         if (emailSetting.wishlist_branding_type == "1") {
             delete emailSetting.wishlist_logo;
         }
@@ -147,7 +151,7 @@ const WishlistItemsEmail = () => {
         if (emailSetting.restock_branding_type == "1") {
             delete emailSetting.restock_logo;
         }
-        let newEmailSetting = {...emailSetting}
+        let newEmailSetting = {...emailSetting, ...record}
         const formData = new FormData();
         Object.keys(newEmailSetting).forEach((x) => {
             if ((typeof (newEmailSetting[x]) === "object") && newEmailSetting[x] !== null) {
@@ -162,7 +166,6 @@ const WishlistItemsEmail = () => {
             }
         })
         formData.append("payload", JSON.stringify(newEmailSetting))
-
         const response = await apiService.updateEmailSetting(formData, emailSetting.id)
         if (response.status === 200) {
             setMessage(capitalizeMessage(response.message))
@@ -275,7 +278,7 @@ const WishlistItemsEmail = () => {
                     return "";
                 }
             case "reply_to_mail":
-                if (value.trim() !== "" && !value.match(/^\w+([.-]?\w+)@\w+([.-]?\w+)(\.\w{2,3})+$/)) {
+                if (value && !value.match(/^\w+([.-]?\w+)@\w+([.-]?\w+)(\.\w{2,3})+$/)) {
                     return "Enter a valid reply to email address";
                 } else {
                     return "";
@@ -317,22 +320,56 @@ const WishlistItemsEmail = () => {
         },
 
     ];
+    const handleSwitch = async (e) => {
+        setEmailSetting({
+            ...emailSetting,
+            [e.target.name]: e.target.value
+        })
+        saveEmailSetting({[e.target.name]: e.target.value}, false)
+    }
+
 
     return (
         <Fragment>
             <Page title={"Wishlist Items"} backAction={{content: 'Settings', onAction: onBack}}
-                  primaryAction={{content: "Save", onAction: () => saveEmailSetting({}), loading: isLoading}}>
+                  secondaryActions={
+                      <Fragment>
+                          <div className='switch-button'>
+                              <input type="checkbox"
+                                     className="switch-btn-input"
+                                     id={"is_email_reminder_on_off"}
+                                     name={"is_email_reminder_on_off"}
+                                     onChange={(e) => handleSwitch({
+                                         target: {
+                                             name: "is_email_reminder_on_off",
+                                             value: e.target.checked ? 0 : 1
+                                         }
+                                     })}
+                                     checked={emailSetting.is_email_reminder_on_off == 0}
+                              />
+                              <label className="witch-button-label" htmlFor={"is_email_reminder_on_off"}/>
+                          </div>&nbsp;&nbsp;
+                          <Button variant="primary" onClick={() => saveEmailSetting("", true)} loading={isLoading}> Save</Button>
+                      </Fragment>
+                  }
+                  >
                 <Layout>
                     {message !== "" && isError === false ? <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer}/> : ""}
                     <CustomErrorBanner message={message} setMessage={setMessage} setIsError={setIsError} isError={isError} link={""}/>
-                    <Layout.Section oneHalf>
-                        <LegacyCard>
-                            <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>
-                        </LegacyCard>
-                        <LegacyCard>
+
+                    <Layout.Section variant={"oneHalf"}>
+                        <BlockStack gap={"300"}>
+
+                            <Card padding={"0"}>
+                                <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>
+                            </Card>
+
+                            <Card padding={"0"}>
                             {
-                                selected === 0 && <LegacyCard.Section>
+                                selected === 0 &&
+                                <Box padding={"500"}>
                                     <FormLayout>
+                                        <BlockStack gap={"400"}>
                                         <TextField label="Email subject" value={emailSetting.subject}
                                                    helpText="Add this {{shop_name}} variable"
                                                    onChange={(value) => handleChange({
@@ -414,12 +451,16 @@ const WishlistItemsEmail = () => {
                                                    onBlur={onBlur}
                                                    error={emailSettingError.view_product_button_text}
                                         />
+                                        </BlockStack>
                                     </FormLayout>
-                                </LegacyCard.Section>
+                                </Box>
                             }
                             {
-                                selected === 1 && <LegacyCard.Section>
+                                selected === 1 &&
+                                    <Box padding={"400"}>
                                     <FormLayout>
+                                        <BlockStack gap={"300"}>
+                                            <FormLayout.Group>
                                         <TextField label={"Social networks title"}
                                                    value={emailSetting.wishlist_social.title}
                                                    onChange={(value) => {
@@ -431,6 +472,7 @@ const WishlistItemsEmail = () => {
                                                        })
                                                    }}
                                         />
+                                            </FormLayout.Group>
 
                                         <FormLayout.Group condensed>
                                             <TextField label={"Instagram"} prefix={"@"}
@@ -503,12 +545,15 @@ const WishlistItemsEmail = () => {
                                                        }}
                                             />
                                         </FormLayout.Group>
+                                        </BlockStack>
                                     </FormLayout>
-                                </LegacyCard.Section>
+                                    </Box>
                             }
                             {
                                 selected === 2 && <Fragment>
-                                    <LegacyCard.Section title={"Email logo"}>
+                                    <Box padding={"500"}>
+                                        <BlockStack gap={"200"}>
+                                        <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Email logo</Text>
                                         <FormLayout>
                                             <FormLayout.Group condensed>
                                                 <RadioButton
@@ -556,8 +601,12 @@ const WishlistItemsEmail = () => {
                                                 {fileUpload}
                                             </DropZone></div>}
                                         </FormLayout>
-                                    </LegacyCard.Section>
-                                    <LegacyCard.Section title={"Email body customization"}>
+                                        </BlockStack>
+                                    </Box>
+                                    <Divider />
+                                    <Box padding={"500"}>
+                                        <BlockStack gap={"200"}>
+                                        <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Email body customization</Text>
                                         <FormLayout>
                                             <FormLayout.Group condensed>
                                                 <ColorInput label="Background color" name="background_color"
@@ -598,8 +647,12 @@ const WishlistItemsEmail = () => {
                                                 />
                                             </FormLayout.Group>
                                         </FormLayout>
-                                    </LegacyCard.Section>
-                                    <LegacyCard.Section title={"Add to Cart Button customization"}>
+                                        </BlockStack>
+                                    </Box>
+                                    <Divider />
+                                    <Box padding={"500"}>
+                                        <BlockStack gap={"200"}>
+                                        <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Add to Cart Button customization</Text>
                                         <FormLayout>
                                             <FormLayout.Group condensed>
                                                 <ColorInput label={"Button Background color"} name="add_to_cart_btn_bg_color"
@@ -653,8 +706,12 @@ const WishlistItemsEmail = () => {
                                                 />
                                             </FormLayout.Group>
                                         </FormLayout>
-                                    </LegacyCard.Section>
-                                    <LegacyCard.Section title={"View Product Button customization"}>
+                                        </BlockStack>
+                                    </Box>
+                                    <Divider />
+                                    <Box padding={"500"}>
+                                        <BlockStack gap={"200"}>
+                                        <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>View Product Button customization</Text>
                                         <FormLayout>
                                             <FormLayout.Group condensed>
                                                 <ColorInput label={"Button Background color"} name="view_product_btn_bg_color"
@@ -708,13 +765,19 @@ const WishlistItemsEmail = () => {
                                                 />
                                             </FormLayout.Group>
                                         </FormLayout>
-                                    </LegacyCard.Section>
+                                        </BlockStack>
+                                    </Box>
                                 </Fragment>
                             }
-                        </LegacyCard>
+                        </Card>
+
+                        </BlockStack>
                     </Layout.Section>
-                    <Layout.Section oneHalf>
-                        <LegacyCard sectioned title={emailSetting.subject}>
+
+                    <Layout.Section variant={"oneHalf"}>
+                        <Card padding={"0"}>
+                            <Box padding={"500"}>
+                            <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>{emailSetting.subject}</Text>
                             <div className="email-template-live-preview-wrapper">
                                 <div className="email-template-body"
                                      style={{fontFamily: emailSetting.wishlist_style.font_family}}>
@@ -1082,13 +1145,15 @@ const WishlistItemsEmail = () => {
                                     {/*</p>*/}
                                 </div>
                             </div>
-                        </LegacyCard>
+                            </Box>
+                        </Card>
                     </Layout.Section>
+
                     <Layout.Section>
                         <PageActions
                             primaryAction={{
                                 content: 'Save',
-                                onAction: () => saveEmailSetting({}),
+                                onAction: () => saveEmailSetting("", true),
                                 loading: isLoading
                             }}
                         />

@@ -1,10 +1,20 @@
 import React, {Fragment, useEffect, useState} from 'react';
-import {LegacyCard, LegacyStack, Text, Layout, Page, FormLayout, Modal} from '@shopify/polaris'
+import {
+    Text,
+    Layout,
+    Page,
+    FormLayout,
+    Modal,
+    BlockStack,
+    InlineStack,
+    Card,
+    Divider,
+    Box, Checkbox
+} from '@shopify/polaris'
 import {useNavigate} from "react-router-dom";
 import {apiService, baseUrl, capitalizeMessage} from "../../../utils/Constant";
 import ToastMessage from "../../Comman/ToastMessage"
 import CopyCode from "../../Comman/CopyCode"
-import SwitchButton from "../../Comman/SwitchButton"
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
 
 const General = () =>  {
@@ -27,6 +37,12 @@ const General = () =>  {
     }
 
     const general = [
+        {
+            title: "App enable",
+            description: "Switch setting to enable or disable app functionality.",
+            name: "app_enable",
+            checked: setting.app_enable == "1"
+        },
         {
             title: "Guest wishlist",
             description: "Allow your customers to add their favorite items to wishlist without login. All items will be migrated to your account, once they log in.",
@@ -135,75 +151,80 @@ const General = () =>  {
                     {message !== "" && isError === false ? <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer}/> : ""}
                     <CustomErrorBanner message={message} setMessage={setMessage} setIsError={setIsError} isError={isError} link={""}/>
                     <Layout.Section>
-                        <LegacyCard >
-                            <LegacyCard.Section>
-                                <LegacyStack wrap={false}>
-                                    <LegacyStack.Item>
-                                        <SwitchButton checked={setting.app_enable == "1"} onChange={handleChange} name="app_enable"/>
-                                    </LegacyStack.Item>
-                                    <LegacyStack.Item fill>
-                                        <LegacyStack spacing='extraTight' vertical>
-                                            <Text fontWeight='semibold'>App enable</Text>
-                                            <Text>Switch setting to enable or disable app functionality. </Text>
-                                        </LegacyStack>
-                                    </LegacyStack.Item>
-                                </LegacyStack>
-                            </LegacyCard.Section>
+                        <Card padding={"0"}>
                             {general.map((x, i) => {
                                 return (
-                                    <LegacyCard.Section key={i}>
-                                        <LegacyStack wrap={false}>
-                                            <LegacyStack.Item>
-                                                <SwitchButton
-                                                    checked={x.checked}
-                                                    onChange={handleChange} name={x.name}
-                                                />
-                                            </LegacyStack.Item>
-                                            <LegacyStack.Item fill>
-                                                <LegacyStack spacing='extraTight' vertical>
-                                                    <Text fontWeight='semibold'>{x.title}</Text>
-                                                    <Text>{x.description}</Text>
-                                                </LegacyStack>
-                                            </LegacyStack.Item>
-                                        </LegacyStack>
-                                    </LegacyCard.Section>
+                                    <Fragment>
+                                        <InlineStack key={i} blockAlign={"start"}>
+                                            <Box padding={"500"}>
+                                                <InlineStack gap={400} wrap={false}>
+                                                    <Checkbox checked={x.checked} onChange={(checked) => handleChange({
+                                                        target: {
+                                                            name: x.name,
+                                                            value: x.checked ? "0" : "1"
+                                                        }
+                                                    })}/>
+                                                    <div className={"cursor-pointer"} onClick={() => handleChange({
+                                                        target: {
+                                                            name: x.name,
+                                                            value: x.checked ? "0" : "1"
+                                                        }
+                                                    })}>
+                                                        <BlockStack gap={"150"}>
+                                                            <Text as={"p"} fontWeight='semibold'>{x.title}</Text>
+                                                            <Text>{x.description}</Text>
+                                                        </BlockStack>
+                                                    </div>
+                                                </InlineStack>
+                                            </Box>
+                                        </InlineStack>
+                                        <Divider/>
+                                    </Fragment>
                                 )
                             })
                             }
-                            <LegacyCard.Section>
-                                <LegacyStack wrap={false}>
-                                    <LegacyStack.Item>
-                                        <SwitchButton checked={setting.is_variant_wishlist == "1"}
-                                                      onChange={handleChange} name="is_variant_wishlist"
-                                        />
-                                    </LegacyStack.Item>
-                                    <LegacyStack.Item fill>
-                                        <LegacyStack spacing='extraTight' vertical>
+                            <Box padding={"500"}>
+                                <InlineStack gap={"400"} blockAlign={"start"} wrap={false}>
+
+                                        <Checkbox checked={setting.is_variant_wishlist == "1"} onChange={(checked) => handleChange({
+                                            target: {
+                                                name: "is_variant_wishlist",
+                                                value: checked ? "1" : "0"
+                                            }
+                                        })}/>
+                                    <BlockStack gap={"100"}>
+                                        <div className={"cursor-pointer"} onClick={() => handleChange({
+                                            target: {
+                                                name: "is_variant_wishlist",
+                                                value: setting.is_variant_wishlist == "1" ? "0" : "1"
+                                            }
+                                        })}>
                                             <Text fontWeight='semibold'>Product variant wishlists</Text>
                                             <Text>If enabled, wishlists will be shown based on the product variant,
                                                 whereas disabling it will result in wishlists being displayed solely
                                                 based on products.</Text>
-                                            <Text color="critical">Please note: If you wish to see the wishlist for a
+                                        </div>
+
+                                            <Text tone="critical">Please note: If you wish to see the wishlist for a
                                                 specific product variant, you will need to add this shortcode.</Text>
-                                            <Text color="critical">If you choose variant wishlist, make sure to add the
+                                            <Text tone="critical">If you choose variant wishlist, make sure to add the
                                                 below shortcode. Otherwise, the wishlist will not be shown.</Text>
                                             <FormLayout>
                                                 <FormLayout.Group>
-                                                    <LegacyStack vertical spacing={"tight"}>
+                                                    <BlockStack gap={"150"}>
                                                         <Text>Product page shortcode</Text>
                                                         <CopyCode value={`<div class="th_prd_wl_btn" data-product_id="{{product.id}}" data-variant_id="{{product.selected_or_first_available_variant.id}}"></div>`}/>
-                                                    </LegacyStack>
-                                                    <LegacyStack vertical spacing={"tight"}>
+                                                    </BlockStack>
+                                                    <BlockStack gap={"150"}>
                                                         <Text>Collection page shortcode</Text>
                                                         <CopyCode value={`<div class="th_wl_col_btn" data-product_id="{{product.id}}" data-variant_id="{{product.selected_or_first_available_variant.id}}"></div>`}/>
-                                                    </LegacyStack>
+                                                    </BlockStack>
                                                 </FormLayout.Group>
                                             </FormLayout>
-                                        </LegacyStack>
-                                    </LegacyStack.Item>
-                                </LegacyStack>
-                            </LegacyCard.Section>
-                        </LegacyCard>
+                                    </BlockStack>
+                                </InlineStack>
+                            </Box>
+                        </Card>
                     </Layout.Section>
                 </Layout>
             </Page>
@@ -228,7 +249,7 @@ const General = () =>  {
                 >
                     <Modal.Section>
                         <Text>
-                            <Text as={"span"} color={"warning"} fontWeight={"semibold"}>WARNING!</Text> All the Guest Customers Product Information will be removed from our server and there is no way back. Are you sure you want to do this?
+                            <Text as={"span"} tone={"warning"} fontWeight={"semibold"}>WARNING!</Text> All the Guest Customers Product Information will be removed from our server and there is no way back. Are you sure you want to do this?
                         </Text>
                     </Modal.Section>
                 </Modal>

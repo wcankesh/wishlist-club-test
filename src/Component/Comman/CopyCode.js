@@ -1,7 +1,7 @@
 import React, {Fragment, useState} from 'react'
 import {Icons} from '../../utils/Icons'
 import ToastMessage from "./ToastMessage";
-import {LegacyStack} from "@shopify/polaris";
+import {TextField} from "@shopify/polaris";
 
 const CopyCode = ({value,label}) => {
     const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -34,13 +34,13 @@ const CopyCode = ({value,label}) => {
     return (
         <Fragment>
             <ToastMessage message={message} setMessage={setMessage} isErrorServer={false}/>
-            <LegacyStack vertical spacing={"tight"}>
+
                 {label && <label>{label}</label> }
                 <div className='copy-code' id={`cc_${firstId}_copy`} >
-                    <input readOnly className='cc-input-text' value={value} id={`cc_${secondId}_text`} disabled={!value}/>
+                    <TextField className='cc-input-text' value={value} id={`cc_${secondId}_text`} />
                     <button className='cc-copy' onClick={() => onCopyCode(`cc_${firstId}_copy`, `cc_${secondId}_text`)} disabled={!value}>{Icons.copyIcon}{Icons.copyIconTrue}</button>
                 </div>
-            </LegacyStack>
+
         </Fragment>
     );
 };

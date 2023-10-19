@@ -2,12 +2,12 @@ import React, {Fragment, useEffect, useState} from 'react';
 import {
     Page,
     Layout,
-    LegacyCard,
     FormLayout,
+    BlockStack, Box, Divider, Card, Text,
     TextField,
     PageActions,
     Select,
-    RadioButton, DropZone, Thumbnail, Tabs
+    RadioButton, DropZone, Thumbnail, Tabs, Button
 } from "@shopify/polaris";
 import {apiService, baseUrl, capitalizeMessage} from "../../../utils/Constant";
 import ColorInput from "../../Comman/ColorInput"
@@ -110,26 +110,29 @@ const RestockAlertEmail = () => {
         EmailSetting()
     }, []);
 
-    const saveEmailSetting = async () => {
-        let validationErrors = {};
-        let tempObj = {restock_email_subject: emailSetting.restock_email_subject,
-            restock_email_body: emailSetting.restock_email_body,
-            restock_email_reply_to_email: emailSetting.restock_email_reply_to_email,
-            add_to_cart_button_text: emailSetting.restock_content.add_to_cart_button_text,
-            view_product_button_text: emailSetting.restock_content.view_product_button_text,
-        };
-        Object.keys(tempObj).forEach((name) => {
-            const error = formValidate(name, tempObj[name]);
-            if (error && error.length > 0) {
-                validationErrors[name] = error;
-            }
-        });
+    const saveEmailSetting = async (record, isLoad) => {
+        if(isLoad){
+            let validationErrors = {};
+            let tempObj = {restock_email_subject: emailSetting.restock_email_subject,
+                restock_email_body: emailSetting.restock_email_body,
+                restock_email_reply_to_email: emailSetting.restock_email_reply_to_email,
+                add_to_cart_button_text: emailSetting.restock_content.add_to_cart_button_text,
+                view_product_button_text: emailSetting.restock_content.view_product_button_text,
+            };
+            Object.keys(tempObj).forEach((name) => {
+                const error = formValidate(name, tempObj[name]);
+                if (error && error.length > 0) {
+                    validationErrors[name] = error;
+                }
+            });
 
-        if (Object.keys(validationErrors).length > 0) {
-            setEmailSettingError(validationErrors);
-            return;
+            if (Object.keys(validationErrors).length > 0) {
+                setEmailSettingError(validationErrors);
+                return;
+            }
         }
-        setIsLoading(true);
+
+        setIsLoading(isLoad);
 
         if (emailSetting.price_drop_branding_type == "1") {
             delete emailSetting.price_drop_logo;
@@ -140,7 +143,7 @@ const RestockAlertEmail = () => {
         if (emailSetting.restock_branding_type == "1") {
             delete emailSetting.restock_logo;
         }
-        let newEmailSetting = {...emailSetting}
+        let newEmailSetting = {...emailSetting, ...record}
         const formData = new FormData();
         Object.keys(newEmailSetting).forEach((x) => {
             if ((typeof (newEmailSetting[x]) === "object") && newEmailSetting[x] !== null) {
@@ -257,7 +260,7 @@ const RestockAlertEmail = () => {
                     return "";
                 }
             case "restock_email_reply_to_email":
-                if (value.trim() !== "" && !value.match(/^\w+([.-]?\w+)@\w+([.-]?\w+)(\.\w{2,3})+$/)) {
+                if (value && !value?.match(/^\w+([.-]?\w+)@\w+([.-]?\w+)(\.\w{2,3})+$/)) {
                     return "Enter a valid reply to email address";
                 } else {
                     return "";
@@ -299,21 +302,53 @@ const RestockAlertEmail = () => {
         },
 
     ];
-
+    const handleSwitch = async (e) => {
+        setEmailSetting({
+            ...emailSetting,
+            [e.target.name]: e.target.value
+        })
+        saveEmailSetting({[e.target.name]: e.target.value}, false)
+    }
     return (
         <Fragment>
             <Page title={"Restock Alerts"} backAction={{content: 'Settings', onAction: onBack}}
-                  primaryAction={{content: "Save", onAction: saveEmailSetting, loading: isLoading}}>
+                  secondaryActions={
+                      <Fragment>
+                          <div className='switch-button'>
+                              <input type="checkbox"
+                                     className="switch-btn-input"
+                                     id={"is_email_reminder_on_off_restock"}
+                                     name={"is_email_reminder_on_off_restock"}
+                                     onChange={(e) => handleSwitch({
+                                         target: {
+                                             name: "is_email_reminder_on_off_restock",
+                                             value: e.target.checked ? 0 : 1
+                                         }
+                                     })}
+                                     checked={emailSetting.is_email_reminder_on_off_restock == 0}
+                              />
+                              <label className="witch-button-label" htmlFor={"is_email_reminder_on_off_restock"}/>
+                          </div>&nbsp;&nbsp;
+                          <Button variant="primary" onClick={() => saveEmailSetting("", true)} loading={isLoading}> Save</Button>
+                      </Fragment>
+                  }
+            >
                 <Layout>
                     {message !== "" && isError === false ? <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer}/> : ""}
                     <CustomErrorBanner message={message} setMessage={setMessage} setIsError={setIsError} isError={isError} link={""}/>
-                    <Layout.Section oneHalf>
-                        <LegacyCard>
-                            <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>
-                        </LegacyCard>
-                        <LegacyCard>
-                            {selected === 0 && <LegacyCard.Section>
+
+                    <Layout.Section variant={"oneHalf"}>
+                        <BlockStack gap={"300"}>
+
+                            <Card padding={"0"}>
+                                <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>
+                            </Card>
+
+                        <Card padding={"0"}>
+                            {selected === 0 &&
+                            <Box padding={"500"}>
                                 <FormLayout>
+                                    <BlockStack gap={"400"}>
                                     <TextField label="Email subject"
                                                helpText="Add this {{product_name}} {{shop_name}} variable"
                                                value={emailSetting.restock_email_subject}
@@ -383,10 +418,13 @@ const RestockAlertEmail = () => {
                                                onBlur={onBlur}
                                                error={emailSettingError.view_product_button_text}
                                     />
+                                    </BlockStack>
                                 </FormLayout>
-                            </LegacyCard.Section>}
-                            {selected === 1 && <LegacyCard.Section>
+                            </Box>}
+                            {selected === 1 && <Box padding={"400"}>
                                 <FormLayout>
+                                    <BlockStack gap={"300"}>
+                                        <FormLayout.Group>
                                     <TextField label={"Social networks title"}
                                                value={emailSetting.restock_social.title}
                                                onChange={(value) => {
@@ -398,7 +436,7 @@ const RestockAlertEmail = () => {
                                                    })
                                                }}
                                     />
-
+                                        </FormLayout.Group>
                                     <FormLayout.Group condensed>
                                         <TextField label={"Instagram"} prefix={"@"}
                                                    value={emailSetting.restock_social.instagram}
@@ -470,10 +508,13 @@ const RestockAlertEmail = () => {
                                                    }}
                                         />
                                     </FormLayout.Group>
+                                    </BlockStack>
                                 </FormLayout>
-                            </LegacyCard.Section>}
+                            </Box>}
                             {selected === 2 && <Fragment>
-                                <LegacyCard.Section title={"Email logo"}>
+                                <Box padding={"500"}>
+                                    <BlockStack gap={"200"}>
+                                        <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Email logo</Text>
                                     <FormLayout>
                                         <FormLayout.Group condensed>
                                             <RadioButton
@@ -523,8 +564,12 @@ const RestockAlertEmail = () => {
                                             </DropZone>
                                         </div>}
                                     </FormLayout>
-                                </LegacyCard.Section>
-                                <LegacyCard.Section title={"Email body customization"}>
+                                    </BlockStack>
+                                </Box>
+                                <Divider />
+                                <Box padding={"500"}>
+                                    <BlockStack gap={"200"}>
+                                        <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Email body customization</Text>
                                     <FormLayout>
                                         <FormLayout.Group condensed>
                                             <ColorInput label="Background color" name="background_color"
@@ -565,8 +610,12 @@ const RestockAlertEmail = () => {
                                             />
                                         </FormLayout.Group>
                                     </FormLayout>
-                                </LegacyCard.Section>
-                                <LegacyCard.Section title={"Add to Cart Button customization"}>
+                                    </BlockStack>
+                                </Box>
+                                <Divider />
+                                <Box padding={"500"}>
+                                    <BlockStack gap={"200"}>
+                                        <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Add to Cart Button customization</Text>
                                     <FormLayout>
                                         <FormLayout.Group condensed>
                                             <ColorInput label={"Button Background color"} name="add_to_cart_btn_bg_color"
@@ -620,8 +669,12 @@ const RestockAlertEmail = () => {
                                             />
                                         </FormLayout.Group>
                                     </FormLayout>
-                                </LegacyCard.Section>
-                                <LegacyCard.Section title={"View Product Button customization"}>
+                                    </BlockStack>
+                                </Box>
+                                <Divider />
+                                <Box padding={"500"}>
+                                    <BlockStack gap={"200"}>
+                                        <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>View Product Button customization</Text>
                                     <FormLayout>
                                         <FormLayout.Group condensed>
                                             <ColorInput label={"Button Background color"} name="view_product_btn_bg_color"
@@ -675,12 +728,17 @@ const RestockAlertEmail = () => {
                                             />
                                         </FormLayout.Group>
                                     </FormLayout>
-                                </LegacyCard.Section>
+                                    </BlockStack>
+                                </Box>
                             </Fragment>}
-                        </LegacyCard>
+                        </Card>
+                        </BlockStack>
                     </Layout.Section>
-                    <Layout.Section oneHalf>
-                        <LegacyCard sectioned title={emailSetting.restock_email_subject}>
+
+                    <Layout.Section variant={"oneHalf"}>
+                        <Card padding={"0"}>
+                            <Box padding={"500"}>
+                                <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>{emailSetting.restock_email_subject}</Text>
                             <div className="email-template-live-preview-wrapper">
                                 <div className="email-template-body"
                                      style={{fontFamily: emailSetting.restock_style.font_family}}>
@@ -963,13 +1021,15 @@ const RestockAlertEmail = () => {
                                     {/*</p>*/}
                                 </div>
                             </div>
-                        </LegacyCard>
+                            </Box>
+                        </Card>
                     </Layout.Section>
+
                     <Layout.Section>
                         <PageActions
                             primaryAction={{
                                 content: 'Save',
-                                onAction: saveEmailSetting,
+                                onAction: () => saveEmailSetting("", true),
                                 loading: isLoading
                             }}
                         />

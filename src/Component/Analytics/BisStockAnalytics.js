@@ -1,13 +1,15 @@
 import React, {Fragment, useState, useEffect} from 'react';
 import {
-  LegacyCard,
+    Card,
   Text,
-  LegacyStack,
+      BlockStack,
+    InlineStack,
   Layout,
   Tabs,
   TextField,
   Pagination,
   Thumbnail,
+  Grid, Bleed,Box,
   Badge, EmptySearchResult, IndexTable,
 } from '@shopify/polaris';
 import {apiService} from "../../utils/Constant";
@@ -113,11 +115,12 @@ const BisStockAnalytics = () => {
   return (
       <Fragment>
         <Layout.Section>
-          <LegacyCard title={"Back in stock analytics"}>
-            <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>
-            <LegacyCard.Section>
-              <LegacyStack>
-                <LegacyStack.Item fill>
+          <Card padding={"0"}>
+            <Box paddingBlockStart={"500"} paddingInlineStart={"500"} paddingInlineEnd={"500"}><Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Back in stock analytics</Text></Box>
+            <Box paddingInlineStart={"100"} paddingInlineEnd={"100"}><Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/></Box>
+            <Box paddingInlineStart={"400"} paddingBlockStart={"100"} paddingBlockEnd={"300"} paddingInlineEnd={"400"}>
+              <Grid >
+                <Grid.Cell columnSpan={{xs: 6, sm: 4, md: 5, lg: 10, xl: 10}}>
                   <TextField name="search" value={filter.search}
                              placeholder="Filter by product"
                              onChange={(value) => {
@@ -129,77 +132,73 @@ const BisStockAnalytics = () => {
                                })
                              }}
                   />
-                </LegacyStack.Item>
-                <LegacyStack.Item>
-                  <div className="datepicker-contain">
-                    <DateRangePicker
-                        onChange={handleCallback}
-                    />
-                  </div>
-                </LegacyStack.Item>
-              </LegacyStack>
-            </LegacyCard.Section>
+                </Grid.Cell>
+                <Grid.Cell columnSpan={{xs: 6, sm: 2, md: 1, lg: 2, xl: 2}}>
+                  <DateRangePicker fullWidth onChange={handleCallback}/>
+                </Grid.Cell>
+              </Grid>
+            </Box>
+            <Box paddingBlockEnd={"200"} >
             <IndexTable
-                resourceName={selected === 0 ? resourceNameRequest :selected === 1 ? resourceNameAwaitingStock : selected === 2 ? resourceNameSentNotification : null }
-                itemCount={isLoading ? 0 : bisAnalytics.length}
-                loading={isLoading}
-                emptyState={<EmptySearchResult title={selected === 0 ? 'No Request found':selected === 1 ? 'No Awaiting Stock found' : selected === 2 ? 'No Sent Notifications Found':null}
-                                               withIllustration={(!isLoading) || !isLoading}/>}
-                hasMoreItems={isLoading}
-                headings={[
-                  {title: 'Product'},
-                  {title: 'Email'},
-                  {title: 'Request Status'},
-                  {title: 'Request Time'},
-                ]}
-                selectable={false}
-            >{(bisAnalytics || []).map((x, i) => {
-              return (
-                  <IndexTable.Row key={i} id={i}>
-                    <IndexTable.Cell>
-                      <LegacyStack alignment="center" wrap={false}>
-                        <Thumbnail size={"small"} source={x.image}/>
-                        <LegacyStack.Item fill>
+                  resourceName={selected === 0 ? resourceNameRequest :selected === 1 ? resourceNameAwaitingStock : selected === 2 ? resourceNameSentNotification : null }
+                  itemCount={isLoading ? 0 : bisAnalytics.length}
+                  loading={isLoading}
+                  emptyState={<EmptySearchResult title={selected === 0 ? 'No Request found':selected === 1 ? 'No Awaiting Stock found' : selected === 2 ? 'No Sent Notifications Found':null}
+                                                 withIllustration={(!isLoading) || !isLoading}/>}
+                  hasMoreItems={isLoading}
+                  headings={[
+                    {title: 'Product'},
+                    {title: 'Email'},
+                    {title: 'Request Status'},
+                    {title: 'Request Time'},
+                  ]}
+                  selectable={false}
+              >{(bisAnalytics || []).map((x, i) => {
+                return (
+                    <IndexTable.Row key={i} id={i}>
+                      <IndexTable.Cell>
+                        <InlineStack blockAlign={"center"} gap="200" wrap={false} >
+                          <Thumbnail size={"small"} source={x.image}/>
                           <Text as={"span"}>{x.title}</Text>
-                        </LegacyStack.Item>
-                      </LegacyStack>
-                    </IndexTable.Cell>
-                    <IndexTable.Cell>
-                      <Text>{x.email}</Text>
-                    </IndexTable.Cell>
-                    <IndexTable.Cell>
-                      <Fragment>{x.is_in_stock == 0 ? <Badge status="info">Awaiting stock</Badge> : <Badge status="success">Available stock</Badge>}</Fragment>
-                    </IndexTable.Cell>
-                    <IndexTable.Cell>
-                      <Text>{moment(x.created_at).format('L')}</Text>
-                    </IndexTable.Cell>
-                  </IndexTable.Row>
-              )
-            })}
-              <IndexTable.Row>
-                <IndexTable.Cell>
-                  &nbsp;
-                </IndexTable.Cell>
-                <IndexTable.Cell>
-                  &nbsp;
-                </IndexTable.Cell>
-                <IndexTable.Cell>
-                  &nbsp;
-                </IndexTable.Cell>
-                <IndexTable.Cell>
-                  <div className={"d-flex"} style={{justifyContent: "end"}}>
-                    <Pagination
-                        label={PageNo}
-                        hasPrevious={PageNo > 1}
-                        onPrevious={() => onChangePagination('minus')}
-                        hasNext={PageNo < totalPageCount}
-                        onNext={() => onChangePagination('plus')}
-                    />
-                  </div>
-                </IndexTable.Cell>
-              </IndexTable.Row>
-            </IndexTable>
-          </LegacyCard>
+                        </InlineStack>
+                      </IndexTable.Cell>
+                      <IndexTable.Cell>
+                        <Text>{x.email}</Text>
+                      </IndexTable.Cell>
+                      <IndexTable.Cell>
+                        <Fragment>{x.is_in_stock == 0 ? <Badge tone="info">Awaiting stock</Badge> : <Badge tone="success">Available stock</Badge>}</Fragment>
+                      </IndexTable.Cell>
+                      <IndexTable.Cell>
+                        <Text>{moment(x.created_at).format('L')}</Text>
+                      </IndexTable.Cell>
+                    </IndexTable.Row>
+                )
+              })}
+                <IndexTable.Row>
+                  <IndexTable.Cell>
+                    &nbsp;
+                  </IndexTable.Cell>
+                  <IndexTable.Cell>
+                    &nbsp;
+                  </IndexTable.Cell>
+                  <IndexTable.Cell>
+                    &nbsp;
+                  </IndexTable.Cell>
+                  <IndexTable.Cell>
+                    <div className={"d-flex"} style={{justifyContent: "end"}}>
+                      <Pagination
+                          label={PageNo}
+                          hasPrevious={PageNo > 1}
+                          onPrevious={() => onChangePagination('minus')}
+                          hasNext={PageNo < totalPageCount}
+                          onNext={() => onChangePagination('plus')}
+                      />
+                    </div>
+                  </IndexTable.Cell>
+                </IndexTable.Row>
+              </IndexTable>
+            </Box>
+          </Card>
         </Layout.Section>
       </Fragment>
   );
