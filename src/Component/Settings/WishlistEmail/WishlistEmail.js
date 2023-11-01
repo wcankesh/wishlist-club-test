@@ -277,15 +277,16 @@ const WishlistEmail = () => {
                                     </Text>
                                 </BlockStack>
 
-                                <Checkbox label={"Notification mail"}
-                                          onChange={(checked) => notificationUpdate({
-                                              target: {
-                                                  name: "is_notification_mail",
-                                                  value: checked ? "1" : "2"
-                                              }
-                                          })}
-                                          checked={emailSetting.is_notification_mail == 1}
-                                />
+                                <span>
+                                    <Checkbox label={"Notification mail"}
+                                                onChange={(checked) => notificationUpdate({
+                                                    target: {
+                                                        name: "is_notification_mail",
+                                                        value: checked ? "1" : "2"
+                                                    }
+                                                })} checked={emailSetting.is_notification_mail == 1}
+                                        />
+                                </span>
                             </BlockStack>
                         </Card>
                     </Layout.Section>
