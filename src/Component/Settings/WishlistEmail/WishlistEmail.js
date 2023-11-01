@@ -1,17 +1,5 @@
 import React, {Fragment, useEffect, useState} from 'react';
-import {
-    Page,
-    Layout,
-    FormLayout,
-    TextField,
-    Text,
-    Button,
-    Card,
-    BlockStack,
-    InlineStack,
-    Box,
-    Divider, Badge
-} from "@shopify/polaris";
+import {Page, Layout, FormLayout, TextField, Text, Button, Card, BlockStack, InlineStack, Box, Divider, Badge, Checkbox} from "@shopify/polaris";
 import {apiService, baseUrl, capitalizeMessage} from "../../../utils/Constant";
 import {useNavigate} from "react-router-dom"
 import ToastMessage from "../../Comman/ToastMessage";
@@ -27,6 +15,7 @@ const initialState = {
     offer_reminder: 0,
     stock_reminder: 0,
     weekly_reminder: 0,
+    is_notification_mail: 0,
 }
 const initialStateError = {
     from_email: ""
@@ -121,6 +110,26 @@ const WishlistEmail = () => {
         }
     }
 
+    const notificationUpdate = async (e) => {
+        const {name, value} = e.target;
+        const payload = {
+            ...emailSetting, [name]: value,
+        }
+        const formData = new FormData();
+        formData.append("payload", JSON.stringify(payload))
+        const response = await apiService.updateEmailSetting(formData, emailSetting.id);
+        if (response.status === 200) {
+            setMessage(capitalizeMessage(response.message))
+        } else if (response.status === 500) {
+            setMessage(capitalizeMessage(response.message))
+            setIsErrorServer(true);
+        } else {
+            setMessage(capitalizeMessage(response.message))
+            setIsError(true)
+        }
+        setEmailSetting({...emailSetting, [name]: value})
+    }
+
     const handleChange = (e) => {
         const {name, value} = e.target
         setEmailSetting({
@@ -152,6 +161,7 @@ const WishlistEmail = () => {
     const onBack = () => {
         navigate(`${baseUrl}/settings`)
     }
+
 
     return (
         <Fragment>
@@ -234,7 +244,7 @@ const WishlistEmail = () => {
                             {
                                 (Customization_Email || []).map((x, i) => {
                                     return (
-                                        <div onClick={() => navigate(`${baseUrl}/${x.path}`)} className={"cursor-pointer"}>
+                                        <div onClick={() => navigate(`${baseUrl}/${x.path}`)} className={"cursor-pointer"} key={i}>
                                             <Box padding={"500"}>
                                                 <InlineStack align={"space-between"} blockAlign={"start"} wrap={false} gap={"200"}>
                                                     <InlineStack gap={"400"} wrap={false}>
@@ -256,9 +266,31 @@ const WishlistEmail = () => {
                             }
                         </Card>
                     </Layout.Section>
+
+                    <Layout.Section>
+                        <Card>
+                            <BlockStack gap={"300"}>
+                                <BlockStack gap={"100"}>
+                                    <Text as={"h2"} variant={"headingMd"}>Wishlist Notifications</Text>
+                                    <Text as={"p"} tone={"subdued"}>
+                                        Enabling this setting allows store owners to stay updated through email notifications when users add products to their wishlist.
+                                    </Text>
+                                </BlockStack>
+
+                                <Checkbox label={"Notification mail"}
+                                          onChange={(checked) => notificationUpdate({
+                                              target: {
+                                                  name: "is_notification_mail",
+                                                  value: checked ? "1" : "2"
+                                              }
+                                          })}
+                                          checked={emailSetting.is_notification_mail == 1}
+                                />
+                            </BlockStack>
+                        </Card>
+                    </Layout.Section>
                 </Layout>
             </Page>
-
         </Fragment>
     );
 }

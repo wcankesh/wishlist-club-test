@@ -113,16 +113,16 @@ const EmailHistory = () => {
                                                 <Text as={"span"}>{z.email}</Text>
                                             </IndexTable.Cell>
                                             <IndexTable.Cell>
-                                                <span className={`custom-badge badge-type-${z.type}`}>{`${z.type == 1 ? "Wishlist reminder" : z.type == 2 ? "Price drop alert" : z.type == 3 ? "Restock alert" : z.type == 4 ? "Share wishlist" : z.type == 5 ? "Back In Stock thank you" : z.type == 6 ? "Back In Stock alert" : ""}`}</span>
+                                                <span className={`custom-badge badge-type-${z.type}`}>{`${z.type == 1 ? "Wishlist reminder" : z.type == 2 ? "Price drop alert" : z.type == 3 ? "Restock alert" : z.type == 4 ? "Share wishlist" : z.type == 5 ? "Back In Stock thank you" : z.type == 6 ? "Back In Stock alert" : z.type == 7 ? "Wishlist notification" : ""}`}</span>
                                             </IndexTable.Cell>
                                             <IndexTable.Cell>
                                                 <Popover
                                                     active={selectedProductIndex === i}
-                                                    activator={<Button variant={"plain"} removeUnderline onClick={() => togglePopoverActive(i)} disclosure={selectedProductIndex === i ? 'up' : 'down'}>{z.type == 1 || z.type == 2 || z.type == 3 || z.type == 4 ? `${z.wishlist_products.length} Products` : `${z.bis_products.length} Products`}</Button>}
+                                                    activator={<Button variant={"plain"} removeUnderline onClick={() => togglePopoverActive(i)} disclosure={selectedProductIndex === i ? 'up' : 'down'}>{z.type == 1 || z.type == 2 || z.type == 3 || z.type == 4 || z.type == 7 ? `${z.wishlist_products.length} Products` : `${z.bis_products.length} Products`}</Button>}
                                                     onClose={() => togglePopoverActive(i)}
                                                 >
                                                     <Popover.Pane>
-                                                        <ResourceList items={((z.type == 1 || z.type == 2 || z.type == 3 || z.type == 4 ? z.wishlist_products : z.bis_products) || [] )} renderItem={(item) => {
+                                                        <ResourceList items={((z.type == 1 || z.type == 2 || z.type == 3 || z.type == 4 || z.type == 7 ? z.wishlist_products : z.bis_products) || [] )} renderItem={(item) => {
                                                             const {title} = item
                                                             return (
                                                                 <ResourceList.Item>

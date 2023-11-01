@@ -1,22 +1,13 @@
-import React, {Fragment, useState} from 'react'
+import React, {Fragment, useState, useId} from 'react'
 import {Icons} from '../../utils/Icons'
 import ToastMessage from "./ToastMessage";
 import {TextField} from "@shopify/polaris";
 
 const CopyCode = ({value,label}) => {
-    const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-
-    let secondId = '';
-    for (let i = 0; i < 6; i++) {
-        secondId += characters[Math.floor(Math.random() * characters.length)];
-    }
-    let firstId = '';
-    for (let i = 0; i < 6; i++) {
-        firstId += characters[Math.floor(Math.random() * characters.length)];
-    }
-
-
+    const secondId = useId();
+    const firstId = useId();
     const [message, setMessage] = useState("");
+
     const onCopyCode = (step1, step2) => {
         let copyCode = document.getElementById(step1);
         copyCode.classList.add("copy-true");
@@ -36,9 +27,9 @@ const CopyCode = ({value,label}) => {
             <ToastMessage message={message} setMessage={setMessage} isErrorServer={false}/>
 
                 {label && <label>{label}</label> }
-                <div className='copy-code' id={`cc_${firstId}_copy`} >
-                    <TextField className='cc-input-text' value={value} id={`cc_${secondId}_text`} />
-                    <button className='cc-copy' onClick={() => onCopyCode(`cc_${firstId}_copy`, `cc_${secondId}_text`)} disabled={!value}>{Icons.copyIcon}{Icons.copyIconTrue}</button>
+                <div className='copy-code' id={`cc${firstId}copy`} >
+                    <TextField className='cc-input-text' value={value} id={`cc${secondId}text`} />
+                    <button className='cc-copy' onClick={() => onCopyCode(`cc${firstId}copy`, `cc${secondId}text`)} disabled={!value}>{Icons.copyIcon}{Icons.copyIconTrue}</button>
                 </div>
 
         </Fragment>
