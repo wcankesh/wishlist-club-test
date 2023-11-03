@@ -282,7 +282,7 @@ const WishlistEmail = () => {
                                                 onChange={(checked) => notificationUpdate({
                                                     target: {
                                                         name: "is_notification_mail",
-                                                        value: checked ? "1" : "2"
+                                                        value: checked ? "1" : "0"
                                                     }
                                                 })} checked={emailSetting.is_notification_mail == 1}
                                         />
