@@ -276,7 +276,6 @@ const DateRangePicker = ({ onChange, fullWidth }) =>  {
                                 options={ranges.map(({ alias, title }) => title || alias)}
                             />
                         ) : (
-
                             <OptionList
                                 options={ranges.map((range) => ({
                                     value: range.alias,
@@ -294,7 +293,7 @@ const DateRangePicker = ({ onChange, fullWidth }) =>  {
                     </Box>
                     <Box padding={{ xs: 500 }} maxWidth={mdDown ? "320px" : "516px"}>
                         <BlockStack gap={"400"}>
-                            <InlineStack gap={"200"}>
+                            <InlineStack gap={"200"} wrap={mdDown}>
                                 <div style={{ flexGrow: 1 }}>
                                     <TextField
                                         role="combobox"
