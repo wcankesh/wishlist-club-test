@@ -61,11 +61,11 @@ const CountAnalytics = () => {
                 },
                 {
                     title: "Order From Wishlist",
-                    value: analytics.cartProduct
+                    value: analytics.wishlistOrder
                 },
                 {
                     title: "Cart From Wishlist",
-                    value: analytics.wishlistOrder
+                    value: analytics.cartProduct
                 },]
         },
 
