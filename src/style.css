@@ -11,7 +11,7 @@
 .wl_logo {width: 40px;height: 40px;display: flex;justify-content: center;align-items: center;}
 .wl_logo svg {width: 40px;height: 40px;}
 .wl_btn {display: flex;justify-content: center;align-items: center;}
-.btn-collection {padding: 10px;position: absolute;top: 0;width: 100%;}
+/*.btn-collection {padding: 10px;position: absolute;top: 0;width: 100%;}*/
 .wl_btn_common {display: flex;justify-content: center;cursor: pointer;align-items: center;}
 .wl_btn_common svg {margin-right: 5px;}
 .email-logo-preview {background-color: #e4e5e7;border-radius: 50%;height: 2.5rem;max-height: 100%;max-width: 100%;width: 2.5rem;}

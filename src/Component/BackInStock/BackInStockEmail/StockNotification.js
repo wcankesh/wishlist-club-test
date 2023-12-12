@@ -15,7 +15,7 @@ import {
     Page,
     Thumbnail,
     PageActions,
-    Tabs, Box, Bleed, Button
+    Tabs, Box,  Button
 } from "@shopify/polaris";
 import {Icons} from "../../../utils/Icons";
 import {apiService, baseUrl, capitalizeMessage} from "../../../utils/Constant";
@@ -98,6 +98,7 @@ const StockNotification = () => {
     const [isErrorServer, setIsErrorServer] = useState(false)
     const [message, setMessage] = useState("")
     const [selected, setSelected] = useState(0);
+    const [selectedEmailTab, setSelectedEmailTab] = useState(0);
     const shopDetails = useSelector((state) => state.shopDetails)
     const theme = [
         {label: "Dark", value: "1"},
@@ -299,6 +300,9 @@ const StockNotification = () => {
             setSelected(selectedTabIndex)
         }
     }
+    const handleTabChangeEmail = (selectedTabIndex) => {
+            setSelectedEmailTab(selectedTabIndex)
+    }
 
     const tabs = [
         {
@@ -318,6 +322,19 @@ const StockNotification = () => {
             panelID: 'store-branding-1',
         },
 
+    ];
+
+    const tabsEmail = [
+        {
+            id: 'email-body-content',
+            content: 'Content',
+            panelID: 'email-body-content',
+        },
+        {
+            id: 'email-body',
+            content: 'Preview',
+            panelID: 'email-body',
+        },
     ];
 
 
@@ -381,832 +398,823 @@ const StockNotification = () => {
                   }>
                 <Layout>
                     {message !== "" && isError === false ?
-                        <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
-                                      setIsErrorServer={setIsErrorServer}/> : ""}
-                    <CustomErrorBanner message={message} setMessage={setMessage} setIsError={setIsError} isError={isError}
-                                       link={""}/>
-                    <Layout.Section variant={"oneHalf"}>
+                        <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer}/> : ""}
+                        <CustomErrorBanner message={message} setMessage={setMessage} setIsError={setIsError} isError={isError} link={""}/>
+                    <Layout.Section>
                         <BlockStack gap={400}>
                         <Card padding={0} roundedAbove={"md"}>
-                            <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>
+                            <Tabs tabs={tabsEmail} selected={selectedEmailTab} onSelect={handleTabChangeEmail}/>
                         </Card>
-                        <Card padding={"0"}>
-                            {
-                                selected === 0 &&
-                                    <FormLayout>
-                                        <Box padding={"400"}>
-                                        <FormLayout.Group>
-                                <BlockStack gap={"500"}>
-                                            <TextField label="Sender Email"
-                                                       value={backInStockEmail.bis_from_mail}
-                                                       onChange={(value) => {
-                                                           handleChange({
-                                                               target: {
-                                                                   name: "bis_from_mail",
-                                                                   value
-                                                               }
-                                                           })
-                                                       }}
-                                                       name={"bis_from_mail"}
-                                                       onBlur={onBlur}
-                                                       error={backInStockEmailError.bis_from_mail}
-                                            />
-                                            <TextField label={"Email Subject"}
-                                                       multiline={2}
-                                                       value={backInStockEmail.bis_content.email_subject}
-                                                       onChange={(value) => {
-                                                           bisOnChangeContent({
-                                                               target: {
-                                                                   name: "email_subject",
-                                                                   value
-                                                               }
-                                                           })
-                                                       }}
-                                                       name={"email_subject"}
-                                                       onBlur={onBlur}
-                                                       error={backInStockEmailError.email_subject}
-                                                       helpText={"Add this {{product_name}} {{shop_name}} variable"}
-                                            />
-                                            <TextField label={"Email Title"}
-                                                       multiline={2}
-                                                       value={backInStockEmail.bis_content.email_title}
-                                                       onChange={(value) => {
-                                                           bisOnChangeContent({
-                                                               target: {
-                                                                   name: "email_title",
-                                                                   value
-                                                               }
-                                                           })
-                                                       }}
-                                                       helpText={"Add this {{product_name}} {{shop_name}} variable"}
-                                                       name={"email_title"}
-                                                       onBlur={onBlur}
-                                                       error={backInStockEmailError.email_title}
-                                            />
-                                            <TextField label={"Email Description"}
-                                                       multiline={2}
-                                                       value={backInStockEmail.bis_content.email_description}
-                                                       onChange={(value) => {
-                                                           bisOnChangeContent({
-                                                               target: {
-                                                                   name: "email_description",
-                                                                   value
-                                                               }
-                                                           })
-                                                       }}
-                                                       name={"email_description"}
-                                                       onBlur={onBlur}
-                                                       error={backInStockEmailError.email_description}
-                                                       helpText={"Add this {{shop_name}} {{product_name}} {{shop_url}} {{product_url}} variable"}/>
-                                            <TextField label={'"Add to cart" label'}
-                                                       value={backInStockEmail.bis_content.add_to_cart_button_text}
-                                                       onChange={(value) => {
-                                                           bisOnChangeContent({
-                                                               target: {
-                                                                   name: "add_to_cart_button_text",
-                                                                   value
-                                                               }
-                                                           })
-                                                       }}
-                                                       name={"add_to_cart_button_text"}
-                                                       onBlur={onBlur}
-                                                       error={backInStockEmailError.add_to_cart_button_text}
-                                            />
-                                            <TextField label={'"Visit product" label'}
-                                                       value={backInStockEmail.bis_content.view_product_button_text}
-                                                       onChange={(value) => {
-                                                           bisOnChangeContent({
-                                                               target: {
-                                                                   name: "view_product_button_text",
-                                                                   value
-                                                               }
-                                                           })
-                                                       }}
-                                                       name={"view_product_button_text"}
-                                                       onBlur={onBlur}
-                                                       error={backInStockEmailError.view_product_button_text}
-                                            />
-                                            <Checkbox
-                                                label="Discount code"
-                                                checked={checkDiscount}
-                                                onChange={() => setCheckDiscount(!checkDiscount)}
-                                            />
-                                            {checkDiscount &&
-
-                                            <TextField label={"Discount description"}
-                                                       value={backInStockEmail.bis_content.discount_code}
-                                                       onChange={(value) => {
-                                                           bisOnChangeContent({
-                                                               target: {
-                                                                   name: "discount_code",
-                                                                   value
-                                                               }
-                                                           })
-                                                       }}
-                                            />
-                                            }
-                                </BlockStack>
-                                        </FormLayout.Group>
-                                        </Box>
-                                    </FormLayout>
-                            }
-                            {
-                                selected === 1 &&
-                                    <FormLayout>
-                                        <Box padding={"400"}>
-                                <BlockStack gap={"300"}>
-                                        <FormLayout.Group>
-                                            <TextField label={"Social networks title"}
-                                                       value={backInStockEmail.bis_social.title}
-                                                       onChange={(value) => {
-                                                           bisOnChangeSocial({
-                                                               target: {
-                                                                   name: "title",
-                                                                   value
-                                                               }
-                                                           })
-                                                       }}
-                                            />
-                                        </FormLayout.Group>
-                                        <FormLayout.Group condensed>
-                                            <TextField label={"Instagram"} prefix={"@"}
-                                                       value={backInStockEmail.bis_social.instagram}
-                                                       onChange={(value) => {
-                                                           bisOnChangeSocial({
-                                                               target: {
-                                                                   name: "instagram",
-                                                                   value
-                                                               }
-                                                           })
-                                                       }}
-                                            />
-                                            <TextField label={"Facebook"} prefix={"@"}
-                                                       value={backInStockEmail.bis_social.facebook}
-                                                       onChange={(value) => {
-                                                           bisOnChangeSocial({
-                                                               target: {
-                                                                   name: "facebook",
-                                                                   value
-                                                               }
-                                                           })
-                                                       }}
-                                            />
-                                        </FormLayout.Group>
-                                        <FormLayout.Group condensed>
-                                            <TextField label={"Twitter"} prefix={"@"}
-                                                       value={backInStockEmail.bis_social.twitter}
-                                                       onChange={(value) => {
-                                                           bisOnChangeSocial({
-                                                               target: {
-                                                                   name: "twitter",
-                                                                   value
-                                                               }
-                                                           })
-                                                       }}
-                                            />
-                                            <TextField label={"Telegram"} prefix={"@"}
-                                                       value={backInStockEmail.bis_social.telegram}
-                                                       onChange={(value) => {
-                                                           bisOnChangeSocial({
-                                                               target: {
-                                                                   name: "telegram",
-                                                                   value
-                                                               }
-                                                           })
-                                                       }}
-                                            />
-                                        </FormLayout.Group>
-                                        <FormLayout.Group condensed>
-                                            <TextField label={"Linkedin"}
-                                                       value={backInStockEmail.bis_social.linkedin}
-                                                       onChange={(value) => {
-                                                           bisOnChangeSocial({
-                                                               target: {
-                                                                   name: "linkedin",
-                                                                   value
-                                                               }
-                                                           })
-                                                       }}
-                                            />
-                                            <TextField label={"Pinterest"}
-                                                       value={backInStockEmail.bis_social.pinterest}
-                                                       onChange={(value) => {
-                                                           bisOnChangeSocial({
-                                                               target: {
-                                                                   name: "pinterest",
-                                                                   value
-                                                               }
-                                                           })
-                                                       }}
-                                            />
-                                        </FormLayout.Group>
-                                </BlockStack>
-                                        </Box>
-                                    </FormLayout>
-                            }
-                            {
-                                selected === 2 &&
-                                <Fragment>
-                                        <Box padding={"500"}>
-                                        <Text as={"h3"} variant={"bodyLg"} fontWeight={"medium"}>Email logo</Text>
-                                            <Bleed marginInlineStart={"200"}>
-                                        <FormLayout>
-                                            <BlockStack gap={"500"}>
-                                            <FormLayout.Group condensed>
-                                                <RadioButton
-                                                    label="Logo"
-                                                    id="disabled"
-                                                    checked={backInStockEmail.bis_branding_type == '2'}
-                                                    onChange={() => handleChange({
-                                                        target: {
-                                                            name: "bis_branding_type",
-                                                            value: "2"
-                                                        }
-                                                    })}
-                                                />
-                                                <RadioButton
-                                                    label={"Store Name"}
-                                                    id="optional"
-                                                    checked={backInStockEmail.bis_branding_type == '1'}
-                                                    onChange={() => handleChange({
-                                                        target: {
-                                                            name: "bis_branding_type",
-                                                            value: "1"
-                                                        }
-                                                    })}
-                                                />
-                                                <RadioButton
-                                                    label={"Both"}
-                                                    id="both"
-                                                    checked={backInStockEmail.bis_branding_type == '3'}
-                                                    onChange={() => handleChange({
-                                                        target: {
-                                                            name: "bis_branding_type",
-                                                            value: "3"
-                                                        }
-                                                    })}
-                                                />
-                                            </FormLayout.Group>
-                                            {(backInStockEmail.bis_branding_type == '2' || backInStockEmail.bis_branding_type == '3') &&
-                                            <div style={{width: 58, height: 58}}>
-                                                <DropZone
-                                                    accept=".jpg,.png,.jpeg"
-                                                    allowMultiple={false}
-                                                    onDrop={handleDropZoneDrop}
-                                                >
-                                                    {uploadedFiles}
-                                                    {fileUpload}
-                                                </DropZone>
-                                            </div>
-                                                }
-                                            </BlockStack>
-                                        </FormLayout>
-                                            </Bleed>
-                                        </Box>
-                                            <Divider />
-                                        <Box padding={"500"}>
-                                        <Text as={"h3"} fontWeight={"medium"}>Email body customization</Text>
-                                            <Bleed marginInlineStart={"200"}>
-                                        <FormLayout>
-                                            <BlockStack gap={400}>
-                                            <FormLayout.Group condensed>
-                                                <Select label={"Text color theme"} options={theme}
-                                                        value={backInStockEmail.bis_style.theme}
-                                                        onChange={(value) => {
-                                                            bisOnChangeStyle({
-                                                                target: {
-                                                                    name: "theme",
-                                                                    value
-                                                                }
-                                                            })
-                                                        }}
-                                                />
-                                                <Select label={"Font family"}
-                                                        options={fontFamily}
-                                                        value={backInStockEmail.bis_style.font_family}
-                                                        onChange={(value) => {
-                                                            bisOnChangeStyle({
-                                                                target: {
-                                                                    name: "font_family",
-                                                                    value
-                                                                }
-                                                            })
-                                                        }}
-                                                />
-                                            </FormLayout.Group>
-                                            <FormLayout.Group condensed>
-                                                <ColorInput label={"Background color"} name="background_color"
-                                                            onChange={bisOnChangeStyle}
-                                                            value={backInStockEmail.bis_style.background_color}/>
-                                                <TextField type={"number"} label={"Email title font size"} suffix={"Px"}
-                                                           value={backInStockEmail.bis_style.title_font_size}
-                                                           onChange={(value) => {
-                                                               bisOnChangeStyle({
-                                                                   target: {
-                                                                       name: "title_font_size",
-                                                                       value
-                                                                   }
-                                                               })
-                                                           }}
-                                                />
-                                            </FormLayout.Group>
-                                            <FormLayout.Group condensed>
-                                                <TextField type={"number"} label={"Email description font size"} suffix={"Px"} value={backInStockEmail.bis_style.description_font_size} onChange={(value) => {
-                                                               bisOnChangeStyle({
-                                                                   target: {
-                                                                       name: "description_font_size",
-                                                                       value
-                                                                   }
-                                                               })
-                                                           }}/>
-                                                {checkDiscount ? <TextField label={"Discount font size"} suffix={"Px"} type="number" value={backInStockEmail.bis_style.discount_font_size} onChange={(value) => {
-                                                                   bisOnChangeStyle({
+                        {
+                            selectedEmailTab === 0 ?  <BlockStack gap={400}>
+                                <Card padding={"0"}>
+                                    <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>
+                                    <Divider/>
+                                    {
+                                        selected === 0 &&
+                                            <Box padding={"400"} paddingBlockStart={"200"}>
+                                                <FormLayout>
+                                                    <TextField label="Sender Email"
+                                                               value={backInStockEmail.bis_from_mail}
+                                                               onChange={(value) => {
+                                                                   handleChange({
                                                                        target: {
-                                                                           name: "discount_font_size",
+                                                                           name: "bis_from_mail",
                                                                            value
                                                                        }
                                                                    })
-                                                               }}/> : <div/>}
-                                            </FormLayout.Group>
-                                            </BlockStack>
-                                        </FormLayout>
-                                            </Bleed>
-                                        </Box>
-                                                <Divider  />
-                                        <Box padding={"500"}>
-                                        <Text as={"h3"} fontWeight={"medium"}>Add to Cart Button customization</Text>
-                                            <Bleed marginInlineStart={"200"}>
-                                        <FormLayout>
-                                            <BlockStack gap={400}>
-                                            <FormLayout.Group condensed>
-                                                <ColorInput label={"Button Background color"}
-                                                            name="add_to_cart_btn_bg_color"
-                                                            onChange={bisOnChangeStyle}
-                                                            value={backInStockEmail.bis_style.add_to_cart_btn_bg_color}/>
-                                                <ColorInput label={"Button Text color"}
-                                                            name="add_to_cart_btn_text_color"
-                                                            onChange={bisOnChangeStyle}
-                                                            value={backInStockEmail.bis_style.add_to_cart_btn_text_color}/>
-                                            </FormLayout.Group>
-                                            <FormLayout.Group condensed>
-                                                <ColorInput label={"Button Border color"}
-                                                            name="add_to_cart_btn_border_color"
-                                                            onChange={bisOnChangeStyle}
-                                                            value={backInStockEmail.bis_style.add_to_cart_btn_border_color}/>
-                                                <TextField label={"Border Width"}
-                                                           value={backInStockEmail.bis_style.add_to_cart_btn_border_size}
-                                                           type="number"
-                                                           suffix="PX"
-                                                           onChange={(value) => {
-                                                               bisOnChangeStyle({
-                                                                   target: {
-                                                                       name: "add_to_cart_btn_border_size",
-                                                                       value
-                                                                   }
-                                                               })
-                                                           }}
+                                                               }}
+                                                               name={"bis_from_mail"}
+                                                               onBlur={onBlur}
+                                                               error={backInStockEmailError.bis_from_mail}
+                                                    />
+                                                    <TextField label={"Email Subject"}
+                                                               multiline={2}
+                                                               value={backInStockEmail.bis_content.email_subject}
+                                                               onChange={(value) => {
+                                                                   bisOnChangeContent({
+                                                                       target: {
+                                                                           name: "email_subject",
+                                                                           value
+                                                                       }
+                                                                   })
+                                                               }}
+                                                               name={"email_subject"}
+                                                               onBlur={onBlur}
+                                                               error={backInStockEmailError.email_subject}
+                                                               helpText={"Add this {{product_name}} {{shop_name}} variable"}
+                                                    />
+                                                    <TextField label={"Email Title"}
+                                                               multiline={2}
+                                                               value={backInStockEmail.bis_content.email_title}
+                                                               onChange={(value) => {
+                                                                   bisOnChangeContent({
+                                                                       target: {
+                                                                           name: "email_title",
+                                                                           value
+                                                                       }
+                                                                   })
+                                                               }}
+                                                               helpText={"Add this {{product_name}} {{shop_name}} variable"}
+                                                               name={"email_title"}
+                                                               onBlur={onBlur}
+                                                               error={backInStockEmailError.email_title}
+                                                    />
+                                                    <TextField label={"Email Description"}
+                                                               multiline={2}
+                                                               value={backInStockEmail.bis_content.email_description}
+                                                               onChange={(value) => {
+                                                                   bisOnChangeContent({
+                                                                       target: {
+                                                                           name: "email_description",
+                                                                           value
+                                                                       }
+                                                                   })
+                                                               }}
+                                                               name={"email_description"}
+                                                               onBlur={onBlur}
+                                                               error={backInStockEmailError.email_description}
+                                                               helpText={"Add this {{shop_name}} {{product_name}} {{shop_url}} {{product_url}} variable"}/>
+                                                    <TextField label={'"Add to cart" label'}
+                                                               value={backInStockEmail.bis_content.add_to_cart_button_text}
+                                                               onChange={(value) => {
+                                                                   bisOnChangeContent({
+                                                                       target: {
+                                                                           name: "add_to_cart_button_text",
+                                                                           value
+                                                                       }
+                                                                   })
+                                                               }}
+                                                               name={"add_to_cart_button_text"}
+                                                               onBlur={onBlur}
+                                                               error={backInStockEmailError.add_to_cart_button_text}
+                                                    />
+                                                    <TextField label={'"Visit product" label'}
+                                                               value={backInStockEmail.bis_content.view_product_button_text}
+                                                               onChange={(value) => {
+                                                                   bisOnChangeContent({
+                                                                       target: {
+                                                                           name: "view_product_button_text",
+                                                                           value
+                                                                       }
+                                                                   })
+                                                               }}
+                                                               name={"view_product_button_text"}
+                                                               onBlur={onBlur}
+                                                               error={backInStockEmailError.view_product_button_text}
+                                                    />
+                                                    <Checkbox
+                                                        label="Discount code"
+                                                        checked={checkDiscount}
+                                                        onChange={() => setCheckDiscount(!checkDiscount)}
+                                                    />
+                                                    {checkDiscount &&
 
-                                                />
-                                            </FormLayout.Group>
-                                            <FormLayout.Group condensed>
-                                                <TextField label="Top & Bottom padding"
-                                                           type="number"
-                                                           value={backInStockEmail.bis_style.add_to_cart_btn_vertical_padding}
-                                                           onChange={(value) => bisOnChangeStyle({
-                                                               target: {
-                                                                   name: "add_to_cart_btn_vertical_padding",
-                                                                   value
-                                                               }
-                                                           })}
-                                                           suffix="PX"
-                                                />
-                                                <TextField label="Left & Right padding"
-                                                           type="number"
-                                                           value={backInStockEmail.bis_style.add_to_cart_btn_horizontal_padding}
-                                                           onChange={(value) => bisOnChangeStyle({
-                                                               target: {
-                                                                   name: "add_to_cart_btn_horizontal_padding",
-                                                                   value
-                                                               }
-                                                           })}
-                                                           suffix="PX"
-                                                />
-                                            </FormLayout.Group>
-                                            </BlockStack>
-                                        </FormLayout>
-                                            </Bleed>
-                                        </Box>
+                                                    <TextField label={"Discount description"}
+                                                               value={backInStockEmail.bis_content.discount_code}
+                                                               onChange={(value) => {
+                                                                   bisOnChangeContent({
+                                                                       target: {
+                                                                           name: "discount_code",
+                                                                           value
+                                                                       }
+                                                                   })
+                                                               }}
+                                                    />
+                                                    }
+                                                </FormLayout>
+                                            </Box>
+                                    }
+                                    {
+                                        selected === 1 &&
+                                            <Box padding={"400"} paddingBlockStart={"200"}>
+                                                <FormLayout>
+                                                    <FormLayout.Group>
+                                                        <TextField label={"Social networks title"}
+                                                                   value={backInStockEmail.bis_social.title}
+                                                                   onChange={(value) => {
+                                                                       bisOnChangeSocial({
+                                                                           target: {
+                                                                               name: "title",
+                                                                               value
+                                                                           }
+                                                                       })
+                                                                   }}
+                                                        />
+                                                    </FormLayout.Group>
+                                                    <FormLayout.Group condensed>
+                                                        <TextField label={"Instagram"} prefix={"@"}
+                                                                   value={backInStockEmail.bis_social.instagram}
+                                                                   onChange={(value) => {
+                                                                       bisOnChangeSocial({
+                                                                           target: {
+                                                                               name: "instagram",
+                                                                               value
+                                                                           }
+                                                                       })
+                                                                   }}
+                                                        />
+                                                        <TextField label={"Facebook"} prefix={"@"}
+                                                                   value={backInStockEmail.bis_social.facebook}
+                                                                   onChange={(value) => {
+                                                                       bisOnChangeSocial({
+                                                                           target: {
+                                                                               name: "facebook",
+                                                                               value
+                                                                           }
+                                                                       })
+                                                                   }}
+                                                        />
+                                                    </FormLayout.Group>
+                                                    <FormLayout.Group condensed>
+                                                        <TextField label={"Twitter"} prefix={"@"}
+                                                                   value={backInStockEmail.bis_social.twitter}
+                                                                   onChange={(value) => {
+                                                                       bisOnChangeSocial({
+                                                                           target: {
+                                                                               name: "twitter",
+                                                                               value
+                                                                           }
+                                                                       })
+                                                                   }}
+                                                        />
+                                                        <TextField label={"Telegram"} prefix={"@"}
+                                                                   value={backInStockEmail.bis_social.telegram}
+                                                                   onChange={(value) => {
+                                                                       bisOnChangeSocial({
+                                                                           target: {
+                                                                               name: "telegram",
+                                                                               value
+                                                                           }
+                                                                       })
+                                                                   }}
+                                                        />
+                                                    </FormLayout.Group>
+                                                    <FormLayout.Group condensed>
+                                                        <TextField label={"Linkedin"}
+                                                                   value={backInStockEmail.bis_social.linkedin}
+                                                                   onChange={(value) => {
+                                                                       bisOnChangeSocial({
+                                                                           target: {
+                                                                               name: "linkedin",
+                                                                               value
+                                                                           }
+                                                                       })
+                                                                   }}
+                                                        />
+                                                        <TextField label={"Pinterest"}
+                                                                   value={backInStockEmail.bis_social.pinterest}
+                                                                   onChange={(value) => {
+                                                                       bisOnChangeSocial({
+                                                                           target: {
+                                                                               name: "pinterest",
+                                                                               value
+                                                                           }
+                                                                       })
+                                                                   }}
+                                                        />
+                                                    </FormLayout.Group>
+                                                </FormLayout>
+                                            </Box>
+
+                                    }
+                                    {
+                                        selected === 2 &&
+                                        <Fragment>
+                                            <Box padding={"400"} paddingBlockStart={"200"}>
+                                                <BlockStack gap={"200"}>
+                                                    <Text as={"h3"} fontWeight={"medium"}>Email logo</Text>
+                                                    <FormLayout>
+                                                        <FormLayout.Group condensed>
+                                                            <RadioButton
+                                                                label="Logo"
+                                                                id="disabled"
+                                                                checked={backInStockEmail.bis_branding_type == '2'}
+                                                                onChange={() => handleChange({
+                                                                    target: {
+                                                                        name: "bis_branding_type",
+                                                                        value: "2"
+                                                                    }
+                                                                })}
+                                                            />
+                                                            <RadioButton
+                                                                label={"Store Name"}
+                                                                id="optional"
+                                                                checked={backInStockEmail.bis_branding_type == '1'}
+                                                                onChange={() => handleChange({
+                                                                    target: {
+                                                                        name: "bis_branding_type",
+                                                                        value: "1"
+                                                                    }
+                                                                })}
+                                                            />
+                                                            <RadioButton
+                                                                label={"Both"}
+                                                                id="both"
+                                                                checked={backInStockEmail.bis_branding_type == '3'}
+                                                                onChange={() => handleChange({
+                                                                    target: {
+                                                                        name: "bis_branding_type",
+                                                                        value: "3"
+                                                                    }
+                                                                })}
+                                                            />
+                                                        </FormLayout.Group>
+                                                        {(backInStockEmail.bis_branding_type == '2' || backInStockEmail.bis_branding_type == '3') &&
+                                                        <div style={{width: 58, height: 58}}>
+                                                            <DropZone
+                                                                accept=".jpg,.png,.jpeg"
+                                                                allowMultiple={false}
+                                                                onDrop={handleDropZoneDrop}
+                                                            >
+                                                                {uploadedFiles}
+                                                                {fileUpload}
+                                                            </DropZone>
+                                                        </div>
+                                                        }
+                                                    </FormLayout>
+                                                </BlockStack>
+                                            </Box>
                                             <Divider />
-                                        <Box padding={"500"}>
-                                        <Text as={"h3"} fontWeight={"medium"}>View Product Button customization</Text>
-                                            <Bleed marginInlineStart={"200"}>
-                                        <FormLayout>
-                                            <BlockStack gap={500}>
-                                            <FormLayout.Group condensed>
-                                                <ColorInput label={"Button Background color"}
-                                                            name="view_product_btn_bg_color"
-                                                            onChange={bisOnChangeStyle}
-                                                            value={backInStockEmail.bis_style.view_product_btn_bg_color}/>
-                                                <ColorInput label={"Button Text color"}
-                                                            name="view_product_btn_text_color"
-                                                            onChange={bisOnChangeStyle}
-                                                            value={backInStockEmail.bis_style.view_product_btn_text_color}/>
-                                            </FormLayout.Group>
-                                            <FormLayout.Group condensed>
-                                                <ColorInput label={"Button Border color"}
-                                                            name="view_product_btn_border_color"
-                                                            onChange={bisOnChangeStyle}
-                                                            value={backInStockEmail.bis_style.view_product_btn_border_color}/>
-                                                <TextField label={"Border Width"}
-                                                           value={backInStockEmail.bis_style.view_product_btn_border_size}
-                                                           type="number"
-                                                           suffix="PX"
-                                                           onChange={(value) => {
-                                                               bisOnChangeStyle({
-                                                                   target: {
-                                                                       name: "view_product_btn_border_size",
-                                                                       value
-                                                                   }
-                                                               })
-                                                           }}
+                                            <Box padding={"400"}>
+                                                <BlockStack gap={"200"}>
+                                                    <Text as={"h3"} fontWeight={"medium"}>Email body customization</Text>
+                                                    <FormLayout>
+                                                        <FormLayout.Group condensed>
+                                                            <Select label={"Text color theme"} options={theme}
+                                                                    value={backInStockEmail.bis_style.theme}
+                                                                    onChange={(value) => {
+                                                                        bisOnChangeStyle({
+                                                                            target: {
+                                                                                name: "theme",
+                                                                                value
+                                                                            }
+                                                                        })
+                                                                    }}
+                                                            />
+                                                            <Select label={"Font family"}
+                                                                    options={fontFamily}
+                                                                    value={backInStockEmail.bis_style.font_family}
+                                                                    onChange={(value) => {
+                                                                        bisOnChangeStyle({
+                                                                            target: {
+                                                                                name: "font_family",
+                                                                                value
+                                                                            }
+                                                                        })
+                                                                    }}
+                                                            />
+                                                        </FormLayout.Group>
+                                                        <FormLayout.Group condensed>
+                                                            <ColorInput label={"Background color"} name="background_color"
+                                                                        onChange={bisOnChangeStyle}
+                                                                        value={backInStockEmail.bis_style.background_color}/>
+                                                            <TextField type={"number"} label={"Email title font size"} suffix={"Px"}
+                                                                       value={backInStockEmail.bis_style.title_font_size}
+                                                                       onChange={(value) => {
+                                                                           bisOnChangeStyle({
+                                                                               target: {
+                                                                                   name: "title_font_size",
+                                                                                   value
+                                                                               }
+                                                                           })
+                                                                       }}
+                                                            />
+                                                        </FormLayout.Group>
+                                                        <FormLayout.Group condensed>
+                                                            <TextField type={"number"} label={"Email description font size"} suffix={"Px"} value={backInStockEmail.bis_style.description_font_size} onChange={(value) => {
+                                                                bisOnChangeStyle({
+                                                                    target: {
+                                                                        name: "description_font_size",
+                                                                        value
+                                                                    }
+                                                                })
+                                                            }}/>
+                                                            {checkDiscount ? <TextField label={"Discount font size"} suffix={"Px"} type="number" value={backInStockEmail.bis_style.discount_font_size} onChange={(value) => {
+                                                                bisOnChangeStyle({
+                                                                    target: {
+                                                                        name: "discount_font_size",
+                                                                        value
+                                                                    }
+                                                                })
+                                                            }}/> : <div/>}
+                                                        </FormLayout.Group>
+                                                    </FormLayout>
+                                                </BlockStack>
+                                            </Box>
+                                            <Divider  />
+                                            <Box padding={"400"}>
+                                                <BlockStack gap={"200"}>
+                                                    <Text as={"h3"} fontWeight={"medium"}>Add to Cart Button customization</Text>
+                                                    <FormLayout>
+                                                        <FormLayout.Group condensed>
+                                                            <ColorInput label={"Button Background color"}
+                                                                        name="add_to_cart_btn_bg_color"
+                                                                        onChange={bisOnChangeStyle}
+                                                                        value={backInStockEmail.bis_style.add_to_cart_btn_bg_color}/>
+                                                            <ColorInput label={"Button Text color"}
+                                                                        name="add_to_cart_btn_text_color"
+                                                                        onChange={bisOnChangeStyle}
+                                                                        value={backInStockEmail.bis_style.add_to_cart_btn_text_color}/>
+                                                        </FormLayout.Group>
+                                                        <FormLayout.Group condensed>
+                                                            <ColorInput label={"Button Border color"}
+                                                                        name="add_to_cart_btn_border_color"
+                                                                        onChange={bisOnChangeStyle}
+                                                                        value={backInStockEmail.bis_style.add_to_cart_btn_border_color}/>
+                                                            <TextField label={"Border Width"}
+                                                                       value={backInStockEmail.bis_style.add_to_cart_btn_border_size}
+                                                                       type="number"
+                                                                       suffix="PX"
+                                                                       onChange={(value) => {
+                                                                           bisOnChangeStyle({
+                                                                               target: {
+                                                                                   name: "add_to_cart_btn_border_size",
+                                                                                   value
+                                                                               }
+                                                                           })
+                                                                       }}
 
-                                                />
-                                            </FormLayout.Group>
-                                            <FormLayout.Group condensed>
-                                                <TextField label="Top & Bottom padding"
-                                                           type="number"
-                                                           value={backInStockEmail.bis_style.view_product_btn_vertical_padding}
-                                                           onChange={(value) => bisOnChangeStyle({
-                                                               target: {
-                                                                   name: "view_product_btn_vertical_padding",
-                                                                   value
-                                                               }
-                                                           })}
-                                                           suffix="PX"
-                                                />
-                                                <TextField label="Left & Right padding"
-                                                           type="number"
-                                                           value={backInStockEmail.bis_style.view_product_btn_horizontal_padding}
-                                                           onChange={(value) => bisOnChangeStyle({
-                                                               target: {
-                                                                   name: "view_product_btn_horizontal_padding",
-                                                                   value
-                                                               }
-                                                           })}
-                                                           suffix="PX"
-                                                />
-                                            </FormLayout.Group>
+                                                            />
+                                                        </FormLayout.Group>
+                                                        <FormLayout.Group condensed>
+                                                            <TextField label="Top & Bottom padding"
+                                                                       type="number"
+                                                                       value={backInStockEmail.bis_style.add_to_cart_btn_vertical_padding}
+                                                                       onChange={(value) => bisOnChangeStyle({
+                                                                           target: {
+                                                                               name: "add_to_cart_btn_vertical_padding",
+                                                                               value
+                                                                           }
+                                                                       })}
+                                                                       suffix="PX"
+                                                            />
+                                                            <TextField label="Left & Right padding"
+                                                                       type="number"
+                                                                       value={backInStockEmail.bis_style.add_to_cart_btn_horizontal_padding}
+                                                                       onChange={(value) => bisOnChangeStyle({
+                                                                           target: {
+                                                                               name: "add_to_cart_btn_horizontal_padding",
+                                                                               value
+                                                                           }
+                                                                       })}
+                                                                       suffix="PX"
+                                                            />
+                                                        </FormLayout.Group>
+                                                    </FormLayout>
+                                                </BlockStack>
+                                            </Box>
+                                            <Divider />
+                                            <Box padding={"400"}>
+                                                <BlockStack gap={"200"}>
+                                                    <Text as={"h3"} fontWeight={"medium"}>View Product Button customization</Text>
+                                                    <FormLayout>
+                                                        <FormLayout.Group condensed>
+                                                            <ColorInput label={"Button Background color"}
+                                                                        name="view_product_btn_bg_color"
+                                                                        onChange={bisOnChangeStyle}
+                                                                        value={backInStockEmail.bis_style.view_product_btn_bg_color}/>
+                                                            <ColorInput label={"Button Text color"}
+                                                                        name="view_product_btn_text_color"
+                                                                        onChange={bisOnChangeStyle}
+                                                                        value={backInStockEmail.bis_style.view_product_btn_text_color}/>
+                                                        </FormLayout.Group>
+                                                        <FormLayout.Group condensed>
+                                                            <ColorInput label={"Button Border color"}
+                                                                        name="view_product_btn_border_color"
+                                                                        onChange={bisOnChangeStyle}
+                                                                        value={backInStockEmail.bis_style.view_product_btn_border_color}/>
+                                                            <TextField label={"Border Width"}
+                                                                       value={backInStockEmail.bis_style.view_product_btn_border_size}
+                                                                       type="number"
+                                                                       suffix="PX"
+                                                                       onChange={(value) => {
+                                                                           bisOnChangeStyle({
+                                                                               target: {
+                                                                                   name: "view_product_btn_border_size",
+                                                                                   value
+                                                                               }
+                                                                           })
+                                                                       }}
+
+                                                            />
+                                                        </FormLayout.Group>
+                                                        <FormLayout.Group condensed>
+                                                            <TextField label="Top & Bottom padding"
+                                                                       type="number"
+                                                                       value={backInStockEmail.bis_style.view_product_btn_vertical_padding}
+                                                                       onChange={(value) => bisOnChangeStyle({
+                                                                           target: {
+                                                                               name: "view_product_btn_vertical_padding",
+                                                                               value
+                                                                           }
+                                                                       })}
+                                                                       suffix="PX"
+                                                            />
+                                                            <TextField label="Left & Right padding"
+                                                                       type="number"
+                                                                       value={backInStockEmail.bis_style.view_product_btn_horizontal_padding}
+                                                                       onChange={(value) => bisOnChangeStyle({
+                                                                           target: {
+                                                                               name: "view_product_btn_horizontal_padding",
+                                                                               value
+                                                                           }
+                                                                       })}
+                                                                       suffix="PX"
+                                                            />
+                                                        </FormLayout.Group>
+                                                    </FormLayout>
+                                                </BlockStack>
+                                            </Box>
+                                        </Fragment>
+                                    }
+                                </Card>
+                            </BlockStack> : ""
+                        }
+                        {
+                            selectedEmailTab === 1 ? <Card padding={"0"}>
+                                <Box padding={"400"}>
+                                    <BlockStack gap={400}>
+                                        <InlineStack gap={400}>
+                                            <div className="email-logo-preview">{Icons.email}</div>
+                                            <BlockStack>
+                                                <Text variant={"bodyLg"}>
+                                                    {backInStockEmail.bis_content.email_subject}
+                                                </Text>
+                                                <BlockStack>
+                                                    <Text as={"h3"}
+                                                          fontWeight={"bold"}>{shopDetails && shopDetails.store_name}</Text>
+                                                    <Text>{backInStockEmail.bis_from_mail}</Text>
+                                                </BlockStack>
                                             </BlockStack>
-                                        </FormLayout>
-                                            </Bleed>
-                                        </Box>
-                                </Fragment>
-                            }
-                        </Card>
+                                        </InlineStack>
+                                    </BlockStack>
+                                </Box>
+                                <Divider />
+                                <Box padding={"400"}>
+                                    <BlockStack>
+                                        <div className="email-template-live-preview-wrapper">
+                                            <div className="email-template-body"
+                                                 style={{fontFamily: backInStockEmail.bis_style.font_family}}>
+                                                <table width="100%" border={0} cellSpacing={0} cellPadding={0}
+                                                       style={{borderCollapse: 'collapse'}}>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td align="center">
+                                                            <table className="template-table" border={0} cellSpacing={0}
+                                                                   cellPadding={0} style={{
+                                                                margin: '0px auto',
+                                                                maxWidth: '470px',
+                                                                borderCollapse: 'collapse'
+                                                            }}>
+                                                                <thead>
+                                                                <tr className="shop-branding-wrapper">
+                                                                    <th className="shop-branding" style={{
+                                                                        backgroundColor: backInStockEmail.bis_style.background_color,
+                                                                        borderRadius: '10px 10px 0px 0px',
+                                                                        color: 'rgb(32, 34, 35)',
+                                                                        fontSize: '24px',
+                                                                        fontWeight: 'bold',
+                                                                        lineHeight: '28px',
+                                                                        height: '70px',
+                                                                        textAlign: 'center',
+                                                                        paddingTop: '20px',
+                                                                    }}>
+                                                                        {
+                                                                            backInStockEmail.bis_branding_type == "2" ?
+                                                                                <Fragment>{selectedBISLogo && selectedBISLogo.name ?
+                                                                                    <img
+                                                                                        src={selectedBISLogo ? URL.createObjectURL(selectedBISLogo) : ""}
+                                                                                        alt="logo"
+                                                                                        style={{maxHeight: '50px'}}/> :
+                                                                                    backInStockEmail.bis_logo ?
+                                                                                        <img src={backInStockEmail.bis_logo}
+                                                                                             alt="logo"
+                                                                                             style={{maxHeight: '50px'}}/> :
+                                                                                        <img src={""} alt="logo"
+                                                                                             style={{maxHeight: '50px'}}/>}</Fragment> :
+                                                                                backInStockEmail.bis_branding_type == "1" ? shopDetails && shopDetails.store_name :
+                                                                                    <Fragment>{selectedBISLogo?.name ?
+                                                                                        <img
+                                                                                            src={selectedBISLogo ? URL.createObjectURL(selectedBISLogo) : ""}
+                                                                                            alt="logo"
+                                                                                            style={{maxHeight: '50px'}}/> :
+                                                                                        backInStockEmail.bis_logo ?
+                                                                                            <img src={backInStockEmail.bis_logo}
+                                                                                                 alt="logo"
+                                                                                                 style={{maxHeight: '50px'}}/> :
+                                                                                            <img src={""} alt="logo"
+                                                                                                 style={{maxHeight: '50px'}}/>}&nbsp; {shopDetails && shopDetails.store_name}
+                                                                                    </Fragment>
+                                                                        }
+                                                                    </th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody className="template-body" style={{
+                                                                    backgroundColor: backInStockEmail.bis_style.background_color,
+                                                                    border: '30px solid transparent'
+                                                                }}>
+                                                                <tr className="title-wrapper">
+                                                                    <td className="title color-text-primary" style={{
+                                                                        fontSize: `${backInStockEmail.bis_style.title_font_size}px`,
+                                                                        lineHeight: '32px',
+                                                                        color: backInStockEmail.bis_style.theme == "1" ? 'rgb(93, 99, 102)' : 'rgb(186, 198, 204)',
+                                                                        fontWeight: 400,
+                                                                        whiteSpace: 'pre-line'
+                                                                    }}>
+                                                                        {backInStockEmail.bis_content.email_title}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr className="description-wrapper">
+                                                                    <td className="description color-text-secondary" style={{
+                                                                        fontSize: `${backInStockEmail.bis_style.description_font_size}px`,
+                                                                        lineHeight: '28px',
+                                                                        paddingTop: '40px',
+                                                                        color: backInStockEmail.bis_style.theme == "1" ? 'rgb(93, 99, 102)' : 'rgb(186, 198, 204)',
+                                                                        whiteSpace: 'pre-line'
+                                                                    }}>
+                                                                        {backInStockEmail.bis_content.email_description}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr className="discount-wrapper">
+                                                                    <td className="discount color-text-secondary" colSpan={3}
+                                                                        style={{
+                                                                            whiteSpace: 'pre-line',
+                                                                            fontSize: `${backInStockEmail.bis_style.discount_font_size}px`,
+                                                                            paddingTop: '20px',
+                                                                            lineHeight: '20px',
+                                                                            color: backInStockEmail.bis_style.theme == "1" ? 'rgb(93, 99, 102)' : 'rgb(186, 198, 204)',
+                                                                            display: checkDiscount === true ? "block" : 'none'
+                                                                        }}>{backInStockEmail.bis_content.discount_code}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td className="product-image" style={{paddingTop: '20px'}}>
+                                                                        <div style={{
+                                                                            width: '100%',
+                                                                            height: '100%',
+                                                                            borderRadius: '10px',
+                                                                            border: '1px solid rgb(201, 202, 204)'
+                                                                        }}>
+                                                                            <img
+                                                                                src="https://wishlist.thimatic-apps.com/assets/images/product3.jpg"
+                                                                                alt="Dacia blouse" width={470} style={{
+                                                                                display: 'block',
+                                                                                margin: 'auto',
+                                                                                maxWidth: '100%',
+                                                                                borderRadius: '10px'
+                                                                            }}/>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr className="product-price-wrapper">
+                                                                    <td className="product-price" style={{
+                                                                        paddingTop: '8px',
+                                                                        fontWeight: 500,
+                                                                        fontSize: '18px',
+                                                                        lineHeight: '24px',
+                                                                        color: 'rgb(32, 34, 35)',
+                                                                        display: 'revert'
+                                                                    }}>
+                                                                        ₹179.00
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style={{paddingTop: '20px'}}>
+                                                                        <a className="buy-action-url bg-primary"
+                                                                           style={{
+                                                                               backgroundColor: backInStockEmail.bis_style.add_to_cart_btn_bg_color,
+                                                                               color: backInStockEmail.bis_style.add_to_cart_btn_text_color,
+                                                                               boxSizing: 'border-box',
+                                                                               borderRadius: '10px',
+                                                                               display: 'block',
+                                                                               fontSize: '18px',
+                                                                               fontWeight: 600,
+                                                                               lineHeight: '20px',
+                                                                               padding: `${backInStockEmail.bis_style.add_to_cart_btn_vertical_padding}px ${backInStockEmail.bis_style.add_to_cart_btn_horizontal_padding}px`,
+                                                                               textAlign: 'center',
+                                                                               textDecoration: 'none',
+                                                                               border: `${backInStockEmail.bis_style.add_to_cart_btn_border_size}px solid ${backInStockEmail.bis_style.add_to_cart_btn_border_color}`
+                                                                           }}>{backInStockEmail.bis_content.add_to_cart_button_text}</a>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style={{paddingTop: '20px'}}>
+                                                                        <a className="visit-action-url color-primary border-primary"
+                                                                           style={{
+                                                                               backgroundColor: backInStockEmail.bis_style.view_product_btn_bg_color,
+                                                                               color: backInStockEmail.bis_style.view_product_btn_text_color,
+                                                                               border: `${backInStockEmail.bis_style.view_product_btn_border_size}px solid ${backInStockEmail.bis_style.view_product_btn_border_color}`,
+                                                                               boxSizing: 'border-box',
+                                                                               borderRadius: '10px',
+                                                                               display: 'block',
+                                                                               fontSize: '18px',
+                                                                               fontWeight: 600,
+                                                                               lineHeight: '20px',
+                                                                               padding: `${backInStockEmail.bis_style.view_product_btn_vertical_padding}px ${backInStockEmail.bis_style.view_product_btn_horizontal_padding}px`,
+                                                                               textAlign: 'center',
+                                                                               textDecoration: 'none'
+                                                                           }}>{backInStockEmail.bis_content.view_product_button_text}</a>
+                                                                    </td>
+                                                                </tr>
+                                                                {
+                                                                    (backInStockEmail.bis_social.instagram !== null && backInStockEmail.bis_social.instagram !== "") ||
+                                                                    (backInStockEmail.bis_social.facebook !== null && backInStockEmail.bis_social.facebook !== "") ||
+                                                                    (backInStockEmail.bis_social.twitter !== null && backInStockEmail.bis_social.twitter !== "") ||
+                                                                    (backInStockEmail.bis_social.telegram !== null && backInStockEmail.bis_social.telegram !== "") ||
+                                                                    (backInStockEmail.bis_social.linkedin !== null && backInStockEmail.bis_social.linkedin !== "") ||
+                                                                    (backInStockEmail.bis_social.pinterest !== null && backInStockEmail.bis_social.pinterest !== "") ?
+                                                                        <React.Fragment>
+                                                                            <tr className="social-text-wrapper">
+                                                                                <td colSpan={3}
+                                                                                    className="social-text color-text-tertiary"
+                                                                                    style={{
+                                                                                        display: (backInStockEmail.bis_social.instagram !== null && backInStockEmail.bis_social.instagram !== "") ||
+                                                                                        (backInStockEmail.bis_social.facebook !== null && backInStockEmail.bis_social.facebook !== "") ||
+                                                                                        (backInStockEmail.bis_social.twitter !== null && backInStockEmail.bis_social.twitter !== "") ||
+                                                                                        (backInStockEmail.bis_social.telegram !== null && backInStockEmail.bis_social.telegram !== "") ||
+                                                                                        (backInStockEmail.bis_social.linkedin !== null && backInStockEmail.bis_social.linkedin !== "") ||
+                                                                                        (backInStockEmail.bis_social.pinterest !== null && backInStockEmail.bis_social.pinterest !== "")
+                                                                                            ? "block" : 'none',
+                                                                                        fontWeight: 400,
+                                                                                        fontSize: '16px',
+                                                                                        textAlign: 'center',
+                                                                                        color: 'rgb(116, 124, 128)',
+                                                                                        paddingBottom: '10px',
+                                                                                        paddingTop: '30px'
+                                                                                    }}>{backInStockEmail.bis_social.title}</td>
+                                                                            </tr>
+                                                                            <tr className="social-networks-wrapper">
+                                                                                <td className="social-networks"
+                                                                                    style={{textAlign: 'center'}}>
+                                                                                    <button className="instagram bg-secondary"
+                                                                                            style={{
+                                                                                                border: 'none',
+                                                                                                boxSizing: 'border-box',
+                                                                                                display: backInStockEmail.bis_social.instagram !== null && backInStockEmail?.bis_social?.instagram.trim() !== "" ? "inline-block" : 'none',
+                                                                                                margin: '0px 12px',
+                                                                                                backgroundColor: backInStockEmail.bis_style.add_to_cart_btn_bg_color,
+                                                                                                width: '24px',
+                                                                                                height: '24px',
+                                                                                                borderRadius: '50%'
+                                                                                            }}><img
+                                                                                        src="https://storage.googleapis.com/static.shopgram.io/restock-icons/instagram.png"
+                                                                                        width={12} alt="instagram"/></button>
+                                                                                    <button className="facebook bg-secondary"
+                                                                                            style={{
+                                                                                                border: 'none',
+                                                                                                boxSizing: 'border-box',
+                                                                                                display: backInStockEmail.bis_social.facebook !== null && backInStockEmail.bis_social.facebook.trim() !== "" ? "inline-block" : 'none',
+                                                                                                margin: '0px 12px',
+                                                                                                backgroundColor: backInStockEmail.bis_style.add_to_cart_btn_bg_color,
+                                                                                                width: '24px',
+                                                                                                height: '24px',
+                                                                                                borderRadius: '50%'
+                                                                                            }}><img
+                                                                                        src="https://storage.googleapis.com/static.shopgram.io/restock-icons/facebook.png"
+                                                                                        width={12} alt="facebook"/></button>
+                                                                                    <button className="twitter bg-secondary"
+                                                                                            style={{
+                                                                                                border: 'none',
+                                                                                                boxSizing: 'border-box',
+                                                                                                display: backInStockEmail.bis_social.twitter !== null && backInStockEmail.bis_social.twitter.trim() !== "" ? "inline-block" : 'none',
+                                                                                                margin: '0px 12px',
+                                                                                                backgroundColor: backInStockEmail.bis_style.add_to_cart_btn_bg_color,
+                                                                                                width: '24px',
+                                                                                                height: '24px',
+                                                                                                borderRadius: '50%'
+                                                                                            }}><img
+                                                                                        src="https://storage.googleapis.com/static.shopgram.io/restock-icons/twitter.png"
+                                                                                        width={12} alt="twitter"/></button>
+                                                                                    <button className="telegram bg-secondary"
+                                                                                            style={{
+                                                                                                border: 'none',
+                                                                                                boxSizing: 'border-box',
+                                                                                                display: backInStockEmail.bis_social.telegram !== null && backInStockEmail.bis_social.telegram.trim() !== "" ? "inline-block" : 'none',
+                                                                                                margin: '0px 12px',
+                                                                                                backgroundColor: backInStockEmail.bis_style.add_to_cart_btn_bg_color,
+                                                                                                width: '24px',
+                                                                                                height: '24px',
+                                                                                                borderRadius: '50%'
+                                                                                            }}><img
+                                                                                        src="https://storage.googleapis.com/static.shopgram.io/restock-icons/telegram.png"
+                                                                                        width={12} alt="telegram"/></button>
+                                                                                    <button className="linkedin bg-secondary"
+                                                                                            style={{
+                                                                                                border: 'none',
+                                                                                                boxSizing: 'border-box',
+                                                                                                display: backInStockEmail.bis_social.linkedin !== null && backInStockEmail.bis_social.linkedin.trim() !== "" ? "inline-block" : 'none',
+                                                                                                margin: '0px 12px',
+                                                                                                backgroundColor: backInStockEmail.bis_style.add_to_cart_btn_bg_color,
+                                                                                                width: '24px',
+                                                                                                height: '24px',
+                                                                                                borderRadius: '50%'
+                                                                                            }}><img
+                                                                                        src="https://storage.googleapis.com/static.shopgram.io/restock-icons/linkedin.png"
+                                                                                        width={12} alt="linkedin"/></button>
+                                                                                    <button className="pinterest bg-secondary"
+                                                                                            style={{
+                                                                                                border: 'none',
+                                                                                                boxSizing: 'border-box',
+                                                                                                display: backInStockEmail.bis_social.pinterest !== null && backInStockEmail.bis_social.pinterest.trim() !== "" ? "inline-block" : 'none',
+                                                                                                margin: '0px 12px',
+                                                                                                backgroundColor: backInStockEmail.bis_style.add_to_cart_btn_bg_color,
+                                                                                                width: '24px',
+                                                                                                height: '24px',
+                                                                                                borderRadius: '50%'
+                                                                                            }}><img
+                                                                                        src="https://storage.googleapis.com/static.shopgram.io/restock-icons/pinterest.png"
+                                                                                        width={12} alt="pinterest"/></button>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </React.Fragment>
+                                                                        :
+                                                                        null
+                                                                }
+
+                                                                {/*<tr>*/}
+                                                                {/*    <td className="footer color-text-tertiary" style={{*/}
+                                                                {/*        borderTop: '1px solid rgb(201, 202, 204)',*/}
+                                                                {/*        fontWeight: 400,*/}
+                                                                {/*        color: backInStockEmail.bis_style.theme == "1" ? 'rgb(93, 99, 102)' : 'rgb(186, 198, 204)',*/}
+                                                                {/*        fontSize: '12px',*/}
+                                                                {/*        lineHeight: '16px',*/}
+                                                                {/*        height: '45px',*/}
+                                                                {/*        textAlign: 'center',*/}
+                                                                {/*        paddingTop: '8px',*/}
+                                                                {/*        borderBottomRightRadius: '10px',*/}
+                                                                {/*        borderBottomLeftRadius: '10px'*/}
+                                                                {/*    }}>*/}
+                                                                {/*        You are receiving this email because you requested a*/}
+                                                                {/*        back in*/}
+                                                                {/*        stock notification*/}
+                                                                {/*        on {shopDetails && shopDetails.store_name}.*/}
+                                                                {/*    </td>*/}
+                                                                {/*</tr>*/}
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                                {/*<p className="unsubscribe-link" style={{textAlign: 'center'}}>If you'd like to*/}
+                                                {/*    unsubscribe and stop receiving these emails from this shop click <a>here</a>.*/}
+                                                {/*</p>*/}
+                                            </div>
+                                        </div>
+                                    </BlockStack>
+                                </Box>
+                            </Card> : ""
+                        }
                         </BlockStack>
                     </Layout.Section>
-                    <Layout.Section variant={"oneHalf"}>
-                        <Card padding={"0"}>
-                            <Box padding={"500"}>
-                                <BlockStack gap={400}>
-                                    <InlineStack gap={400}>
-                                    <div className="email-logo-preview">{Icons.email}</div>
-                                    <BlockStack>
-                                        <Text variant={"bodyLg"}>
-                                            {backInStockEmail.bis_content.email_subject}
-                                        </Text>
-                                        <BlockStack>
-                                            <Text as={"h3"}
-                                                  fontWeight={"bold"}>{shopDetails && shopDetails.store_name}</Text>
-                                            <Text>{backInStockEmail.bis_from_mail}</Text>
-                                        </BlockStack>
-                                    </BlockStack>
-                                    </InlineStack>
-                                </BlockStack>
-                            </Box>
-                            <Divider />
-                            <BlockStack>
-                                <div className="email-template-live-preview-wrapper">
-                                    <div className="email-template-body"
-                                         style={{fontFamily: backInStockEmail.bis_style.font_family}}>
-                                        <table width="100%" border={0} cellSpacing={0} cellPadding={0}
-                                               style={{borderCollapse: 'collapse'}}>
-                                            <tbody>
-                                            <tr>
-                                                <td align="center">
-                                                    <table className="template-table" border={0} cellSpacing={0}
-                                                           cellPadding={0} style={{
-                                                        margin: '0px auto',
-                                                        maxWidth: '470px',
-                                                        borderCollapse: 'collapse'
-                                                    }}>
-                                                        <thead>
-                                                        <tr className="shop-branding-wrapper">
-                                                            <th className="shop-branding" style={{
-                                                                backgroundColor: backInStockEmail.bis_style.background_color,
-                                                                borderRadius: '10px 10px 0px 0px',
-                                                                color: 'rgb(32, 34, 35)',
-                                                                fontSize: '24px',
-                                                                fontWeight: 'bold',
-                                                                lineHeight: '28px',
-                                                                height: '70px',
-                                                                textAlign: 'center',
-                                                                paddingTop: '20px',
-                                                            }}>
-                                                                {
-                                                                    backInStockEmail.bis_branding_type == "2" ?
-                                                                        <Fragment>{selectedBISLogo && selectedBISLogo.name ?
-                                                                            <img
-                                                                                src={selectedBISLogo ? URL.createObjectURL(selectedBISLogo) : ""}
-                                                                                alt="logo"
-                                                                                style={{maxHeight: '50px'}}/> :
-                                                                            backInStockEmail.bis_logo ?
-                                                                                <img src={backInStockEmail.bis_logo}
-                                                                                     alt="logo"
-                                                                                     style={{maxHeight: '50px'}}/> :
-                                                                                <img src={""} alt="logo"
-                                                                                     style={{maxHeight: '50px'}}/>}</Fragment> :
-                                                                        backInStockEmail.bis_branding_type == "1" ? shopDetails && shopDetails.store_name :
-                                                                            <Fragment>{selectedBISLogo?.name ?
-                                                                                <img
-                                                                                    src={selectedBISLogo ? URL.createObjectURL(selectedBISLogo) : ""}
-                                                                                    alt="logo"
-                                                                                    style={{maxHeight: '50px'}}/> :
-                                                                                backInStockEmail.bis_logo ?
-                                                                                    <img src={backInStockEmail.bis_logo}
-                                                                                         alt="logo"
-                                                                                         style={{maxHeight: '50px'}}/> :
-                                                                                    <img src={""} alt="logo"
-                                                                                         style={{maxHeight: '50px'}}/>}&nbsp; {shopDetails && shopDetails.store_name}
-                                                                            </Fragment>
-                                                                }
-                                                            </th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody className="template-body" style={{
-                                                            backgroundColor: backInStockEmail.bis_style.background_color,
-                                                            border: '30px solid transparent'
-                                                        }}>
-                                                        <tr className="title-wrapper">
-                                                            <td className="title color-text-primary" style={{
-                                                                fontSize: `${backInStockEmail.bis_style.title_font_size}px`,
-                                                                lineHeight: '32px',
-                                                                color: backInStockEmail.bis_style.theme == "1" ? 'rgb(93, 99, 102)' : 'rgb(186, 198, 204)',
-                                                                fontWeight: 400,
-                                                                whiteSpace: 'pre-line'
-                                                            }}>
-                                                                {backInStockEmail.bis_content.email_title}
-                                                            </td>
-                                                        </tr>
-                                                        <tr className="description-wrapper">
-                                                            <td className="description color-text-secondary" style={{
-                                                                fontSize: `${backInStockEmail.bis_style.description_font_size}px`,
-                                                                lineHeight: '28px',
-                                                                paddingTop: '40px',
-                                                                color: backInStockEmail.bis_style.theme == "1" ? 'rgb(93, 99, 102)' : 'rgb(186, 198, 204)',
-                                                                whiteSpace: 'pre-line'
-                                                            }}>
-                                                                {backInStockEmail.bis_content.email_description}
-                                                            </td>
-                                                        </tr>
-                                                        <tr className="discount-wrapper">
-                                                            <td className="discount color-text-secondary" colSpan={3}
-                                                                style={{
-                                                                    whiteSpace: 'pre-line',
-                                                                    fontSize: `${backInStockEmail.bis_style.discount_font_size}px`,
-                                                                    paddingTop: '20px',
-                                                                    lineHeight: '20px',
-                                                                    color: backInStockEmail.bis_style.theme == "1" ? 'rgb(93, 99, 102)' : 'rgb(186, 198, 204)',
-                                                                    display: checkDiscount === true ? "block" : 'none'
-                                                                }}>{backInStockEmail.bis_content.discount_code}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td className="product-image" style={{paddingTop: '20px'}}>
-                                                                <div style={{
-                                                                    width: '100%',
-                                                                    height: '100%',
-                                                                    borderRadius: '10px',
-                                                                    border: '1px solid rgb(201, 202, 204)'
-                                                                }}>
-                                                                    <img
-                                                                        src="https://wishlist.thimatic-apps.com/assets/images/product3.jpg"
-                                                                        alt="Dacia blouse" width={470} style={{
-                                                                        display: 'block',
-                                                                        margin: 'auto',
-                                                                        maxWidth: '100%',
-                                                                        borderRadius: '10px'
-                                                                    }}/>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr className="product-price-wrapper">
-                                                            <td className="product-price" style={{
-                                                                paddingTop: '8px',
-                                                                fontWeight: 500,
-                                                                fontSize: '18px',
-                                                                lineHeight: '24px',
-                                                                color: 'rgb(32, 34, 35)',
-                                                                display: 'revert'
-                                                            }}>
-                                                                ₹179.00
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td style={{paddingTop: '20px'}}>
-                                                                <a className="buy-action-url bg-primary"
-                                                                   style={{
-                                                                       backgroundColor: backInStockEmail.bis_style.add_to_cart_btn_bg_color,
-                                                                       color: backInStockEmail.bis_style.add_to_cart_btn_text_color,
-                                                                       boxSizing: 'border-box',
-                                                                       borderRadius: '10px',
-                                                                       display: 'block',
-                                                                       fontSize: '18px',
-                                                                       fontWeight: 600,
-                                                                       lineHeight: '20px',
-                                                                       padding: `${backInStockEmail.bis_style.add_to_cart_btn_vertical_padding}px ${backInStockEmail.bis_style.add_to_cart_btn_horizontal_padding}px`,
-                                                                       textAlign: 'center',
-                                                                       textDecoration: 'none',
-                                                                       border: `${backInStockEmail.bis_style.add_to_cart_btn_border_size}px solid ${backInStockEmail.bis_style.add_to_cart_btn_border_color}`
-                                                                   }}>{backInStockEmail.bis_content.add_to_cart_button_text}</a>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td style={{paddingTop: '20px'}}>
-                                                                <a className="visit-action-url color-primary border-primary"
-                                                                   style={{
-                                                                       backgroundColor: backInStockEmail.bis_style.view_product_btn_bg_color,
-                                                                       color: backInStockEmail.bis_style.view_product_btn_text_color,
-                                                                       border: `${backInStockEmail.bis_style.view_product_btn_border_size}px solid ${backInStockEmail.bis_style.view_product_btn_border_color}`,
-                                                                       boxSizing: 'border-box',
-                                                                       borderRadius: '10px',
-                                                                       display: 'block',
-                                                                       fontSize: '18px',
-                                                                       fontWeight: 600,
-                                                                       lineHeight: '20px',
-                                                                       padding: `${backInStockEmail.bis_style.view_product_btn_vertical_padding}px ${backInStockEmail.bis_style.view_product_btn_horizontal_padding}px`,
-                                                                       textAlign: 'center',
-                                                                       textDecoration: 'none'
-                                                                   }}>{backInStockEmail.bis_content.view_product_button_text}</a>
-                                                            </td>
-                                                        </tr>
-                                                        {
-                                                            (backInStockEmail.bis_social.instagram !== null && backInStockEmail.bis_social.instagram !== "") ||
-                                                            (backInStockEmail.bis_social.facebook !== null && backInStockEmail.bis_social.facebook !== "") ||
-                                                            (backInStockEmail.bis_social.twitter !== null && backInStockEmail.bis_social.twitter !== "") ||
-                                                            (backInStockEmail.bis_social.telegram !== null && backInStockEmail.bis_social.telegram !== "") ||
-                                                            (backInStockEmail.bis_social.linkedin !== null && backInStockEmail.bis_social.linkedin !== "") ||
-                                                            (backInStockEmail.bis_social.pinterest !== null && backInStockEmail.bis_social.pinterest !== "") ?
-                                                                <React.Fragment>
-                                                                    <tr className="social-text-wrapper">
-                                                                        <td colSpan={3}
-                                                                            className="social-text color-text-tertiary"
-                                                                            style={{
-                                                                                display: (backInStockEmail.bis_social.instagram !== null && backInStockEmail.bis_social.instagram !== "") ||
-                                                                                (backInStockEmail.bis_social.facebook !== null && backInStockEmail.bis_social.facebook !== "") ||
-                                                                                (backInStockEmail.bis_social.twitter !== null && backInStockEmail.bis_social.twitter !== "") ||
-                                                                                (backInStockEmail.bis_social.telegram !== null && backInStockEmail.bis_social.telegram !== "") ||
-                                                                                (backInStockEmail.bis_social.linkedin !== null && backInStockEmail.bis_social.linkedin !== "") ||
-                                                                                (backInStockEmail.bis_social.pinterest !== null && backInStockEmail.bis_social.pinterest !== "")
-                                                                                    ? "block" : 'none',
-                                                                                fontWeight: 400,
-                                                                                fontSize: '16px',
-                                                                                textAlign: 'center',
-                                                                                color: 'rgb(116, 124, 128)',
-                                                                                paddingBottom: '10px',
-                                                                                paddingTop: '30px'
-                                                                            }}>{backInStockEmail.bis_social.title}</td>
-                                                                    </tr>
-                                                                    <tr className="social-networks-wrapper">
-                                                                        <td className="social-networks"
-                                                                            style={{textAlign: 'center'}}>
-                                                                            <button className="instagram bg-secondary"
-                                                                                    style={{
-                                                                                        border: 'none',
-                                                                                        boxSizing: 'border-box',
-                                                                                        display: backInStockEmail.bis_social.instagram !== null && backInStockEmail?.bis_social?.instagram.trim() !== "" ? "inline-block" : 'none',
-                                                                                        margin: '0px 12px',
-                                                                                        backgroundColor: backInStockEmail.bis_style.add_to_cart_btn_bg_color,
-                                                                                        width: '24px',
-                                                                                        height: '24px',
-                                                                                        borderRadius: '50%'
-                                                                                    }}><img
-                                                                                src="https://storage.googleapis.com/static.shopgram.io/restock-icons/instagram.png"
-                                                                                width={12} alt="instagram"/></button>
-                                                                            <button className="facebook bg-secondary"
-                                                                                    style={{
-                                                                                        border: 'none',
-                                                                                        boxSizing: 'border-box',
-                                                                                        display: backInStockEmail.bis_social.facebook !== null && backInStockEmail.bis_social.facebook.trim() !== "" ? "inline-block" : 'none',
-                                                                                        margin: '0px 12px',
-                                                                                        backgroundColor: backInStockEmail.bis_style.add_to_cart_btn_bg_color,
-                                                                                        width: '24px',
-                                                                                        height: '24px',
-                                                                                        borderRadius: '50%'
-                                                                                    }}><img
-                                                                                src="https://storage.googleapis.com/static.shopgram.io/restock-icons/facebook.png"
-                                                                                width={12} alt="facebook"/></button>
-                                                                            <button className="twitter bg-secondary"
-                                                                                    style={{
-                                                                                        border: 'none',
-                                                                                        boxSizing: 'border-box',
-                                                                                        display: backInStockEmail.bis_social.twitter !== null && backInStockEmail.bis_social.twitter.trim() !== "" ? "inline-block" : 'none',
-                                                                                        margin: '0px 12px',
-                                                                                        backgroundColor: backInStockEmail.bis_style.add_to_cart_btn_bg_color,
-                                                                                        width: '24px',
-                                                                                        height: '24px',
-                                                                                        borderRadius: '50%'
-                                                                                    }}><img
-                                                                                src="https://storage.googleapis.com/static.shopgram.io/restock-icons/twitter.png"
-                                                                                width={12} alt="twitter"/></button>
-                                                                            <button className="telegram bg-secondary"
-                                                                                    style={{
-                                                                                        border: 'none',
-                                                                                        boxSizing: 'border-box',
-                                                                                        display: backInStockEmail.bis_social.telegram !== null && backInStockEmail.bis_social.telegram.trim() !== "" ? "inline-block" : 'none',
-                                                                                        margin: '0px 12px',
-                                                                                        backgroundColor: backInStockEmail.bis_style.add_to_cart_btn_bg_color,
-                                                                                        width: '24px',
-                                                                                        height: '24px',
-                                                                                        borderRadius: '50%'
-                                                                                    }}><img
-                                                                                src="https://storage.googleapis.com/static.shopgram.io/restock-icons/telegram.png"
-                                                                                width={12} alt="telegram"/></button>
-                                                                            <button className="linkedin bg-secondary"
-                                                                                    style={{
-                                                                                        border: 'none',
-                                                                                        boxSizing: 'border-box',
-                                                                                        display: backInStockEmail.bis_social.linkedin !== null && backInStockEmail.bis_social.linkedin.trim() !== "" ? "inline-block" : 'none',
-                                                                                        margin: '0px 12px',
-                                                                                        backgroundColor: backInStockEmail.bis_style.add_to_cart_btn_bg_color,
-                                                                                        width: '24px',
-                                                                                        height: '24px',
-                                                                                        borderRadius: '50%'
-                                                                                    }}><img
-                                                                                src="https://storage.googleapis.com/static.shopgram.io/restock-icons/linkedin.png"
-                                                                                width={12} alt="linkedin"/></button>
-                                                                            <button className="pinterest bg-secondary"
-                                                                                    style={{
-                                                                                        border: 'none',
-                                                                                        boxSizing: 'border-box',
-                                                                                        display: backInStockEmail.bis_social.pinterest !== null && backInStockEmail.bis_social.pinterest.trim() !== "" ? "inline-block" : 'none',
-                                                                                        margin: '0px 12px',
-                                                                                        backgroundColor: backInStockEmail.bis_style.add_to_cart_btn_bg_color,
-                                                                                        width: '24px',
-                                                                                        height: '24px',
-                                                                                        borderRadius: '50%'
-                                                                                    }}><img
-                                                                                src="https://storage.googleapis.com/static.shopgram.io/restock-icons/pinterest.png"
-                                                                                width={12} alt="pinterest"/></button>
-                                                                        </td>
-                                                                    </tr>
-                                                                </React.Fragment>
-                                                                :
-                                                                null
-                                                        }
-
-                                                        {/*<tr>*/}
-                                                        {/*    <td className="footer color-text-tertiary" style={{*/}
-                                                        {/*        borderTop: '1px solid rgb(201, 202, 204)',*/}
-                                                        {/*        fontWeight: 400,*/}
-                                                        {/*        color: backInStockEmail.bis_style.theme == "1" ? 'rgb(93, 99, 102)' : 'rgb(186, 198, 204)',*/}
-                                                        {/*        fontSize: '12px',*/}
-                                                        {/*        lineHeight: '16px',*/}
-                                                        {/*        height: '45px',*/}
-                                                        {/*        textAlign: 'center',*/}
-                                                        {/*        paddingTop: '8px',*/}
-                                                        {/*        borderBottomRightRadius: '10px',*/}
-                                                        {/*        borderBottomLeftRadius: '10px'*/}
-                                                        {/*    }}>*/}
-                                                        {/*        You are receiving this email because you requested a*/}
-                                                        {/*        back in*/}
-                                                        {/*        stock notification*/}
-                                                        {/*        on {shopDetails && shopDetails.store_name}.*/}
-                                                        {/*    </td>*/}
-                                                        {/*</tr>*/}
-                                                        </tbody>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                        {/*<p className="unsubscribe-link" style={{textAlign: 'center'}}>If you'd like to*/}
-                                        {/*    unsubscribe and stop receiving these emails from this shop click <a>here</a>.*/}
-                                        {/*</p>*/}
-                                    </div>
-                                </div>
-                            </BlockStack>
-                        </Card>
-                    </Layout.Section>
-                    <Layout.Section>
-                        <PageActions
-                            primaryAction={{
-                                content: 'Save',
-                                onAction: onSaveBISEmail,
-                                loading: isLoading
-                            }}
-                        />
-                    </Layout.Section>
                 </Layout>
+                <PageActions
+                    primaryAction={{
+                        content: 'Save',
+                        onAction: onSaveBISEmail,
+                        loading: isLoading
+                    }}
+                />
             </Page>
         </Fragment>
     );

@@ -20,7 +20,7 @@ const App = () => {
         const getInstall = async () => {
             const response = await apiService.Install({shop: shop})
             if (response.status === 200) {
-                dispatch(Shop_details({...response.data, notification: response.notification}))
+                dispatch(Shop_details({...response.data, notification: response.notification, bannerDisplaySetting: JSON.parse(response.banner_display_setting), extension_status: response.extension_status}))
                 setIsLoading(false)
             } else if (response.status === 201 && response.data.is_install === false) {
                 window.top.location.href = response.data.install_url;

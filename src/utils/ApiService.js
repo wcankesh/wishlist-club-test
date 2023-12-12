@@ -244,4 +244,7 @@ export class ApiService {
     async upgradePlan(payload) {
         return await this.postData(`${apiBaseUrl}/api/upgrade`, payload)
     }
+    async updateShopDisplayBanner(payload) {
+        return await this.postData(`${apiBaseUrl}/api/banner-setting`, payload)
+    }
 }

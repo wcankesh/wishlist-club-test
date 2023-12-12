@@ -278,16 +278,15 @@ const BackInStockDesign = () => {
                         backInStockDesignError={backInStockDesignError}
                         formValidate={formValidate}
                     />}
-                    <Layout.Section fullWidth>
-                        <PageActions
-                            primaryAction={{
-                                content: 'Save',
-                                onAction: updateBisSetting,
-                                loading: isLoading
-                            }}
-                        />
-                    </Layout.Section>
+
                 </Layout>
+                <PageActions
+                    primaryAction={{
+                        content: 'Save',
+                        onAction: updateBisSetting,
+                        loading: isLoading
+                    }}
+                />
             </Page>
         </Fragment>
     );

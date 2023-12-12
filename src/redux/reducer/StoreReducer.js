@@ -16,7 +16,9 @@ const intialState = {
     store_email: "",
     store_name: "",
     totalItem: "",
-    notification: []
+    notification: [],
+    bannerDisplaySetting: {},
+    extension_status: true,
 }
 
 export const StoreReducer = (state = intialState, action) => {

@@ -2,14 +2,13 @@ import React, {Fragment, useState, useEffect} from 'react';
 import {
     Card,
   Text,
-      BlockStack,
     InlineStack,
   Layout,
   Tabs,
   TextField,
   Pagination,
   Thumbnail,
-  Grid, Bleed,Box,
+  Grid, Box,
   Badge, EmptySearchResult, IndexTable,
 } from '@shopify/polaris';
 import {apiService} from "../../utils/Constant";

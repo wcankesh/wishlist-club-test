@@ -190,16 +190,14 @@ const  WishlistDesign = () => {
                         isSVGLoading={isSVGLoading}
                     />
                     }
-                    <Layout.Section fullWidth>
-                        <PageActions
-                            primaryAction={{
-                                content: 'Save',
-                                onAction: updateLauncher,
-                                loading: isLoading
-                            }}
-                        />
-                    </Layout.Section>
                 </Layout>
+                <PageActions
+                    primaryAction={{
+                        content: 'Save',
+                        onAction: updateLauncher,
+                        loading: isLoading
+                    }}
+                />
             </Page>
         </Fragment>
     );

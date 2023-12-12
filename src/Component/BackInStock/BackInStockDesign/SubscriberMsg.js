@@ -1,5 +1,5 @@
 import React, {Fragment} from 'react';
-import {Layout, FormLayout, TextField, Text, Button, BlockStack, Card, InlineStack, Bleed} from "@shopify/polaris"
+import {Layout, FormLayout, TextField, Text, Button, BlockStack, Card, InlineStack} from "@shopify/polaris"
 import ColorInput from "../../Comman/ColorInput";
 import {Helmet} from "react-helmet";
 
@@ -29,13 +29,11 @@ const SubscriberMsg = ({backInStockDesign, setBackInStockDesign, setBackInStockD
                             background-color:${backInStockDesign.subscription_message.background_color}; } `
             }]}>
             </Helmet>
-            <Layout.Section variant={"oneHalf"}>
-                <Card padding={"500"}>
+            <Layout.Section>
+                <Card padding={"400"}>
                     <BlockStack gap={"400"}>
                     <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Customize Subscriber Message</Text>
                     <FormLayout>
-                        <BlockStack gap={"300"}>
-                            <Bleed marginInlineStart={"150"}>
                         <FormLayout.Group condensed>
                             <TextField
                                 label="Message"
@@ -54,8 +52,6 @@ const SubscriberMsg = ({backInStockDesign, setBackInStockDesign, setBackInStockD
                                 error={backInStockDesignError.success_message}
                             />
                         </FormLayout.Group>
-                            </Bleed>
-                            <Bleed marginInlineStart={"150"}>
                         <FormLayout.Group condensed>
                             <TextField
                                 label="Already Subscribed Message"
@@ -74,8 +70,6 @@ const SubscriberMsg = ({backInStockDesign, setBackInStockDesign, setBackInStockD
                                 error={backInStockDesignError.already_subscribed_message}
                             />
                         </FormLayout.Group>
-                            </Bleed>
-                            <Bleed marginInlineStart={"150"}>
                         <FormLayout.Group condensed>
                             <ColorInput label={"Toast Text Color"}
                                         name="text_color"
@@ -88,36 +82,31 @@ const SubscriberMsg = ({backInStockDesign, setBackInStockDesign, setBackInStockD
                                         value={backInStockDesign.subscription_message.background_color}
                             />
                         </FormLayout.Group>
-                            </Bleed>
-                        </BlockStack>
                     </FormLayout>
                     </BlockStack>
                 </Card>
             </Layout.Section>
 
-            <Layout.Section variant={"oneHalf"}>
-                <Card padding={"500"}>
+            <Layout.Section variant={"oneThird"}>
+                <Card padding={"400"}>
                     <BlockStack gap={"400"}>
                     <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Preview</Text>
                         <BlockStack gap={"600"}>
-                        <InlineStack gap={"300"} wrap={false}>
-                            <img src={"https://wishlist.thimatic-apps.com/assets/images/product3.jpg"} width={"140px"}/>
-                                <BlockStack gap={"200"}>
-                                    <Text as='h3' fontWeight={"bold"}>AKAMAI TOP // PALMS COLLIDE</Text>
-                                    <Text>Rs. 80.00</Text>
-                                    <InlineStack>
-                                    <Button size={"large"}>Add to cart</Button>
-                                    </InlineStack>
-                                </BlockStack>
-                        </InlineStack>
-                        <InlineStack align={"end"}>
-                            <div className="wl_btn_common wl_subscription_msg_preview sub_msg">
-                                {backInStockDesign.subscription_message.already_subscribed_message}
-                            </div>
-                        </InlineStack>
+                            <InlineStack gap={"300"} wrap={false}>
+                                <img src={"https://wishlist.thimatic-apps.com/assets/images/product3.jpg"} width={"100px"}/>
+                                    <BlockStack gap={"200"}>
+                                        <Text as='h3' fontWeight={"bold"}>AKAMAI TOP // PALMS COLLIDE</Text>
+                                        <Text>Rs. 80.00</Text>
+                                        <Button size={"large"}>Add to cart</Button>
+                                    </BlockStack>
+                            </InlineStack>
+                            <InlineStack align={"end"}>
+                                <div className="wl_btn_common wl_subscription_msg_preview sub_msg">
+                                    {backInStockDesign.subscription_message.already_subscribed_message}
+                                </div>
+                            </InlineStack>
                         </BlockStack>
                     </BlockStack>
-
                 </Card>
             </Layout.Section>
         </Fragment>

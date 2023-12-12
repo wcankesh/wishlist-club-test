@@ -13,22 +13,14 @@ import {
     Text,
     Checkbox,
     Select,
-    Button, Tabs, Grid
+    Button, Tabs, Grid, Divider
 } from "@shopify/polaris";
 import {Icons} from "../../../utils/Icons";
 
 import {Helmet} from "react-helmet";
 import ColorInput from "../../Comman/ColorInput";
 
-const CollectionDesign = ({
-                              wishlistSetting,
-                              setWishlistSetting,
-                              file,
-                              setFile,
-                              isSVGLoading,
-                              updateIcon,
-                              deleteIcon
-                          }) => {
+const CollectionDesign = ({wishlistSetting, setWishlistSetting, file, setFile, isSVGLoading, updateIcon, deleteIcon}) => {
     const [selected, setSelected] = useState(0);
     const options = [
         {label: 'Grid', value: '0'},
@@ -111,237 +103,232 @@ const CollectionDesign = ({
             }]}>
             </Helmet>
 
-            <Layout.Section variant={"oneHalf"}>
-                <BlockStack gap={"300"}>
+            <Layout.Section>
                 <Card padding={"0"}>
                     <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>
-                </Card>
-                <Card padding={"0"}>
+                    <Divider/>
                     {
                         selected === 0 &&
-                            <FormLayout>
-                                <Box padding={"400"}>
-                                    <BlockStack gap={"300"}>
-                                        <FormLayout.Group condensed>
-                                            <InlineStack align={"space-between"}>
+                            <Box padding={"400"} paddingBlockStart={"200"}>
+                                <FormLayout>
+                                    <FormLayout.Group condensed>
+                                        <InlineStack align={"space-between"}>
                                             <RadioButton label={Icons.wishlistIcon} checked={wishlistSetting.product_collection_button_type === "1"} id="disabled" name="product_collection_button_type" value={wishlistSetting.product_collection_button_type} onChange={() => handleChange({
-                                                    target: {
-                                                        name: "product_collection_button_type",
-                                                        value: "1"
-                                                    }
-                                                })}/>
+                                                target: {
+                                                    name: "product_collection_button_type",
+                                                    value: "1"
+                                                }
+                                            })}/>
                                             <RadioButton label={<InlineStack gap={"400"}>{Icons.wishlistIcon}Wishlist</InlineStack>} id="optional" name="product_collection_button_type" checked={wishlistSetting.product_collection_button_type === "3"} value={wishlistSetting.product_collection_button_type} onChange={() => handleChange({target: {name: "product_collection_button_type", value: "3"}})}/>
-                                                &nbsp;
-                                                <div></div>
-                                            </InlineStack>
-                                        </FormLayout.Group>
-                                <FormLayout.Group>
-                                    <BlockStack gap={"100"}>
-                                        <DropZone
-                                            label={
-                                                <div className={"Polaris-Label-full"}>
-                                                    <InlineStack align={"space-between"}>
-                                                        Select Icon
-                                                        {file &&
-                                                        <Button size={"slim"} outline onClick={updateIcon} loading={isSVGLoading}>Upload</Button>}
+                                            &nbsp;
+                                            <div></div>
+                                        </InlineStack>
+                                    </FormLayout.Group>
+                                    <FormLayout.Group>
+                                        <BlockStack gap={"100"}>
+                                            <DropZone
+                                                label={
+                                                    <div className={"Polaris-Label-full"}>
+                                                        <InlineStack align={"space-between"}>
+                                                            Select Icon
+                                                            {file &&
+                                                            <Button size={"slim"} outline onClick={updateIcon} loading={isSVGLoading}>Upload</Button>}
                                                             {wishlistSetting.icon &&
                                                             <Button size={"slim"} outline onClick={deleteIcon} loading={isSVGLoading}>Remove</Button>}
-                                                    </InlineStack>
-                                                </div>
-                                            }
-                                            accept=".svg"
-                                            allowMultiple={false}
-                                            errorOverlayText="File type must be.svg"
-                                            onDrop={handleDropZoneDrop}
-                                        >
-                                            {uploadedFile}
-                                            {fileUpload}
-                                        </DropZone>
-                                        <Text tone={"critical"}>Note: You can add only svg</Text>
-                                    </BlockStack>
-                                </FormLayout.Group>
-                                <FormLayout.Group condensed>
-                                    <TextField label="Border width"
-                                               type="number"
-                                               value={wishlistSetting.product_collection_button_border_width}
-                                               onChange={(value) => handleChange({
-                                                   target: {
-                                                       name: "product_collection_button_border_width",
-                                                       value
-                                                   }
-                                               })}
-                                               suffix="PX"
-                                    />
-                                    <TextField label="Border Radius"
-                                               type="number"
-                                               value={wishlistSetting.product_collection_button_border_radius}
-                                               onChange={(value) => handleChange({
-                                                   target: {
-                                                       name: "product_collection_button_border_radius",
-                                                       value
-                                                   }
-                                               })}
-                                               suffix="PX"
-                                    />
-                                </FormLayout.Group>
-                                <FormLayout.Group condensed>
-                                    <TextField label="Top & Bottom padding"
-                                               type="number"
-                                               value={wishlistSetting.product_collection_button_top_bottom_padding}
-                                               onChange={(value) => handleChange({
-                                                   target: {
-                                                       name: "product_collection_button_top_bottom_padding",
-                                                       value
-                                                   }
-                                               })}
-                                               suffix="PX"
-                                    />
-                                    <TextField label="Left & Right padding"
-                                               type="number"
-                                               value={wishlistSetting.product_collection_button_left_right_padding}
-                                               onChange={(value) => handleChange({
-                                                   target: {
-                                                       name: "product_collection_button_left_right_padding",
-                                                       value
-                                                   }
-                                               })}
-                                               suffix="PX"
-                                    />
-                                </FormLayout.Group>
-                                <FormLayout.Group condensed>
-                                    <Select label="Wishlist button position" options={btn_options}
-                                            value={wishlistSetting.product_collection_button_position}
-                                            onChange={(value) => {
+                                                        </InlineStack>
+                                                    </div>
+                                                }
+                                                accept=".svg"
+                                                allowMultiple={false}
+                                                errorOverlayText="File type must be.svg"
+                                                onDrop={handleDropZoneDrop}
+                                            >
+                                                {uploadedFile}
+                                                {fileUpload}
+                                            </DropZone>
+                                            <Text tone={"subdued"}>Note: You can add only svg</Text>
+                                        </BlockStack>
+                                    </FormLayout.Group>
+                                    <FormLayout.Group condensed>
+                                        <TextField label="Border width"
+                                                   type="number"
+                                                   value={wishlistSetting.product_collection_button_border_width}
+                                                   onChange={(value) => handleChange({
+                                                       target: {
+                                                           name: "product_collection_button_border_width",
+                                                           value
+                                                       }
+                                                   })}
+                                                   suffix="PX"
+                                        />
+                                        <TextField label="Border Radius"
+                                                   type="number"
+                                                   value={wishlistSetting.product_collection_button_border_radius}
+                                                   onChange={(value) => handleChange({
+                                                       target: {
+                                                           name: "product_collection_button_border_radius",
+                                                           value
+                                                       }
+                                                   })}
+                                                   suffix="PX"
+                                        />
+                                    </FormLayout.Group>
+                                    <FormLayout.Group condensed>
+                                        <TextField label="Top & Bottom padding"
+                                                   type="number"
+                                                   value={wishlistSetting.product_collection_button_top_bottom_padding}
+                                                   onChange={(value) => handleChange({
+                                                       target: {
+                                                           name: "product_collection_button_top_bottom_padding",
+                                                           value
+                                                       }
+                                                   })}
+                                                   suffix="PX"
+                                        />
+                                        <TextField label="Left & Right padding"
+                                                   type="number"
+                                                   value={wishlistSetting.product_collection_button_left_right_padding}
+                                                   onChange={(value) => handleChange({
+                                                       target: {
+                                                           name: "product_collection_button_left_right_padding",
+                                                           value
+                                                       }
+                                                   })}
+                                                   suffix="PX"
+                                        />
+                                    </FormLayout.Group>
+                                    <FormLayout.Group condensed>
+                                        <Select label="Wishlist button position" options={btn_options}
+                                                value={wishlistSetting.product_collection_button_position}
+                                                onChange={(value) => {
+                                                    handleChange({
+                                                        target: {
+                                                            name: "product_collection_button_position",
+                                                            value
+                                                        }
+                                                    })
+                                                }}/>
+                                        <div></div>
+                                    </FormLayout.Group>
+                                    <FormLayout.Group>
+                                        <Checkbox
+                                            label="Show how many times the product has been added to the wishlist."
+                                            checked={wishlistSetting.product_collection_total_count == "1"}
+                                            onChange={(checked) => {
                                                 handleChange({
                                                     target: {
-                                                        name: "product_collection_button_position",
-                                                        value
+                                                        name: "product_collection_total_count",
+                                                        value: checked ? "1" : "0"
                                                     }
                                                 })
-                                            }}/>
-                                    <div></div>
-                                </FormLayout.Group>
-                                <FormLayout.Group>
-                                    <Checkbox
-                                        label="Show how many times the product has been added to the wishlist."
-                                        checked={wishlistSetting.product_collection_total_count == "1"}
-                                        onChange={(checked) => {
-                                            handleChange({
-                                                target: {
-                                                    name: "product_collection_total_count",
-                                                    value: checked ? "1" : "0"
-                                                }
-                                            })
-                                        }}
-                                    />
-                                </FormLayout.Group>
-                                    </BlockStack>
-                                </Box>
-                            </FormLayout>
+                                            }}
+                                        />
+                                    </FormLayout.Group>
+                                </FormLayout>
+                            </Box>
+
                     }
                     {
                         selected === 1 && <Fragment>
                             {wishlistSetting.product_collection_button_type === '1' ?
-                                <FormLayout>
-                                    <Box padding={"400"}>
-                                <FormLayout.Group condensed>
-                                    <ColorInput label={"Button color"}
-                                                value={wishlistSetting.product_collection_button_color_before}
-                                                name="product_collection_button_color_before" onChange={handleChange}/>
-                                    <div/>
-                                </FormLayout.Group>
-                                    </Box>
-                            </FormLayout> :
-                                <FormLayout>
-                                    <Box padding={"400"}>
-                                <FormLayout.Group condensed>
-                                    <TextField label="Button text"
-                                               value={wishlistSetting.product_collection_button_text_before}
-                                               onChange={(value) => handleChange({
-                                                   target: {
-                                                       name: "product_collection_button_text_before",
-                                                       value
-                                                   }
-                                               })}
-                                    />
-                                    <ColorInput label={"Button color"}
-                                                value={wishlistSetting.product_collection_button_color_before}
-                                                name="product_collection_button_color_before" onChange={handleChange}/>
-                                </FormLayout.Group>
-                                <FormLayout.Group condensed>
-                                    <ColorInput label={"Button background color"}
-                                                value={wishlistSetting.product_collection_button_bg_color_before}
-                                                name="product_collection_button_bg_color_before"
-                                                onChange={handleChange}/>
-                                    <ColorInput label={"Border Color"}
-                                                value={wishlistSetting.product_collection_button_border_color_before}
-                                                name="product_collection_button_border_color_before"
-                                                onChange={handleChange}/>
-                                </FormLayout.Group>
-                                    </Box>
-                            </FormLayout>
+                                <Box padding={"400"} paddingBlockStart={"200"}>
+                                    <FormLayout>
+                                        <FormLayout.Group condensed>
+                                            <ColorInput label={"Button color"}
+                                                        value={wishlistSetting.product_collection_button_color_before}
+                                                        name="product_collection_button_color_before" onChange={handleChange}/>
+                                            <div/>
+                                        </FormLayout.Group>
+                                    </FormLayout>
+                                </Box>:
+                                <Box padding={"400"} paddingBlockStart={"200"}>
+                                    <FormLayout>
+                                        <FormLayout.Group condensed>
+                                            <TextField label="Button text"
+                                                       value={wishlistSetting.product_collection_button_text_before}
+                                                       onChange={(value) => handleChange({
+                                                           target: {
+                                                               name: "product_collection_button_text_before",
+                                                               value
+                                                           }
+                                                       })}
+                                            />
+                                            <ColorInput label={"Button color"}
+                                                        value={wishlistSetting.product_collection_button_color_before}
+                                                        name="product_collection_button_color_before" onChange={handleChange}/>
+                                        </FormLayout.Group>
+                                        <FormLayout.Group condensed>
+                                            <ColorInput label={"Button background color"}
+                                                        value={wishlistSetting.product_collection_button_bg_color_before}
+                                                        name="product_collection_button_bg_color_before"
+                                                        onChange={handleChange}/>
+                                            <ColorInput label={"Border Color"}
+                                                        value={wishlistSetting.product_collection_button_border_color_before}
+                                                        name="product_collection_button_border_color_before"
+                                                        onChange={handleChange}/>
+                                        </FormLayout.Group>
+                                    </FormLayout>
+                                </Box>
                             }
                         </Fragment>
                     }
                     {
                         selected === 2 && <Fragment>
                             {wishlistSetting.product_collection_button_type === '1' ?
-                                <FormLayout>
-                                    <Box padding={"400"}>
-                                <FormLayout.Group>
-                                    <ColorInput label={"Button color"}
-                                                value={wishlistSetting.product_collection_button_color_after}
-                                                name="product_collection_button_color_after" onChange={handleChange}/>
-                                    <div></div>
-                                </FormLayout.Group>
-                                    </Box>
-                            </FormLayout> :
-                                <FormLayout>
-                                    <Box padding={"400"}>
-                                <FormLayout.Group condensed>
-                                    <TextField label="Button text"
-                                               value={wishlistSetting.product_collection_button_text_after}
-                                               onChange={(value) => handleChange({
-                                                   target: {
-                                                       name: "product_collection_button_text_after",
-                                                       value
-                                                   }
-                                               })}
-                                    />
-                                    <ColorInput label={"Button color"}
-                                                value={wishlistSetting.product_collection_button_color_after}
-                                                name="product_collection_button_color_after"
-                                                onChange={handleChange}/>
-                                </FormLayout.Group>
-                                <FormLayout.Group condensed>
-                                    <ColorInput label={"Button background color"}
-                                                value={wishlistSetting.product_collection_button_bg_color_after}
-                                                name="product_collection_button_bg_color_after"
-                                                onChange={handleChange}/>
-                                    <ColorInput label={"Border Color"}
-                                                value={wishlistSetting.product_collection_button_border_color_after}
-                                                name="product_collection_button_border_color_after"
-                                                onChange={handleChange}/>
-                                </FormLayout.Group>
-                                    </Box>
-                            </FormLayout>
+                                <Box padding={"400"} paddingBlockStart={"200"}>
+                                    <FormLayout>
+                                        <FormLayout.Group>
+                                            <ColorInput label={"Button color"}
+                                                        value={wishlistSetting.product_collection_button_color_after}
+                                                        name="product_collection_button_color_after" onChange={handleChange}/>
+                                            <div></div>
+                                        </FormLayout.Group>
+                                    </FormLayout>
+                                </Box>:
+                                <Box padding={"400"} paddingBlockStart={"200"}>
+                                    <FormLayout>
+                                        <FormLayout.Group condensed>
+                                            <TextField label="Button text"
+                                                       value={wishlistSetting.product_collection_button_text_after}
+                                                       onChange={(value) => handleChange({
+                                                           target: {
+                                                               name: "product_collection_button_text_after",
+                                                               value
+                                                           }
+                                                       })}
+                                            />
+                                            <ColorInput label={"Button color"}
+                                                        value={wishlistSetting.product_collection_button_color_after}
+                                                        name="product_collection_button_color_after"
+                                                        onChange={handleChange}/>
+                                        </FormLayout.Group>
+                                        <FormLayout.Group condensed>
+                                            <ColorInput label={"Button background color"}
+                                                        value={wishlistSetting.product_collection_button_bg_color_after}
+                                                        name="product_collection_button_bg_color_after"
+                                                        onChange={handleChange}/>
+                                            <ColorInput label={"Border Color"}
+                                                        value={wishlistSetting.product_collection_button_border_color_after}
+                                                        name="product_collection_button_border_color_after"
+                                                        onChange={handleChange}/>
+                                        </FormLayout.Group>
+                                    </FormLayout>
+                                </Box>
                             }
                         </Fragment>
                     }
                 </Card>
-                </BlockStack>
             </Layout.Section>
 
-            <Layout.Section variant={"oneHalf"}>
-                <BlockStack gap={"300"}>
-                <Card padding={"500"}>
-                    <BlockStack gap={"500"}>
-                    <Text as={"h2"} variant={"headingMd"}>Preview (before adding to wishlist)</Text>
-                    <Grid>
-                        {
-                            Array.from(Array(2)).map((_, i) => {
-                               return(
-                                   <Grid.Cell columnSpan={{xs: 6, sm: 3, md: 3, lg: 6, xl: 6}} key={i}>
+            <Layout.Section variant={"oneThird"}>
+                <BlockStack gap={"400"}>
+                <Card padding={"400"}>
+                    <BlockStack gap={"400"}>
+                        <Text as={"h2"} variant={"headingMd"}>Preview (before adding to wishlist)</Text>
+                        <InlineStack gap={"200"} wrap={false} align={"center"}>
+                            {
+                                Array.from(Array(2)).map((_, i) => {
+                                   return(
                                        <div className={"preview-collection"}>
                                            <figure>
                                                <img src={`https://wishlist.thimatic-apps.com/assets/images/product${i + 1}.jpg`}/>
@@ -352,21 +339,19 @@ const CollectionDesign = ({
                                                </div>
                                            </div>
                                        </div>
-                                   </Grid.Cell>
-                               )
-                            })
-                        }
-                    </Grid>
+                                   )
+                                })
+                            }
+                        </InlineStack>
                     </BlockStack>
                 </Card>
-                <Card padding={"500"}>
-                    <BlockStack gap={"500"}>
-                    <Text as={"h2"} variant={"headingMd"}>Preview (after adding to wishlist)</Text>
-                    <Grid>
-                        {
-                            Array.from(Array(2)).map((_, i) => {
-                                return(
-                                    <Grid.Cell columnSpan={{xs: 6, sm: 3, md: 3, lg: 6, xl: 6}} key={i}>
+                <Card padding={"400"}>
+                    <BlockStack gap={"400"}>
+                        <Text as={"h2"} variant={"headingMd"}>Preview (after adding to wishlist)</Text>
+                        <InlineStack gap={"200"} wrap={false} align={"center"}>
+                            {
+                                Array.from(Array(2)).map((_, i) => {
+                                    return(
                                         <div className={"preview-collection"}>
                                             <figure>
                                                 <img src={`https://wishlist.thimatic-apps.com/assets/images/product${i + 1}.jpg`}/>
@@ -389,16 +374,14 @@ const CollectionDesign = ({
                                                 </div>
                                             </div>
                                         </div>
-                                    </Grid.Cell>
-                                )
-                            })
-                        }
-                    </Grid>
+                                    )
+                                })
+                            }
+                        </InlineStack>
                     </BlockStack>
                 </Card>
                 </BlockStack>
             </Layout.Section>
-
         </Fragment>
     );
 }

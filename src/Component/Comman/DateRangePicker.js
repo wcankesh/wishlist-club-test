@@ -259,7 +259,7 @@ const DateRangePicker = ({ onChange, fullWidth }) =>  {
                     <Box
                         maxWidth={mdDown ? "516px" : "212px"}
                         width={mdDown ? "100%" : "212px"}
-                        padding={{ xs: "500", md: "0" }}
+                        padding={{ xs: "400", md: "0" }}
                         paddingBlockEnd={{ xs: "100", md: "0" }}
                     >
                         {mdDown ? (

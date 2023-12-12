@@ -174,57 +174,53 @@ const WishlistEmail = () => {
                                        isError={isError} link={""}/>
                     <Layout.Section>
                         <Card padding={"0"}>
-                            <BlockStack>
-                                <Box padding={"500"}>
-                                    <BlockStack gap={"150"}>
-                                        <Text as={"h2"} variant={"headingMd"}>From Email & Name</Text>
-                                        <Text as={"p"} tone={"subdued"}>Add the "Name" in From name and "Email id" in
-                                            From email you want users to see while receiving the Wishlist alerts</Text>
-                                    </BlockStack>
-                                </Box>
-                                <Divider/>
-                                <Box padding={"500"}>
-                                    <BlockStack gap={"400"}>
-                                        <FormLayout>
-                                            <FormLayout.Group>
-                                                <TextField
-                                                    label="From name"
-                                                    value={emailSetting.from_name}
-                                                    onChange={(value) => handleChange({
-                                                        target: {
-                                                            name: "from_name",
-                                                            value
-                                                        }
-                                                    })}
-                                                />
-                                                <TextField
-                                                    type="email"
-                                                    label="From email"
-                                                    value={emailSetting.from_email}
-                                                    onChange={(value) => handleChange({
-                                                        target: {
-                                                            name: "from_email",
-                                                            value
-                                                        }
-                                                    })}
-                                                    name={"from_email"}
-                                                    error={emailSettingError.from_email}
-                                                    onBlur={onBlur}
-                                                />
-                                            </FormLayout.Group>
-                                        </FormLayout>
-                                        <InlineStack align={"end"}>
-                                            <Button variant={"primary"} loading={isSave}
-                                                    onClick={saveEmailSetting}>Save</Button>
-                                        </InlineStack>
-                                    </BlockStack>
-                                </Box>
-                            </BlockStack>
+                            <Box padding={"400"}>
+                                <BlockStack gap={"100"}>
+                                    <Text as={"h2"} variant={"headingMd"}>From Email & Name</Text>
+                                    <Text as={"p"} tone={"subdued"}>Add the "Name" in From name and "Email id" in From email you want users to see while receiving the Wishlist alerts</Text>
+                                </BlockStack>
+                            </Box>
+                            <Divider/>
+                            <Box padding={"400"}>
+                                <BlockStack gap={"400"}>
+                                    <FormLayout>
+                                        <FormLayout.Group>
+                                            <TextField
+                                                label="From name"
+                                                value={emailSetting.from_name}
+                                                onChange={(value) => handleChange({
+                                                    target: {
+                                                        name: "from_name",
+                                                        value
+                                                    }
+                                                })}
+                                            />
+                                            <TextField
+                                                type="email"
+                                                label="From email"
+                                                value={emailSetting.from_email}
+                                                onChange={(value) => handleChange({
+                                                    target: {
+                                                        name: "from_email",
+                                                        value
+                                                    }
+                                                })}
+                                                name={"from_email"}
+                                                error={emailSettingError.from_email}
+                                                onBlur={onBlur}
+                                            />
+                                        </FormLayout.Group>
+                                    </FormLayout>
+                                    <InlineStack align={"end"}>
+                                        <Button variant={"primary"} loading={isSave} onClick={saveEmailSetting}>Save</Button>
+                                    </InlineStack>
+                                </BlockStack>
+                            </Box>
                         </Card>
                     </Layout.Section>
                     <Layout.Section>
                         <Card padding={"0"}>
-                            <Box padding={"500"}>
+                            <Box padding={"400"}>
                                 <BlockStack gap={"100"}>
                                     <Text as={"h2"} variant={"headingMd"}>Email Customization</Text>
                                     <Text as={"p"} tone={"subdued"}>
@@ -232,7 +228,7 @@ const WishlistEmail = () => {
                                         send price drop & restock alerts for the products in
                                         Wishlist.
                                     </Text>
-                                    <Text as={"p"} tone={"critical"}>
+                                    <Text as={"p"} tone={"caution"}>
                                         <b>Note: </b> These all the
                                         notifications(Wishlist Items, Price Drop Alerts, and
                                         Restock Alerts) are sent to customers if the <b>Guest
@@ -245,7 +241,7 @@ const WishlistEmail = () => {
                                 (Customization_Email || []).map((x, i) => {
                                     return (
                                         <div onClick={() => navigate(`${baseUrl}/${x.path}`)} className={"cursor-pointer"} key={i}>
-                                            <Box padding={"500"}>
+                                            <Box padding={"400"}>
                                                 <InlineStack align={"space-between"} blockAlign={"start"} wrap={false} gap={"200"}>
                                                     <InlineStack gap={"400"} wrap={false}>
                                                         <BlockStack gap={"100"}>
@@ -269,7 +265,7 @@ const WishlistEmail = () => {
 
                     <Layout.Section>
                         <Card>
-                            <BlockStack gap={"300"}>
+                            <BlockStack gap={"400"}>
                                 <BlockStack gap={"100"}>
                                     <Text as={"h2"} variant={"headingMd"}>Wishlist Notifications</Text>
                                     <Text as={"p"} tone={"subdued"}>
@@ -277,16 +273,14 @@ const WishlistEmail = () => {
                                     </Text>
                                 </BlockStack>
 
-                                <span>
-                                    <Checkbox label={"Notification mail"}
-                                                onChange={(checked) => notificationUpdate({
-                                                    target: {
-                                                        name: "is_notification_mail",
-                                                        value: checked ? "1" : "0"
-                                                    }
-                                                })} checked={emailSetting.is_notification_mail == 1}
-                                        />
-                                </span>
+                                <Checkbox label={"Notification mail"}
+                                          onChange={(checked) => notificationUpdate({
+                                              target: {
+                                                  name: "is_notification_mail",
+                                                  value: checked ? "1" : "0"
+                                              }
+                                          })} checked={emailSetting.is_notification_mail == 1}
+                                />
                             </BlockStack>
                         </Card>
                     </Layout.Section>

@@ -1,16 +1,5 @@
 import React, {Fragment, useEffect, useState} from 'react';
-import {
-    Text,
-    Layout,
-    Page,
-    FormLayout,
-    Modal,
-    BlockStack,
-    InlineStack,
-    Card,
-    Divider,
-    Box, Checkbox
-} from '@shopify/polaris'
+import {Text, Layout, Page, FormLayout, Modal, BlockStack, InlineStack, Card, Divider, Box, Checkbox} from '@shopify/polaris'
 import {useNavigate} from "react-router-dom";
 import {apiService, baseUrl, capitalizeMessage} from "../../../utils/Constant";
 import ToastMessage from "../../Comman/ToastMessage"
@@ -32,6 +21,7 @@ const General = () =>  {
     const [isError, setIsError] = useState(false)
     const [isErrorServer, setIsErrorServer] = useState(false)
     const [message, setMessage] = useState("")
+
     const handleChangeModal = () => {
         setActiveGuestModal(!activeGuestModal)
     }
@@ -109,25 +99,19 @@ const General = () =>  {
             } else {
                 setMessage(capitalizeMessage(response.message))
                 setIsError(true)
-
             }
         }
 
     }
+
     const onBack = () => {
         navigate(`${baseUrl}/settings`)
     }
 
     const GuestWishlistConfirmation = async () => {
         setIsLoading(true)
-        setSetting({
-            ...setting,
-            guest_wishlist: "0"
-        })
-        let payload = {
-            ...setting,
-            guest_wishlist: "0"
-        }
+        setSetting({...setting, guest_wishlist: "0"})
+        let payload = {...setting, guest_wishlist: "0"}
         const response = await apiService.updateSetting(payload, setting.id)
         if (response.status === 200) {
             setMessage(capitalizeMessage(response.message))
@@ -158,18 +142,8 @@ const General = () =>  {
                                         <InlineStack key={i} blockAlign={"start"}>
                                             <Box padding={"500"}>
                                                 <InlineStack gap={400} wrap={false}>
-                                                    <Checkbox checked={x.checked} onChange={(checked) => handleChange({
-                                                        target: {
-                                                            name: x.name,
-                                                            value: x.checked ? "0" : "1"
-                                                        }
-                                                    })}/>
-                                                    <div className={"cursor-pointer"} onClick={() => handleChange({
-                                                        target: {
-                                                            name: x.name,
-                                                            value: x.checked ? "0" : "1"
-                                                        }
-                                                    })}>
+                                                    <Checkbox checked={x.checked} onChange={(checked) => handleChange({target: {name: x.name, value: x.checked ? "0" : "1"}})}/>
+                                                    <div className={"cursor-pointer"} onClick={() => handleChange({target: {name: x.name, value: x.checked ? "0" : "1"}})}>
                                                         <BlockStack gap={"150"}>
                                                             <Text as={"p"} fontWeight='semibold'>{x.title}</Text>
                                                             <Text>{x.description}</Text>
@@ -185,30 +159,14 @@ const General = () =>  {
                             }
                             <Box padding={"500"}>
                                 <InlineStack gap={"400"} blockAlign={"start"} wrap={false}>
-
-                                        <Checkbox checked={setting.is_variant_wishlist == "1"} onChange={(checked) => handleChange({
-                                            target: {
-                                                name: "is_variant_wishlist",
-                                                value: checked ? "1" : "0"
-                                            }
-                                        })}/>
+                                        <Checkbox checked={setting.is_variant_wishlist == "1"} onChange={(checked) => handleChange({target: {name: "is_variant_wishlist", value: checked ? "1" : "0"}})}/>
                                     <BlockStack gap={"100"}>
-                                        <div className={"cursor-pointer"} onClick={() => handleChange({
-                                            target: {
-                                                name: "is_variant_wishlist",
-                                                value: setting.is_variant_wishlist == "1" ? "0" : "1"
-                                            }
-                                        })}>
+                                        <div className={"cursor-pointer"} onClick={() => handleChange({target: {name: "is_variant_wishlist", value: setting.is_variant_wishlist == "1" ? "0" : "1"}})}>
                                             <Text fontWeight='semibold'>Product variant wishlists</Text>
-                                            <Text>If enabled, wishlists will be shown based on the product variant,
-                                                whereas disabling it will result in wishlists being displayed solely
-                                                based on products.</Text>
+                                            <Text>If enabled, wishlists will be shown based on the product variant, whereas disabling it will result in wishlists being displayed solely based on products.</Text>
                                         </div>
-
-                                            <Text tone="critical">Please note: If you wish to see the wishlist for a
-                                                specific product variant, you will need to add this shortcode.</Text>
-                                            <Text tone="critical">If you choose variant wishlist, make sure to add the
-                                                below shortcode. Otherwise, the wishlist will not be shown.</Text>
+                                            <Text tone="caution">Please note: If you wish to see the wishlist for a specific product variant, you will need to add this shortcode.</Text>
+                                            <Text tone="caution">If you choose variant wishlist, make sure to add the below shortcode. Otherwise, the wishlist will not be shown.</Text>
                                             <FormLayout>
                                                 <FormLayout.Group>
                                                     <BlockStack gap={"150"}>
@@ -234,19 +192,8 @@ const General = () =>  {
                     open={activeGuestModal}
                     onClose={handleChangeModal}
                     title={"Really want to deactivate Guest Wishlist?"}
-                    primaryAction={{
-                        content: 'Yes',
-                        onAction: GuestWishlistConfirmation,
-                        loading:isLoading
-                    }}
-                    secondaryActions={[
-                        {
-                            content: 'No',
-                            onAction: handleChangeModal,
-                        },
-                    ]}
-
-                >
+                    primaryAction={{content: 'Yes', onAction: GuestWishlistConfirmation, loading:isLoading}}
+                    secondaryActions={[{content: 'No', onAction: handleChangeModal,}]}>
                     <Modal.Section>
                         <Text>
                             <Text as={"span"} tone={"warning"} fontWeight={"semibold"}>WARNING!</Text> All the Guest Customers Product Information will be removed from our server and there is no way back. Are you sure you want to do this?

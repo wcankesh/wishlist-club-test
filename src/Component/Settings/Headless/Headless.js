@@ -140,7 +140,7 @@ const Headless = () => {
                                     </BlockStack>
 
                                     <CopyCode label={"Access Token"} value={headLess.token}/>
-                                    <Text tone={"critical"}><Text as={"span"} fontWeight={"bold"}>Please Note</Text>:
+                                    <Text tone={"caution"}><Text as={"span"} fontWeight={"bold"}>Please Note</Text>:
                                         Reach out to our dedicated support team and provide them with the domain you
                                         want to use with the API. They will guide you through the whitelisting process
                                         and ensure that the API is enabled for your specified domain. Without
@@ -150,16 +150,15 @@ const Headless = () => {
                             </Box>
                         </Card>
                     </Layout.AnnotatedSection>
-                    <Layout.Section>
-                        <PageActions
-                            primaryAction={{
-                                content: 'Save',
-                                onAction: updateHeadless,
-                                loading: isTokenLoading
-                            }}
-                        />
-                    </Layout.Section>
+
                 </Layout>
+                <PageActions
+                    primaryAction={{
+                        content: 'Save',
+                        onAction: updateHeadless,
+                        loading: isTokenLoading
+                    }}
+                />
             </Page>
         </Fragment>
     );

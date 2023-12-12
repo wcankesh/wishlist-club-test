@@ -353,14 +353,14 @@ const Language = () => {
                     {message !== "" && isError === false ? <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer}/> : ""}
                     <CustomErrorBanner message={message} setMessage={setMessage} setIsError={setIsError} isError={isError} link={""}/>
                     <Layout.Section>
-                        <BlockStack gap={"300"}>
-                        <Card padding={"0"}>
-                            <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>
-                        </Card>
+                        <BlockStack gap={"400"}>
+                            <Card padding={"0"}>
+                                <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>
+                            </Card>
                         {(Langaguge || []).map((x, i) => {
                             return (
                                x.tab === selected &&
-                               <Card padding={"500"} key={i}>
+                               <Card padding={"400"} key={i}>
                                     <Grid gap="4" columns={{xs: 1, sm: 2, md: 2, lg: 3, xl: 3}}
                                                     alignItems="end">
                                         {(x.PageLabel || []).map((y, j) => {
@@ -381,7 +381,6 @@ const Language = () => {
                                                                     onChange={handleChange} value={y.value}/>
                                                     }
                                                 </Fragment>
-
                                             )
                                         })
                                         }
@@ -392,16 +391,14 @@ const Language = () => {
                         }
                         </BlockStack>
                     </Layout.Section>
-                    <Layout.Section>
-                        <PageActions
-                            primaryAction={{
-                                content: 'Save',
-                                onAction: updateLabel,
-                                loading: isLoading
-                            }}
-                        />
-                    </Layout.Section>
                 </Layout>
+                <PageActions
+                    primaryAction={{
+                        content: 'Save',
+                        onAction: updateLabel,
+                        loading: isLoading
+                    }}
+                />
             </Page>
         </Fragment>
     );
