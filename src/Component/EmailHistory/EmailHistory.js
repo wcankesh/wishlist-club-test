@@ -85,8 +85,8 @@ const EmailHistory = () => {
             {message !== "" && isError === false ?
                 <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
                               setIsErrorServer={setIsErrorServer}/> : ""}
-            <CustomErrorBanner message={message} setMessage={setMessage} setIsError={setIsError} isError={isError}
-                               link={""}/>
+            <CustomErrorBanner link={"https://webcontrive.helpscoutdocs.com/article/515-how-to-check-email-sent-out-history"} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError}
+                               />
             <Layout>
                 <Layout.Section>
                     <Card padding={"050"}>

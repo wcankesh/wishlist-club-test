@@ -374,7 +374,7 @@ const WishlistItemsEmail = () => {
                   >
                 <Layout>
                     {message !== "" && isError === false ? <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer}/> : ""}
-                    <CustomErrorBanner message={message} setMessage={setMessage} setIsError={setIsError} isError={isError} link={""}/>
+                    <CustomErrorBanner link={"https://webcontrive.helpscoutdocs.com/article/425-wishlist-email-settings"} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError}/>
 
                     <Layout.Section>
                         <BlockStack gap={"400"}>

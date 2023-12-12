@@ -238,8 +238,8 @@ const WishlistItems = () => {
             {message !== "" && isError === false ?
                 <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
                               setIsErrorServer={setIsErrorServer}/> : ""}
-            <CustomErrorBanner message={message} setMessage={setMessage} setIsError={setIsError} isError={isError}
-                               link={""}/>
+            <CustomErrorBanner link={"https://webcontrive.helpscoutdocs.com/article/422-how-to-check-wishlist-product"} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError}
+                               />
             <Layout.Section>
               <Card padding={"0"}>
                 <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>

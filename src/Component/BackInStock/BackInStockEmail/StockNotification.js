@@ -399,7 +399,7 @@ const StockNotification = () => {
                 <Layout>
                     {message !== "" && isError === false ?
                         <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer}/> : ""}
-                        <CustomErrorBanner message={message} setMessage={setMessage} setIsError={setIsError} isError={isError} link={""}/>
+                        <CustomErrorBanner link={"https://webcontrive.helpscoutdocs.com/article/525-how-to-set-back-in-stock-button-and-email"} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError} />
                     <Layout.Section>
                         <BlockStack gap={400}>
                         <Card padding={0} roundedAbove={"md"}>

@@ -29,10 +29,10 @@ const DefaultLayout = () => {
             <Provider config={config}>
                 <NavigationMenu
                     navigationLinks={[
-                        {
-                            label: 'Dashboard',
-                            destination: `${baseUrl}/dashboard`,
-                        },
+                        // {
+                        //     label: 'Dashboard',
+                        //     destination: `${baseUrl}/dashboard`,
+                        // },
                         {
                             label: 'Analytics',
                             destination: `${baseUrl}/analytics`

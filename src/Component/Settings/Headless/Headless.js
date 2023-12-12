@@ -96,7 +96,7 @@ const Headless = () => {
                   }}>
                 <Layout>
                     {message !== "" && isError === false ? <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer}/> : ""}
-                    <CustomErrorBanner message={message} setMessage={setMessage} setIsError={setIsError} isError={isError} link={""}/>
+                    <CustomErrorBanner link={"https://webcontrive.helpscoutdocs.com/collection/416-wishlist-club"} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError} />
                     <Layout.AnnotatedSection
                         id="storeDetails"
                         title="Headless Settings"

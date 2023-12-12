@@ -161,7 +161,7 @@ const  WishlistDesign = () => {
                   primaryAction={{content: "Save", onAction: updateLauncher, loading: isLoading}}>
                 <Layout>
                     {message !== "" && isError === false ? <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer}/> : ""}
-                    <CustomErrorBanner message={message} setMessage={setMessage} setIsError={setIsError} isError={isError} link={""}/>
+                    <CustomErrorBanner link={"https://webcontrive.helpscoutdocs.com/article/424-how-to-customize-wishlist-button"} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError} />
                     <Layout.Section fullWidth>
                         <Card padding={"0"}>
                             <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>

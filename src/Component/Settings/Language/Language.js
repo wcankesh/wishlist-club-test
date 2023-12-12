@@ -351,7 +351,7 @@ const Language = () => {
                   primaryAction={{content: "Save", onAction: updateLabel, loading: isLoading}}>
                 <Layout>
                     {message !== "" && isError === false ? <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer}/> : ""}
-                    <CustomErrorBanner message={message} setMessage={setMessage} setIsError={setIsError} isError={isError} link={""}/>
+                    <CustomErrorBanner link={"https://webcontrive.helpscoutdocs.com/article/426-wishlist-language-settings"} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError} />
                     <Layout.Section>
                         <BlockStack gap={"400"}>
                             <Card padding={"0"}>

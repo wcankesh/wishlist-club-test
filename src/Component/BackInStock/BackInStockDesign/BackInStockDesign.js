@@ -237,7 +237,7 @@ const BackInStockDesign = () => {
 
                 <Layout>
                     {message !== "" && isError === false ? <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer}/> : ""}
-                    <CustomErrorBanner message={message} setMessage={setMessage} setIsError={setIsError} isError={isError} link={""}/>
+                    <CustomErrorBanner link={"https://webcontrive.helpscoutdocs.com/article/525-how-to-set-back-in-stock-button-and-email"} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError}/>
                     <Layout.Section fullWidth>
                         <Card padding={0} roundedAbove={"md"}>
                             <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>
