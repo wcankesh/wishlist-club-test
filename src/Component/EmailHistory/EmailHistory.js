@@ -51,6 +51,7 @@ const EmailHistory = () => {
             setEmail(response.data)
             setEmailPage(response.data.total)
             setIsLoading(false);
+            setIsError(false)
         } else if (response.status === 500) {
             setMessage(capitalizeMessage(response.message))
             setIsErrorServer(true);
@@ -122,18 +123,21 @@ const EmailHistory = () => {
                                                     onClose={() => togglePopoverActive(i)}
                                                 >
                                                     <Popover.Pane>
-                                                        <ResourceList items={((z.type == 1 || z.type == 2 || z.type == 3 || z.type == 4 || z.type == 7 ? z.wishlist_products : z.bis_products) || [] )} renderItem={(item) => {
-                                                            const {title} = item
-                                                            return (
-                                                                <ResourceList.Item>
-                                                                    <InlineStack blockAlign={"center"} gap="200" wrap={false} >
-                                                                        <Thumbnail size={"small"} source={item.image}/>
-                                                                        <Text as={"span"}>{title}</Text>
-                                                                    </InlineStack>
-                                                                </ResourceList.Item>
-                                                            )
-                                                        }}/>
+                                                        <div className={"remove-cursor"}>
+                                                            <ResourceList items={((z.type == 1 || z.type == 2 || z.type == 3 || z.type == 4 || z.type == 7 ? z.wishlist_products : z.bis_products) || [] )} renderItem={(item) => {
+                                                                const {title} = item
+                                                                return (
+                                                                    <ResourceList.Item>
+                                                                        <InlineStack blockAlign={"center"} gap="200" wrap={false} >
+                                                                            <Thumbnail size={"small"} source={item.image}/>
+                                                                            <Text as={"span"}>{title}</Text>
+                                                                        </InlineStack>
+                                                                    </ResourceList.Item>
+                                                                )
+                                                            }}/>
+                                                        </div>
                                                     </Popover.Pane>
+
                                                 </Popover>
                                             </IndexTable.Cell>
                                             <IndexTable.Cell>

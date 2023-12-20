@@ -55,6 +55,7 @@ const Language = () => {
         const Label = async () => {
             const response = await apiService.getLabel();
             if (response.status === 200) {
+                setIsError(false)
                 setLabelData(response.data)
             } else if (response.status === 500) {
                 setMessage(capitalizeMessage(response.message))
@@ -74,6 +75,7 @@ const Language = () => {
         }
         const response = await apiService.updateLabel(payload, labelData.id)
         if (response.status === 200) {
+            setIsError(false)
             setIsLoading(false)
             setMessage(capitalizeMessage(response.message))
         } else if (response.status === 500) {

@@ -81,7 +81,6 @@ const WishlistItemsEmail = () => {
     const [message, setMessage] = useState("")
     const [selectedWlLogo, setSelectedWlLogo] = useState("");
     const [selected, setSelected] = useState(0);
-    const [selectedEmailTab, setSelectedEmailTab] = useState(0);
     const shopDetails = useSelector((state) => state.shopDetails);
     const options = [
         {label: '1 Day', value: '1'},
@@ -322,23 +321,6 @@ const WishlistItemsEmail = () => {
 
     ];
 
-    const tabsEmail = [
-        {
-            id: 'email-body-content',
-            content: 'Content',
-            panelID: 'email-body-content',
-        },
-        {
-            id: 'email-body',
-            content: 'Preview',
-            panelID: 'email-body',
-        },
-    ];
-
-    const handleTabChangeEmail = (selectedTabIndex) => {
-        setSelectedEmailTab(selectedTabIndex)
-    }
-
     const handleSwitch = async (e) => {
         setEmailSetting({
             ...emailSetting,
@@ -377,793 +359,503 @@ const WishlistItemsEmail = () => {
                     <CustomErrorBanner link={"https://webcontrive.helpscoutdocs.com/article/425-wishlist-email-settings"} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError}/>
 
                     <Layout.Section>
-                        <BlockStack gap={"400"}>
-                            <Card padding={0} roundedAbove={"md"}>
-                                <Tabs tabs={tabsEmail} selected={selectedEmailTab} onSelect={handleTabChangeEmail}/>
-                            </Card>
+                        <Card padding={"0"}>
+                            <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>
+                            <Divider/>
                             {
-                                selectedEmailTab === 0 &&  <Card padding={"0"}>
-                                    <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>
-                                    <Divider/>
-                                    {
-                                        selected === 0 &&
-                                        <Box padding={"400"} paddingBlockStart={"200"}>
-                                            <FormLayout>
-                                                <TextField label="Email subject" value={emailSetting.subject}
-                                                           helpText="Add this {{shop_name}} variable"
-                                                           onChange={(value) => handleChange({
+                                selected === 0 &&
+                                <Box padding={"400"} paddingBlockStart={"200"}>
+                                    <FormLayout>
+                                        <TextField label="Email subject" value={emailSetting.subject}
+                                                   helpText="Add this {{shop_name}} variable"
+                                                   onChange={(value) => handleChange({
+                                                       target: {
+                                                           name: "subject",
+                                                           value
+                                                       }
+                                                   })}
+                                                   name={"subject"}
+                                                   onBlur={onBlur}
+                                                   error={emailSettingError.subject}
+                                        />
+                                        <TextField
+                                            label="Email body"
+                                            helpText="Add this {{shop_name}} {{shop_url}}  variable"
+                                            multiline={3}
+                                            value={emailSetting.email_body}
+                                            onChange={(value) => handleChange({
+                                                target: {
+                                                    name: "email_body",
+                                                    value
+                                                }
+                                            })}
+                                            name={"email_body"}
+                                            onBlur={onBlur}
+                                            error={emailSettingError.email_body}
+                                        />
+                                        <TextField
+                                            label="Reply to email"
+                                            value={emailSetting.reply_to_mail}
+                                            onChange={(value) => handleChange({
+                                                target: {
+                                                    name: "reply_to_mail",
+                                                    value
+                                                }
+                                            })}
+                                            name={"reply_to_mail"}
+                                            onBlur={onBlur}
+                                            error={emailSettingError.reply_to_mail}
+                                        />
+                                        <Select
+                                            label="Email send after create wishlist"
+                                            options={options}
+                                            value={emailSetting.reminder_after_day.toString()}
+                                            onChange={(value) => {
+                                                handleChange({
+                                                    target: {
+                                                        name: "reminder_after_day",
+                                                        value
+                                                    }
+                                                })
+                                            }}
+                                        />
+                                        <TextField label='"Add to cart" label'
+                                                   value={emailSetting.wishlist_content.add_to_cart_button_text}
+                                                   onChange={(value) => {
+                                                       wlItemOnChangeContent({
+                                                           target: {
+                                                               name: "add_to_cart_button_text",
+                                                               value
+                                                           }
+                                                       })
+                                                   }}
+                                                   name={"add_to_cart_button_text"}
+                                                   onBlur={onBlur}
+                                                   error={emailSettingError.add_to_cart_button_text}
+                                        />
+                                        <TextField label='"Visit product" label'
+                                                   value={emailSetting.wishlist_content.view_product_button_text}
+                                                   onChange={(value) => {
+                                                       wlItemOnChangeContent({
+                                                           target: {
+                                                               name: "view_product_button_text",
+                                                               value
+                                                           }
+                                                       })
+                                                   }}
+                                                   name={"view_product_button_text"}
+                                                   onBlur={onBlur}
+                                                   error={emailSettingError.view_product_button_text}
+                                        />
+                                    </FormLayout>
+                                </Box>
+                            }
+                            {
+                                selected === 1 &&
+                                <Box padding={"400"} paddingBlockStart={"200"}>
+                                    <FormLayout>
+                                        <FormLayout.Group>
+                                            <TextField label={"Social networks title"}
+                                                       value={emailSetting.wishlist_social.title}
+                                                       onChange={(value) => {
+                                                           wlItemOnChangeSocial({
                                                                target: {
-                                                                   name: "subject",
+                                                                   name: "title",
                                                                    value
                                                                }
-                                                           })}
-                                                           name={"subject"}
-                                                           onBlur={onBlur}
-                                                           error={emailSettingError.subject}
-                                                />
-                                                <TextField
-                                                    label="Email body"
-                                                    helpText="Add this {{shop_name}} {{shop_url}}  variable"
-                                                    multiline={3}
-                                                    value={emailSetting.email_body}
-                                                    onChange={(value) => handleChange({
-                                                        target: {
-                                                            name: "email_body",
-                                                            value
-                                                        }
-                                                    })}
-                                                    name={"email_body"}
-                                                    onBlur={onBlur}
-                                                    error={emailSettingError.email_body}
-                                                />
-                                                <TextField
-                                                    label="Reply to email"
-                                                    value={emailSetting.reply_to_mail}
-                                                    onChange={(value) => handleChange({
-                                                        target: {
-                                                            name: "reply_to_mail",
-                                                            value
-                                                        }
-                                                    })}
-                                                    name={"reply_to_mail"}
-                                                    onBlur={onBlur}
-                                                    error={emailSettingError.reply_to_mail}
-                                                />
-                                                <Select
-                                                    label="Email send after create wishlist"
-                                                    options={options}
-                                                    value={emailSetting.reminder_after_day.toString()}
-                                                    onChange={(value) => {
-                                                        handleChange({
-                                                            target: {
-                                                                name: "reminder_after_day",
-                                                                value
-                                                            }
-                                                        })
-                                                    }}
-                                                />
-                                                <TextField label='"Add to cart" label'
-                                                           value={emailSetting.wishlist_content.add_to_cart_button_text}
-                                                           onChange={(value) => {
-                                                               wlItemOnChangeContent({
-                                                                   target: {
-                                                                       name: "add_to_cart_button_text",
-                                                                       value
-                                                                   }
-                                                               })
-                                                           }}
-                                                           name={"add_to_cart_button_text"}
-                                                           onBlur={onBlur}
-                                                           error={emailSettingError.add_to_cart_button_text}
-                                                />
-                                                <TextField label='"Visit product" label'
-                                                           value={emailSetting.wishlist_content.view_product_button_text}
-                                                           onChange={(value) => {
-                                                               wlItemOnChangeContent({
-                                                                   target: {
-                                                                       name: "view_product_button_text",
-                                                                       value
-                                                                   }
-                                                               })
-                                                           }}
-                                                           name={"view_product_button_text"}
-                                                           onBlur={onBlur}
-                                                           error={emailSettingError.view_product_button_text}
-                                                />
-                                            </FormLayout>
-                                        </Box>
-                                    }
-                                    {
-                                        selected === 1 &&
-                                        <Box padding={"400"} paddingBlockStart={"200"}>
+                                                           })
+                                                       }}
+                                            />
+                                        </FormLayout.Group>
+
+                                        <FormLayout.Group condensed>
+                                            <TextField label={"Instagram"} prefix={"@"}
+                                                       value={emailSetting.wishlist_social.instagram}
+                                                       onChange={(value) => {
+                                                           wlItemOnChangeSocial({
+                                                               target: {
+                                                                   name: "instagram",
+                                                                   value
+                                                               }
+                                                           })
+                                                       }}/>
+                                            <TextField label={"Facebook"} prefix={"@"}
+                                                       value={emailSetting.wishlist_social.facebook}
+                                                       onChange={(value) => {
+                                                           wlItemOnChangeSocial({
+                                                               target: {
+                                                                   name: "facebook",
+                                                                   value
+                                                               }
+                                                           })
+                                                       }}
+                                            />
+                                        </FormLayout.Group>
+                                        <FormLayout.Group condensed>
+                                            <TextField label={"Twitter"} prefix={"@"}
+                                                       value={emailSetting.wishlist_social.twitter}
+                                                       onChange={(value) => {
+                                                           wlItemOnChangeSocial({
+                                                               target: {
+                                                                   name: "twitter",
+                                                                   value
+                                                               }
+                                                           })
+                                                       }}
+                                            />
+                                            <TextField label={"Telegram"} prefix={"@"}
+                                                       value={emailSetting.wishlist_social.telegram}
+                                                       onChange={(value) => {
+                                                           wlItemOnChangeSocial({
+                                                               target: {
+                                                                   name: "telegram",
+                                                                   value
+                                                               }
+                                                           })
+                                                       }}
+                                            />
+                                        </FormLayout.Group>
+                                        <FormLayout.Group condensed>
+                                            <TextField label={"Linkedin"}
+                                                       value={emailSetting.wishlist_social.linkedin}
+                                                       onChange={(value) => {
+                                                           wlItemOnChangeSocial({
+                                                               target: {
+                                                                   name: "linkedin",
+                                                                   value
+                                                               }
+                                                           })
+                                                       }}
+                                            />
+                                            <TextField label={"Pinterest"}
+                                                       value={emailSetting.wishlist_social.pinterest}
+                                                       onChange={(value) => {
+                                                           wlItemOnChangeSocial({
+                                                               target: {
+                                                                   name: "pinterest",
+                                                                   value
+                                                               }
+                                                           })
+                                                       }}
+                                            />
+                                        </FormLayout.Group>
+                                    </FormLayout>
+                                </Box>
+                            }
+                            {
+                                selected === 2 && <Fragment>
+                                    <Box padding={"400"} paddingBlockStart={"200"}>
+                                        <BlockStack gap={"200"}>
+                                            <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Email logo</Text>
                                             <FormLayout>
-                                                <FormLayout.Group>
-                                                    <TextField label={"Social networks title"}
-                                                               value={emailSetting.wishlist_social.title}
-                                                               onChange={(value) => {
-                                                                   wlItemOnChangeSocial({
-                                                                       target: {
-                                                                           name: "title",
-                                                                           value
-                                                                       }
-                                                                   })
-                                                               }}
+                                                <FormLayout.Group condensed>
+                                                    <RadioButton
+                                                        label={"Store Name"}
+                                                        id="optional"
+                                                        checked={emailSetting.wishlist_branding_type == '1'}
+                                                        onChange={() => handleChange({
+                                                            target: {
+                                                                name: "wishlist_branding_type",
+                                                                value: "1"
+                                                            }
+                                                        })}
+                                                    />
+                                                    <RadioButton
+                                                        label="Logo"
+                                                        id="disabled"
+                                                        checked={emailSetting.wishlist_branding_type == '2'}
+                                                        onChange={() => handleChange({
+                                                            target: {
+                                                                name: "wishlist_branding_type",
+                                                                value: "2"
+                                                            }
+                                                        })}
+                                                    />
+                                                    <RadioButton
+                                                        label={"Both"}
+                                                        id="both"
+                                                        checked={emailSetting.wishlist_branding_type == '3'}
+                                                        onChange={() => handleChange({
+                                                            target: {
+                                                                name: "wishlist_branding_type",
+                                                                value: "3"
+                                                            }
+                                                        })}
                                                     />
                                                 </FormLayout.Group>
-
+                                                {(emailSetting.wishlist_branding_type == '2' || emailSetting.wishlist_branding_type == '3') &&
+                                                <div style={{width: 58, height: 58}}>
+                                                    <DropZone
+                                                        accept=".jpg,.png,.jpeg"
+                                                        allowMultiple={false}
+                                                        onDrop={handleDropZoneDrop}
+                                                    >
+                                                        {uploadedFiles}
+                                                        {fileUpload}
+                                                    </DropZone></div>}
+                                            </FormLayout>
+                                        </BlockStack>
+                                    </Box>
+                                    <Divider />
+                                    <Box padding={"400"}>
+                                        <BlockStack gap={"200"}>
+                                            <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Email body customization</Text>
+                                            <FormLayout>
                                                 <FormLayout.Group condensed>
-                                                    <TextField label={"Instagram"} prefix={"@"}
-                                                               value={emailSetting.wishlist_social.instagram}
+                                                    <ColorInput label="Background color" name="background_color"
+                                                                value={emailSetting.wishlist_style.background_color}
+                                                                onChange={wlItemOnChangeStyle}/>
+                                                    <TextField type="number" label="Email body font size" suffix="PX"
+                                                               value={emailSetting.wishlist_style.description_font_size}
                                                                onChange={(value) => {
-                                                                   wlItemOnChangeSocial({
+                                                                   wlItemOnChangeStyle({
                                                                        target: {
-                                                                           name: "instagram",
+                                                                           name: "description_font_size",
                                                                            value
                                                                        }
                                                                    })
                                                                }}/>
-                                                    <TextField label={"Facebook"} prefix={"@"}
-                                                               value={emailSetting.wishlist_social.facebook}
-                                                               onChange={(value) => {
-                                                                   wlItemOnChangeSocial({
-                                                                       target: {
-                                                                           name: "facebook",
-                                                                           value
-                                                                       }
-                                                                   })
-                                                               }}
-                                                    />
                                                 </FormLayout.Group>
                                                 <FormLayout.Group condensed>
-                                                    <TextField label={"Twitter"} prefix={"@"}
-                                                               value={emailSetting.wishlist_social.twitter}
-                                                               onChange={(value) => {
-                                                                   wlItemOnChangeSocial({
-                                                                       target: {
-                                                                           name: "twitter",
-                                                                           value
-                                                                       }
-                                                                   })
-                                                               }}
-                                                    />
-                                                    <TextField label={"Telegram"} prefix={"@"}
-                                                               value={emailSetting.wishlist_social.telegram}
-                                                               onChange={(value) => {
-                                                                   wlItemOnChangeSocial({
-                                                                       target: {
-                                                                           name: "telegram",
-                                                                           value
-                                                                       }
-                                                                   })
-                                                               }}
-                                                    />
-                                                </FormLayout.Group>
-                                                <FormLayout.Group condensed>
-                                                    <TextField label={"Linkedin"}
-                                                               value={emailSetting.wishlist_social.linkedin}
-                                                               onChange={(value) => {
-                                                                   wlItemOnChangeSocial({
-                                                                       target: {
-                                                                           name: "linkedin",
-                                                                           value
-                                                                       }
-                                                                   })
-                                                               }}
-                                                    />
-                                                    <TextField label={"Pinterest"}
-                                                               value={emailSetting.wishlist_social.pinterest}
-                                                               onChange={(value) => {
-                                                                   wlItemOnChangeSocial({
-                                                                       target: {
-                                                                           name: "pinterest",
-                                                                           value
-                                                                       }
-                                                                   })
-                                                               }}
+                                                    <Select label={"Text color theme"} options={theme}
+                                                            value={emailSetting.wishlist_style.theme}
+                                                            onChange={(value) => {
+                                                                wlItemOnChangeStyle({
+                                                                    target: {
+                                                                        name: "theme",
+                                                                        value
+                                                                    }
+                                                                })
+                                                            }}/>
+                                                    <Select label={"Font family"} options={fontFamily}
+                                                            value={emailSetting.wishlist_style.font_family}
+                                                            onChange={(value) => {
+                                                                wlItemOnChangeStyle({
+                                                                    target: {
+                                                                        name: "font_family",
+                                                                        value
+                                                                    }
+                                                                })
+                                                            }}
                                                     />
                                                 </FormLayout.Group>
                                             </FormLayout>
-                                        </Box>
-                                    }
-                                    {
-                                        selected === 2 && <Fragment>
-                                            <Box padding={"400"} paddingBlockStart={"200"}>
-                                                <BlockStack gap={"200"}>
-                                                    <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Email logo</Text>
-                                                    <FormLayout>
-                                                        <FormLayout.Group condensed>
-                                                            <RadioButton
-                                                                label={"Store Name"}
-                                                                id="optional"
-                                                                checked={emailSetting.wishlist_branding_type == '1'}
-                                                                onChange={() => handleChange({
-                                                                    target: {
-                                                                        name: "wishlist_branding_type",
-                                                                        value: "1"
-                                                                    }
-                                                                })}
-                                                            />
-                                                            <RadioButton
-                                                                label="Logo"
-                                                                id="disabled"
-                                                                checked={emailSetting.wishlist_branding_type == '2'}
-                                                                onChange={() => handleChange({
-                                                                    target: {
-                                                                        name: "wishlist_branding_type",
-                                                                        value: "2"
-                                                                    }
-                                                                })}
-                                                            />
-                                                            <RadioButton
-                                                                label={"Both"}
-                                                                id="both"
-                                                                checked={emailSetting.wishlist_branding_type == '3'}
-                                                                onChange={() => handleChange({
-                                                                    target: {
-                                                                        name: "wishlist_branding_type",
-                                                                        value: "3"
-                                                                    }
-                                                                })}
-                                                            />
-                                                        </FormLayout.Group>
-                                                        {(emailSetting.wishlist_branding_type == '2' || emailSetting.wishlist_branding_type == '3') &&
-                                                        <div style={{width: 58, height: 58}}>
-                                                            <DropZone
-                                                                accept=".jpg,.png,.jpeg"
-                                                                allowMultiple={false}
-                                                                onDrop={handleDropZoneDrop}
-                                                            >
-                                                                {uploadedFiles}
-                                                                {fileUpload}
-                                                            </DropZone></div>}
-                                                    </FormLayout>
-                                                </BlockStack>
-                                            </Box>
-                                            <Divider />
-                                            <Box padding={"400"}>
-                                                <BlockStack gap={"200"}>
-                                                    <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Email body customization</Text>
-                                                    <FormLayout>
-                                                        <FormLayout.Group condensed>
-                                                            <ColorInput label="Background color" name="background_color"
-                                                                        value={emailSetting.wishlist_style.background_color}
-                                                                        onChange={wlItemOnChangeStyle}/>
-                                                            <TextField type="number" label="Email body font size" suffix="PX"
-                                                                       value={emailSetting.wishlist_style.description_font_size}
-                                                                       onChange={(value) => {
-                                                                           wlItemOnChangeStyle({
-                                                                               target: {
-                                                                                   name: "description_font_size",
-                                                                                   value
-                                                                               }
-                                                                           })
-                                                                       }}/>
-                                                        </FormLayout.Group>
-                                                        <FormLayout.Group condensed>
-                                                            <Select label={"Text color theme"} options={theme}
-                                                                    value={emailSetting.wishlist_style.theme}
-                                                                    onChange={(value) => {
-                                                                        wlItemOnChangeStyle({
-                                                                            target: {
-                                                                                name: "theme",
-                                                                                value
-                                                                            }
-                                                                        })
-                                                                    }}/>
-                                                            <Select label={"Font family"} options={fontFamily}
-                                                                    value={emailSetting.wishlist_style.font_family}
-                                                                    onChange={(value) => {
-                                                                        wlItemOnChangeStyle({
-                                                                            target: {
-                                                                                name: "font_family",
-                                                                                value
-                                                                            }
-                                                                        })
-                                                                    }}
-                                                            />
-                                                        </FormLayout.Group>
-                                                    </FormLayout>
-                                                </BlockStack>
-                                            </Box>
-                                            <Divider />
-                                            <Box padding={"400"}>
-                                                <BlockStack gap={"200"}>
-                                                    <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Add to Cart Button customization</Text>
-                                                    <FormLayout>
-                                                        <FormLayout.Group condensed>
-                                                            <ColorInput label={"Button Background color"} name="add_to_cart_btn_bg_color"
-                                                                        onChange={wlItemOnChangeStyle}
-                                                                        value={emailSetting.wishlist_style.add_to_cart_btn_bg_color}/>
-                                                            <ColorInput label={"Button Text color"} name="add_to_cart_btn_text_color"
-                                                                        onChange={wlItemOnChangeStyle}
-                                                                        value={emailSetting.wishlist_style.add_to_cart_btn_text_color}/>
-                                                        </FormLayout.Group>
-                                                        <FormLayout.Group condensed>
-                                                            <ColorInput label={"Button Border color"} name="add_to_cart_btn_border_color"
-                                                                        onChange={wlItemOnChangeStyle}
-                                                                        value={emailSetting.wishlist_style.add_to_cart_btn_border_color}/>
-                                                            <TextField label={"Border Width"}
-                                                                       value={emailSetting.wishlist_style.add_to_cart_btn_border_size}
-                                                                       type="number"
-                                                                       suffix="PX"
-                                                                       onChange={(value) => {
-                                                                           wlItemOnChangeStyle({
-                                                                               target: {
-                                                                                   name: "add_to_cart_btn_border_size",
-                                                                                   value
-                                                                               }
-                                                                           })
-                                                                       }}
-
-                                                            />
-                                                        </FormLayout.Group>
-                                                        <FormLayout.Group condensed>
-                                                            <TextField label="Top & Bottom padding"
-                                                                       type="number"
-                                                                       value={emailSetting.wishlist_style.add_to_cart_btn_vertical_padding}
-                                                                       onChange={(value) => wlItemOnChangeStyle({
-                                                                           target: {
-                                                                               name: "add_to_cart_btn_vertical_padding",
-                                                                               value
-                                                                           }
-                                                                       })}
-                                                                       suffix="PX"
-                                                            />
-                                                            <TextField label="Left & Right padding"
-                                                                       type="number"
-                                                                       value={emailSetting.wishlist_style.add_to_cart_btn_horizontal_padding}
-                                                                       onChange={(value) => wlItemOnChangeStyle({
-                                                                           target: {
-                                                                               name: "add_to_cart_btn_horizontal_padding",
-                                                                               value
-                                                                           }
-                                                                       })}
-                                                                       suffix="PX"
-                                                            />
-                                                        </FormLayout.Group>
-                                                    </FormLayout>
-                                                </BlockStack>
-                                            </Box>
-                                            <Divider />
-                                            <Box padding={"400"}>
-                                                <BlockStack gap={"200"}>
-                                                    <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>View Product Button customization</Text>
-                                                    <FormLayout>
-                                                        <FormLayout.Group condensed>
-                                                            <ColorInput label={"Button Background color"} name="view_product_btn_bg_color"
-                                                                        onChange={wlItemOnChangeStyle}
-                                                                        value={emailSetting.wishlist_style.view_product_btn_bg_color}/>
-                                                            <ColorInput label={"Button Text color"} name="view_product_btn_text_color"
-                                                                        onChange={wlItemOnChangeStyle}
-                                                                        value={emailSetting.wishlist_style.view_product_btn_text_color}/>
-                                                        </FormLayout.Group>
-                                                        <FormLayout.Group condensed>
-                                                            <ColorInput label={"Button Border color"} name="view_product_btn_border_color"
-                                                                        onChange={wlItemOnChangeStyle}
-                                                                        value={emailSetting.wishlist_style.view_product_btn_border_color}/>
-                                                            <TextField label={"Border Width"}
-                                                                       value={emailSetting.wishlist_style.view_product_btn_border_size}
-                                                                       type="number"
-                                                                       suffix="PX"
-                                                                       onChange={(value) => {
-                                                                           wlItemOnChangeStyle({
-                                                                               target: {
-                                                                                   name: "view_product_btn_border_size",
-                                                                                   value
-                                                                               }
-                                                                           })
-                                                                       }}
-
-                                                            />
-                                                        </FormLayout.Group>
-                                                        <FormLayout.Group condensed>
-                                                            <TextField label="Top & Bottom padding"
-                                                                       type="number"
-                                                                       value={emailSetting.wishlist_style.view_product_btn_vertical_padding}
-                                                                       onChange={(value) => wlItemOnChangeStyle({
-                                                                           target: {
-                                                                               name: "view_product_btn_vertical_padding",
-                                                                               value
-                                                                           }
-                                                                       })}
-                                                                       suffix="PX"
-                                                            />
-                                                            <TextField label="Left & Right padding"
-                                                                       type="number"
-                                                                       value={emailSetting.wishlist_style.view_product_btn_horizontal_padding}
-                                                                       onChange={(value) => wlItemOnChangeStyle({
-                                                                           target: {
-                                                                               name: "view_product_btn_horizontal_padding",
-                                                                               value
-                                                                           }
-                                                                       })}
-                                                                       suffix="PX"
-                                                            />
-                                                        </FormLayout.Group>
-                                                    </FormLayout>
-                                                </BlockStack>
-                                            </Box>
-                                        </Fragment>
-                                    }
-                                </Card>
-                            }
-                            {
-                                selectedEmailTab === 1 &&  <Card padding={"0"}>
+                                        </BlockStack>
+                                    </Box>
+                                    <Divider />
                                     <Box padding={"400"}>
-                                        <BlockStack gap={"400"}>
-                                            <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>{emailSetting.subject}</Text>
-                                            <div className="email-template-live-preview-wrapper">
-                                                <div className="email-template-body"
-                                                     style={{fontFamily: emailSetting.wishlist_style.font_family}}>
-                                                    <table width="100%" border={0} cellSpacing={0} cellPadding={0}
-                                                           style={{borderCollapse: 'collapse'}}>
-                                                        <tbody>
-                                                        <tr>
-                                                            <td align="center">
-                                                                <table className="template-table" border={0} cellSpacing={0}
-                                                                       cellPadding={0} style={{
-                                                                    margin: '0px auto',
-                                                                    maxWidth: '470px',
-                                                                    borderCollapse: 'collapse'
-                                                                }}>
-                                                                    <thead>
-                                                                    <tr className="shop-branding-wrapper">
-                                                                        <th className="shop-branding" style={{
-                                                                            backgroundColor: emailSetting.wishlist_style.background_color,
-                                                                            borderRadius: '10px 10px 0px 0px',
-                                                                            color: 'rgb(32, 34, 35)',
-                                                                            fontSize: '24px',
-                                                                            fontWeight: 'bold',
-                                                                            lineHeight: '28px',
-                                                                            height: '70px',
-                                                                            textAlign: 'center',
-                                                                            paddingTop: '20px',
-                                                                        }}>
-                                                                            {
-                                                                                emailSetting.wishlist_branding_type == "2" ?
-                                                                                    <Fragment>{selectedWlLogo && selectedWlLogo.name ?
-                                                                                        <img
-                                                                                            src={selectedWlLogo ? URL.createObjectURL(selectedWlLogo) : ""}
-                                                                                            alt="logo"
-                                                                                            style={{maxHeight: '50px'}}/> :
-                                                                                        emailSetting.wishlist_logo ?
-                                                                                            <img src={emailSetting.wishlist_logo}
-                                                                                                 alt="logo"
-                                                                                                 style={{maxHeight: '50px'}}/> :
-                                                                                            <img src={""} alt="logo"
-                                                                                                 style={{maxHeight: '50px'}}/>}</Fragment> :
-                                                                                    emailSetting.wishlist_branding_type == "1" ? shopDetails && shopDetails.store_name :
-                                                                                        <Fragment>
-                                                                                            {selectedWlLogo?.name ?
-                                                                                                <img
-                                                                                                    src={selectedWlLogo ? URL.createObjectURL(selectedWlLogo) : ""}
-                                                                                                    alt="logo"
-                                                                                                    style={{maxHeight: '50px'}}/> :
-                                                                                                emailSetting.wishlist_logo ?
-                                                                                                    <img
-                                                                                                        src={emailSetting.wishlist_logo}
-                                                                                                        alt="logo"
-                                                                                                        style={{maxHeight: '50px'}}/> :
-                                                                                                    <img src={""} alt="logo"
-                                                                                                         style={{maxHeight: '50px'}}/>}&nbsp; {shopDetails && shopDetails.store_name}
-                                                                                        </Fragment>
-                                                                            }
-                                                                        </th>
-                                                                    </tr>
-                                                                    </thead>
-                                                                    <tbody className="template-body" style={{
-                                                                        backgroundColor: emailSetting.wishlist_style.background_color,
-                                                                        border: '30px solid transparent'
-                                                                    }}>
-                                                                    <tr className="description-wrapper">
-                                                                        <td className="description color-text-secondary" style={{
-                                                                            fontSize: `${emailSetting.wishlist_style.description_font_size}px`,
-                                                                            lineHeight: '28px',
-                                                                            color: emailSetting.wishlist_style.theme == "1" ? 'rgb(93, 99, 102)' : 'rgb(186, 198, 204)',
-                                                                            whiteSpace: 'pre-line'
-                                                                        }}>
-                                                                            {emailSetting.email_body}
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <table>
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <table>
-                                                                                        <tr>
-                                                                                            <td className="product-image"
-                                                                                                style={{paddingTop: '20px'}}>
-                                                                                                <div style={{
-                                                                                                    width: '100%',
-                                                                                                    display: "block",
-                                                                                                    height: '100%',
-                                                                                                    borderRadius: '10px',
-                                                                                                    border: '1px solid rgb(201, 202, 204)',
-                                                                                                }}>
-                                                                                                    <img
-                                                                                                        src="https://cdn.shopify.com/s/files/1/0629/5207/9596/products/Group1242.png?v=1672138033"
-                                                                                                        alt="Dacia blouse" width={470}
-                                                                                                        style={{
-                                                                                                            display: 'block',
-                                                                                                            margin: 'auto',
-                                                                                                            maxWidth: '100%',
-                                                                                                            borderRadius: '10px'
-                                                                                                        }}/>
-                                                                                                </div>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        <tr className="product-price-wrapper">
-                                                                                            <td className="product-price" style={{
-                                                                                                paddingTop: '8px',
-                                                                                                fontWeight: 500,
-                                                                                                fontSize: '18px',
-                                                                                                lineHeight: '24px',
-                                                                                                color: 'rgb(32, 34, 35)',
-                                                                                                display: 'revert'
-                                                                                            }}>
-                                                                                                ₹179.00
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        <tr>
-                                                                                            <td style={{paddingTop: '20px'}}>
-                                                                                                <a className="buy-action-url bg-primary"
-                                                                                                   style={{
-                                                                                                       backgroundColor: emailSetting.wishlist_style.add_to_cart_btn_bg_color,
-                                                                                                       color: emailSetting.wishlist_style.add_to_cart_btn_text_color,
-                                                                                                       boxSizing: 'border-box',
-                                                                                                       borderRadius: '10px',
-                                                                                                       display: 'block',
-                                                                                                       fontSize: '16px',
-                                                                                                       fontWeight: 600,
-                                                                                                       lineHeight: '20px',
-                                                                                                       padding: `${emailSetting.wishlist_style.add_to_cart_btn_vertical_padding}px ${emailSetting.wishlist_style.add_to_cart_btn_horizontal_padding}px`,
-                                                                                                       textAlign: 'center',
-                                                                                                       textDecoration: 'none',
-                                                                                                       border: `${emailSetting.wishlist_style.add_to_cart_btn_border_size}px solid ${emailSetting.wishlist_style.add_to_cart_btn_border_color}`
+                                        <BlockStack gap={"200"}>
+                                            <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Add to Cart Button customization</Text>
+                                            <FormLayout>
+                                                <FormLayout.Group condensed>
+                                                    <ColorInput label={"Button Background color"} name="add_to_cart_btn_bg_color"
+                                                                onChange={wlItemOnChangeStyle}
+                                                                value={emailSetting.wishlist_style.add_to_cart_btn_bg_color}/>
+                                                    <ColorInput label={"Button Text color"} name="add_to_cart_btn_text_color"
+                                                                onChange={wlItemOnChangeStyle}
+                                                                value={emailSetting.wishlist_style.add_to_cart_btn_text_color}/>
+                                                </FormLayout.Group>
+                                                <FormLayout.Group condensed>
+                                                    <ColorInput label={"Button Border color"} name="add_to_cart_btn_border_color"
+                                                                onChange={wlItemOnChangeStyle}
+                                                                value={emailSetting.wishlist_style.add_to_cart_btn_border_color}/>
+                                                    <TextField label={"Border Width"}
+                                                               value={emailSetting.wishlist_style.add_to_cart_btn_border_size}
+                                                               type="number"
+                                                               suffix="PX"
+                                                               onChange={(value) => {
+                                                                   wlItemOnChangeStyle({
+                                                                       target: {
+                                                                           name: "add_to_cart_btn_border_size",
+                                                                           value
+                                                                       }
+                                                                   })
+                                                               }}
 
-                                                                                                   }}>
-                                                                                                    {emailSetting.wishlist_content.add_to_cart_button_text}
-                                                                                                </a>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        <tr>
-                                                                                            <td style={{paddingTop: '20px'}}>
-                                                                                                <a className="visit-action-url color-primary border-primary"
-                                                                                                   style={{
-                                                                                                       backgroundColor: emailSetting.wishlist_style.view_product_btn_bg_color,
-                                                                                                       color: emailSetting.wishlist_style.view_product_btn_text_color,
-                                                                                                       border: `${emailSetting.wishlist_style.view_product_btn_border_size}px solid ${emailSetting.wishlist_style.view_product_btn_border_color}`,
-                                                                                                       boxSizing: 'border-box',
-                                                                                                       borderRadius: '10px',
-                                                                                                       display: 'block',
-                                                                                                       fontSize: '16px',
-                                                                                                       fontWeight: 600,
-                                                                                                       lineHeight: '20px',
-                                                                                                       padding: `${emailSetting.wishlist_style.view_product_btn_vertical_padding}px ${emailSetting.wishlist_style.view_product_btn_horizontal_padding}px`,
-                                                                                                       textAlign: 'center',
-                                                                                                       textDecoration: 'none'
-                                                                                                   }}>
-                                                                                                    {emailSetting.wishlist_content.view_product_button_text}
-                                                                                                </a>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                    </table>
-                                                                                </td>
-                                                                                <td>
-                                                                                    <table>
-                                                                                        <tr>
-                                                                                            <td className="product-image"
-                                                                                                style={{paddingTop: '20px'}}>
-                                                                                                <div style={{
-                                                                                                    width: '100%',
-                                                                                                    display: "block",
-                                                                                                    height: '100%',
-                                                                                                    borderRadius: '10px',
-                                                                                                    border: '1px solid rgb(201, 202, 204)',
-                                                                                                }}>
-                                                                                                    <img
-                                                                                                        src="https://cdn.shopify.com/s/files/1/0629/5207/9596/products/Group1249.png?v=1672138031"
-                                                                                                        alt="Dacia blouse" width={470}
-                                                                                                        style={{
-                                                                                                            display: 'block',
-                                                                                                            margin: 'auto',
-                                                                                                            maxWidth: '100%',
-                                                                                                            borderRadius: '10px'
-                                                                                                        }}/>
-                                                                                                </div>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        <tr className="product-price-wrapper">
-                                                                                            <td className="product-price" style={{
-                                                                                                paddingTop: '8px',
-                                                                                                fontWeight: 500,
-                                                                                                fontSize: '18px',
-                                                                                                lineHeight: '24px',
-                                                                                                color: 'rgb(32, 34, 35)',
-                                                                                                display: 'revert'
-                                                                                            }}>
-                                                                                                ₹75.00
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        <tr>
-                                                                                            <td style={{paddingTop: '20px'}}>
-                                                                                                <a className="buy-action-url bg-primary"
-                                                                                                   style={{
-                                                                                                       backgroundColor: emailSetting.wishlist_style.add_to_cart_btn_bg_color,
-                                                                                                       color: emailSetting.wishlist_style.add_to_cart_btn_text_color,
-                                                                                                       boxSizing: 'border-box',
-                                                                                                       borderRadius: '10px',
-                                                                                                       display: 'block',
-                                                                                                       fontSize: '16px',
-                                                                                                       fontWeight: 600,
-                                                                                                       lineHeight: '20px',
-                                                                                                       padding: `${emailSetting.wishlist_style.add_to_cart_btn_vertical_padding}px ${emailSetting.wishlist_style.add_to_cart_btn_horizontal_padding}px`,
-                                                                                                       textAlign: 'center',
-                                                                                                       textDecoration: 'none',
-                                                                                                       border: `${emailSetting.wishlist_style.add_to_cart_btn_border_size}px solid ${emailSetting.wishlist_style.add_to_cart_btn_border_color}`
-                                                                                                   }}>
-                                                                                                    {emailSetting.wishlist_content.add_to_cart_button_text}
-                                                                                                </a>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        <tr>
-                                                                                            <td style={{paddingTop: '20px'}}>
-                                                                                                <a className="visit-action-url color-primary border-primary"
-                                                                                                   style={{
-                                                                                                       backgroundColor: emailSetting.wishlist_style.view_product_btn_bg_color,
-                                                                                                       color: emailSetting.wishlist_style.view_product_btn_text_color,
-                                                                                                       border: `${emailSetting.wishlist_style.view_product_btn_border_size}px solid ${emailSetting.wishlist_style.view_product_btn_border_color}`,
-                                                                                                       boxSizing: 'border-box',
-                                                                                                       borderRadius: '10px',
-                                                                                                       display: 'block',
-                                                                                                       fontSize: '16px',
-                                                                                                       fontWeight: 600,
-                                                                                                       lineHeight: '20px',
-                                                                                                       padding: `${emailSetting.wishlist_style.view_product_btn_vertical_padding}px ${emailSetting.wishlist_style.view_product_btn_horizontal_padding}px`,
-                                                                                                       textAlign: 'center',
-                                                                                                       textDecoration: 'none'
-                                                                                                   }}>
-                                                                                                    {emailSetting.wishlist_content.view_product_button_text}
-                                                                                                </a>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                    </table>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </table>
-                                                                    </tr>
-                                                                    <tr className="social-text-wrapper">
-                                                                        <td colSpan={3} className="social-text color-text-tertiary"
-                                                                            style={{
-                                                                                display:
-                                                                                    (emailSetting.wishlist_social.instagram !== null && emailSetting.wishlist_social.instagram !== "") ||
-                                                                                    (emailSetting.wishlist_social.facebook !== null && emailSetting.wishlist_social.facebook !== "") ||
-                                                                                    (emailSetting.wishlist_social.twitter !== null && emailSetting.wishlist_social.twitter !== "") ||
-                                                                                    (emailSetting.wishlist_social.telegram !== null && emailSetting.wishlist_social.telegram !== "") ||
-                                                                                    (emailSetting.wishlist_social.linkedin !== null && emailSetting.wishlist_social.linkedin !== "") ||
-                                                                                    (emailSetting.wishlist_social.pinterest !== null && emailSetting.wishlist_social.pinterest !== "")
-                                                                                        ? "block" : 'none',
-                                                                                fontWeight: 400,
-                                                                                fontSize: '16px',
-                                                                                textAlign: 'center',
-                                                                                color: 'rgb(116, 124, 128)',
-                                                                                paddingBottom: '10px',
-                                                                                paddingTop: '30px'
-                                                                            }}>{emailSetting.wishlist_social.title}</td>
-                                                                    </tr>
-                                                                    <tr className="social-networks-wrapper">
-                                                                        <td className="social-networks"
-                                                                            style={{textAlign: 'center', paddingBottom: '20px'}}>
-                                                                            <button className="instagram bg-secondary" style={{
-                                                                                border: 'none',
-                                                                                boxSizing: 'border-box',
-                                                                                display: emailSetting.wishlist_social.instagram !== null && emailSetting.wishlist_social.instagram.trim() !== "" ? "inline-block" : 'none',
-                                                                                margin: '0px 12px',
-                                                                                backgroundColor: emailSetting.wishlist_style.add_to_cart_btn_bg_color,
-                                                                                width: '24px',
-                                                                                height: '24px',
-                                                                                borderRadius: '50%'
-                                                                            }}><img
-                                                                                src="https://storage.googleapis.com/static.shopgram.io/restock-icons/instagram.png"
-                                                                                width={12} alt="instagram"/></button>
-                                                                            <button className="facebook bg-secondary" style={{
-                                                                                border: 'none',
-                                                                                boxSizing: 'border-box',
-                                                                                display: emailSetting.wishlist_social.facebook !== null && emailSetting.wishlist_social.facebook.trim() !== "" ? "inline-block" : 'none',
-                                                                                margin: '0px 12px',
-                                                                                backgroundColor: emailSetting.wishlist_style.add_to_cart_btn_bg_color,
-                                                                                width: '24px',
-                                                                                height: '24px',
-                                                                                borderRadius: '50%'
-                                                                            }}><img
-                                                                                src="https://storage.googleapis.com/static.shopgram.io/restock-icons/facebook.png"
-                                                                                width={12} alt="facebook"/></button>
-                                                                            <button className="twitter bg-secondary" style={{
-                                                                                border: 'none',
-                                                                                boxSizing: 'border-box',
-                                                                                display: emailSetting.wishlist_social.twitter !== null && emailSetting.wishlist_social.twitter.trim() !== "" ? "inline-block" : 'none',
-                                                                                margin: '0px 12px',
-                                                                                backgroundColor: emailSetting.wishlist_style.add_to_cart_btn_bg_color,
-                                                                                width: '24px',
-                                                                                height: '24px',
-                                                                                borderRadius: '50%'
-                                                                            }}><img
-                                                                                src="https://storage.googleapis.com/static.shopgram.io/restock-icons/twitter.png"
-                                                                                width={12} alt="twitter"/></button>
-                                                                            <button className="telegram bg-secondary" style={{
-                                                                                border: 'none',
-                                                                                boxSizing: 'border-box',
-                                                                                display: emailSetting.wishlist_social.telegram !== null && emailSetting.wishlist_social.telegram.trim() !== "" ? "inline-block" : 'none',
-                                                                                margin: '0px 12px',
-                                                                                backgroundColor: emailSetting.wishlist_style.add_to_cart_btn_bg_color,
-                                                                                width: '24px',
-                                                                                height: '24px',
-                                                                                borderRadius: '50%'
-                                                                            }}><img
-                                                                                src="https://storage.googleapis.com/static.shopgram.io/restock-icons/telegram.png"
-                                                                                width={12} alt="telegram"/></button>
-                                                                            <button className="linkedin bg-secondary" style={{
-                                                                                border: 'none',
-                                                                                boxSizing: 'border-box',
-                                                                                display: emailSetting.wishlist_social.linkedin !== null && emailSetting.wishlist_social.linkedin.trim() !== "" ? "inline-block" : 'none',
-                                                                                margin: '0px 12px',
-                                                                                backgroundColor: emailSetting.wishlist_style.add_to_cart_btn_bg_color,
-                                                                                width: '24px',
-                                                                                height: '24px',
-                                                                                borderRadius: '50%'
-                                                                            }}><img
-                                                                                src="https://storage.googleapis.com/static.shopgram.io/restock-icons/linkedin.png"
-                                                                                width={12} alt="linkedin"/></button>
-                                                                            <button className="pinterest bg-secondary" style={{
-                                                                                border: 'none',
-                                                                                boxSizing: 'border-box',
-                                                                                display: emailSetting.wishlist_social.pinterest !== null && emailSetting.wishlist_social.pinterest.trim() !== "" ? "inline-block" : 'none',
-                                                                                margin: '0px 12px',
-                                                                                backgroundColor: emailSetting.wishlist_style.add_to_cart_btn_bg_color,
-                                                                                width: '24px',
-                                                                                height: '24px',
-                                                                                borderRadius: '50%'
-                                                                            }}><img
-                                                                                src="https://storage.googleapis.com/static.shopgram.io/restock-icons/pinterest.png"
-                                                                                width={12} alt="pinterest"/></button>
-                                                                        </td>
-                                                                    </tr>
-                                                                    {/*<tr>*/}
-                                                                    {/*    <td className="footer color-text-tertiary" style={{*/}
-                                                                    {/*        borderTop: '1px solid rgb(201, 202, 204)',*/}
-                                                                    {/*        fontWeight: 400,*/}
-                                                                    {/*        color: emailSetting.wishlist_style.theme == "1" ? 'rgb(93, 99, 102)' : 'rgb(186, 198, 204)',*/}
-                                                                    {/*        fontSize: '12px',*/}
-                                                                    {/*        lineHeight: '16px',*/}
-                                                                    {/*        height: '45px',*/}
-                                                                    {/*        textAlign: 'center',*/}
-                                                                    {/*        paddingTop: '8px',*/}
-                                                                    {/*        borderBottomRightRadius: '10px',*/}
-                                                                    {/*        borderBottomLeftRadius: '10px'*/}
-                                                                    {/*    }}>*/}
-                                                                    {/*        You are receiving this email because you requested a*/}
-                                                                    {/*        back in*/}
-                                                                    {/*        stock notification*/}
-                                                                    {/*        on {shopDetails && shopDetails.store_name}.*/}
-                                                                    {/*    </td>*/}
-                                                                    {/*</tr>*/}
-                                                                    </tbody>
-                                                                </table>
+                                                    />
+                                                </FormLayout.Group>
+                                                <FormLayout.Group condensed>
+                                                    <TextField label="Top & Bottom padding"
+                                                               type="number"
+                                                               value={emailSetting.wishlist_style.add_to_cart_btn_vertical_padding}
+                                                               onChange={(value) => wlItemOnChangeStyle({
+                                                                   target: {
+                                                                       name: "add_to_cart_btn_vertical_padding",
+                                                                       value
+                                                                   }
+                                                               })}
+                                                               suffix="PX"
+                                                    />
+                                                    <TextField label="Left & Right padding"
+                                                               type="number"
+                                                               value={emailSetting.wishlist_style.add_to_cart_btn_horizontal_padding}
+                                                               onChange={(value) => wlItemOnChangeStyle({
+                                                                   target: {
+                                                                       name: "add_to_cart_btn_horizontal_padding",
+                                                                       value
+                                                                   }
+                                                               })}
+                                                               suffix="PX"
+                                                    />
+                                                </FormLayout.Group>
+                                            </FormLayout>
+                                        </BlockStack>
+                                    </Box>
+                                    <Divider />
+                                    <Box padding={"400"}>
+                                        <BlockStack gap={"200"}>
+                                            <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>View Product Button customization</Text>
+                                            <FormLayout>
+                                                <FormLayout.Group condensed>
+                                                    <ColorInput label={"Button Background color"} name="view_product_btn_bg_color"
+                                                                onChange={wlItemOnChangeStyle}
+                                                                value={emailSetting.wishlist_style.view_product_btn_bg_color}/>
+                                                    <ColorInput label={"Button Text color"} name="view_product_btn_text_color"
+                                                                onChange={wlItemOnChangeStyle}
+                                                                value={emailSetting.wishlist_style.view_product_btn_text_color}/>
+                                                </FormLayout.Group>
+                                                <FormLayout.Group condensed>
+                                                    <ColorInput label={"Button Border color"} name="view_product_btn_border_color"
+                                                                onChange={wlItemOnChangeStyle}
+                                                                value={emailSetting.wishlist_style.view_product_btn_border_color}/>
+                                                    <TextField label={"Border Width"}
+                                                               value={emailSetting.wishlist_style.view_product_btn_border_size}
+                                                               type="number"
+                                                               suffix="PX"
+                                                               onChange={(value) => {
+                                                                   wlItemOnChangeStyle({
+                                                                       target: {
+                                                                           name: "view_product_btn_border_size",
+                                                                           value
+                                                                       }
+                                                                   })
+                                                               }}
+
+                                                    />
+                                                </FormLayout.Group>
+                                                <FormLayout.Group condensed>
+                                                    <TextField label="Top & Bottom padding"
+                                                               type="number"
+                                                               value={emailSetting.wishlist_style.view_product_btn_vertical_padding}
+                                                               onChange={(value) => wlItemOnChangeStyle({
+                                                                   target: {
+                                                                       name: "view_product_btn_vertical_padding",
+                                                                       value
+                                                                   }
+                                                               })}
+                                                               suffix="PX"
+                                                    />
+                                                    <TextField label="Left & Right padding"
+                                                               type="number"
+                                                               value={emailSetting.wishlist_style.view_product_btn_horizontal_padding}
+                                                               onChange={(value) => wlItemOnChangeStyle({
+                                                                   target: {
+                                                                       name: "view_product_btn_horizontal_padding",
+                                                                       value
+                                                                   }
+                                                               })}
+                                                               suffix="PX"
+                                                    />
+                                                </FormLayout.Group>
+                                            </FormLayout>
+                                        </BlockStack>
+                                    </Box>
+                                </Fragment>
+                            }
+                        </Card>
+                    </Layout.Section>
+                    <Layout.Section variant={"oneThird"}>
+                        <Card padding={"0"}>
+                            <Box padding={"400"}>
+                                <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>{emailSetting.subject}</Text>
+                            </Box>
+                            <Box>
+                                <div className="email-template-live-preview-wrapper">
+                                    <div className="email-template-body"
+                                         style={{fontFamily: emailSetting.wishlist_style.font_family}}>
+                                        <table width="100%" border={0} cellSpacing={0} cellPadding={0} style={{borderCollapse: 'collapse'}}>
+                                            <tbody>
+                                            <tr>
+                                                <td align="center">
+                                                    <table className="template-table" border={0} cellSpacing={0} cellPadding={0} style={{margin: '0px auto', maxWidth: '470px', borderCollapse: 'collapse'}}>
+                                                        <thead>
+                                                        <tr className="shop-branding-wrapper" style={{backgroundColor: emailSetting.wishlist_style.background_color, borderRadius: '10px 10px 0px 0px',}}>
+                                                            <th className="shop-branding" style={{color: 'rgb(32, 34, 35)', fontSize: '24px', fontWeight: 'bold', lineHeight: '28px', height: '70px', textAlign: 'center', paddingTop: '20px', display: "flex", alignItems:"center",justifyContent:"center"}}>
+                                                                {
+                                                                    emailSetting.wishlist_branding_type == "2" ? <Fragment>{selectedWlLogo && selectedWlLogo.name ? <img src={selectedWlLogo ? URL.createObjectURL(selectedWlLogo) : ""} alt="logo" style={{maxHeight: '50px'}}/> : emailSetting.wishlist_logo ? <img src={emailSetting.wishlist_logo} alt="logo" style={{maxHeight: '50px'}}/> : <img src={""} alt="logo" style={{maxHeight: '50px'}}/>}</Fragment> : emailSetting.wishlist_branding_type == "1" ? shopDetails && shopDetails.store_name : <Fragment>{selectedWlLogo?.name ? <img src={selectedWlLogo ? URL.createObjectURL(selectedWlLogo) : ""} alt="logo" style={{maxHeight: '50px'}}/> : emailSetting.wishlist_logo ? <img src={emailSetting.wishlist_logo} alt="logo" style={{maxHeight: '50px'}}/> : <img src={""} alt="logo" style={{maxHeight: '50px'}}/>}&nbsp; {shopDetails && shopDetails.store_name}</Fragment>
+                                                                }
+                                                            </th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody className="template-body" style={{backgroundColor: emailSetting.wishlist_style.background_color, border: '30px solid transparent'}}>
+                                                        <tr className="description-wrapper">
+                                                            <td className="description color-text-secondary" style={{fontSize: `${emailSetting.wishlist_style.description_font_size}px`, lineHeight: '28px', color: emailSetting.wishlist_style.theme == "1" ? 'rgb(93, 99, 102)' : 'rgb(186, 198, 204)', whiteSpace: 'pre-line'}}>
+                                                                {emailSetting.email_body}
+                                                            </td>
+                                                        </tr>
+                                                        <tr style={{paddingTop: '10px'}}>
+                                                            <table>
+                                                                <tr>
+                                                                    {["https://cdn.shopify.com/s/files/1/0629/5207/9596/products/Group1242.png?v=1672138033","https://cdn.shopify.com/s/files/1/0629/5207/9596/products/Group1249.png?v=1672138031"].map((x) => {
+                                                                        return(
+                                                                            <td>
+                                                                                <table>
+                                                                                    <tr >
+                                                                                        <td className="product-image">
+                                                                                            <div style={{width: '100%', display: "block", height: '100%', borderRadius: '10px', border: '1px solid rgb(201, 202, 204)',}}>
+                                                                                                <img src={x} alt="Dacia blouse" width={470} style={{display: 'block', margin: 'auto', maxWidth: '100%', borderRadius: '10px'}}/>
+                                                                                            </div>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr className="product-price-wrapper">
+                                                                                        <td className="product-price" style={{paddingTop: '8px', fontWeight: 500, fontSize: '18px', lineHeight: '24px', color: 'rgb(32, 34, 35)', display: 'revert'}}>
+                                                                                            ₹179.00
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td style={{paddingTop: '10px'}}>
+                                                                                            <a className="buy-action-url bg-primary" style={{backgroundColor: emailSetting.wishlist_style.add_to_cart_btn_bg_color, color: emailSetting.wishlist_style.add_to_cart_btn_text_color, boxSizing: 'border-box', borderRadius: '10px', display: 'block', fontSize: '16px', fontWeight: 600, lineHeight: '20px', padding: `${emailSetting.wishlist_style.add_to_cart_btn_vertical_padding}px ${emailSetting.wishlist_style.add_to_cart_btn_horizontal_padding}px`, textAlign: 'center', textDecoration: 'none', border: `${emailSetting.wishlist_style.add_to_cart_btn_border_size}px solid ${emailSetting.wishlist_style.add_to_cart_btn_border_color}`}}>
+                                                                                                {emailSetting.wishlist_content.add_to_cart_button_text}
+                                                                                            </a>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td style={{paddingTop: '10px'}}>
+                                                                                            <a className="visit-action-url color-primary border-primary" style={{backgroundColor: emailSetting.wishlist_style.view_product_btn_bg_color, color: emailSetting.wishlist_style.view_product_btn_text_color, border: `${emailSetting.wishlist_style.view_product_btn_border_size}px solid ${emailSetting.wishlist_style.view_product_btn_border_color}`, boxSizing: 'border-box', borderRadius: '10px', display: 'block', fontSize: '16px', fontWeight: 600, lineHeight: '20px', padding: `${emailSetting.wishlist_style.view_product_btn_vertical_padding}px ${emailSetting.wishlist_style.view_product_btn_horizontal_padding}px`, textAlign: 'center', textDecoration: 'none'}}>
+                                                                                                {emailSetting.wishlist_content.view_product_button_text}
+                                                                                            </a>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                </table>
+                                                                            </td>
+                                                                        )
+                                                                    })}
+                                                                </tr>
+                                                            </table>
+                                                        </tr>
+                                                        <tr className="social-text-wrapper">
+                                                            <td colSpan={3} className="social-text color-text-tertiary" style={{display: (emailSetting.wishlist_social.instagram !== null && emailSetting.wishlist_social.instagram !== "") || (emailSetting.wishlist_social.facebook !== null && emailSetting.wishlist_social.facebook !== "") || (emailSetting.wishlist_social.twitter !== null && emailSetting.wishlist_social.twitter !== "") || (emailSetting.wishlist_social.telegram !== null && emailSetting.wishlist_social.telegram !== "") || (emailSetting.wishlist_social.linkedin !== null && emailSetting.wishlist_social.linkedin !== "") || (emailSetting.wishlist_social.pinterest !== null && emailSetting.wishlist_social.pinterest !== "") ? "block" : 'none', fontWeight: 400, fontSize: '16px', textAlign: 'center', color: 'rgb(116, 124, 128)', paddingBottom: '10px', paddingTop: '30px'}}>{emailSetting.wishlist_social.title}</td>
+                                                        </tr>
+                                                        <tr className="social-networks-wrapper">
+                                                            <td className="social-networks" style={{textAlign: 'center', paddingBottom: '20px'}}>
+                                                                <button className="instagram bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: emailSetting.wishlist_social.instagram !== null && emailSetting.wishlist_social.instagram.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: emailSetting.wishlist_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}><img src="https://storage.googleapis.com/static.shopgram.io/restock-icons/instagram.png" width={12} alt="instagram"/></button>
+                                                                <button className="facebook bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: emailSetting.wishlist_social.facebook !== null && emailSetting.wishlist_social.facebook.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: emailSetting.wishlist_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}><img src="https://storage.googleapis.com/static.shopgram.io/restock-icons/facebook.png" width={12} alt="facebook"/></button>
+                                                                <button className="twitter bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: emailSetting.wishlist_social.twitter !== null && emailSetting.wishlist_social.twitter.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: emailSetting.wishlist_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}><img src="https://storage.googleapis.com/static.shopgram.io/restock-icons/twitter.png" width={12} alt="twitter"/></button>
+                                                                <button className="telegram bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: emailSetting.wishlist_social.telegram !== null && emailSetting.wishlist_social.telegram.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: emailSetting.wishlist_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}><img src="https://storage.googleapis.com/static.shopgram.io/restock-icons/telegram.png" width={12} alt="telegram"/></button>
+                                                                <button className="linkedin bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: emailSetting.wishlist_social.linkedin !== null && emailSetting.wishlist_social.linkedin.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: emailSetting.wishlist_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}><img src="https://storage.googleapis.com/static.shopgram.io/restock-icons/linkedin.png" width={12} alt="linkedin"/></button>
+                                                                <button className="pinterest bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: emailSetting.wishlist_social.pinterest !== null && emailSetting.wishlist_social.pinterest.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: emailSetting.wishlist_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}><img src="https://storage.googleapis.com/static.shopgram.io/restock-icons/pinterest.png" width={12} alt="pinterest"/></button>
                                                             </td>
                                                         </tr>
                                                         </tbody>
                                                     </table>
-                                                    {/*<p className="unsubscribe-link" style={{textAlign: 'center'}}>If you'd like to*/}
-                                                    {/*    unsubscribe and stop receiving these emails from this shop click <a*/}
-                                                    {/*        >here</a>.*/}
-                                                    {/*</p>*/}
-                                                </div>
-                                            </div>
-                                        </BlockStack>
-                                    </Box>
-                                </Card>
-                            }
-                        </BlockStack>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </Box>
+                        </Card>
                     </Layout.Section>
 
                 </Layout>

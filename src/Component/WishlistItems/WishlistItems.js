@@ -69,6 +69,7 @@ const WishlistItems = () => {
     }
     const response = await apiService.WishlistAnalytics(payload);
     if (response.status === 200) {
+      setIsError(false)
       setWlProduct(response.data.products)
       setWlUser(response.data.user_wishlist)
       setTotalProduct(response.data.totalProduct)
@@ -93,6 +94,7 @@ const WishlistItems = () => {
     }
     const response = await apiService.ImportWishlistHistory(payload);
     if (response.status === 200) {
+      setIsError(false)
       setImportHistory(response.data)
       setImportHisPage(response.data.total)
       setIsLoading(false);
@@ -115,6 +117,8 @@ const WishlistItems = () => {
   }
 
   const Import = async () => {
+    setMessage("")
+    setIsError(false)
     setIsImportLoading(true)
     const formData = new FormData();
     formData.append("file", file)
@@ -132,6 +136,7 @@ const WishlistItems = () => {
       setMessage(capitalizeMessage(response.message))
       setIsError(true)
       setIsImportLoading(false)
+      setActive(false);
     }
 
   }
@@ -335,17 +340,19 @@ const WishlistItems = () => {
                                     ariaHaspopup={false}
                                 >
                                   <Popover.Pane>
-                                    <ResourceList items={y.products} renderItem={(item) => {
-                                      const {title} = item
-                                      return (
-                                          <ResourceList.Item>
-                                            <InlineStack gap={"400"} blockAlign={"center"} wrap={false}>
-                                              <Thumbnail size={"small"} source={item.image}/>
-                                              <Text as={"span"}>{title}</Text>
-                                            </InlineStack>
-                                          </ResourceList.Item>
-                                      )
-                                    }}/>
+                                    <div className={"remove-cursor"}>
+                                      <ResourceList items={y.products} renderItem={(item) => {
+                                        const {title} = item
+                                        return (
+                                            <ResourceList.Item>
+                                              <InlineStack gap={"400"} blockAlign={"center"} wrap={false}>
+                                                <Thumbnail size={"small"} source={item.image}/>
+                                                <Text as={"span"}>{title}</Text>
+                                              </InlineStack>
+                                            </ResourceList.Item>
+                                        )
+                                      }}/>
+                                    </div>
                                   </Popover.Pane>
                                 </Popover>
                               </IndexTable.Cell>

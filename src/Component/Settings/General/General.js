@@ -64,6 +64,7 @@ const General = () =>  {
             const response = await apiService.getSetting();
             if (response.status === 200) {
                 setSetting(response.data)
+                setIsError(false)
             } else if (response.status === 500) {
                 setMessage(capitalizeMessage(response.message))
                 setIsErrorServer(true);
@@ -92,6 +93,7 @@ const General = () =>  {
             }
             const response = await apiService.updateSetting(payload, setting.id)
             if (response.status === 200) {
+                setIsError(false)
                 setMessage(capitalizeMessage(response.message))
             } else if (response.status === 500) {
                 setMessage(capitalizeMessage(response.message))
@@ -114,6 +116,7 @@ const General = () =>  {
         let payload = {...setting, guest_wishlist: "0"}
         const response = await apiService.updateSetting(payload, setting.id)
         if (response.status === 200) {
+            setIsError(false)
             setMessage(capitalizeMessage(response.message))
             setIsLoading(false)
             setActiveGuestModal(false);

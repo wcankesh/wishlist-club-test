@@ -1,5 +1,5 @@
 import React, {Fragment} from 'react';
-import {Layout, Page, ProgressBar, Text, BlockStack, InlineStack, Banner} from "@shopify/polaris"
+import {Layout, Page, ProgressBar, Text, BlockStack, InlineStack, Banner, Card} from "@shopify/polaris"
 import OnBoarding from "./OnBoarding/OnBoarding";
 import HelpDesk from "./HelpDesk/HelpDesk"
 import {useDispatch, useSelector} from "react-redux";
@@ -83,13 +83,15 @@ const Dashboard = () => {
                   : ''
             }
             <Layout.Section>
-              <Text as={"span"}>Mail sent {`${shopDetails.sent_email}/${(shopDetails.plan_type === "0" || shopDetails.plan_type === "1") ? "50" : shopDetails.plan_type === "5" ? "500" : shopDetails.plan_type === "6" ? "2000" : shopDetails.plan_type === "7" ? "5000" : shopDetails.plan_type === "8" ? "10000" : ""}`}</Text>
-              <BlockStack>
-                <InlineStack wrap={false} blockAlign={"center"} gap="400">
-                  <ProgressBar progress={productPercent} size="small" tone="primary"/>
-                  <Text>{productPercent}%</Text>
-                </InlineStack >
-              </BlockStack>
+              <Card>
+                <Text as={"span"}>Mail sent {`${shopDetails.sent_email}/${(shopDetails.plan_type === "0" || shopDetails.plan_type === "1") ? "50" : shopDetails.plan_type === "5" ? "500" : shopDetails.plan_type === "6" ? "2000" : shopDetails.plan_type === "7" ? "5000" : shopDetails.plan_type === "8" ? "10000" : ""}`}</Text>
+                <BlockStack>
+                  <InlineStack wrap={false} blockAlign={"center"} gap="400">
+                    <ProgressBar progress={productPercent} size="small" tone="primary"/>
+                    <Text>{productPercent}%</Text>
+                  </InlineStack >
+                </BlockStack>
+              </Card>
             </Layout.Section>
             <Layout.Section>
               <OnBoarding/>

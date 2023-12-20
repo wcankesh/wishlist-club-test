@@ -104,7 +104,8 @@ const BackInStockDesign = () => {
     const bisSetting = async () => {
         const response = await apiService.bisSetting();
         if (response.status === 200) {
-            setBackInStockDesign(response.data)
+            setBackInStockDesign(response.data);
+            setIsError(false)
         } else if (response.status === 500) {
             setMessage(capitalizeMessage(response.message))
             setIsErrorServer(true);
@@ -171,6 +172,7 @@ const BackInStockDesign = () => {
         if (response.status === 200) {
             setIsLoading(false)
             setMessage(capitalizeMessage(response.message))
+            setIsError(false)
             bisSetting();
         } else if (response.status === 500) {
             setIsLoading(false)

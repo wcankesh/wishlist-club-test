@@ -14,9 +14,9 @@
 /*.btn-collection {padding: 10px;position: absolute;top: 0;width: 100%;}*/
 .wl_btn_common {display: flex;justify-content: center;cursor: pointer;align-items: center;}
 .wl_btn_common svg {margin-right: 5px;}
-.email-logo-preview {background-color: #e4e5e7;border-radius: 50%;height: 2.5rem;max-height: 100%;max-width: 100%;width: 2.5rem;}
+.email-logo-preview {background-color: #e4e5e7;border-radius: 50%;height: 30px;max-height: 100%;max-width: 100%;width: 30px;}
 .email-logo-preview, .img-set {align-items: center;display: flex;justify-content: center;}
-.email-logo-preview svg {display: block;max-height: 20px;max-width: 20px;width: 100%;}
+.email-logo-preview svg {display: block;max-height: 18px;max-width: 18px;width: 100%;}
 .branding-icon {display: flex;height: 70px;width: 72px;align-items: center;justify-content: center;background-color: #f2f9f7;border-radius: 6px;}
 .branding-icon svg {width: 50px;}
 .branding-icon svg .st0 {fill: #008060;}
@@ -48,8 +48,8 @@
 .planpriceWrap {display: inline-block;width: 100%;}
 ul.PlanPriceList {border-bottom: 1px solid #d5d6d9;display: inline-block;list-style: none;margin: 0;padding: 0;width: 100%;}
 ul li.ppl_item {background-color: #fff;border: 1px solid #dbdbdb;border-bottom: 0;display: flex;flex-wrap: wrap;}
-ul li .pplLabel {color: #000;flex: 0 0 320px;font-size: 14px;line-height: 22px;max-width: 320px;padding: 10px;}
-ul li .pplContent {border-left: 1px solid #dbdbdb;color: #000;flex-basis: calc(100% - 350px);flex-grow: 0;flex-shrink: 0;font-size: 14px;line-height: 22px;max-width: calc(100% - 350px);padding: 10px;text-align: center;}
+ul li .pplLabel {color: #000;flex: 0 0 225px;font-size: 14px;line-height: 22px;max-width: 225px;padding: 10px;}
+ul li .pplContent {border-left: 1px solid #dbdbdb;color: #000;flex-basis: calc(100% - 225px);flex-grow: 0;flex-shrink: 0;font-size: 14px;line-height: 22px;max-width: calc(100% - 225px);padding: 10px;text-align: center;}
 ul.PlanPriceList li.ppl_item .pplContent .icons {align-items: center;display: flex;flex-wrap: wrap;height: 16px;justify-content: center;margin: 0 auto;width: 16px;}
 .react-tagsinput-input {margin-bottom: 5px;}
 .react-tagsinput {border-radius: 2px;padding-top: 3px;}
@@ -80,6 +80,12 @@ ul.PlanPriceList li.ppl_item .pplContent .icons {align-items: center;display: fl
 .boding-count{width: 20px;height: 20px;display: flex;align-items: center;justify-content: center;border: 2px #8A8A8A dashed;border-radius: 50%;color: #000000;font-size: 11px;font-weight: 700;}
 .boding-count-active{color: #ffffff;background: #000000;border: 0}
 .sgi_icon .Polaris-Icon {height: 30px;width: 30px;}
+
+.remove-cursor .Polaris-ResourceItem{cursor: inherit;}
+@media (max-width: 991px) {
+    .planpriceWrap{overflow: auto;}
+    ul.PlanPriceList{width: 950px;}
+}
 @media (max-width: 575px) {
     .branding-icon {height: 60px;width: 100px;}
     .branding-icon svg {width: 40px;}

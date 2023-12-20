@@ -60,6 +60,7 @@ const WishlistEmail = () => {
         const EmailSetting = async () => {
             const response = await apiService.emailSetting();
             if (response.status === 200) {
+                setIsError(false)
                 setEmailSetting(response.data)
                 setIsLoading(false)
             } else if (response.status === 500) {
@@ -96,6 +97,7 @@ const WishlistEmail = () => {
         formData.append("payload", JSON.stringify(payload))
         const response = await apiService.updateEmailSetting(formData, emailSetting.id);
         if (response.status === 200) {
+            setIsError(false)
             setIsSave(false);
             setMessage(capitalizeMessage(response.message))
             // EmailSetting();
@@ -188,23 +190,13 @@ const WishlistEmail = () => {
                                             <TextField
                                                 label="From name"
                                                 value={emailSetting.from_name}
-                                                onChange={(value) => handleChange({
-                                                    target: {
-                                                        name: "from_name",
-                                                        value
-                                                    }
-                                                })}
+                                                onChange={(value) => handleChange({target: {name: "from_name", value}})}
                                             />
                                             <TextField
                                                 type="email"
                                                 label="From email"
                                                 value={emailSetting.from_email}
-                                                onChange={(value) => handleChange({
-                                                    target: {
-                                                        name: "from_email",
-                                                        value
-                                                    }
-                                                })}
+                                                onChange={(value) => handleChange({target: {name: "from_email", value}})}
                                                 name={"from_email"}
                                                 error={emailSettingError.from_email}
                                                 onBlur={onBlur}
@@ -223,17 +215,8 @@ const WishlistEmail = () => {
                             <Box padding={"400"}>
                                 <BlockStack gap={"100"}>
                                     <Text as={"h2"} variant={"headingMd"}>Email Customization</Text>
-                                    <Text as={"p"} tone={"subdued"}>
-                                        Send alerts when the products are on Wishlist. Also,
-                                        send price drop & restock alerts for the products in
-                                        Wishlist.
-                                    </Text>
-                                    <Text as={"p"} tone={"caution"}>
-                                        <b>Note: </b> These all the
-                                        notifications(Wishlist Items, Price Drop Alerts, and
-                                        Restock Alerts) are sent to customers if the <b>Guest
-                                        Wishlist</b> option disable.
-                                    </Text>
+                                    <Text as={"p"} tone={"subdued"}>Send alerts when the products are on Wishlist. Also, send price drop & restock alerts for the products in Wishlist.</Text>
+                                    <Text as={"p"} tone={"caution"}><b>Note: </b> These all the notifications(Wishlist Items, Price Drop Alerts, and Restock Alerts) are sent to customers if the <b>Guest Wishlist</b> option disable.</Text>
                                 </BlockStack>
                             </Box>
                             <Divider/>
@@ -249,10 +232,8 @@ const WishlistEmail = () => {
                                                             <Text tone={"subdued"}>{x.description}</Text>
                                                         </BlockStack>
                                                     </InlineStack>
-                                                    {isLoading ? <Badge>
-                                                        <div style={{width: 62}}>&nbsp;</div>
-                                                    </Badge> : <Badge
-                                                        tone={x.checked ? "success" : "critical"}>{x.checked ? "Enabled" : "Disabled"} </Badge>}
+                                                    {isLoading ? <Badge><div style={{width: 62}}>&nbsp;</div>
+                                                    </Badge> : <Badge tone={x.checked ? "success" : "critical"}>{x.checked ? "Enabled" : "Disabled"} </Badge>}
                                                 </InlineStack>
                                             </Box>
                                             <Divider/>
@@ -272,15 +253,7 @@ const WishlistEmail = () => {
                                         Enabling this setting allows store owners to stay updated through email notifications when users add products to their wishlist.
                                     </Text>
                                 </BlockStack>
-
-                                <Checkbox label={"Notification mail"}
-                                          onChange={(checked) => notificationUpdate({
-                                              target: {
-                                                  name: "is_notification_mail",
-                                                  value: checked ? "1" : "0"
-                                              }
-                                          })} checked={emailSetting.is_notification_mail == 1}
-                                />
+                                <Checkbox label={"Notification mail"} onChange={(checked) => notificationUpdate({target: {name: "is_notification_mail", value: checked ? "1" : "0"}})} checked={emailSetting.is_notification_mail == 1}/>
                             </BlockStack>
                         </Card>
                     </Layout.Section>

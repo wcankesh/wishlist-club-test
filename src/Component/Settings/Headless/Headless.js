@@ -22,6 +22,7 @@ const Headless = () => {
         const getHeadless = async () => {
             const response = await apiService.getHeadless();
             if (response.status === 200) {
+                setIsError(false)
                 setHeadLess(response.data)
             } else if (response.status === 500) {
                 setMessage(capitalizeMessage(response.message))
@@ -38,6 +39,7 @@ const Headless = () => {
         setIsLoading(false);
         const response = await apiService.getHeadlessToken();
         if (response.status === 200) {
+            setIsError(false)
             setHeadLessToken(response.data)
             setIsLoading(false)
             setMessage(capitalizeMessage(response.message))
@@ -60,6 +62,7 @@ const Headless = () => {
         }
         const response = await apiService.updateHeadless(payload)
         if (response.status === 200) {
+            setIsError(false)
             setIsTokenLoading(false)
             setMessage(capitalizeMessage(response.message))
         } else if (response.status === 500) {

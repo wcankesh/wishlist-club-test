@@ -60,6 +60,7 @@ const  WishlistDesign = () => {
     const getLauncher = async () => {
         const response = await apiService.getLauncher();
         if (response.status === 200) {
+            setIsError(false)
             setWishlistSetting(response.data)
         } else if (response.status === 500) {
             setMessage(capitalizeMessage(response.message))
@@ -79,6 +80,7 @@ const  WishlistDesign = () => {
         const response = await apiService.updateLauncher(payload, wishlistSetting.id)
         if (response.status === 200) {
             setIsLoading(false)
+            setIsError(false)
             setMessage(capitalizeMessage(response.message))
         } else if (response.status === 500) {
             setMessage(capitalizeMessage(response.message))
@@ -98,6 +100,7 @@ const  WishlistDesign = () => {
         const response = await apiService.updateIcon(formData, true)
         if (response.status === 200) {
             setFile("")
+            setIsError(false)
             setIsSVGLoading(false)
             setMessage(capitalizeMessage(response.message))
             getLauncher();
@@ -117,6 +120,7 @@ const  WishlistDesign = () => {
         const response = await apiService.deleteIcon()
         if (response.status === 200) {
             setFile("")
+            setIsError(false)
             setIsSVGLoading(false)
             setMessage(capitalizeMessage(response.message))
             getLauncher()
