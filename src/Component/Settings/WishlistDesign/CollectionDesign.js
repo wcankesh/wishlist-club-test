@@ -335,7 +335,7 @@ const CollectionDesign = ({wishlistSetting, setWishlistSetting, file, setFile, i
                                            </figure>
                                            <div className="btn-collection">
                                                <div className="d-flex wl_collection_btn_position">
-                                                   <button className="d-flex align-items-center wl_collection_btn_before">{wishlistSetting && wishlistSetting.icon ? <div dangerouslySetInnerHTML={{__html: wishlistSetting && wishlistSetting.icon}}/> : Icons.wishlistIcon}&nbsp;{wishlistSetting.product_collection_button_type == "3" ? wishlistSetting.product_collection_button_text_before : ""} (10)</button>
+                                                   <button className="d-flex wl_btn align-items-center wl_collection_btn_before">{wishlistSetting && wishlistSetting.icon ? <div dangerouslySetInnerHTML={{__html: wishlistSetting && wishlistSetting.icon}}/> : Icons.wishlistIcon}&nbsp;{wishlistSetting.product_collection_button_type == "3" ? wishlistSetting.product_collection_button_text_before : ""} (10)</button>
                                                </div>
                                            </div>
                                        </div>
