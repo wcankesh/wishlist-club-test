@@ -24,7 +24,8 @@ const Headless = () => {
             if (response.status === 200) {
                 setIsError(false)
                 setHeadLess(response.data)
-            } else if (response.status === 500) {
+            }
+            else if (response.status === 500) {
                 setMessage(capitalizeMessage(response.message))
                 setIsErrorServer(true);
             } else {
@@ -139,7 +140,7 @@ const Headless = () => {
                                             pasteSplit={defaultPasteSplit}
                                             addOnPaste={true}
                                             onlyUnique={true}
-                                            inputProps={{placeholder: 'Enter domain'}}/> vertical spacing={"tight"}
+                                            inputProps={{placeholder: 'Enter domain'}}/>
                                     </BlockStack>
 
                                     <CopyCode label={"Access Token"} value={headLess.token}/>

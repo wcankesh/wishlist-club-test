@@ -1,5 +1,5 @@
 import React, {Fragment} from 'react';
-import {Card, Button, Text, InlineStack, BlockStack, Box} from "@shopify/polaris";
+import {Card, Button, Text, InlineStack, BlockStack} from "@shopify/polaris";
 
 const HelpDesk = () => {
     const brandingList = [
