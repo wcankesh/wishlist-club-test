@@ -20,6 +20,8 @@ const intialState = {
   bannerDisplaySetting: {},
   extension_status: true,
   on_boardig: {},
+  upgrade: "1",
+  install_url: "",
 }
 
 export const StoreReducer = (state = intialState, action) => {

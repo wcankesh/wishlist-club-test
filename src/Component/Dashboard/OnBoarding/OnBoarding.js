@@ -14,7 +14,7 @@ import {CaretUpMinor, CaretDownMinor,TickMinor} from "@shopify/polaris-icons"
 import ToastMessage from "../../Comman/ToastMessage";
 import {apiService, baseUrl} from "../../../utils/Constant";
 import {useSelector} from "react-redux";
-import {useNavigate} from "@shopify/app-bridge-react";
+import {useNavigate} from "react-router-dom"
 
 const OnBoarding = () => {
   const navigate = useNavigate()

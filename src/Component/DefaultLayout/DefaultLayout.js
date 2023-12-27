@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {Frame,FooterHelp, Link} from '@shopify/polaris';
+import React, {useEffect, useState} from 'react';
+import {Frame,FooterHelp, Link, Text, Modal} from '@shopify/polaris';
 import {Outlet, useLocation, useNavigate} from 'react-router-dom';
 import {baseUrl} from "../../utils/Constant"
 import {useSelector} from 'react-redux';
@@ -10,6 +10,7 @@ const apiKey = '65909e95fac4682299cfdae29dcd6a1a';
 const DefaultLayout = () => {
     const location = useLocation();
     const navigate = useNavigate();
+    const [isUpdateLoading, setIsUpdateLoading,] = useState(false);
     const urlParams = new URLSearchParams(location.search);
     const host = urlParams.get('host');
     const shopDetails = useSelector(state => state.shopDetails);
@@ -22,7 +23,15 @@ const DefaultLayout = () => {
         if(shopDetails.plan_type == "0" || shopDetails.is_older_shop == 1){
             navigate(`${baseUrl}/settings/plan`)
         }
+        if(shopDetails?.upgrade == "0"){
+            document.body.classList.add('hide-popup-close-icon');
+        }
     }, [])
+
+    const onAuthorize = () => {
+        setIsUpdateLoading(true)
+        window.open(shopDetails.install_url, "_top");
+    };
 
     return (
         <div>
@@ -64,6 +73,15 @@ const DefaultLayout = () => {
                 <Frame>
                     <RoutePropagator location={location}/>
                     <Outlet/>
+                    <Modal onClose={() => {}} open={shopDetails?.upgrade == "0"} title="Authorize our latest app update" primaryAction={{content: "Authorize", onAction: onAuthorize, loading: isUpdateLoading}}>
+                        <Modal.Section>
+                            <Text>Hey there,</Text>
+                            <br/>
+                            <Text>
+                                Our app has been updated to align with the most recent changes in Shopify. To maintain your access to our review services, please authorize us from the <b>"Admin Account"</b> to continue using our services. Please <Link onClick={() => window.Beacon('toggle')} removeUnderline>contact us</Link> if you face any difficulty.
+                            </Text>
+                        </Modal.Section>
+                    </Modal>
                     <FooterHelp>
                         <div className="FooterHelp__Content">
                            if you need any help, please &nbsp;

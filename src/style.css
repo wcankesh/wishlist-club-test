@@ -82,6 +82,9 @@ ul.PlanPriceList li.ppl_item .pplContent .icons {align-items: center;display: fl
 .sgi_icon .Polaris-Icon {height: 30px;width: 30px;}
 
 .remove-cursor .Polaris-ResourceItem{cursor: inherit;}
+
+.hide-popup-close-icon .Polaris-Modal-Dialog__Modal .Polaris-Button--iconOnly{display: none;}
+
 @media (max-width: 991px) {
     .planpriceWrap{overflow: auto;}
     ul.PlanPriceList{width: 950px;}
