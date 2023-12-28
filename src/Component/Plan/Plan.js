@@ -70,9 +70,9 @@ const Plan = () => {
 
         },
         {
-            plan: "Plus",
+            plan: "Enterprise",
             planType: "8",
-            price: "19.99",
+            price: "24.99",
             btn_text: "Upgrade"
         },
     ]
