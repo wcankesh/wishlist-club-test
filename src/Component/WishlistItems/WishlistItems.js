@@ -342,12 +342,26 @@ const WishlistItems = () => {
                                   <Popover.Pane>
                                     <div className={"remove-cursor"}>
                                       <ResourceList items={y.products} renderItem={(item) => {
-                                        const {title} = item
+                                        const {title, quantity, created_at, variant_title} = item
                                         return (
                                             <ResourceList.Item>
-                                              <InlineStack gap={"400"} blockAlign={"center"} wrap={false}>
-                                                <Thumbnail size={"small"} source={item.image}/>
-                                                <Text as={"span"}>{title}</Text>
+                                              <InlineStack gap={"400"}  wrap={false}>
+                                                  <Thumbnail size={"small"} source={item.image}/>
+                                                  <BlockStack gap={"100"}>
+                                                    <Text as={"span"}>{title}</Text>
+                                                    <InlineStack gap={"100"}>
+                                                      <Text as={"span"} fontWeight={"semibold"}>Variant :</Text>
+                                                      <Text as={"span"}>{variant_title}</Text>
+                                                    </InlineStack>
+                                                    <InlineStack gap={"100"}>
+                                                      <Text as={"span"} fontWeight={"semibold"}>Quantity :</Text>
+                                                      <Text as={"span"}>{quantity}</Text>
+                                                    </InlineStack>
+                                                    <InlineStack gap={"100"}>
+                                                      <Text as={"span"} fontWeight={"semibold"}>Created Date :</Text>
+                                                      <Text as={"span"}>{moment(created_at).format("DD-MM-YYYY")}</Text>
+                                                    </InlineStack>
+                                                  </BlockStack>
                                               </InlineStack>
                                             </ResourceList.Item>
                                         )
