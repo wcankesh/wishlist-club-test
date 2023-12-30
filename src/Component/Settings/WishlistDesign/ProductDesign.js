@@ -227,111 +227,81 @@ const ProductDesign = ({wishlistSetting, setWishlistSetting, updateIcon, file, s
                         }
                         {
                             selected === 1 && <Fragment>
-                                {wishlistSetting.button_type === '1' ?
-                                    <Box padding={"400"} paddingBlockStart={"200"}>
-                                        <FormLayout>
-                                            <FormLayout.Group condensed>
-                                                <ColorInput
-                                                    label={"Button color"}
-                                                    name="button_color_before"
-                                                    onChange={handleChange}
-                                                    value={wishlistSetting.button_color_before}
-                                                />
-                                                <div/>
-                                            </FormLayout.Group>
-                                        </FormLayout>
-                                    </Box>
-                                    : <Box padding={"400"} paddingBlockStart={"200"}>
-                                        <FormLayout>
-                                            <FormLayout.Group condensed>
-                                                <TextField
-                                                    label="Button text"
-                                                    value={wishlistSetting.button_text_before}
-                                                    onChange={(value) => handleChange({
-                                                        target: {
-                                                            name: "button_text_before",
-                                                            value
-                                                        }
-                                                    })}
-                                                />
-                                                <ColorInput
-                                                    label={"Button color"}
-                                                    name="button_color_before"
-                                                    onChange={handleChange}
-                                                    value={wishlistSetting.button_color_before}
-                                                />
-                                            </FormLayout.Group>
-                                            <FormLayout.Group condensed>
-                                                <ColorInput
-                                                    label={"Button background color"}
-                                                    name="button_bg_color_before"
-                                                    value={wishlistSetting.button_bg_color_before}
-                                                    onChange={handleChange}
-                                                />
-                                                <ColorInput
-                                                    label={"Border Color"}
-                                                    name="button_border_color_before"
-                                                    value={wishlistSetting.button_border_color_before}
-                                                    onChange={handleChange}
-                                                />
-                                            </FormLayout.Group>
-                                        </FormLayout>
-                                    </Box>
-                                }
+                                <Box padding={"400"} paddingBlockStart={"200"}>
+                                    <FormLayout>
+                                        <FormLayout.Group condensed>
+                                            <TextField
+                                                label="Button text"
+                                                value={wishlistSetting.button_text_before}
+                                                onChange={(value) => handleChange({
+                                                    target: {
+                                                        name: "button_text_before",
+                                                        value
+                                                    }
+                                                })}
+                                            />
+                                            <ColorInput
+                                                label={"Button color"}
+                                                name="button_color_before"
+                                                onChange={handleChange}
+                                                value={wishlistSetting.button_color_before}
+                                            />
+                                        </FormLayout.Group>
+                                        <FormLayout.Group condensed>
+                                            <ColorInput
+                                                label={"Button background color"}
+                                                name="button_bg_color_before"
+                                                value={wishlistSetting.button_bg_color_before}
+                                                onChange={handleChange}
+                                            />
+                                            <ColorInput
+                                                label={"Border Color"}
+                                                name="button_border_color_before"
+                                                value={wishlistSetting.button_border_color_before}
+                                                onChange={handleChange}
+                                            />
+                                        </FormLayout.Group>
+                                    </FormLayout>
+                                </Box>
                             </Fragment>
                         }
                         {
                             selected === 2 && <Fragment>
-                                {wishlistSetting.button_type === '1' ?
-                                    <Box padding={"400"} paddingBlockStart={"200"}>
-                                        <FormLayout>
-                                            <FormLayout.Group condensed>
-                                                <ColorInput
-                                                    label={"Button color"}
-                                                    name="button_color_after"
-                                                    onChange={handleChange}
-                                                    value={wishlistSetting.button_color_after}
-                                                />
-                                                <div/>
-                                            </FormLayout.Group>
-                                        </FormLayout>
-                                    </Box>:
-                                    <Box padding={"400"} paddingBlockStart={"200"}>
-                                        <FormLayout>
-                                            <FormLayout.Group condensed>
-                                                <TextField
-                                                    label="Button text"
-                                                    value={wishlistSetting.button_text_after}
-                                                    onChange={(value) => handleChange({
-                                                        target: {
-                                                            name: "button_text_after",
-                                                            value
-                                                        }
-                                                    })}
-                                                />
-                                                <ColorInput
-                                                    label={"Button color"}
-                                                    name="button_color_after"
-                                                    onChange={handleChange}
-                                                    value={wishlistSetting.button_color_after}
-                                                />
-                                            </FormLayout.Group>
-                                            <FormLayout.Group condensed>
-                                                <ColorInput
-                                                    label={"Button background color"}
-                                                    name="button_bg_color_after"
-                                                    value={wishlistSetting.button_bg_color_after}
-                                                    onChange={handleChange}/>
-                                                <ColorInput
-                                                    label={"Border Color"}
-                                                    name="button_border_color_after"
-                                                    value={wishlistSetting.button_border_color_after}
-                                                    onChange={handleChange}
-                                                />
-                                            </FormLayout.Group>
-                                        </FormLayout>
-                                    </Box>
-                                }
+                                <Box padding={"400"} paddingBlockStart={"200"}>
+                                    <FormLayout>
+                                        <FormLayout.Group condensed>
+                                            <TextField
+                                                label="Button text"
+                                                value={wishlistSetting.button_text_after}
+                                                onChange={(value) => handleChange({
+                                                    target: {
+                                                        name: "button_text_after",
+                                                        value
+                                                    }
+                                                })}
+                                            />
+                                            <ColorInput
+                                                label={"Button color"}
+                                                name="button_color_after"
+                                                onChange={handleChange}
+                                                value={wishlistSetting.button_color_after}
+                                            />
+                                        </FormLayout.Group>
+                                        <FormLayout.Group condensed>
+                                            <ColorInput
+                                                label={"Button background color"}
+                                                name="button_bg_color_after"
+                                                value={wishlistSetting.button_bg_color_after}
+                                                onChange={handleChange}/>
+                                            <ColorInput
+                                                label={"Border Color"}
+                                                name="button_border_color_after"
+                                                value={wishlistSetting.button_border_color_after}
+                                                onChange={handleChange}
+                                            />
+                                        </FormLayout.Group>
+                                    </FormLayout>
+                                </Box>
                             </Fragment>
                         }
                         {selected === 0 &&
@@ -422,6 +392,3 @@ const ProductDesign = ({wishlistSetting, setWishlistSetting, updateIcon, file, s
     );
 }
 export default ProductDesign
-
-
-
