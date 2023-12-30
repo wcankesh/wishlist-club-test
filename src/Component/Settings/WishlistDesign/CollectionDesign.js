@@ -87,7 +87,7 @@ const CollectionDesign = ({wishlistSetting, setWishlistSetting, file, setFile, i
                 .wl_collection_btn_before{
                                         border:${wishlistSetting.product_collection_button_border_width}px solid ${wishlistSetting.product_collection_button_border_color_before};
                                         border-radius:${wishlistSetting.product_collection_button_border_radius}px;padding:${wishlistSetting.product_collection_button_top_bottom_padding}px ${wishlistSetting.product_collection_button_left_right_padding}px;
-                                        color: ${wishlistSetting.product_collection_button_color_before};background-color:${wishlistSetting.product_collection_button_type === "1" ? "transparent" : wishlistSetting.product_collection_button_bg_color_before};
+                                        color: ${wishlistSetting.product_collection_button_color_before};background-color:${ wishlistSetting.product_collection_button_bg_color_before};
                                         width:${wishlistSetting.product_collection_button_position == "4" ? "100%" : "auto"}
                                         }
                   .wl_collection_btn_before svg, .wl_collection_btn_after svg{width: 26px;height:23px}
@@ -96,7 +96,7 @@ const CollectionDesign = ({wishlistSetting, setWishlistSetting, file, setFile, i
                 .wl_collection_btn_after svg path {fill: ${wishlistSetting.product_collection_button_color_after}} 
                 .wl_collection_btn_after{border:${wishlistSetting.product_collection_button_border_width}px solid ${wishlistSetting.product_collection_button_border_color_after};
                                         border-radius:${wishlistSetting.product_collection_button_border_radius}px;padding:${wishlistSetting.product_collection_button_top_bottom_padding}px ${wishlistSetting.product_collection_button_left_right_padding}px;
-                                        color: ${wishlistSetting.product_collection_button_color_after};background-color:${wishlistSetting.product_collection_button_type === "1" ? "transparent" : wishlistSetting.product_collection_button_bg_color_after};
+                                        color: ${wishlistSetting.product_collection_button_color_after};background-color:${wishlistSetting.product_collection_button_bg_color_after};
                                          width:${wishlistSetting.product_collection_button_position == "4" ? "100%" : "auto"}
                                         }
                 `
