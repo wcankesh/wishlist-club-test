@@ -1,87 +1,66 @@
-import React, {Fragment, useEffect, useState} from 'react';
+import React, {Fragment,} from 'react';
 import {
     InlineStack,
     Card,
-  Thumbnail,
-  Text,
-  EmptySearchResult, IndexTable,Box
+    Thumbnail,
+    Text,
+    EmptySearchResult, IndexTable,Box
 } from '@shopify/polaris';
-import {apiService, currencySymbol} from "../../../utils/Constant";
-import moment from "moment"
+import {currencySymbol} from "../../../utils/Constant";
 import {useSelector} from "react-redux";
 import {
-  ImageMajor
+    ImageMajor
 } from '@shopify/polaris-icons';
 
-const TopProducts = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [state, setState] = useState({startDate: moment().subtract(29, 'days'), endDate: moment(),});
-  const [topProducts, setTopProducts] = useState({top10Products: []})
-  const shopDetails = useSelector((state) => state.shopDetails)
+const TopProducts = ({topProducts, isLoading}) => {
+    const shopDetails = useSelector((state) => state.shopDetails)
 
-  useEffect(() => {
-    const Analytics = async () => {
-      setIsLoading(true);
-      const payload = {
-        start_date: moment(state.startDate).format("YYYY-MM-DD"),
-        end_date: moment(state.endDate).format("YYYY-MM-DD")
-      }
-      const response = await apiService.Analytics(payload);
-      if (response.status === 200) {
-        setTopProducts(response.data)
-        setIsLoading(false)
-      } else {
-        setIsLoading(false)
-      }
-    }
-    Analytics();
-  }, []);
-  const resourceNameWishlistProduct = {
-    singular: 'product wishlist',
-    plural: 'product wishlists',
-  };
+    const resourceNameWishlistProduct = {
+        singular: 'product wishlist',
+        plural: 'product wishlists',
+    };
 
-  return (
-      <Fragment>
-        <Card padding={"0"}>
-            <Box padding={"500"}>
-                <Text as={"h2"} fontWeight={"medium"} variant={"headingMd"}>Top 10 Product in Wishlists</Text>
-            </Box>
+    return (
+        <Fragment>
+            <Card padding={"0"}>
+                <Box padding={"500"}>
+                    <Text as={"h2"} fontWeight={"medium"} variant={"headingMd"}>Top 10 Product in Wishlists</Text>
+                </Box>
 
-          <IndexTable
-              resourceName={resourceNameWishlistProduct}
-              itemCount={isLoading ? 0 : topProducts.top10Products.length}
-              loading={isLoading}
-              emptyState={<EmptySearchResult title={'No product wishlist found'} withIllustration={!isLoading}/>}
-              hasMoreItems={isLoading}
-              headings={[
-                {title: 'Product'},
-                {title: 'Price', alignment: 'end'},
-                {title: 'Item Count', alignment: 'end'},
-              ]}
-              selectable={false}
-          >{(topProducts.top10Products || []).map((x, i) => {
-            return (
-                <IndexTable.Row key={i} id={i}>
-                  <IndexTable.Cell>
-                      <InlineStack blockAlign={"center"} gap="200" wrap={false} >
-                          <Thumbnail size={"small"} source={x?.product?.image ? x?.product?.image : ImageMajor}/>
-                          <Text as={"span"}>{x?.product?.title || ""}</Text>
-                      </InlineStack>
-                  </IndexTable.Cell>
-                  <IndexTable.Cell>
-                    <Text alignment={"end"}>{currencySymbol[shopDetails.currency]}{x?.product?.price || ""}</Text>
-                  </IndexTable.Cell>
-                  <IndexTable.Cell>
-                    <Text alignment={"end"}>{x.total}</Text>
-                  </IndexTable.Cell>
-                </IndexTable.Row>
-            )
-          })}
-          </IndexTable>
-        </Card>
-      </Fragment>
-  );
+                <IndexTable
+                    resourceName={resourceNameWishlistProduct}
+                    itemCount={isLoading ? 0 : topProducts.length}
+                    loading={isLoading}
+                    emptyState={<EmptySearchResult title={'No product wishlist found'} withIllustration={!isLoading}/>}
+                    hasMoreItems={isLoading}
+                    headings={[
+                        {title: 'Product'},
+                        {title: 'Price', alignment: 'end'},
+                        {title: 'Item Count', alignment: 'end'},
+                    ]}
+                    selectable={false}
+                >{(topProducts || []).map((x, i) => {
+                    return (
+                        <IndexTable.Row key={i} id={i}>
+                            <IndexTable.Cell>
+                                <InlineStack blockAlign={"center"} gap="200" wrap={false} >
+                                    <Thumbnail size={"small"} source={x?.product?.image ? x?.product?.image : ImageMajor}/>
+                                    <Text as={"span"}>{x?.product?.title || ""}</Text>
+                                </InlineStack>
+                            </IndexTable.Cell>
+                            <IndexTable.Cell>
+                                <Text alignment={"end"}>{currencySymbol[shopDetails.currency]}{x?.product?.price || ""}</Text>
+                            </IndexTable.Cell>
+                            <IndexTable.Cell>
+                                <Text alignment={"end"}>{x.total}</Text>
+                            </IndexTable.Cell>
+                        </IndexTable.Row>
+                    )
+                })}
+                </IndexTable>
+            </Card>
+        </Fragment>
+    );
 };
 
 export default TopProducts;
