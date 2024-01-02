@@ -1,43 +1,8 @@
-import React, {Fragment, useEffect, useState} from 'react';
+import React, {Fragment, } from 'react';
 import {Text, Layout, Card, Grid} from "@shopify/polaris";
-import moment from "moment";
-import {apiService, currencySymbol} from "../../utils/Constant";
+import {currencySymbol} from "../../utils/Constant";
 
-
-const initialState = {
-    wishlistOrderAmount: 0,
-    wishlistPageView: 0,
-    totalItem: 10,
-    totalWishlist: 5,
-    totalUniqueItem: 8,
-    cartProduct: 0,
-    wishlistOrder: 0,
-}
-const CountAnalytics = () => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [state, setState] = useState({startDate: moment().subtract(29, 'days'), endDate: moment(),});
-    const [analytics, SetAnalytics] = useState(initialState);
-    const [currency, setCurrency] = useState("INR");
-
-    useEffect(() => {
-        const getAnalytics = async () => {
-            setIsLoading(true);
-            const payload = {
-                start_date: moment(state.startDate).format("YYYY-MM-DD"),
-                end_date: moment(state.endDate).format("YYYY-MM-DD")
-            }
-            const response = await apiService.Analytics(payload);
-            if (response.status === 200) {
-                SetAnalytics(response.data)
-                setCurrency(response.data.currency);
-                setIsLoading(false)
-            } else {
-                setIsLoading(false)
-            }
-        }
-        getAnalytics();
-    }, []);
-
+const CountAnalytics = ({analytics, currency}) => {
     const analyticsCard = [
         {
             analytics1: [
