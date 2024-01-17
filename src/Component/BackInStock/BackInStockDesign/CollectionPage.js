@@ -136,11 +136,11 @@ const CollectionPage = ({backInStockDesign, setBackInStockDesign,}) => {
                             <FormLayout.Group>
                                 <Checkbox
                                     label="Show icon"
-                                    checked={backInStockDesign.collection_page_widget.button_type == "1"}
+                                    checked={backInStockDesign.collection_page_widget.is_icon == "1"}
                                     onChange={(checked) => {
                                         handleChange({
                                             target: {
-                                                name: "button_type",
+                                                name: "is_icon",
                                                 value: checked ? "1" : "0"
                                             }
                                         })
@@ -172,7 +172,7 @@ const CollectionPage = ({backInStockDesign, setBackInStockDesign,}) => {
                                 <Text>Rs. 80.00</Text>
                                 <Button size={"large"} fullWidth>Add to cart</Button>
                                 <button className="wl_btn_common wl_collection_preview">
-                                    {backInStockDesign.collection_page_widget.button_type == "1" ? Icons.notifyIcon : ""} {backInStockDesign.collection_page_widget.text}
+                                    {backInStockDesign.collection_page_widget.is_icon == "1" ? Icons.notifyIcon : ""} {backInStockDesign.collection_page_widget.text}
                                 </button>
                             </BlockStack>
 
