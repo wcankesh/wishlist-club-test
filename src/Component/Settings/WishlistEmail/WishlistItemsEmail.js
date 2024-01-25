@@ -252,6 +252,8 @@ const WishlistItemsEmail = () => {
     }
 
     const formValidate = (name, value) => {
+        const validRegex =
+            /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
         switch (name) {
             case "subject":
                 if (!value || value.trim() === "") {
@@ -278,7 +280,7 @@ const WishlistItemsEmail = () => {
                     return "";
                 }
             case "reply_to_mail":
-                if (value && !value.match(/^\w+([.-]?\w+)@\w+([.-]?\w+)(\.\w{2,3})+$/)) {
+                if (value && !value.match(validRegex)) {
                     return "Enter a valid reply to email address";
                 } else {
                     return "";

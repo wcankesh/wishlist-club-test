@@ -234,6 +234,8 @@ const RestockAlertEmail = () => {
     }
 
     const formValidate = (name, value) => {
+        const validRegex =
+            /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
         switch (name) {
             case "restock_email_subject":
                 if (!value || value.trim() === "") {
@@ -260,7 +262,7 @@ const RestockAlertEmail = () => {
                     return "";
                 }
             case "restock_email_reply_to_email":
-                if (value && !value?.match(/^\w+([.-]?\w+)@\w+([.-]?\w+)(\.\w{2,3})+$/)) {
+                if (value && !value?.match(validRegex)) {
                     return "Enter a valid reply to email address";
                 } else {
                     return "";
