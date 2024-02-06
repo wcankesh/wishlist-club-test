@@ -1,5 +1,5 @@
 import React, {Fragment, useState} from 'react';
-import {Page, Layout, ProgressBar, Button, Banner, Grid, Text, BlockStack, InlineStack, Card} from "@shopify/polaris";
+import {Page, Layout, ProgressBar, Button, Banner, Text, BlockStack, InlineStack, Card} from "@shopify/polaris";
 import {useDispatch, useSelector} from "react-redux";
 import moment from "moment";
 import {Icons} from "../../utils/Icons";
@@ -39,15 +39,16 @@ const Plan = () => {
         productPercent = (shopDetails.sent_email * 100 / 5000)
     } else if (shopDetails.plan_type === "8") {
         productPercent = (shopDetails.sent_email * 100 / 10000)
+    }else if (shopDetails.plan_type === "9") {
+        productPercent = (shopDetails.sent_email * 100 / 100)
     }
     const plan = [
-        {
+        (shopDetails.plan_type === "1") ?  {
             plan: "Free",
             planType: "1",
             price: "0",
             btn_text: "Downgrade"
-
-        },
+        }: "",
         {
             plan: "Basic",
             planType: "5",
@@ -80,7 +81,7 @@ const Plan = () => {
     const planTable = [
         {
             title: 'Email for Price drop, Restock, Wishlist, Back in stock',
-            free: "50",
+            free: (shopDetails.plan_type === "1") ? "50" : "",
             basic: "500",
             pro: "2000",
             advance: "5000",
@@ -172,52 +173,6 @@ const Plan = () => {
     const newBackInStockPlan = () => {
         return (
             <Fragment>
-                {/*<Layout.Section>*/}
-                {/*    <Grid>*/}
-                {/*        <Grid.Cell columnSpan={{xs: 6, sm: 2, md: 2, lg: 4, xl: 2}}>*/}
-                {/*            <Card padding={"500"}>*/}
-                {/*                <BlockStack gap={"400"}>*/}
-                {/*                    <Text as={"h4"} variant={"headingLg"} fontWeight={"semibold"}>Current Plan*/}
-                {/*                        :{(shopDetails.plan_type === "0" || shopDetails.plan_type === "1") ? "Free" : shopDetails.plan_type === "5" ? "Basic" : shopDetails.plan_type === "6" ? "Pro" : shopDetails.plan_type === "7" ? "Advance" : shopDetails.plan_type === "8" ? "Plus" : ""}</Text>*/}
-                {/*                    <Text>{moment(shopDetails?.billing_schedule?.billing_start_date).format("MMMM DD")} - {moment(shopDetails?.billing_schedule?.billing_end_date).format("MMMM DD")}</Text>*/}
-                {/*                    <Text as={"span"}>Mail*/}
-                {/*                        sent {`${shopDetails.sent_email}/${(shopDetails.plan_type === "0" || shopDetails.plan_type === "1") ? "50" : shopDetails.plan_type === "5" ? "500" : shopDetails.plan_type === "6" ? "2000" : shopDetails.plan_type === "7" ? "5000" : shopDetails.plan_type === "8" ? "10000" : ""}`}</Text>*/}
-                {/*                    <ProgressBar progress={productPercent} size="small" tone="primary"/>*/}
-                {/*                </BlockStack>*/}
-                {/*            </Card>*/}
-                {/*        </Grid.Cell>*/}
-                {/*        {(plan || []).map((x, i) => {*/}
-                {/*            return (*/}
-                {/*                <Grid.Cell columnSpan={{xs: 6, sm: 3, md: 2, lg: 4, xl: 2}}>*/}
-                {/*                    <Card padding={"500"}>*/}
-                {/*                        <BlockStack gap={"400"}>*/}
-                {/*                            <Text as={"h4"} variant={"headingLg"} fontWeight={"semibold"}*/}
-                {/*                                  alignment={"center"}>{x.plan}</Text>*/}
-                {/*                            <div>*/}
-                {/*                                <Text as={"h1"} variant={"headingXl"} alignment={"center"}>*/}
-                {/*                                    <Text as={"span"} variant={"bodyLg"}><sup>$</sup></Text>*/}
-                {/*                                    {x.price}*/}
-                {/*                                    <Text as={"span"}*/}
-                {/*                                          variant={"bodyLg"}><sub>/month</sub></Text>*/}
-                {/*                                </Text>*/}
-                {/*                            </div>*/}
-
-                {/*                            <InlineStack align={"center"}>*/}
-                {/*                                <Button*/}
-                {/*                                    variant={"primary"}*/}
-                {/*                                    onClick={() => onUpdatePlan(x.planType)}*/}
-                {/*                                    loading={isLoading == x.planType}*/}
-                {/*                                    disabled={shopDetails.plan_type == x.planType ? true : false}>*/}
-                {/*                                    {shopDetails.plan_type == x.planType ? "Activated" : shopDetails.is_older_shop == 1 ? "Upgrade" : shopDetails.plan_type < x.planType ? "Upgrade" : "Downgrade"}*/}
-                {/*                                </Button>*/}
-                {/*                            </InlineStack>*/}
-                {/*                        </BlockStack>*/}
-                {/*                    </Card>*/}
-                {/*                </Grid.Cell>*/}
-                {/*            )*/}
-                {/*        })}*/}
-                {/*    </Grid>*/}
-                {/*</Layout.Section>*/}
                 <Layout.Section>
                     <Card padding={"0"}>
                         <div className="planpriceWrap">
@@ -225,17 +180,18 @@ const Plan = () => {
                                 <li className="ppl_item" >
                                     <div className="pplLabel">
                                         <BlockStack gap={"300"}>
-                                            <Text variant="headingLg" as="h5">Current Plan : {(shopDetails.plan_type === "0" || shopDetails.plan_type === "1") ? "Free" : shopDetails.plan_type === "5" ? "Basic" : shopDetails.plan_type === "6" ? "Pro" : shopDetails.plan_type === "7" ? "Advance" : shopDetails.plan_type === "8" ? "Plus" : ""}</Text>
-                                        <Text>{moment(shopDetails?.billing_schedule?.billing_start_date).format("MMMM DD")} - {moment(shopDetails?.billing_schedule?.billing_end_date).format("MMMM DD")}</Text>
-                                        <Text as={"span"}>Mail sent {`${shopDetails.sent_email}/${(shopDetails.plan_type === "0" || shopDetails.plan_type === "1") ? "50" : shopDetails.plan_type === "5" ? "500" : shopDetails.plan_type === "6" ? "2000" : shopDetails.plan_type === "7" ? "5000" : shopDetails.plan_type === "8" ? "10000" : ""}`}</Text>
-                                        <ProgressBar progress={productPercent} size="small" tone="primary"/>
-                                    </BlockStack></div>
-
+                                            <Text variant="headingLg" as="h5">Current Plan : {(shopDetails.plan_type === "0" || shopDetails.plan_type === "1") ? "Free" : shopDetails.plan_type === "5" ? "Basic" : shopDetails.plan_type === "6" ? "Pro" : shopDetails.plan_type === "7" ? "Advance" : shopDetails.plan_type === "8" ? "Enterprise" : shopDetails.plan_type === "9" ? "Starter" : ""}</Text>
+                                            <Text>{moment(shopDetails?.billing_schedule?.billing_start_date).format("MMMM DD")} - {moment(shopDetails?.billing_schedule?.billing_end_date).format("MMMM DD")}</Text>
+                                            <Text as={"span"}>Mail sent {`${shopDetails.sent_email}/${(shopDetails.plan_type === "0" || shopDetails.plan_type === "1") ? "50" : shopDetails.plan_type === "5" ? "500" : shopDetails.plan_type === "6" ? "2000" : shopDetails.plan_type === "7" ? "5000" : shopDetails.plan_type === "8" ? "10000" : shopDetails.plan_type === "9" ? "100" : ""}`}</Text>
+                                            <ProgressBar progress={productPercent} size="small" tone="primary"/>
+                                        </BlockStack>
+                                    </div>
                                     <div className="pplContent">
                                         <div className="row">
-                                            {(plan || []).map((x, i) => {
+                                            {(plan || []).filter((x) => x).map((x, i) => {
+                                                const col = shopDetails.plan_type == "1" ? "col col-5" : "col col-4";
                                                 return (
-                                                    <div className="col col-5">
+                                                    <div className={col} key={i}>
                                                         <BlockStack gap={"300"}>
                                                             <Text variant="headingLg" as="h5">{x.plan}</Text>
                                                             <InlineStack blockAlign={"baseline"} align={"center"}>
@@ -244,14 +200,10 @@ const Plan = () => {
                                                                     /month
                                                                 </Text>
                                                             </InlineStack>
-                                                                {/*<Text as={"h1"} variant={"headingXl"} alignment={"center"}>*/}
-                                                                {/*    <Text as={"span"} variant={"bodyLg"}><sup>$</sup></Text>*/}
-                                                                {/*    */}
-                                                                {/*    <Text as={"span"} variant={"bodyLg"}><sub>/month</sub></Text>*/}
-                                                                {/*</Text>*/}
-
                                                             <InlineStack align={"center"}>
-                                                                <Button variant={"primary"} onClick={() => onUpdatePlan(x.planType)} loading={isLoading == x.planType} disabled={shopDetails.plan_type == x.planType ? true : false}>{shopDetails.plan_type == x.planType ? "Activated" : shopDetails.is_older_shop == 1 ? "Upgrade" : shopDetails.plan_type < x.planType ? "Upgrade" : "Downgrade"}</Button>
+                                                                <Button variant={"primary"} onClick={() => onUpdatePlan(x.planType)} loading={isLoading == x.planType} disabled={shopDetails.plan_type == x.planType ? true : false}>
+                                                                    {shopDetails.plan_type == x.planType ? "Activated" : shopDetails.is_older_shop == 1 ? "Upgrade" : shopDetails.plan_type === "9" ? "Upgrade" : shopDetails.plan_type > x.planType ? "Downgrade" : x.planType === "9" ? "Downgrade" : "Upgrade"}
+                                                                </Button>
                                                             </InlineStack>
                                                         </BlockStack>
                                                     </div>
@@ -262,27 +214,27 @@ const Plan = () => {
                                 </li>
                                 {
                                     (planTable || []).map((y, j) => {
+                                        const col = shopDetails.plan_type == "1" ? "col col-5" : "col col-4";
                                         return (
                                             <li className="ppl_item" key={j}>
                                                 <div className="pplLabel">{y.title}</div>
                                                 <div className="pplContent">
                                                     <div className="row">
-                                                        <div className="col col-5">{(y.free === true || y.free === false) ?
-                                                            <span className="icons">{y.free === true ? Icons.rightIcon : Icons.cancelIcon}</span> : y.free}</div>
-                                                        <div
-                                                            className="col col-5">{y.basic === true || y.basic === false ?
-                                                            <span
-                                                                className="icons">{y.basic === true ? Icons.rightIcon : Icons.cancelIcon}</span> : y.basic}</div>
-                                                        <div
-                                                            className="col col-5">{(y.pro === true || y.pro === false) ?
+                                                        {
+                                                            shopDetails.plan_type == "1" ?    <div className={col}>{(y.free === true || y.free === false) ?
+                                                                <span className="icons">{y.free === true ? Icons.rightIcon : Icons.cancelIcon}</span> : y.free}
+                                                            </div> : ""
+                                                        }
+
+                                                        <div className={col}>{y.basic === true || y.basic === false ?
+                                                            <span className="icons">{y.basic === true ? Icons.rightIcon : Icons.cancelIcon}</span> : y.basic}</div>
+                                                        <div className={col}>{(y.pro === true || y.pro === false) ?
                                                             <span
                                                                 className="icons">{y.pro === true ? Icons.rightIcon : Icons.cancelIcon}</span> : y.pro}</div>
-                                                        <div
-                                                            className="col col-5">{(y.advance === true || y.advance === false) ?
+                                                        <div className={col}>{(y.advance === true || y.advance === false) ?
                                                             <span
                                                                 className="icons">{y.advance === true ? Icons.rightIcon : Icons.cancelIcon}</span> : y.advance}</div>
-                                                        <div
-                                                            className="col col-5">{(y.enterprise === true || y.enterprise === false) ?
+                                                        <div className={col}>{(y.enterprise === true || y.enterprise === false) ?
                                                             <span
                                                                 className="icons">{y.enterprise === true ? Icons.rightIcon : Icons.cancelIcon}</span> : y.enterprise}</div>
                                                     </div>

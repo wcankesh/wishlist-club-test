@@ -34,6 +34,8 @@ const Dashboard = () => {
     productPercent = (shopDetails.sent_email * 100 / 5000)
   } else if (shopDetails.plan_type === "8") {
     productPercent = (shopDetails.sent_email * 100 / 10000)
+  }else if (shopDetails.plan_type === "9") {
+    productPercent = (shopDetails.sent_email * 100 / 100)
   }
   return (
       <Fragment>
@@ -84,7 +86,7 @@ const Dashboard = () => {
             }
             <Layout.Section>
               <Card>
-                <Text as={"span"}>Mail sent {`${shopDetails.sent_email}/${(shopDetails.plan_type === "0" || shopDetails.plan_type === "1") ? "50" : shopDetails.plan_type === "5" ? "500" : shopDetails.plan_type === "6" ? "2000" : shopDetails.plan_type === "7" ? "5000" : shopDetails.plan_type === "8" ? "10000" : ""}`}</Text>
+                <Text as={"span"}>Mail sent {`${shopDetails.sent_email}/${(shopDetails.plan_type === "0" || shopDetails.plan_type === "1") ? "50" : shopDetails.plan_type === "5" ? "500" : shopDetails.plan_type === "6" ? "2000" : shopDetails.plan_type === "7" ? "5000" : shopDetails.plan_type === "8" ? "10000" : shopDetails.plan_type === "9" ? "100" : ""}`}</Text>
                 <BlockStack>
                   <InlineStack wrap={false} blockAlign={"center"} gap="400">
                     <ProgressBar progress={productPercent} size="small" tone="primary"/>

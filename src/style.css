@@ -146,6 +146,7 @@ ul.PlanPriceList li.ppl_item .pplContent .icons {align-items: center;display: fl
 .row {display: flex; flex-flow: row wrap; margin-left: -8px; margin-right: -8px;}
 .col {padding-left: 8px; padding-right: 8px;}
 .col-5 {flex: 0 0 20%; max-width: 20%;}
+.col-4 {flex: 0 0 25%; max-width: 25%;}
 .Polaris-Modal-Dialog__Container {z-index: 1050;}
 .w-100 {width: 100%;}
 .Polaris-FooterHelp {position: sticky; bottom: 0; top: 100%;}
