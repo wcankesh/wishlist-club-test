@@ -44,6 +44,8 @@ const initialSate = {
             view_product_btn_border_size: "",
             view_product_btn_horizontal_padding: "",
             view_product_btn_vertical_padding: "",
+            add_to_cart_btn_border_radius : 10,
+            view_product_btn_border_radius : 10
         },
     price_drop_social:
         {
@@ -682,6 +684,21 @@ const PriceDropAlertEmail = () => {
                                                                suffix="PX"
                                                     />
                                                 </FormLayout.Group>
+                                                <FormLayout.Group condensed>
+                                                    <TextField label="Border Radius"
+                                                               type="number"
+                                                               value={emailSetting.price_drop_style.add_to_cart_btn_border_radius}
+                                                               onChange={(value) => priceOnChangeStyle({
+                                                                   target: {
+                                                                       name: "add_to_cart_btn_border_radius",
+                                                                       value
+                                                                   }
+                                                               })}
+                                                               min={0}
+                                                               suffix="PX"
+                                                    />
+                                                    <div/>
+                                                </FormLayout.Group>
                                             </FormLayout>
                                         </BlockStack>
                                     </Box>
@@ -744,6 +761,21 @@ const PriceDropAlertEmail = () => {
                                                                })}
                                                                suffix="PX"
                                                     />
+                                                </FormLayout.Group>
+                                                <FormLayout.Group condensed>
+                                                    <TextField label="Border Radius"
+                                                               type="number"
+                                                               value={emailSetting.price_drop_style.view_product_btn_border_radius}
+                                                               onChange={(value) => priceOnChangeStyle({
+                                                                   target: {
+                                                                       name: "view_product_btn_border_radius",
+                                                                       value
+                                                                   }
+                                                               })}
+                                                               min={0}
+                                                               suffix="PX"
+                                                    />
+                                                    <div/>
                                                 </FormLayout.Group>
                                             </FormLayout>
                                         </BlockStack>
@@ -808,7 +840,7 @@ const PriceDropAlertEmail = () => {
                                                             </tr>
                                                             <tr>
                                                                 <td style={{paddingTop: '20px'}}>
-                                                                    <a className="buy-action-url bg-primary"style={{backgroundColor: emailSetting.price_drop_style.add_to_cart_btn_bg_color, color: emailSetting.price_drop_style.add_to_cart_btn_text_color, boxSizing: 'border-box', borderRadius: '10px', display: 'block', fontSize: '18px', fontWeight: 600, lineHeight: '20px', padding: `${emailSetting.price_drop_style.add_to_cart_btn_vertical_padding}px ${emailSetting.price_drop_style.add_to_cart_btn_horizontal_padding}px`, textAlign: 'center', textDecoration: 'none', border: `${emailSetting.price_drop_style.add_to_cart_btn_border_size}px solid ${emailSetting.price_drop_style.add_to_cart_btn_border_color}`}}>
+                                                                    <a className="buy-action-url bg-primary" style={{backgroundColor: emailSetting.price_drop_style.add_to_cart_btn_bg_color, color: emailSetting.price_drop_style.add_to_cart_btn_text_color, boxSizing: 'border-box', borderRadius: `${emailSetting.price_drop_style.add_to_cart_btn_border_radius}px`, display: 'block', fontSize: '18px', fontWeight: 600, lineHeight: '20px', padding: `${emailSetting.price_drop_style.add_to_cart_btn_vertical_padding}px ${emailSetting.price_drop_style.add_to_cart_btn_horizontal_padding}px`, textAlign: 'center', textDecoration: 'none', border: `${emailSetting.price_drop_style.add_to_cart_btn_border_size}px solid ${emailSetting.price_drop_style.add_to_cart_btn_border_color}`}}>
                                                                         {emailSetting.price_drop_content.add_to_cart_button_text}
                                                                     </a>
                                                                 </td>
@@ -817,7 +849,7 @@ const PriceDropAlertEmail = () => {
                                                             <tr>
                                                                 <td style={{paddingTop: '20px'}}>
                                                                     <a className="visit-action-url color-primary border-primary"
-                                                                       style={{backgroundColor: emailSetting.price_drop_style.view_product_btn_bg_color, color: emailSetting.price_drop_style.view_product_btn_text_color, border: `${emailSetting.price_drop_style.view_product_btn_border_size}px solid ${emailSetting.price_drop_style.view_product_btn_border_color}`, boxSizing: 'border-box', borderRadius: '10px', display: 'block', fontSize: '18px', fontWeight: 600, lineHeight: '20px', padding: `${emailSetting.price_drop_style.view_product_btn_vertical_padding}px ${emailSetting.price_drop_style.view_product_btn_horizontal_padding}px`, textAlign: 'center', textDecoration: 'none'}}>
+                                                                       style={{backgroundColor: emailSetting.price_drop_style.view_product_btn_bg_color, color: emailSetting.price_drop_style.view_product_btn_text_color, border: `${emailSetting.price_drop_style.view_product_btn_border_size}px solid ${emailSetting.price_drop_style.view_product_btn_border_color}`, boxSizing: 'border-box', borderRadius: `${emailSetting.price_drop_style.view_product_btn_border_radius}px`, display: 'block', fontSize: '18px', fontWeight: 600, lineHeight: '20px', padding: `${emailSetting.price_drop_style.view_product_btn_vertical_padding}px ${emailSetting.price_drop_style.view_product_btn_horizontal_padding}px`, textAlign: 'center', textDecoration: 'none'}}>
                                                                         {emailSetting.price_drop_content.view_product_button_text}
                                                                     </a>
                                                                 </td>
@@ -852,7 +884,7 @@ const PriceDropAlertEmail = () => {
                 <PageActions
                     primaryAction={{
                         content: 'Save',
-                        onAction: saveEmailSetting,
+                        onAction: () => saveEmailSetting("", true),
                         loading: isLoading
                     }}
                 />

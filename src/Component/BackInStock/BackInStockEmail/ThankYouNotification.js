@@ -36,6 +36,7 @@ const initialState = {
             font_family: "roboto",
             title_font_size: 24,
             description_font_size: 16,
+            btn_border_radius: 10,
             btn_bg_color: "",
             btn_text_color: "",
             btn_border_color: "",
@@ -760,6 +761,20 @@ const ThankYouNotification = () => {
                                                                suffix="PX"
                                                     />
                                                 </FormLayout.Group>
+                                                <FormLayout.Group condensed>
+                                                    <TextField label="Border radius"
+                                                               type="number"
+                                                               value={backInStockEmail.thankyou_style.btn_border_radius}
+                                                               onChange={(value) => tyOnChangeStyle({
+                                                                   target: {
+                                                                       name: "btn_border_radius",
+                                                                       value
+                                                                   }
+                                                               })}
+                                                               suffix="PX"
+                                                    />
+                                                   <div/>
+                                                </FormLayout.Group>
                                             </FormLayout>
                                         </BlockStack>
                                     </Box>
@@ -837,7 +852,7 @@ const ThankYouNotification = () => {
 
                                                             <tr>
                                                                 <td style={{paddingTop: '20px'}}>
-                                                                    <a className="buy-action-url bg-primary" style={{backgroundColor: backInStockEmail.thankyou_style.btn_bg_color, color: backInStockEmail.thankyou_style.btn_text_color, boxSizing: 'border-box', borderRadius: '10px', display: 'block', fontSize: '18px', fontWeight: 600, lineHeight: '20px', padding: `${backInStockEmail.thankyou_style.btn_vertical_padding}px ${backInStockEmail.thankyou_style.btn_horizontal_padding}px`, textAlign: 'center', textDecoration: 'none', border: `${backInStockEmail.thankyou_style.btn_border_size}px solid ${backInStockEmail.thankyou_style.btn_border_color}`}}>{backInStockEmail.thankyou_content.button_text}</a>
+                                                                    <a className="buy-action-url bg-primary" style={{backgroundColor: backInStockEmail.thankyou_style.btn_bg_color, color: backInStockEmail.thankyou_style.btn_text_color, boxSizing: 'border-box', borderRadius: `${backInStockEmail.thankyou_style.btn_border_radius}px`, display: 'block', fontSize: '18px', fontWeight: 600, lineHeight: '20px', padding: `${backInStockEmail.thankyou_style.btn_vertical_padding}px ${backInStockEmail.thankyou_style.btn_horizontal_padding}px`, textAlign: 'center', textDecoration: 'none', border: `${backInStockEmail.thankyou_style.btn_border_size}px solid ${backInStockEmail.thankyou_style.btn_border_color}`}}>{backInStockEmail.thankyou_content.button_text}</a>
                                                                 </td>
                                                             </tr>
                                                             {

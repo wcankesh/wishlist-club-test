@@ -38,6 +38,8 @@ const initialState = {
             title_font_size: 24,
             description_font_size: 16,
             discount_font_size: 16,
+            add_to_cart_btn_border_radius: 10,
+            view_product_btn_border_radius: 10,
             add_to_cart_btn_bg_color: "",
             add_to_cart_btn_text_color: "",
             add_to_cart_btn_border_color: "",
@@ -767,6 +769,21 @@ const StockNotification = () => {
                                                                suffix="PX"
                                                     />
                                                 </FormLayout.Group>
+                                                <FormLayout.Group condensed>
+                                                    <TextField label="Border Radius"
+                                                               type="number"
+                                                               value={backInStockEmail.bis_style.add_to_cart_btn_border_radius}
+                                                               onChange={(value) => bisOnChangeStyle({
+                                                                   target: {
+                                                                       name: "add_to_cart_btn_border_radius",
+                                                                       value
+                                                                   }
+                                                               })}
+                                                               min={0}
+                                                               suffix="PX"
+                                                    />
+                                                    <div/>
+                                                </FormLayout.Group>
                                             </FormLayout>
                                         </BlockStack>
                                     </Box>
@@ -828,6 +845,21 @@ const StockNotification = () => {
                                                                })}
                                                                suffix="PX"
                                                     />
+                                                </FormLayout.Group>
+                                                <FormLayout.Group condensed>
+                                                    <TextField label="Border Radius"
+                                                               type="number"
+                                                               min={0}
+                                                               value={backInStockEmail.bis_style.view_product_btn_border_radius}
+                                                               onChange={(value) => bisOnChangeStyle({
+                                                                   target: {
+                                                                       name: "view_product_btn_border_radius",
+                                                                       value
+                                                                   }
+                                                               })}
+                                                               suffix="PX"
+                                                    />
+                                                   <div/>
                                                 </FormLayout.Group>
                                             </FormLayout>
                                         </BlockStack>
@@ -912,13 +944,13 @@ const StockNotification = () => {
                                                             </tr>
                                                             <tr>
                                                                 <td style={{paddingTop: '20px'}}>
-                                                                    <a className="buy-action-url bg-primary" style={{backgroundColor: backInStockEmail.bis_style.add_to_cart_btn_bg_color, color: backInStockEmail.bis_style.add_to_cart_btn_text_color, boxSizing: 'border-box', borderRadius: '10px', display: 'block', fontSize: '18px', fontWeight: 600, lineHeight: '20px', padding: `${backInStockEmail.bis_style.add_to_cart_btn_vertical_padding}px ${backInStockEmail.bis_style.add_to_cart_btn_horizontal_padding}px`, textAlign: 'center', textDecoration: 'none', border: `${backInStockEmail.bis_style.add_to_cart_btn_border_size}px solid ${backInStockEmail.bis_style.add_to_cart_btn_border_color}`}}>{backInStockEmail.bis_content.add_to_cart_button_text}</a>
+                                                                    <a className="buy-action-url bg-primary" style={{backgroundColor: backInStockEmail.bis_style.add_to_cart_btn_bg_color, color: backInStockEmail.bis_style.add_to_cart_btn_text_color, boxSizing: 'border-box', borderRadius: `${backInStockEmail.bis_style.add_to_cart_btn_border_radius}px`, display: 'block', fontSize: '18px', fontWeight: 600, lineHeight: '20px', padding: `${backInStockEmail.bis_style.add_to_cart_btn_vertical_padding}px ${backInStockEmail.bis_style.add_to_cart_btn_horizontal_padding}px`, textAlign: 'center', textDecoration: 'none', border: `${backInStockEmail.bis_style.add_to_cart_btn_border_size}px solid ${backInStockEmail.bis_style.add_to_cart_btn_border_color}`}}>{backInStockEmail.bis_content.add_to_cart_button_text}</a>
                                                                 </td>
                                                             </tr>
                                                             <tr>
                                                                 <td style={{paddingTop: '20px'}}>
                                                                     <a className="visit-action-url color-primary border-primary"
-                                                                       style={{backgroundColor: backInStockEmail.bis_style.view_product_btn_bg_color, color: backInStockEmail.bis_style.view_product_btn_text_color, border: `${backInStockEmail.bis_style.view_product_btn_border_size}px solid ${backInStockEmail.bis_style.view_product_btn_border_color}`, boxSizing: 'border-box', borderRadius: '10px', display: 'block', fontSize: '18px', fontWeight: 600, lineHeight: '20px', padding: `${backInStockEmail.bis_style.view_product_btn_vertical_padding}px ${backInStockEmail.bis_style.view_product_btn_horizontal_padding}px`, textAlign: 'center', textDecoration: 'none'}}>{backInStockEmail.bis_content.view_product_button_text}</a>
+                                                                       style={{backgroundColor: backInStockEmail.bis_style.view_product_btn_bg_color, color: backInStockEmail.bis_style.view_product_btn_text_color, border: `${backInStockEmail.bis_style.view_product_btn_border_size}px solid ${backInStockEmail.bis_style.view_product_btn_border_color}`, boxSizing: 'border-box', borderRadius: `${backInStockEmail.bis_style.view_product_btn_border_radius}px`, display: 'block', fontSize: '18px', fontWeight: 600, lineHeight: '20px', padding: `${backInStockEmail.bis_style.view_product_btn_vertical_padding}px ${backInStockEmail.bis_style.view_product_btn_horizontal_padding}px`, textAlign: 'center', textDecoration: 'none'}}>{backInStockEmail.bis_content.view_product_button_text}</a>
                                                                 </td>
                                                             </tr>
                                                             {

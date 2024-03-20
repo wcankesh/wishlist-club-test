@@ -52,6 +52,8 @@ const initialSate = {
         view_product_btn_border_size: "",
         view_product_btn_horizontal_padding: "",
         view_product_btn_vertical_padding: "",
+        add_to_cart_btn_border_radius: 10,
+        view_product_btn_border_radius: 10
     },
     restock_content: {
         add_to_cart_button_text: "",
@@ -663,6 +665,21 @@ const RestockAlertEmail = () => {
                                                            suffix="PX"
                                                 />
                                             </FormLayout.Group>
+                                            <FormLayout.Group condensed>
+                                                <TextField label="Border Radius"
+                                                           type="number"
+                                                           value={emailSetting.restock_style.add_to_cart_btn_border_radius}
+                                                           onChange={(value) => restockOnChangeStyle({
+                                                               target: {
+                                                                   name: "add_to_cart_btn_border_radius",
+                                                                   value
+                                                               }
+                                                           })}
+                                                           min={0}
+                                                           suffix="PX"
+                                                />
+                                                <div/>
+                                            </FormLayout.Group>
                                         </FormLayout>
                                     </BlockStack>
                                 </Box>
@@ -721,6 +738,21 @@ const RestockAlertEmail = () => {
                                                            })}
                                                            suffix="PX"
                                                 />
+                                            </FormLayout.Group>
+                                            <FormLayout.Group condensed>
+                                                <TextField label="Border Radius"
+                                                           type="number"
+                                                           value={emailSetting.restock_style.view_product_btn_border_radius}
+                                                           onChange={(value) => restockOnChangeStyle({
+                                                               target: {
+                                                                   name: "view_product_btn_border_radius",
+                                                                   value
+                                                               }
+                                                           })}
+                                                           min={0}
+                                                           suffix="PX"
+                                                />
+                                                <div/>
                                             </FormLayout.Group>
                                         </FormLayout>
                                     </BlockStack>
@@ -789,7 +821,7 @@ const RestockAlertEmail = () => {
                                                         <tr>
                                                             <td style={{paddingTop: '10px'}}>
                                                                 <a className="buy-action-url bg-primary"
-                                                                   style={{backgroundColor: emailSetting.restock_style.add_to_cart_btn_bg_color, color: emailSetting.restock_style.add_to_cart_btn_text_color, boxSizing: 'border-box', borderRadius: '10px', display: 'block', fontSize: '18px', fontWeight: 600, lineHeight: '20px', padding: `${emailSetting.restock_style.add_to_cart_btn_vertical_padding}px ${emailSetting.restock_style.add_to_cart_btn_horizontal_padding}px`, textAlign: 'center', textDecoration: 'none', border: `${emailSetting.restock_style.add_to_cart_btn_border_size}px solid ${emailSetting.restock_style.add_to_cart_btn_border_color}`}}>
+                                                                   style={{backgroundColor: emailSetting.restock_style.add_to_cart_btn_bg_color, color: emailSetting.restock_style.add_to_cart_btn_text_color, boxSizing: 'border-box', borderRadius: `${emailSetting.restock_style.add_to_cart_btn_border_radius}px`, display: 'block', fontSize: '18px', fontWeight: 600, lineHeight: '20px', padding: `${emailSetting.restock_style.add_to_cart_btn_vertical_padding}px ${emailSetting.restock_style.add_to_cart_btn_horizontal_padding}px`, textAlign: 'center', textDecoration: 'none', border: `${emailSetting.restock_style.add_to_cart_btn_border_size}px solid ${emailSetting.restock_style.add_to_cart_btn_border_color}`}}>
                                                                     {emailSetting.restock_content.add_to_cart_button_text}
                                                                 </a>
                                                             </td>
@@ -798,7 +830,7 @@ const RestockAlertEmail = () => {
                                                         <tr>
                                                             <td style={{paddingTop: '10px'}}>
                                                                 <a className="visit-action-url color-primary border-primary"
-                                                                   style={{backgroundColor: emailSetting.restock_style.view_product_btn_bg_color, color: emailSetting.restock_style.view_product_btn_text_color, border: `${emailSetting.restock_style.view_product_btn_border_size}px solid ${emailSetting.restock_style.view_product_btn_border_color}`, boxSizing: 'border-box', borderRadius: '10px', display: 'block', fontSize: '18px', fontWeight: 600, lineHeight: '20px', padding: `${emailSetting.restock_style.view_product_btn_vertical_padding}px ${emailSetting.restock_style.view_product_btn_horizontal_padding}px`, textAlign: 'center', textDecoration: 'none'}}>
+                                                                   style={{backgroundColor: emailSetting.restock_style.view_product_btn_bg_color, color: emailSetting.restock_style.view_product_btn_text_color, border: `${emailSetting.restock_style.view_product_btn_border_size}px solid ${emailSetting.restock_style.view_product_btn_border_color}`, boxSizing: 'border-box', borderRadius: `${emailSetting.restock_style.view_product_btn_border_radius}px`, display: 'block', fontSize: '18px', fontWeight: 600, lineHeight: '20px', padding: `${emailSetting.restock_style.view_product_btn_vertical_padding}px ${emailSetting.restock_style.view_product_btn_horizontal_padding}px`, textAlign: 'center', textDecoration: 'none'}}>
                                                                     {emailSetting.restock_content.view_product_button_text}
                                                                 </a>
                                                             </td>

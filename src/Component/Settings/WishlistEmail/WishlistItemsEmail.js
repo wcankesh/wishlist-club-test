@@ -46,6 +46,8 @@ const initialSate = {
         view_product_btn_border_size: "",
         view_product_btn_horizontal_padding: "",
         view_product_btn_vertical_padding: "",
+        add_to_cart_btn_border_radius : 10,
+        view_product_btn_border_radius : 10
     },
     wishlist_social: {
         facebook: "",
@@ -121,7 +123,7 @@ const WishlistItemsEmail = () => {
         EmailSetting()
     }, []);
 
-    const saveEmailSetting = async (record, isLoad) => {debugger
+    const saveEmailSetting = async (record, isLoad) => {
         if(isLoad){
             let validationErrors = {};
             let tempObj = { subject: emailSetting.subject,
@@ -700,6 +702,21 @@ const WishlistItemsEmail = () => {
                                                                suffix="PX"
                                                     />
                                                 </FormLayout.Group>
+                                                <FormLayout.Group condensed>
+                                                    <TextField label="Border Radius"
+                                                               type="number"
+                                                               value={emailSetting.wishlist_style.add_to_cart_btn_border_radius}
+                                                               onChange={(value) => wlItemOnChangeStyle({
+                                                                   target: {
+                                                                       name: "add_to_cart_btn_border_radius",
+                                                                       value
+                                                                   }
+                                                               })}
+                                                               min={0}
+                                                               suffix="PX"
+                                                    />
+                                                   <div/>
+                                                </FormLayout.Group>
                                             </FormLayout>
                                         </BlockStack>
                                     </Box>
@@ -759,6 +776,21 @@ const WishlistItemsEmail = () => {
                                                                suffix="PX"
                                                     />
                                                 </FormLayout.Group>
+                                                <FormLayout.Group condensed>
+                                                    <TextField label="Border Radius"
+                                                               type="number"
+                                                               value={emailSetting.wishlist_style.view_product_btn_border_radius}
+                                                               onChange={(value) => wlItemOnChangeStyle({
+                                                                   target: {
+                                                                       name: "view_product_btn_border_radius",
+                                                                       value
+                                                                   }
+                                                               })}
+                                                               min={0}
+                                                               suffix="PX"
+                                                    />
+                                                    <div/>
+                                                </FormLayout.Group>
                                             </FormLayout>
                                         </BlockStack>
                                     </Box>
@@ -816,14 +848,14 @@ const WishlistItemsEmail = () => {
                                                                                     </tr>
                                                                                     <tr>
                                                                                         <td style={{paddingTop: '10px'}}>
-                                                                                            <a className="buy-action-url bg-primary" style={{backgroundColor: emailSetting.wishlist_style.add_to_cart_btn_bg_color, color: emailSetting.wishlist_style.add_to_cart_btn_text_color, boxSizing: 'border-box', borderRadius: '10px', display: 'block', fontSize: '16px', fontWeight: 600, lineHeight: '20px', padding: `${emailSetting.wishlist_style.add_to_cart_btn_vertical_padding}px ${emailSetting.wishlist_style.add_to_cart_btn_horizontal_padding}px`, textAlign: 'center', textDecoration: 'none', border: `${emailSetting.wishlist_style.add_to_cart_btn_border_size}px solid ${emailSetting.wishlist_style.add_to_cart_btn_border_color}`}}>
+                                                                                            <a className="buy-action-url bg-primary" style={{backgroundColor: emailSetting.wishlist_style.add_to_cart_btn_bg_color, color: emailSetting.wishlist_style.add_to_cart_btn_text_color, boxSizing: 'border-box', borderRadius: `${emailSetting.wishlist_style.add_to_cart_btn_border_radius}px`, display: 'block', fontSize: '16px', fontWeight: 600, lineHeight: '20px', padding: `${emailSetting.wishlist_style.add_to_cart_btn_vertical_padding}px ${emailSetting.wishlist_style.add_to_cart_btn_horizontal_padding}px`, textAlign: 'center', textDecoration: 'none', border: `${emailSetting.wishlist_style.add_to_cart_btn_border_size}px solid ${emailSetting.wishlist_style.add_to_cart_btn_border_color}`}}>
                                                                                                 {emailSetting.wishlist_content.add_to_cart_button_text}
                                                                                             </a>
                                                                                         </td>
                                                                                     </tr>
                                                                                     <tr>
                                                                                         <td style={{paddingTop: '10px'}}>
-                                                                                            <a className="visit-action-url color-primary border-primary" style={{backgroundColor: emailSetting.wishlist_style.view_product_btn_bg_color, color: emailSetting.wishlist_style.view_product_btn_text_color, border: `${emailSetting.wishlist_style.view_product_btn_border_size}px solid ${emailSetting.wishlist_style.view_product_btn_border_color}`, boxSizing: 'border-box', borderRadius: '10px', display: 'block', fontSize: '16px', fontWeight: 600, lineHeight: '20px', padding: `${emailSetting.wishlist_style.view_product_btn_vertical_padding}px ${emailSetting.wishlist_style.view_product_btn_horizontal_padding}px`, textAlign: 'center', textDecoration: 'none'}}>
+                                                                                            <a className="visit-action-url color-primary border-primary" style={{backgroundColor: emailSetting.wishlist_style.view_product_btn_bg_color, color: emailSetting.wishlist_style.view_product_btn_text_color, border: `${emailSetting.wishlist_style.view_product_btn_border_size}px solid ${emailSetting.wishlist_style.view_product_btn_border_color}`, boxSizing: 'border-box', borderRadius: `${emailSetting.wishlist_style.view_product_btn_border_radius}px`, display: 'block', fontSize: '16px', fontWeight: 600, lineHeight: '20px', padding: `${emailSetting.wishlist_style.view_product_btn_vertical_padding}px ${emailSetting.wishlist_style.view_product_btn_horizontal_padding}px`, textAlign: 'center', textDecoration: 'none'}}>
                                                                                                 {emailSetting.wishlist_content.view_product_button_text}
                                                                                             </a>
                                                                                         </td>
