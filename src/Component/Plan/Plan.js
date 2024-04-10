@@ -120,6 +120,14 @@ const Plan = () => {
             enterprise: true,
         },
         {
+            title: 'Import/Export Back in Stock',
+            free: false,
+            basic: false,
+            pro: false,
+            advance: false,
+            enterprise: true,
+        },
+        {
             title: 'Button Customization',
             free: true,
             basic: true,

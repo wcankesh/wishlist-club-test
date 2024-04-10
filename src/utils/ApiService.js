@@ -247,4 +247,12 @@ export class ApiService {
     async updateShopDisplayBanner(payload) {
         return await this.postData(`${apiBaseUrl}/api/banner-setting`, payload)
     }
+    async getBisExport(payload) {
+        let url = `${apiBaseUrl}/api/bis/export?shop=${payload.shop}`
+        return window.open(url, "_blank");
+    }
+
+    async bisImport(payload, isFormData) {
+        return await this.postData(`${apiBaseUrl}/api/bis/import`, payload, isFormData);
+    }
 }
