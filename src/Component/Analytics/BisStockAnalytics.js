@@ -153,6 +153,7 @@ const BisStockAnalytics = () => {
             setIsError(true)
             setIsImportLoading(false)
             setActive(false);
+            setIsErrorServer(true);
         }
 
     }
@@ -171,7 +172,7 @@ const BisStockAnalytics = () => {
 
     return (
         <Fragment>
-            {message !== "" && isError === false ?
+            {message !== "" && isError === true ?
                 <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
                               setIsErrorServer={setIsErrorServer}/> : ""}
 
@@ -182,10 +183,12 @@ const BisStockAnalytics = () => {
                             <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Back in stock analytics</Text>
                             <InlineStack gap={"200"}>
                                 <div className="Polaris-ActionMenu-SecondaryAction">
-                                    <Button disabled={shopDetails.plan_type !== "8"} onClick={() => Export()}>Export</Button>
+                                    <Button disabled={shopDetails.plan_type !== "8"}
+                                            onClick={() => Export()}>Export</Button>
                                 </div>
                                 <div className="Polaris-ActionMenu-SecondaryAction">
-                                    <Button disabled={shopDetails.plan_type !== "8"} onClick={() => handleImportChange()}>Import</Button>
+                                    <Button disabled={shopDetails.plan_type !== "8"}
+                                            onClick={() => handleImportChange()}>Import</Button>
                                 </div>
                             </InlineStack>
                         </InlineStack>
