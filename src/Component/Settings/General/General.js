@@ -1,12 +1,15 @@
-import React, {Fragment, useEffect, useState} from 'react';
-import {Text, Layout, Page, FormLayout, Modal, BlockStack, InlineStack, Card, Divider, Box, Checkbox} from '@shopify/polaris'
+import React, {Fragment, useCallback, useEffect, useState} from 'react';
+import {
+    ButtonGroup, Button, Text, Layout, Page, FormLayout, Modal, BlockStack, InlineStack, Card,
+    Divider, Box, Checkbox
+} from '@shopify/polaris'
 import {useNavigate} from "react-router-dom";
 import {apiService, baseUrl, capitalizeMessage} from "../../../utils/Constant";
 import ToastMessage from "../../Comman/ToastMessage"
 import CopyCode from "../../Comman/CopyCode"
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
 
-const General = () =>  {
+const General = () => {
     const navigate = useNavigate();
     const [setting, setSetting] = useState({
         app_enable: "1",
@@ -15,6 +18,7 @@ const General = () =>  {
         share_wishlist: "1",
         is_dispaly_add_to_cart_all: "1",
         is_variant_wishlist: "1",
+        redirect_type: 0
     })
     const [isLoading, setIsLoading] = useState(false)
     const [activeGuestModal, setActiveGuestModal] = useState(false);
@@ -131,12 +135,17 @@ const General = () =>  {
         }
     }
 
+
     return (
         <Fragment>
             <Page title={"General"} backAction={{content: 'Settings', onAction: onBack}}>
                 <Layout>
-                    {message !== "" && isError === false ? <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer}/> : ""}
-                    <CustomErrorBanner link={"https://webcontrive.helpscoutdocs.com/article/423-wishlist-settings"} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError}/>
+                    {message !== "" && isError === false ?
+                        <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
+                                      setIsErrorServer={setIsErrorServer}/> : ""}
+                    <CustomErrorBanner link={"https://webcontrive.helpscoutdocs.com/article/423-wishlist-settings"}
+                                       message={message} setMessage={setMessage} setIsError={setIsError}
+                                       isError={isError}/>
                     <Layout.Section>
                         <Card padding={"0"}>
                             {general.map((x, i) => {
@@ -145,8 +154,18 @@ const General = () =>  {
                                         <InlineStack key={i} blockAlign={"start"}>
                                             <Box padding={"500"}>
                                                 <InlineStack gap={400} wrap={false}>
-                                                    <Checkbox checked={x.checked} onChange={(checked) => handleChange({target: {name: x.name, value: x.checked ? "0" : "1"}})}/>
-                                                    <div className={"cursor-pointer"} onClick={() => handleChange({target: {name: x.name, value: x.checked ? "0" : "1"}})}>
+                                                    <Checkbox checked={x.checked} onChange={(checked) => handleChange({
+                                                        target: {
+                                                            name: x.name,
+                                                            value: x.checked ? "0" : "1"
+                                                        }
+                                                    })}/>
+                                                    <div className={"cursor-pointer"} onClick={() => handleChange({
+                                                        target: {
+                                                            name: x.name,
+                                                            value: x.checked ? "0" : "1"
+                                                        }
+                                                    })}>
                                                         <BlockStack gap={"150"}>
                                                             <Text as={"p"} fontWeight='semibold'>{x.title}</Text>
                                                             <Text>{x.description}</Text>
@@ -161,27 +180,64 @@ const General = () =>  {
                             })
                             }
                             <Box padding={"500"}>
+                                <BlockStack gap={"200"}>
+                                    <Text fontWeight='semibold'>Redirect Type</Text>
+                                    <ButtonGroup variant="segmented">
+                                        {
+                                            Array.from(Array(3)).map((_, i) => {
+                                                return (
+                                                    <Button
+                                                        pressed={setting?.redirect_type === i}
+                                                        onClick={() => handleChange({
+                                                            target: {name: "redirect_type", value: i}
+                                                        })}
+                                                    > {i === 0 ? "Cart" : i === 1 ? "Checkout" : "Callback"}</Button>
+                                                )
+                                            })
+                                        }
+                                    </ButtonGroup>
+                                </BlockStack>
+                            </Box>
+                            <Divider/>
+                            <Box padding={"500"}>
                                 <InlineStack gap={"400"} blockAlign={"start"} wrap={false}>
-                                        <Checkbox checked={setting.is_variant_wishlist == "1"} onChange={(checked) => handleChange({target: {name: "is_variant_wishlist", value: checked ? "1" : "0"}})}/>
+                                    <Checkbox checked={setting.is_variant_wishlist == "1"}
+                                              onChange={(checked) => handleChange({
+                                                  target: {
+                                                      name: "is_variant_wishlist",
+                                                      value: checked ? "1" : "0"
+                                                  }
+                                              })}/>
                                     <BlockStack gap={"100"}>
-                                        <div className={"cursor-pointer"} onClick={() => handleChange({target: {name: "is_variant_wishlist", value: setting.is_variant_wishlist == "1" ? "0" : "1"}})}>
+                                        <div className={"cursor-pointer"} onClick={() => handleChange({
+                                            target: {
+                                                name: "is_variant_wishlist",
+                                                value: setting.is_variant_wishlist == "1" ? "0" : "1"
+                                            }
+                                        })}>
                                             <Text fontWeight='semibold'>Product variant wishlists</Text>
-                                            <Text>If enabled, wishlists will be shown based on the product variant, whereas disabling it will result in wishlists being displayed solely based on products.</Text>
+                                            <Text>If enabled, wishlists will be shown based on the product variant,
+                                                whereas disabling it will result in wishlists being displayed solely
+                                                based on products.</Text>
                                         </div>
-                                            <Text tone="caution">Please note: If you wish to see the wishlist for a specific product variant, you will need to add this shortcode.</Text>
-                                            <Text tone="caution">If you choose variant wishlist, make sure to add the below shortcode. Otherwise, the wishlist will not be shown.</Text>
-                                            <FormLayout>
-                                                <FormLayout.Group>
-                                                    <BlockStack gap={"150"}>
-                                                        <Text>Product page shortcode</Text>
-                                                        <CopyCode value={`<div class="th_prd_wl_btn" data-product_id="{{product.id}}" data-variant_id="{{product.selected_or_first_available_variant.id}}"></div>`}/>
-                                                    </BlockStack>
-                                                    <BlockStack gap={"150"}>
-                                                        <Text>Collection page shortcode</Text>
-                                                        <CopyCode value={`<div class="th_wl_col_btn" data-product_id="{{product.id}}" data-variant_id="{{product.selected_or_first_available_variant.id}}"></div>`}/>
-                                                    </BlockStack>
-                                                </FormLayout.Group>
-                                            </FormLayout>
+                                        <Text tone="caution">Please note: If you wish to see the wishlist for a specific
+                                            product variant, you will need to add this shortcode.</Text>
+                                        <Text tone="caution">If you choose variant wishlist, make sure to add the below
+                                            shortcode. Otherwise, the wishlist will not be shown.</Text>
+                                        <FormLayout>
+                                            <FormLayout.Group>
+                                                <BlockStack gap={"150"}>
+                                                    <Text>Product page shortcode</Text>
+                                                    <CopyCode
+                                                        value={`<div class="th_prd_wl_btn" data-product_id="{{product.id}}" data-variant_id="{{product.selected_or_first_available_variant.id}}"></div>`}/>
+                                                </BlockStack>
+                                                <BlockStack gap={"150"}>
+                                                    <Text>Collection page shortcode</Text>
+                                                    <CopyCode
+                                                        value={`<div class="th_wl_col_btn" data-product_id="{{product.id}}" data-variant_id="{{product.selected_or_first_available_variant.id}}"></div>`}/>
+                                                </BlockStack>
+                                            </FormLayout.Group>
+                                        </FormLayout>
                                     </BlockStack>
                                 </InlineStack>
                             </Box>
@@ -195,11 +251,13 @@ const General = () =>  {
                     open={activeGuestModal}
                     onClose={handleChangeModal}
                     title={"Really want to deactivate Guest Wishlist?"}
-                    primaryAction={{content: 'Yes', onAction: GuestWishlistConfirmation, loading:isLoading}}
+                    primaryAction={{content: 'Yes', onAction: GuestWishlistConfirmation, loading: isLoading}}
                     secondaryActions={[{content: 'No', onAction: handleChangeModal,}]}>
                     <Modal.Section>
                         <Text>
-                            <Text as={"span"} tone={"warning"} fontWeight={"semibold"}>WARNING!</Text> All the Guest Customers Product Information will be removed from our server and there is no way back. Are you sure you want to do this?
+                            <Text as={"span"} tone={"warning"} fontWeight={"semibold"}>WARNING!</Text> All the Guest
+                            Customers Product Information will be removed from our server and there is no way back. Are
+                            you sure you want to do this?
                         </Text>
                     </Modal.Section>
                 </Modal>
