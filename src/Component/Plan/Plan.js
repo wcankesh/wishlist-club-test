@@ -175,6 +175,14 @@ const Plan = () => {
             advance: false,
             enterprise: true,
         },
+        {
+            title: 'Feature Customization',
+            free: false,
+            basic: false,
+            pro: false,
+            advance: false,
+            enterprise: true,
+        },
 
     ];
 
