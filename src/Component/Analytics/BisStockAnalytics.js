@@ -24,7 +24,7 @@ const BisStockAnalytics = () => {
     const [message, setMessage] = useState("")
     const [isImportLoading, setIsImportLoading] = useState(false);
     const [isError, setIsError] = useState(false)
-    const [isErrorServer, setIsErrorServer] = useState(false)
+    const [isErrorServer, setIsErrorServer] = useState(false);
 
     useEffect(() => {
         BisAnalytics({selected: selected});
@@ -78,7 +78,6 @@ const BisStockAnalytics = () => {
 
     const handleCallback = (range) => {
         setState(range)
-
     };
 
     const tabs = [
@@ -183,12 +182,14 @@ const BisStockAnalytics = () => {
                             <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Back in stock analytics</Text>
                             <InlineStack gap={"200"}>
                                 <div className="Polaris-ActionMenu-SecondaryAction">
-                                    <Button disabled={shopDetails.plan_type !== "8"}
-                                            onClick={() => Export()}>Export</Button>
+                                    <Button
+                                        disabled={shopDetails.plan_type !== "8" ? shopDetails.bis_import_export_btn === false : false}
+                                        onClick={() => Export()}>Export</Button>
                                 </div>
                                 <div className="Polaris-ActionMenu-SecondaryAction">
-                                    <Button disabled={shopDetails.plan_type !== "8"}
-                                            onClick={() => handleImportChange()}>Import</Button>
+                                    <Button
+                                        disabled={shopDetails.plan_type !== "8" ? shopDetails.bis_import_export_btn === false : false}
+                                        onClick={() => handleImportChange()}>Import</Button>
                                 </div>
                             </InlineStack>
                         </InlineStack>
