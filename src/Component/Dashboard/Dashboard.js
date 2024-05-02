@@ -57,12 +57,12 @@ const Dashboard = () => {
             {
               shopDetails.extension_status === false ? shopDetails && shopDetails.bannerDisplaySetting["extension_status"] !== "true" ? <Layout.Section>
                 <Banner
-                    action={{content: "Enable", onAction: () => window.open(`https://${shopDetails.shop}/admin/themes/current/editor?context=apps`, "_blank",)}}
-                    title={"Enable Wishlist Club in your Theme Editor"} tone={"warning"}
+                    action={{content: "Activate", onAction: () => window.open(`https://${shopDetails.shop}/admin/themes/current/editor?context=apps`, "_blank",)}}
+                    title={"Activate Wishlist Club App"} tone={"warning"}
                     onDismiss={() => onRemoveBanner("extension_status")}
                 >
                   <Text
-                      as={"span"}>Our widgets are functional only when the Wishlist Club app embed is enabled in your theme. This is Shopify’s recommended method for integrating apps into your online store.</Text>
+                      as={"span"}>Add the wishlist feature to your website. Activate Wishlist Club App Embed.</Text>
                 </Banner>
               </Layout.Section> : "" : ""
             }
@@ -84,20 +84,20 @@ const Dashboard = () => {
                   })
                   : ''
             }
-            <Layout.Section>
-              <Card>
-                <Text as={"span"}>Mail sent {`${shopDetails.sent_email}/${(shopDetails.plan_type === "0" || shopDetails.plan_type === "1") ? "50" : shopDetails.plan_type === "5" ? "500" : shopDetails.plan_type === "6" ? "2000" : shopDetails.plan_type === "7" ? "5000" : shopDetails.plan_type === "8" ? "10000" : shopDetails.plan_type === "9" ? "100" : ""}`}</Text>
-                <BlockStack>
-                  <InlineStack wrap={false} blockAlign={"center"} gap="400">
-                    <ProgressBar progress={productPercent} size="small" tone="primary"/>
-                    <Text>{productPercent}%</Text>
-                  </InlineStack >
-                </BlockStack>
-              </Card>
-            </Layout.Section>
-            <Layout.Section>
-              <OnBoarding/>
-            </Layout.Section>
+            {/*<Layout.Section>*/}
+            {/*  <Card>*/}
+            {/*    <Text as={"span"}>Mail sent {`${shopDetails.sent_email}/${(shopDetails.plan_type === "0" || shopDetails.plan_type === "1") ? "50" : shopDetails.plan_type === "5" ? "500" : shopDetails.plan_type === "6" ? "2000" : shopDetails.plan_type === "7" ? "5000" : shopDetails.plan_type === "8" ? "10000" : shopDetails.plan_type === "9" ? "100" : ""}`}</Text>*/}
+            {/*    <BlockStack>*/}
+            {/*      <InlineStack wrap={false} blockAlign={"center"} gap="400">*/}
+            {/*        <ProgressBar progress={productPercent} size="small" tone="primary"/>*/}
+            {/*        <Text>{productPercent}%</Text>*/}
+            {/*      </InlineStack >*/}
+            {/*    </BlockStack>*/}
+            {/*  </Card>*/}
+            {/*</Layout.Section>*/}
+            {/*<Layout.Section>*/}
+            {/*  <OnBoarding/>*/}
+            {/*</Layout.Section>*/}
             <Layout.Section>
               <HelpDesk/>
             </Layout.Section>
