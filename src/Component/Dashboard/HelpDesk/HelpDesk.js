@@ -54,7 +54,7 @@ const HelpDesk = () => {
                         return (
                             <Card key={i}>
                                 <InlineStack gap={"400"} wrap={false} blockAlign={"start"}>
-                                    <div><img src={x.icon} alt={x.title} width={"50px"} height={"50px"}/></div>
+                                    {/*<div><img src={x.icon} alt={x.title} width={"50px"} height={"50px"}/></div>*/}
                                     <BlockStack gap={"300"} inlineAlign={"start"}>
                                         <Text as={"span"} variant={"headingMd"} fontWeight={"bold"}>
                                             {x.title}
