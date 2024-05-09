@@ -1,30 +1,21 @@
 import React, {Fragment,} from 'react';
 import {
-    InlineStack,
-    Card,
-    Thumbnail,
-    Text,
-    EmptySearchResult, IndexTable,Box
+    InlineStack, Card, Thumbnail, Text, EmptySearchResult, IndexTable, Box
 } from '@shopify/polaris';
 import {currencySymbol} from "../../../utils/Constant";
 import {useSelector} from "react-redux";
-import {
-    ImageMajor
-} from '@shopify/polaris-icons';
+import {ImageMajor} from '@shopify/polaris-icons';
 
 const TopProducts = ({topProducts, isLoading}) => {
     const shopDetails = useSelector((state) => state.shopDetails)
 
-    const resourceNameWishlistProduct = {
-        singular: 'product wishlist',
-        plural: 'product wishlists',
-    };
+    const resourceNameWishlistProduct = {singular: 'product wishlist', plural: 'product wishlists'};
 
     return (
         <Fragment>
             <Card padding={"0"}>
                 <Box padding={"500"}>
-                    <Text as={"h2"} fontWeight={"medium"} variant={"headingMd"}>Top 10 Product in Wishlists</Text>
+                    <Text as={"span"} fontWeight={"medium"} variant={"headingMd"}>Top 10 Product in Wishlists</Text>
                 </Box>
 
                 <IndexTable
@@ -43,16 +34,18 @@ const TopProducts = ({topProducts, isLoading}) => {
                     return (
                         <IndexTable.Row key={i} id={i}>
                             <IndexTable.Cell>
-                                <InlineStack blockAlign={"center"} gap="200" wrap={false} >
-                                    <Thumbnail size={"small"} source={x?.product?.image ? x?.product?.image : ImageMajor}/>
+                                <InlineStack blockAlign={"center"} gap="200" wrap={false}>
+                                    <Thumbnail size={"small"}
+                                               source={x?.product?.image ? x?.product?.image : ImageMajor}/>
                                     <Text as={"span"}>{x?.product?.title || ""}</Text>
                                 </InlineStack>
                             </IndexTable.Cell>
                             <IndexTable.Cell>
-                                <Text alignment={"end"}>{currencySymbol[shopDetails.currency]}{x?.product?.price || ""}</Text>
+                                <Text as={"span"}
+                                      alignment={"end"}>{currencySymbol[shopDetails.currency]}{x?.product?.price || ""}</Text>
                             </IndexTable.Cell>
                             <IndexTable.Cell>
-                                <Text alignment={"end"}>{x.total}</Text>
+                                <Text as={"span"} alignment={"end"}>{x.total}</Text>
                             </IndexTable.Cell>
                         </IndexTable.Row>
                     )

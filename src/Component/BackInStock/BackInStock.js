@@ -36,8 +36,8 @@ const BackInStock = () => {
                                                         <Icon source={x.icon} tone={"subdued"}/>
                                                     </div>
                                                     <BlockStack>
-                                                        <Text as='h6' fontWeight="medium">{x.tabName}</Text>
-                                                        <Text tone={"subdued"}>{x.description}</Text>
+                                                        <Text as={"span"} fontWeight="medium">{x.tabName}</Text>
+                                                        <Text as={"span"} tone={"subdued"}>{x.description}</Text>
                                                     </BlockStack>
                                                 </InlineStack>
                                             </Box>

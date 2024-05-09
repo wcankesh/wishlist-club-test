@@ -24,6 +24,7 @@ import {apiService, capitalizeMessage, currencySymbol} from "../../utils/Constan
 import {useSelector} from "react-redux";
 import ToastMessage from "../Comman/ToastMessage";
 import CustomErrorBanner from "../Comman/CustomErrorBanner";
+import {AppDocsLinks} from "../../utils/AppDocsLinks";
 
 
 const WishlistItems = () => {
@@ -243,7 +244,7 @@ const WishlistItems = () => {
             {message !== "" && isError === false ?
                 <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
                               setIsErrorServer={setIsErrorServer}/> : ""}
-            <CustomErrorBanner link={"https://webcontrive.helpscoutdocs.com/article/422-how-to-check-wishlist-product"} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError}
+            <CustomErrorBanner link={AppDocsLinks.article["422"]} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError}
                                />
             <Layout.Section>
               <Card padding={"0"}>
@@ -324,10 +325,10 @@ const WishlistItems = () => {
                         return (
                             <IndexTable.Row key={i} id={i}>
                               <IndexTable.Cell>
-                                <Text>{(y.first_name || y.last_name) ? `${y.first_name} ${y.last_name}` : "Guest"}</Text>
+                                <Text as={"span"}>{(y.first_name || y.last_name) ? `${y.first_name} ${y.last_name}` : "Guest"}</Text>
                               </IndexTable.Cell>
                               <IndexTable.Cell>
-                                <Text>{y.email ? y.email : " - "}</Text>
+                                <Text as={"span"}>{y.email ? y.email : " - "}</Text>
                               </IndexTable.Cell>
                               <IndexTable.Cell>
                                 <Popover
@@ -371,7 +372,7 @@ const WishlistItems = () => {
                                 </Popover>
                               </IndexTable.Cell>
                               <IndexTable.Cell>
-                                <Text>{moment(y.updated_at).format("L")}</Text>
+                                <Text as={"span"}>{moment(y.updated_at).format("L")}</Text>
                               </IndexTable.Cell>
                             </IndexTable.Row>
                         )
@@ -484,8 +485,8 @@ const WishlistItems = () => {
           >
             <Modal.Section>
               <BlockStack gap={"400"}>
-                <Text>If you are not known to the CSV template, download a <Link
-                    url="https://wishlist.thimatic-apps.com/assets/images/WishListClubData.csv"
+                <Text as={"span"}>If you are not known to the CSV template, download a <Link
+                    url={AppDocsLinks.wishListClubData}
                     removeUnderline download> Sample
                   CSV </Link> template to
                   get an idea about how to deal with CSV format to import wishlist products.</Text>

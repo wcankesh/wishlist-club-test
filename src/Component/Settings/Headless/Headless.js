@@ -3,10 +3,11 @@ import TagsInput from 'react-tagsinput'
 import 'react-tagsinput/react-tagsinput.css'
 import {Page, Layout, Button, FormLayout, PageActions, Text, Card, BlockStack, Box, InlineStack} from "@shopify/polaris"
 import {useNavigate} from "react-router-dom";
-import {apiService, baseUrl, capitalizeMessage} from "../../../utils/Constant";
+import {apiService, baseUrl, capitalizeMessage, openUrlInNewWindow} from "../../../utils/Constant";
 import ToastMessage from "../../Comman/ToastMessage"
 import CopyCode from "../../Comman/CopyCode"
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
+import {AppDocsLinks} from "../../../utils/AppDocsLinks";
 
 const Headless = () => {
     const navigate = useNavigate()
@@ -24,8 +25,7 @@ const Headless = () => {
             if (response.status === 200) {
                 setIsError(false)
                 setHeadLess(response.data)
-            }
-            else if (response.status === 500) {
+            } else if (response.status === 500) {
                 setMessage(capitalizeMessage(response.message))
                 setIsErrorServer(true);
             } else {
@@ -94,75 +94,66 @@ const Headless = () => {
         <Fragment>
             <Page title={"Headless"} backAction={{content: 'Settings', onAction: onBack}}
                   primaryAction={{
-                      content: "Save",
-                      onAction: updateHeadless,
-                      loading: isTokenLoading
+                      content: "Save", onAction: updateHeadless, loading: isTokenLoading
                   }}>
                 <Layout>
-                    {message !== "" && isError === false ? <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer}/> : ""}
-                    <CustomErrorBanner link={"https://webcontrive.helpscoutdocs.com/collection/416-wishlist-club"} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError} />
+                    {message !== "" && isError === false ?
+                        <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
+                                      setIsErrorServer={setIsErrorServer}/> : ""}
+                    <CustomErrorBanner link={AppDocsLinks.collection["416"]}
+                                       message={message} setMessage={setMessage} setIsError={setIsError}
+                                       isError={isError}/>
                     <Layout.AnnotatedSection
                         id="storeDetails"
                         title="Headless Settings"
                         description={
                             <BlockStack gap={"400"}>
-                                <Text tone={"subdued"}>Enhance your store's capabilities by integrating our API. By
-                                    establishing a
-                                    connection to our API, you gain the ability to fetch wishlist products and
-                                    seamlessly
-                                    integrate them into the frontend presentation of your store.
+                                <Text as={"span"} tone={"subdued"}>
+                                    {`Enhance your store's capabilities by integrating our API. By establishing a 
+                                    connection to our API, you gain the ability to fetch wishlist products and 
+                                    seamlessly integrate them into the frontend presentation of your store. 
                                     This integration provides you with the flexibility to customize and personalize the
-                                    design and layout to meet your exact requirements and create a unique shopping
-                                    experience
-                                    for your customers."</Text>
+                                    design and layout to meet your exact requirements and create a unique shopping 
+                                    experience for your customers."`} </Text>
                                 <InlineStack>
-                                <Button
-                                    onClick={() => window.open("https://documenter.getpostman.com/view/17366629/2s93eVVYTr","_blank")}>API
-                                    Document</Button>
+                                    <Button onClick={() => openUrlInNewWindow(AppDocsLinks.getPostman)}>
+                                        API Document </Button>
                                 </InlineStack>
                             </BlockStack>
-                        }
-
-                    >
+                        }>
                         <Card padding={"0"}>
                             <Box padding={"500"}>
-                            <BlockStack gap={"500"}>
-                            <InlineStack align={"end"}>
-                                <Button onClick={getHeadlessToken} loading={isLoading}>Generate Token</Button>
-                            </InlineStack>
-                                <FormLayout>
-                                    <BlockStack gap={"100"}>
-                                        <label>Domain</label>
-                                        <TagsInput
-                                            className={`react-tagsinput`}
-                                            value={headLess.domain || []}
-                                            onChange={(value) => onChange({target: {name: "domain", value}})}
-                                            pasteSplit={defaultPasteSplit}
-                                            addOnPaste={true}
-                                            onlyUnique={true}
-                                            inputProps={{placeholder: 'Enter domain'}}/>
-                                    </BlockStack>
+                                <BlockStack gap={"500"}>
+                                    <InlineStack align={"end"}>
+                                        <Button onClick={getHeadlessToken} loading={isLoading}>Generate Token</Button>
+                                    </InlineStack>
+                                    <FormLayout>
+                                        <BlockStack gap={"100"}>
+                                            <label>Domain</label>
+                                            <TagsInput
+                                                className={`react-tagsinput`}
+                                                value={headLess.domain || []}
+                                                onChange={(value) => onChange({target: {name: "domain", value}})}
+                                                pasteSplit={defaultPasteSplit}
+                                                addOnPaste={true}
+                                                onlyUnique={true}
+                                                inputProps={{placeholder: 'Enter domain'}}/>
+                                        </BlockStack>
 
-                                    <CopyCode label={"Access Token"} value={headLess.token}/>
-                                    <Text tone={"caution"}><Text as={"span"} fontWeight={"bold"}>Please Note</Text>:
-                                        Reach out to our dedicated support team and provide them with the domain you
-                                        want to use with the API. They will guide you through the whitelisting process
-                                        and ensure that the API is enabled for your specified domain. Without
-                                        whitelisting the domain API will not work.</Text>
-                                </FormLayout>
-                            </BlockStack>
+                                        <CopyCode label={"Access Token"} value={headLess.token}/>
+                                        <Text as={"span"} tone={"caution"}> <Text as={"span"} fontWeight={"bold"}> Please Note </Text>:
+                                            Reach out to our dedicated support team and provide them with the domain you
+                                            want to use with the API. They will guide you through the whitelisting
+                                            process
+                                            and ensure that the API is enabled for your specified domain. Without
+                                            whitelisting the domain API will not work. </Text>
+                                    </FormLayout>
+                                </BlockStack>
                             </Box>
                         </Card>
                     </Layout.AnnotatedSection>
-
                 </Layout>
-                <PageActions
-                    primaryAction={{
-                        content: 'Save',
-                        onAction: updateHeadless,
-                        loading: isTokenLoading
-                    }}
-                />
+                <PageActions primaryAction={{content: 'Save', onAction: updateHeadless, loading: isTokenLoading}}/>
             </Page>
         </Fragment>
     );

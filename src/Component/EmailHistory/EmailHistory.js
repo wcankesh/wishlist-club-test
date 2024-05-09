@@ -12,6 +12,7 @@ import {
 import {apiService, capitalizeMessage,} from "../../utils/Constant";
 import ToastMessage from "../Comman/ToastMessage";
 import CustomErrorBanner from "../Comman/CustomErrorBanner";
+import {AppDocsLinks} from "../../utils/AppDocsLinks";
 
 const EmailHistory = () => {
     const limit = 10;
@@ -86,7 +87,7 @@ const EmailHistory = () => {
             {message !== "" && isError === false ?
                 <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
                               setIsErrorServer={setIsErrorServer}/> : ""}
-            <CustomErrorBanner link={"https://webcontrive.helpscoutdocs.com/article/515-how-to-check-email-sent-out-history"} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError}
+            <CustomErrorBanner link={AppDocsLinks.article["515"]} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError}
                                />
             <Layout>
                 <Layout.Section>
@@ -141,10 +142,10 @@ const EmailHistory = () => {
                                                 </Popover>
                                             </IndexTable.Cell>
                                             <IndexTable.Cell>
-                                                <Text>{z.created_at}</Text>
+                                                <Text as={"span"}>{z.created_at}</Text>
                                             </IndexTable.Cell>
                                             <IndexTable.Cell>
-                                                <Text>{z.message_id ? <Badge tone="success">Sent</Badge> : ""}</Text>
+                                                <Text as={"span"}>{z.message_id ? <Badge tone="success">Sent</Badge> : ""}</Text>
                                             </IndexTable.Cell>
                                         </IndexTable.Row>
                                     )

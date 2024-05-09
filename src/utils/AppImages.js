@@ -1,31 +1,34 @@
-export {default as GuestWishlist} from '../Img/GuestWishlist.webp';
-export {default as WishlistDesign} from '../Img/WishlistDesign.webp';
-export {default as Language} from '../Img/Language.webp';
+export {default as AddressValidatorLogo} from '../Img/AddressValidatorLogo.webp';
 export {default as BackInStock} from '../Img/BackInStock.webp';
-
-export const ImageData = {
-    Facebook: "https://storage.googleapis.com/static.shopgram.io/restock-icons/facebook.png",
-    Instagram: "https://storage.googleapis.com/static.shopgram.io/restock-icons/instagram.png",
-    Twitter: "https://storage.googleapis.com/static.shopgram.io/restock-icons/twitter.png",
-    Telegram: "https://storage.googleapis.com/static.shopgram.io/restock-icons/telegram.png",
-    LinkedIn: "https://storage.googleapis.com/static.shopgram.io/restock-icons/linkedin.png",
-    Pinterest: "https://storage.googleapis.com/static.shopgram.io/restock-icons/pinterest.png",
-    Product3: "https://wishlist.thimatic-apps.com/assets/images/product3.jpg",
-    EmptyStateFiles: "https://cdn.shopify.com/s/files/1/0262/4071/2726/files/emptystate-files.png",
-    ProductGroup1242: "https://cdn.shopify.com/s/files/1/0629/5207/9596/products/Group1242.png?v=1672138033",
-    ProductGroup1249: "https://cdn.shopify.com/s/files/1/0629/5207/9596/products/Group1249.png?v=1672138031",
-    StartOurApp: "https://wishlist.thimatic-apps.com/api/public/assets/images/start-our-app.png",
-    WlActionCodeEdit: "https://wishlist.thimatic-apps.com/api/public/assets/images/wl_action_code_edit.png",
-    WlActionCodeEdit1: "https://wishlist.thimatic-apps.com/api/public/assets/images/wl_action_code_edit_1.png",
-    WlActionCodeEdit2: "https://wishlist.thimatic-apps.com/api/public/assets/images/wl_action_code_edit_2.png",
-    WlProduct1: "https://wishlist.thimatic-apps.com/api/public/assets/images/wl_product1.png",
-    WlProductPre: "https://wishlist.thimatic-apps.com/api/public/assets/images/wl_product_pre.png",
-    WlCollection: "https://wishlist.thimatic-apps.com/api/public/assets/images/wl_collection.png",
-    WlCollectionPre: "https://wishlist.thimatic-apps.com/api/public/assets/images/wl_collection_pre.png",
-    BsiProductPage: "https://wishlist.thimatic-apps.com/api/public/assets/images/bsi_product_page.png",
-    BsiProductPre: "https://wishlist.thimatic-apps.com/api/public/assets/images/bsi_product_pre.png",
-    BsiCollectionPage: "https://wishlist.thimatic-apps.com/api/public/assets/images/bsi_collection_page.png",
-    BsiCollectionPre: "https://wishlist.thimatic-apps.com/api/public/assets/images/bsi_collection_pre.png",
-    Product1: "https://wishlist.thimatic-apps.com/assets/images/product1.jpg"
-}
-
+export {default as BsiCollectionPage} from '../Img/BsiCollectionPage.webp';
+export {default as BsiCollectionPre} from '../Img/BsiCollectionPre.webp';
+export {default as BsiProductPage} from '../Img/BsiProductPage.webp';
+export {default as BsiProductPre} from '../Img/BsiProductPre.webp';
+export {default as EmptyStateFiles} from '../Img/EmptyStateFiles.webp';
+export {default as Facebook} from '../Img/Facebook.webp';
+export {default as GuestWishlist} from '../Img/GuestWishlist.webp';
+export {default as HomeImg2} from '../Img/HomeImg2.webp';
+export {default as IcWishList} from '../Img/IcWishList.webp';
+export {default as Instagram} from '../Img/Instagram.webp';
+export {default as Language} from '../Img/Language.webp';
+export {default as LinkedIn} from '../Img/LinkedIn.webp';
+export {default as Pinterest} from '../Img/Pinterest.webp';
+export {default as Product1} from '../Img/Product1.webp';
+export {default as Product2} from '../Img/Product2.webp';
+export {default as Product3} from '../Img/Product3.webp';
+export {default as Product5} from '../Img/Product5.webp';
+export {default as Product6} from '../Img/Product6.webp';
+export {default as Product7} from '../Img/Product7.webp';
+export {default as ProductGroup1242} from '../Img/ProductGroup1242.webp';
+export {default as ProductGroup1249} from '../Img/ProductGroup1249.webp';
+export {default as StartOurApp} from '../Img/StartOurApp.webp';
+export {default as Telegram} from '../Img/Telegram.webp';
+export {default as Twitter} from '../Img/Twitter.webp';
+export {default as WishlistDesign} from '../Img/WishlistDesign.webp';
+export {default as WlActionCodeEdit} from '../Img/WlActionCodeEdit.webp';
+export {default as WlActionCodeEdit1} from '../Img/WlActionCodeEdit1.webp';
+export {default as WlActionCodeEdit2} from '../Img/WlActionCodeEdit2.webp';
+export {default as WlCollection} from '../Img/WlCollection.webp';
+export {default as WlCollectionPre} from '../Img/WlCollectionPre.webp';
+export {default as WlProduct1} from '../Img/WlProduct1.webp';
+export {default as WlProductPre} from '../Img/WlProductPre.webp';

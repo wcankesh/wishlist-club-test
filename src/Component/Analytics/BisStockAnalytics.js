@@ -8,6 +8,7 @@ import moment from "moment";
 import DateRangePicker from "../Comman/DateRangePicker";
 import {useSelector} from "react-redux";
 import ToastMessage from "../Comman/ToastMessage";
+import {AppDocsLinks} from "../../utils/AppDocsLinks";
 
 const BisStockAnalytics = () => {
     const shopDetails = useSelector((state) => state.shopDetails)
@@ -69,10 +70,7 @@ const BisStockAnalytics = () => {
     }
 
     const handleChange = (e) => {
-        setFilter({
-            ...filter,
-            [e.target.name]: e.target.value
-        })
+        setFilter({...filter, [e.target.name]: e.target.value})
         BisAnalytics({selected: selected, search: e.target.value})
     }
 
@@ -81,36 +79,14 @@ const BisStockAnalytics = () => {
     };
 
     const tabs = [
-        {
-            id: 'all-customers-1',
-            content: 'Request',
-            accessibilityLabel: 'All customers',
-            panelID: 'all-customers-content-1',
-        },
-        {
-            id: 'accepts-marketing-1',
-            content: 'Awaiting stock',
-            panelID: 'accepts-marketing-content-1',
-        },
-        {
-            id: 'repeat-customers-1',
-            content: 'Sent notifications',
-            panelID: 'repeat-customers-content-1',
-        },
+        {id: 'all-customers-1', content: 'Request', panelID: 'all-customers-content-1'},
+        {id: 'accepts-marketing-1', content: 'Awaiting stock', panelID: 'accepts-marketing-content-1'},
+        {id: 'repeat-customers-1', content: 'Sent notifications', panelID: 'repeat-customers-content-1'},
     ];
 
-    const resourceNameRequest = {
-        singular: 'request',
-        plural: 'request',
-    };
-    const resourceNameAwaitingStock = {
-        singular: 'awaiting stock',
-        plural: 'awaiting stock',
-    };
-    const resourceNameSentNotification = {
-        singular: 'sent notification',
-        plural: 'sent notification',
-    };
+    const resourceNameRequest = {singular: 'request', plural: 'request'};
+    const resourceNameAwaitingStock = {singular: 'awaiting stock', plural: 'awaiting stock'};
+    const resourceNameSentNotification = {singular: 'sent notification', plural: 'sent notification'};
 
     const handleDropZoneDrop = useCallback(
         (_dropFiles, acceptedFiles, _rejectedFiles) =>
@@ -124,9 +100,7 @@ const BisStockAnalytics = () => {
             <br/>
             <div>
                 {file.name}{' '}
-                <Text variant="bodySm" as="p">
-                    {file.size} bytes
-                </Text>
+                <Text variant="bodySm" as="span"> {file.size} bytes </Text>
             </div>
         </BlockStack>
     );
@@ -179,7 +153,7 @@ const BisStockAnalytics = () => {
                 <Card padding={"0"}>
                     <Box paddingBlockStart={"500"} paddingInlineStart={"500"} paddingInlineEnd={"500"}>
                         <InlineStack align={"space-between"}>
-                            <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Back in stock analytics</Text>
+                            <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}>Back in stock analytics</Text>
                             <InlineStack gap={"200"}>
                                 <div className="Polaris-ActionMenu-SecondaryAction">
                                     <Button
@@ -203,14 +177,8 @@ const BisStockAnalytics = () => {
                                 <TextField name="search" value={filter.search}
                                            placeholder="Filter by product"
                                            onChange={(value) => {
-                                               handleChange({
-                                                   target: {
-                                                       name: "search",
-                                                       value
-                                                   }
-                                               })
-                                           }}
-                                />
+                                               handleChange({target: {name: "search", value}})
+                                           }}/>
                             </Grid.Cell>
                             <Grid.Cell columnSpan={{xs: 6, sm: 2, md: 1, lg: 2, xl: 2}}>
                                 <DateRangePicker fullWidth onChange={handleCallback}/>
@@ -243,14 +211,14 @@ const BisStockAnalytics = () => {
                                         </InlineStack>
                                     </IndexTable.Cell>
                                     <IndexTable.Cell>
-                                        <Text>{x.email}</Text>
+                                        <Text as={"span"}>{x.email}</Text>
                                     </IndexTable.Cell>
                                     <IndexTable.Cell>
                                         <Fragment>{x.is_in_stock == 0 ? <Badge tone="info">Awaiting stock</Badge> :
                                             <Badge tone="success">Available stock</Badge>}</Fragment>
                                     </IndexTable.Cell>
                                     <IndexTable.Cell>
-                                        <Text>{moment(x.created_at).format('L')}</Text>
+                                        <Text as={"span"}>{moment(x.created_at).format('L')}</Text>
                                     </IndexTable.Cell>
                                 </IndexTable.Row>
                             )
@@ -291,10 +259,8 @@ const BisStockAnalytics = () => {
             >
                 <Modal.Section>
                     <BlockStack gap={"400"}>
-                        <Text>If you are not known to the CSV template, download a <Link
-                            url="https://wishlist.thimatic-apps.com/assets/images/BackInStockData.csv"
-                            removeUnderline download> Sample
-                            CSV </Link> template to
+                        <Text as={"span"}> If you are not known to the CSV template, download a <Link
+                            url={AppDocsLinks.backInStockData} removeUnderline download> Sample CSV </Link> template to
                             get an idea about how to deal with CSV format to import back in stock products.</Text>
                         <DropZone accept=".csv" type="file" onDrop={handleDropZoneDrop}>
                             {uploadedFile}

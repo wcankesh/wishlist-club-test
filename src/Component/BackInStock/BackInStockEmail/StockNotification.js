@@ -1,30 +1,21 @@
 import React, {Fragment, useCallback, useEffect, useState} from 'react';
 import {
-    FormLayout,
-    TextField,
-    Layout,
-    BlockStack,
-    Card,
-    InlineStack,
-    Divider,
-    RadioButton,
-    DropZone,
-    Text,
-    Checkbox,
-    Select,
-    Page,
-    Thumbnail,
-    PageActions,
-    Tabs, Box,  Button
+    FormLayout, TextField, Layout, BlockStack, Card, InlineStack, Divider, RadioButton, DropZone,
+    Text, Checkbox, Select, Page, Thumbnail, PageActions, Tabs, Box, Button
 } from "@shopify/polaris";
 import {Icons} from "../../../utils/Icons";
-import {apiService, baseUrl, capitalizeMessage} from "../../../utils/Constant";
+import {
+    apiService, baseUrl, capitalizeMessage, facebookImage, instagramImage, linkedInImage,
+    pinterestImage, telegramImage, twitterImage
+} from "../../../utils/Constant";
 import {useNavigate} from "react-router-dom"
 import {useSelector} from "react-redux";
 import ToastMessage from "../../Comman/ToastMessage";
 import ColorInput from "../../Comman/ColorInput";
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
 import SwitchButton from "../../Comman/SwitchButton";
+import {Product3} from "../../../utils/AppImages";
+import {AppDocsLinks} from "../../../utils/AppDocsLinks";
 
 const initialState = {
     bis_from_mail: "",
@@ -305,22 +296,9 @@ const StockNotification = () => {
     }
 
     const tabs = [
-        {
-            id: 'email-body-content',
-            content: 'Email content',
-            panelID: 'email-body-content',
-        },
-        {
-            id: 'email-body',
-            content: 'Social content',
-            panelID: 'email-body',
-        },
-        {
-            id: 'store-branding-1',
-            content: 'Email customization',
-            accessibilityLabel: 'store-branding-1',
-            panelID: 'store-branding-1',
-        },
+        {id: 'email-body-content',content: 'Email content',panelID: 'email-body-content'},
+        {id: 'email-body',content: 'Social content',panelID: 'email-body'},
+        {id: 'store-branding-1',content: 'Email customization',panelID: 'store-branding-1'},
 
     ];
 
@@ -372,7 +350,6 @@ const StockNotification = () => {
 
     return (
         <Fragment>
-
             <Page title={"Back In Stock Notification"} backAction={{content: 'Settings', onAction: onBack}}
                   secondaryActions={
                       <Fragment>
@@ -387,7 +364,7 @@ const StockNotification = () => {
                 <Layout>
                     {message !== "" && isError === false ?
                         <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer}/> : ""}
-                        <CustomErrorBanner link={"https://webcontrive.helpscoutdocs.com/article/525-how-to-set-back-in-stock-button-and-email"} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError} />
+                        <CustomErrorBanner link={AppDocsLinks.article["525"]} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError} />
                     <Layout.Section>
                         <Card padding={"0"}>
                             <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>
@@ -591,7 +568,7 @@ const StockNotification = () => {
                                 <Fragment>
                                     <Box padding={"400"} paddingBlockStart={"200"}>
                                         <BlockStack gap={"200"}>
-                                            <Text as={"h3"} fontWeight={"medium"}>Email logo</Text>
+                                            <Text as={"span"} fontWeight={"medium"}>Email logo</Text>
                                             <FormLayout>
                                                 <FormLayout.Group condensed>
                                                     <RadioButton
@@ -643,10 +620,10 @@ const StockNotification = () => {
                                             </FormLayout>
                                         </BlockStack>
                                     </Box>
-                                    <Divider />
+                                    <Divider/>
                                     <Box padding={"400"}>
                                         <BlockStack gap={"200"}>
-                                            <Text as={"h3"} fontWeight={"medium"}>Email body customization</Text>
+                                            <Text as={"span"} fontWeight={"medium"}>Email body customization</Text>
                                             <FormLayout>
                                                 <FormLayout.Group condensed>
                                                     <Select label={"Text color theme"} options={theme}
@@ -713,7 +690,7 @@ const StockNotification = () => {
                                     <Divider  />
                                     <Box padding={"400"}>
                                         <BlockStack gap={"200"}>
-                                            <Text as={"h3"} fontWeight={"medium"}>Add to Cart Button customization</Text>
+                                            <Text as={"span"} fontWeight={"medium"}>Add to Cart Button customization</Text>
                                             <FormLayout>
                                                 <FormLayout.Group condensed>
                                                     <ColorInput label={"Button Background color"}
@@ -790,7 +767,7 @@ const StockNotification = () => {
                                     <Divider />
                                     <Box padding={"400"}>
                                         <BlockStack gap={"200"}>
-                                            <Text as={"h3"} fontWeight={"medium"}>View Product Button customization</Text>
+                                            <Text as={"span"} fontWeight={"medium"}>View Product Button customization</Text>
                                             <FormLayout>
                                                 <FormLayout.Group condensed>
                                                     <ColorInput label={"Button Background color"}
@@ -875,12 +852,12 @@ const StockNotification = () => {
                                     <InlineStack gap={400} wrap={false}>
                                         <div className="email-logo-preview">{Icons.email}</div>
                                         <BlockStack>
-                                            <Text variant={"bodySm"}>
+                                            <Text as={"span"} variant={"bodySm"}>
                                                 {backInStockEmail.bis_content.email_subject}
                                             </Text>
                                             <BlockStack>
-                                                <Text as={"h3"} fontWeight={"bold"}>{shopDetails && shopDetails.store_name}</Text>
-                                                <Text>{backInStockEmail.bis_from_mail}</Text>
+                                                <Text as={"span"} fontWeight={"bold"}>{shopDetails && shopDetails.store_name}</Text>
+                                                <Text as={"span"}>{backInStockEmail.bis_from_mail}</Text>
                                             </BlockStack>
                                         </BlockStack>
                                     </InlineStack>
@@ -935,7 +912,7 @@ const StockNotification = () => {
                                                             <tr>
                                                                 <td className="product-image" style={{paddingTop: '20px'}}>
                                                                     <div style={{width: '100%', height: '100%',}}>
-                                                                        <img src="https://wishlist.thimatic-apps.com/assets/images/product3.jpg" alt="Dacia blouse" width={470} style={{display: 'block', margin: 'auto', maxWidth: '50%', borderRadius: '10px', border: '1px solid rgb(201, 202, 204)'}}/>
+                                                                        <img src={Product3} alt="Dacia blouse" width={470} style={{display: 'block', margin: 'auto', maxWidth: '50%', borderRadius: '10px', border: '1px solid rgb(201, 202, 204)'}}/>
                                                                     </div>
                                                                 </td>
                                                             </tr>
@@ -967,12 +944,12 @@ const StockNotification = () => {
                                                                         <tr className="social-networks-wrapper">
                                                                             <td className="social-networks"
                                                                                 style={{textAlign: 'center'}}>
-                                                                                <button className="instagram bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: backInStockEmail.bis_social.instagram !== null && backInStockEmail?.bis_social?.instagram.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: backInStockEmail.bis_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}><img src="https://storage.googleapis.com/static.shopgram.io/restock-icons/instagram.png" width={12} alt="instagram"/></button>
-                                                                                <button className="facebook bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: backInStockEmail.bis_social.facebook !== null && backInStockEmail.bis_social.facebook.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: backInStockEmail.bis_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}><img src="https://storage.googleapis.com/static.shopgram.io/restock-icons/facebook.png" width={12} alt="facebook"/></button>
-                                                                                <button className="twitter bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: backInStockEmail.bis_social.twitter !== null && backInStockEmail.bis_social.twitter.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: backInStockEmail.bis_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}><img src="https://storage.googleapis.com/static.shopgram.io/restock-icons/twitter.png" width={12} alt="twitter"/></button>
-                                                                                <button className="telegram bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: backInStockEmail.bis_social.telegram !== null && backInStockEmail.bis_social.telegram.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: backInStockEmail.bis_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}><img src="https://storage.googleapis.com/static.shopgram.io/restock-icons/telegram.png" width={12} alt="telegram"/></button>
-                                                                                <button className="linkedin bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: backInStockEmail.bis_social.linkedin !== null && backInStockEmail.bis_social.linkedin.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: backInStockEmail.bis_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}><img src="https://storage.googleapis.com/static.shopgram.io/restock-icons/linkedin.png" width={12} alt="linkedin"/></button>
-                                                                                <button className="pinterest bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: backInStockEmail.bis_social.pinterest !== null && backInStockEmail.bis_social.pinterest.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: backInStockEmail.bis_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}><img src="https://storage.googleapis.com/static.shopgram.io/restock-icons/pinterest.png" width={12} alt="pinterest"/></button>
+                                                                                <button className="instagram bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: backInStockEmail.bis_social.instagram !== null && backInStockEmail?.bis_social?.instagram.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: backInStockEmail.bis_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}>{instagramImage}</button>
+                                                                                <button className="facebook bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: backInStockEmail.bis_social.facebook !== null && backInStockEmail.bis_social.facebook.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: backInStockEmail.bis_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}>{facebookImage}</button>
+                                                                                <button className="twitter bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: backInStockEmail.bis_social.twitter !== null && backInStockEmail.bis_social.twitter.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: backInStockEmail.bis_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}>{twitterImage}</button>
+                                                                                <button className="telegram bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: backInStockEmail.bis_social.telegram !== null && backInStockEmail.bis_social.telegram.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: backInStockEmail.bis_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}>{telegramImage}</button>
+                                                                                <button className="linkedin bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: backInStockEmail.bis_social.linkedin !== null && backInStockEmail.bis_social.linkedin.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: backInStockEmail.bis_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}>{linkedInImage}</button>
+                                                                                <button className="pinterest bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: backInStockEmail.bis_social.pinterest !== null && backInStockEmail.bis_social.pinterest.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: backInStockEmail.bis_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}>{pinterestImage}</button>
                                                                             </td>
                                                                         </tr>
                                                                     </React.Fragment>

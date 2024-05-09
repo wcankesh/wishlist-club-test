@@ -1,39 +1,21 @@
-import React, {Fragment, } from 'react';
-import {Text, Layout, Card, Grid} from "@shopify/polaris";
+import React, {Fragment,} from 'react';
+import {Text, Layout, Card, Grid, BlockStack} from "@shopify/polaris";
 import {currencySymbol} from "../../utils/Constant";
 
 const CountAnalytics = ({analytics, currency}) => {
     const analyticsCard = [
         {
             analytics1: [
-                {
-                    title: "Wishlist Page View",
-                    value: analytics.wishlistPageView
-                },
-                {
-                    title: "Total Items In Wishlist",
-                    value: analytics.totalItem
-                },
-                {
-                    title: "Total Customers in Wishlist",
-                    value: analytics.totalWishlist
-                },
+                {title: "Wishlist Page View", value: analytics.wishlistPageView},
+                {title: "Total Items In Wishlist", value: analytics.totalItem},
+                {title: "Total Customers in Wishlist", value: analytics.totalWishlist},
             ],
             analytics2: [
-                {
-                    title: "Unique Product In Wishlist",
-                    value: analytics.totalUniqueItem
-                },
-                {
-                    title: "Order From Wishlist",
-                    value: analytics.wishlistOrder
-                },
-                {
-                    title: "Cart From Wishlist",
-                    value: analytics.cartProduct
-                },]
+                {title: "Unique Product In Wishlist", value: analytics.totalUniqueItem},
+                {title: "Order From Wishlist", value: analytics.wishlistOrder},
+                {title: "Cart From Wishlist", value: analytics.cartProduct},
+            ]
         },
-
     ]
 
     return (
@@ -43,10 +25,10 @@ const CountAnalytics = ({analytics, currency}) => {
                     <Grid.Cell columnSpan={{xs: 6, sm: 6, md: 6, lg: 3, xl: 3}}>
                         <Card padding={"500"}>
                             <br/><br/><br/>
-                            <Text as={"h6"} alignment={"center"} variant={"headingSm"} fontWeight={"medium"}
+                            <Text as={"span"} alignment={"center"} variant={"headingSm"} fontWeight={"medium"}
                                   tone={"subdued"}>Revenue
                                 Generated</Text>
-                            <Text as={"h3"} alignment={"center"} fontWeight={"medium"}
+                            <Text as={"span"} alignment={"center"} fontWeight={"medium"}
                                   variant={"headingLg"}>{currencySymbol[currency]}{analytics.wishlistOrderAmount ? analytics.wishlistOrderAmount : 0}</Text>
                             <br/><br/>
                         </Card>
@@ -60,43 +42,43 @@ const CountAnalytics = ({analytics, currency}) => {
                                             return (
                                                 <Grid.Cell columnSpan={{xs: 6, sm: 3, md: 2, lg: 4, xl: 4}}>
                                                     <Card key={j} padding={"500"}>
-                                                        <Text variant={"headingSm"} as={"h6"}
-                                                              tone={"subdued"} fontWeight={"medium"}>
-                                                            {y.title}
-                                                        </Text>
-                                                        <Text variant={"headingLg"} as={"h3"} fontWeight={"medium"}>
-                                                            {y.value ? y.value : 0}
-                                                        </Text>
+                                                        <BlockStack gap={"100"}>
+                                                            <Text variant={"headingSm"} as={"span"}
+                                                                  tone={"subdued"} fontWeight={"medium"}>
+                                                                {y.title}
+                                                            </Text>
+                                                            <Text variant={"headingLg"} as={"span"}
+                                                                  fontWeight={"medium"}>
+                                                                {y.value ? y.value : 0}
+                                                            </Text>
+                                                        </BlockStack>
                                                     </Card>
                                                 </Grid.Cell>
                                             )
-                                        })
-                                        }
-
+                                        })}
                                         {(x.analytics2 || []).map((z, k) => {
                                             return (
                                                 <Grid.Cell columnSpan={{xs: 6, sm: 3, md: 2, lg: 4, xl: 4}}>
                                                     <Card key={k} padding={"500"}>
-                                                        <Text variant={"headingSm"} as={"h6"}
-                                                              tone={"subdued"} fontWeight={"medium"}>
-                                                            {z.title}
-                                                        </Text>
-                                                        <Text variant={"headingLg"} as={"h3"} fontWeight={"medium"}>
-                                                            {z.value ? z.value : 0}
-                                                        </Text>
+                                                        <BlockStack gap={"100"}>
+                                                            <Text variant={"headingSm"} as={"span"}
+                                                                  tone={"subdued"} fontWeight={"medium"}>
+                                                                {z.title}
+                                                            </Text>
+                                                            <Text variant={"headingLg"} as={"span"}
+                                                                  fontWeight={"medium"}>
+                                                                {z.value ? z.value : 0}
+                                                            </Text>
+                                                        </BlockStack>
                                                     </Card>
                                                 </Grid.Cell>
                                             )
-                                        })
-                                        }
+                                        })}
                                     </Grid>
                                 </Grid.Cell>
                             )
-                        })
-                    }
-
+                        })}
                 </Grid>
-
             </Layout.Section>
         </Fragment>
     );

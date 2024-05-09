@@ -19,11 +19,19 @@ import {
 import {useNavigate} from "react-router-dom"
 import {useSelector} from "react-redux";
 import {Icons} from "../../../utils/Icons";
-import {apiService, baseUrl, capitalizeMessage} from "../../../utils/Constant";
+import {
+    apiService,
+    baseUrl,
+    capitalizeMessage,
+    facebookImage,
+    instagramImage, linkedInImage, pinterestImage, telegramImage,
+    twitterImage
+} from "../../../utils/Constant";
 import ToastMessage from "../../Comman/ToastMessage";
 import ColorInput from "../../Comman/ColorInput";
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
 import SwitchButton from "../../Comman/SwitchButton";
+import {AppDocsLinks} from "../../../utils/AppDocsLinks";
 
 const initialState = {
     thankyou_from_mail: "",
@@ -401,7 +409,7 @@ const ThankYouNotification = () => {
             >
                 <Layout>
                     {message !== "" && isError === false ? <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer}/> : ""}
-                    <CustomErrorBanner link={"https://webcontrive.helpscoutdocs.com/article/525-how-to-set-back-in-stock-button-and-email"} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError}/>
+                    <CustomErrorBanner link={AppDocsLinks.article["525"]} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError}/>
                     <Layout.Section>
                         <Card padding={"0"}>
                             <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>
@@ -589,7 +597,7 @@ const ThankYouNotification = () => {
                                 <Fragment>
                                     <Box padding={"400"} paddingBlockStart={"200"}>
                                         <BlockStack gap={"200"}>
-                                            <Text as={"h3"} fontWeight={"medium"}>Email logo</Text>
+                                            <Text as={"span"} fontWeight={"medium"}>Email logo</Text>
                                             <FormLayout>
                                                 <FormLayout.Group condensed>
                                                     <RadioButton
@@ -646,7 +654,7 @@ const ThankYouNotification = () => {
                                     <Divider />
                                     <Box padding={"400"}>
                                         <BlockStack gap={"200"}>
-                                            <Text as={"h3"} fontWeight={"medium"}>Email body customization</Text>
+                                            <Text as={"span"} fontWeight={"medium"}>Email body customization</Text>
                                             <FormLayout>
                                                 <FormLayout.Group condensed>
                                                     <Select label={"Text color theme"} options={theme}
@@ -708,7 +716,7 @@ const ThankYouNotification = () => {
                                     <Divider />
                                     <Box padding={"400"}>
                                         <BlockStack gap={"200"}>
-                                            <Text as={"h3"} fontWeight={"medium"}>Shopping button customization</Text>
+                                            <Text as={"span"} fontWeight={"medium"}>Shopping button customization</Text>
                                             <FormLayout>
                                                 <FormLayout.Group condensed>
                                                     <ColorInput label={"Button Background color"} name="btn_bg_color"
@@ -789,14 +797,14 @@ const ThankYouNotification = () => {
                                     <InlineStack gap={400} wrap={false}>
                                         <div className="email-logo-preview">{Icons.email}</div>
                                         <BlockStack>
-                                            <Text variant={"bodySm"}>
+                                            <Text variant={"bodySm"} as={"span"}>
                                                 {backInStockEmail.thankyou_content.email_subject}
                                             </Text>
                                             <BlockStack>
-                                                <Text as={"h3"}
+                                                <Text as={"span"}
                                                       fontWeight={"bold"}>{shopDetails && shopDetails.store_name}</Text>
                                                 <Text
-                                                    className="d-inline-block">{backInStockEmail.thankyou_from_mail}</Text>
+                                                    className="d-inline-block" as={"span"}>{backInStockEmail.thankyou_from_mail}</Text>
                                             </BlockStack>
                                         </BlockStack>
                                     </InlineStack>
@@ -869,12 +877,12 @@ const ThankYouNotification = () => {
                                                                         <tr className="social-networks-wrapper">
                                                                             <td className="social-networks"
                                                                                 style={{textAlign: 'center'}}>
-                                                                                <button className="instagram bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: backInStockEmail.thankyou_social.instagram !== null && backInStockEmail.thankyou_social.instagram.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: backInStockEmail.thankyou_style.btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}><img src="https://storage.googleapis.com/static.shopgram.io/restock-icons/instagram.png" width={12} alt="instagram"/></button>
-                                                                                <button className="facebook bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: backInStockEmail.thankyou_social.facebook !== null && backInStockEmail.thankyou_social.facebook.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: backInStockEmail.thankyou_style.btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}><img src="https://storage.googleapis.com/static.shopgram.io/restock-icons/facebook.png" width={12} alt="facebook"/></button>
-                                                                                <button className="twitter bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: backInStockEmail.thankyou_social.twitter !== null && backInStockEmail.thankyou_social.twitter.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: backInStockEmail.thankyou_style.btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}><img src="https://storage.googleapis.com/static.shopgram.io/restock-icons/twitter.png" width={12} alt="twitter"/></button>
-                                                                                <button className="telegram bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: backInStockEmail.thankyou_social.telegram !== null && backInStockEmail.thankyou_social.telegram.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: backInStockEmail.thankyou_style.btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}><img src="https://storage.googleapis.com/static.shopgram.io/restock-icons/telegram.png" width={12} alt="telegram"/></button>
-                                                                                <button className="linkedin bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: backInStockEmail.thankyou_social.linkedin !== null && backInStockEmail.thankyou_social.linkedin.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: backInStockEmail.thankyou_style.btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}><img src="https://storage.googleapis.com/static.shopgram.io/restock-icons/linkedin.png" width={12} alt="linkedin"/></button>
-                                                                                <button className="pinterest bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: backInStockEmail.thankyou_social.pinterest !== null && backInStockEmail.thankyou_social.pinterest.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: backInStockEmail.thankyou_style.btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}><img src="https://storage.googleapis.com/static.shopgram.io/restock-icons/pinterest.png" width={12} alt="pinterest"/></button>
+                                                                                <button className="instagram bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: backInStockEmail.thankyou_social.instagram !== null && backInStockEmail.thankyou_social.instagram.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: backInStockEmail.thankyou_style.btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}>{instagramImage}</button>
+                                                                                <button className="facebook bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: backInStockEmail.thankyou_social.facebook !== null && backInStockEmail.thankyou_social.facebook.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: backInStockEmail.thankyou_style.btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}>{facebookImage}</button>
+                                                                                <button className="twitter bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: backInStockEmail.thankyou_social.twitter !== null && backInStockEmail.thankyou_social.twitter.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: backInStockEmail.thankyou_style.btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}>{twitterImage}</button>
+                                                                                <button className="telegram bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: backInStockEmail.thankyou_social.telegram !== null && backInStockEmail.thankyou_social.telegram.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: backInStockEmail.thankyou_style.btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}>{telegramImage}</button>
+                                                                                <button className="linkedin bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: backInStockEmail.thankyou_social.linkedin !== null && backInStockEmail.thankyou_social.linkedin.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: backInStockEmail.thankyou_style.btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}>{linkedInImage}</button>
+                                                                                <button className="pinterest bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: backInStockEmail.thankyou_social.pinterest !== null && backInStockEmail.thankyou_social.pinterest.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: backInStockEmail.thankyou_style.btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}>{pinterestImage}</button>
                                                                             </td>
                                                                         </tr>
                                                                     </React.Fragment> : null

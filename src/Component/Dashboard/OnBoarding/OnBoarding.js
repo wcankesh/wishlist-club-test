@@ -81,7 +81,7 @@ const OnBoarding = () => {
           <div className={"reb-card-heading-boding"} onClick={handleToggle}>
             <BlockStack>
               <InlineStack wrap={false} align={"space-between"}>
-                <Text variant="headingSm" as="h2" fontWeight={"medium"}
+                <Text variant="headingSm" as="span" fontWeight={"medium"}
                       breakWord={true}>{"Wishlist app setting is easy just follow 1 to 5 steps to set up and display wishlist icon on your store."}</Text>
                 <div onClick={handleToggle}><Icon source={open ? CaretUpMinor : CaretDownMinor}/>
                 </div>
@@ -113,9 +113,9 @@ const OnBoarding = () => {
 
                             </div>
                             {selectedBoarding === x.selected ?
-                              <Text variant="headingSm" as="h3"
+                              <Text variant="headingSm" as="span"
                                     fontWeight={"medium"}>{x.title}</Text> :
-                              <Text variant="headingSm" as="h3"
+                              <Text variant="headingSm" as="span"
                                     fontWeight={"regular"}>{x.title}</Text>}
                           </InlineStack>
 
@@ -124,7 +124,7 @@ const OnBoarding = () => {
                               <div style={{paddingLeft: 32}}>
                                 <Box paddingBlockStart={"200"} paddingInlineEnd={"200"}>
                                   <BlockStack gap="300">
-                                    <Text as="p">Click on the Activate button to enable the Wishlist Club embed. Make
+                                    <Text as="span">Click on the Activate button to enable the Wishlist Club embed. Make
                                       sure to save your adjustments to make them active.</Text>
                                     <InlineStack>
                                       <Button variant="primary"
@@ -138,7 +138,7 @@ const OnBoarding = () => {
                               <div style={{paddingLeft: 32}}>
                                 <Box paddingBlockStart={"200"} paddingInlineEnd={"200"}>
                                   <BlockStack gap={"300"}>
-                                    <Text as="p">Elevate your customers' shopping journey by incorporating the Wishlist
+                                    <Text as="span">Elevate your customers' shopping journey by incorporating the Wishlist
                                       Block on your Collection and Product Pages. To add the wishlist block to your
                                       collection page, simply click the "Add Collection Block" button, and for the
                                       product page, click the "Add Product Block" button. Remember to save your changes
@@ -159,9 +159,9 @@ const OnBoarding = () => {
                                 <Box paddingBlockStart={"200"} paddingInlineEnd={"200"}>
                                   <BlockStack gap={"400"}>
                                     <BlockStack gap={"200"}>
-                                      <Text as="h3" variant="headingSm" fontWeight={"medium"}>Add Wishlist Icon in
+                                      <Text as="span" variant="headingSm" fontWeight={"medium"}>Add Wishlist Icon in
                                         Header</Text>
-                                      <Text as="p">Add the wishlist icon to your header by clicking on the "Add Wishlist
+                                      <Text as="span">Add the wishlist icon to your header by clicking on the "Add Wishlist
                                         Icon" button.</Text>
                                       <InlineStack>
                                         <Button variant="primary"
@@ -170,20 +170,20 @@ const OnBoarding = () => {
                                       </InlineStack>
                                     </BlockStack>
                                     <BlockStack gap={"200"}>
-                                      <Text variant="headingSm" as="h3" fontWeight={"medium"}>Add Wishlist Menu in
+                                      <Text variant="headingSm" as="span" fontWeight={"medium"}>Add Wishlist Menu in
                                         Header</Text>
-                                      <Text variant="headingSm" as="h5" fontWeight={"medium"}>Follow the steps below to
+                                      <Text variant="headingSm" as="span" fontWeight={"medium"}>Follow the steps below to
                                         include the Wishlist Menu in the header.</Text>
-                                      <Text>1. Open your Shopify store main navigation<Link
+                                      <Text as={"span"}>1. Open your Shopify store main navigation<Link
                                         url={`https://${shopDetails.shop}/admin/themes`}
                                         removeUnderline external> open</Link></Text>
-                                      <Text>2. Add the wishlist icon to your header by clicking on the "Add Wishlist
+                                      <Text as={"span"}>2. Add the wishlist icon to your header by clicking on the "Add Wishlist
                                         Icon" button.</Text>
-                                      <Text>3. Choose menu name.</Text>
-                                      <Text>4. Paste the following link into the Link
+                                      <Text as={"span"}>3. Choose menu name.</Text>
+                                      <Text as={"span"}>4. Paste the following link into the Link
                                         text box: <Text as={"span"}
                                                         fontWeight={"bold"}>/apps/wishlist/</Text></Text>
-                                      <Text>5. Click on Save Menu</Text>
+                                      <Text as={"span"}>5. Click on Save Menu</Text>
                                     </BlockStack>
                                   </BlockStack>
                                 </Box>
@@ -193,7 +193,7 @@ const OnBoarding = () => {
                               <div style={{paddingLeft: 32}}>
                                 <Box paddingBlockStart={"200"} paddingInlineEnd={"200"}>
                                   <BlockStack gap="300">
-                                    <Text as="p">Keep your customers in the loop and boost their shopping experience by
+                                    <Text as="span">Keep your customers in the loop and boost their shopping experience by
                                       seamlessly integrating the Back in Stock Block into your Collection and Product
                                       Pages. Click "Add Back in Stock to Collection Page" to integrate the block on the
                                       collection page, and for the product page, click "Add Back in Stock to Product
@@ -215,7 +215,7 @@ const OnBoarding = () => {
                               <div style={{paddingLeft: 32}}>
                                 <Box paddingBlockStart={"200"} paddingInlineEnd={"200"}>
                                   <BlockStack gap="300">
-                                    <Text as="p">Customize the layout of Wishlist and Back in Stock effortlessly. Click
+                                    <Text as="span">Customize the layout of Wishlist and Back in Stock effortlessly. Click
                                       on "Customize Wishlist" to modify the Wishlist layout, and click on "Customize
                                       Back in Stock" to customize the Back in Stock appearance.
                                     </Text>

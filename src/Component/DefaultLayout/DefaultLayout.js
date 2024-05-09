@@ -75,9 +75,9 @@ const DefaultLayout = () => {
                     <Outlet/>
                     <Modal onClose={() => {}} open={shopDetails?.upgrade == "0"} title="Authorize our latest app update" primaryAction={{content: "Authorize", onAction: onAuthorize, loading: isUpdateLoading}}>
                         <Modal.Section>
-                            <Text>Hey there,</Text>
+                            <Text as={"span"}>Hey there,</Text>
                             <br/>
-                            <Text>
+                            <Text as={"span"}>
                                 Our app has been updated to align with the most recent changes in Shopify. To maintain your access to our review services, please authorize us from the <b>"Admin Account"</b> to continue using our services. Please <Link onClick={() => window.Beacon('toggle')} removeUnderline>contact us</Link> if you face any difficulty.
                             </Text>
                         </Modal.Section>

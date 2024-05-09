@@ -146,7 +146,7 @@ const CollectionDesign = ({wishlistSetting, setWishlistSetting, file, setFile, i
                                                 {uploadedFile}
                                                 {fileUpload}
                                             </DropZone>
-                                            <Text tone={"subdued"}>Note: You can add only svg</Text>
+                                            <Text tone={"subdued"} as={"span"}>Note: You can add only svg</Text>
                                         </BlockStack>
                                     </FormLayout.Group>
                                     <FormLayout.Group condensed>
@@ -300,7 +300,7 @@ const CollectionDesign = ({wishlistSetting, setWishlistSetting, file, setFile, i
                 <BlockStack gap={"400"}>
                 <Card padding={"400"}>
                     <BlockStack gap={"400"}>
-                        <Text as={"h2"} variant={"headingMd"}>Preview (before adding to wishlist)</Text>
+                        <Text as={"span"} variant={"headingMd"}>Preview (before adding to wishlist)</Text>
                         <InlineStack gap={"200"} wrap={false} align={"center"}>
                             {
                                 Array.from(Array(2)).map((_, i) => {
@@ -323,7 +323,7 @@ const CollectionDesign = ({wishlistSetting, setWishlistSetting, file, setFile, i
                 </Card>
                 <Card padding={"400"}>
                     <BlockStack gap={"400"}>
-                        <Text as={"h2"} variant={"headingMd"}>Preview (after adding to wishlist)</Text>
+                        <Text as={"span"} variant={"headingMd"}>Preview (after adding to wishlist)</Text>
                         <InlineStack gap={"200"} wrap={false} align={"center"}>
                             {
                                 Array.from(Array(2)).map((_, i) => {

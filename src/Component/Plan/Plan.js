@@ -196,8 +196,8 @@ const Plan = () => {
                                 <li className="ppl_item" >
                                     <div className="pplLabel">
                                         <BlockStack gap={"300"}>
-                                            <Text variant="headingLg" as="h5">Current Plan : {(shopDetails.plan_type === "0" || shopDetails.plan_type === "1") ? "Free" : shopDetails.plan_type === "5" ? "Basic" : shopDetails.plan_type === "6" ? "Pro" : shopDetails.plan_type === "7" ? "Advance" : shopDetails.plan_type === "8" ? "Enterprise" : shopDetails.plan_type === "9" ? "Starter" : ""}</Text>
-                                            <Text>{moment(shopDetails?.billing_schedule?.billing_start_date).format("MMMM DD")} - {moment(shopDetails?.billing_schedule?.billing_end_date).format("MMMM DD")}</Text>
+                                            <Text variant="headingLg" as="span">Current Plan : {(shopDetails.plan_type === "0" || shopDetails.plan_type === "1") ? "Free" : shopDetails.plan_type === "5" ? "Basic" : shopDetails.plan_type === "6" ? "Pro" : shopDetails.plan_type === "7" ? "Advance" : shopDetails.plan_type === "8" ? "Enterprise" : shopDetails.plan_type === "9" ? "Starter" : ""}</Text>
+                                            <Text as={"span"}>{moment(shopDetails?.billing_schedule?.billing_start_date).format("MMMM DD")} - {moment(shopDetails?.billing_schedule?.billing_end_date).format("MMMM DD")}</Text>
                                             <Text as={"span"}>Mail sent {`${shopDetails.sent_email}/${(shopDetails.plan_type === "0" || shopDetails.plan_type === "1") ? "50" : shopDetails.plan_type === "5" ? "500" : shopDetails.plan_type === "6" ? "2000" : shopDetails.plan_type === "7" ? "5000" : shopDetails.plan_type === "8" ? "10000" : shopDetails.plan_type === "9" ? "100" : ""}`}</Text>
                                             <ProgressBar progress={productPercent} size="small" tone="primary"/>
                                         </BlockStack>
@@ -211,8 +211,8 @@ const Plan = () => {
                                                         <BlockStack gap={"300"}>
                                                             <Text variant="headingLg" as="h5">{x.plan}</Text>
                                                             <InlineStack blockAlign={"baseline"} align={"center"}>
-                                                                <Text as="p" tone="success" variant="headingXl">${x.price}</Text>
-                                                                <Text variant="bodySm" as="p" >
+                                                                <Text as="span" tone="success" variant="headingXl">${x.price}</Text>
+                                                                <Text variant="bodySm" as="span" >
                                                                     /month
                                                                 </Text>
                                                             </InlineStack>

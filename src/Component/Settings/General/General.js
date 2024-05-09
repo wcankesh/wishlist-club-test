@@ -8,16 +8,17 @@ import {apiService, baseUrl, capitalizeMessage} from "../../../utils/Constant";
 import ToastMessage from "../../Comman/ToastMessage"
 import CopyCode from "../../Comman/CopyCode"
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
+import {AppDocsLinks} from "../../../utils/AppDocsLinks";
 
 const General = () => {
     const navigate = useNavigate();
     const [setting, setSetting] = useState({
-        app_enable: "1",
-        guest_wishlist: "1",
-        multiple_wishlist: "1",
-        share_wishlist: "1",
-        is_dispaly_add_to_cart_all: "1",
-        is_variant_wishlist: "1",
+        app_enable: "0",
+        guest_wishlist: "0",
+        multiple_wishlist: "0",
+        share_wishlist: "0",
+        is_dispaly_add_to_cart_all: "0",
+        is_variant_wishlist: "0",
         redirect_type: 0
     })
     const [isLoading, setIsLoading] = useState(false)
@@ -143,7 +144,7 @@ const General = () => {
                     {message !== "" && isError === false ?
                         <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
                                       setIsErrorServer={setIsErrorServer}/> : ""}
-                    <CustomErrorBanner link={"https://webcontrive.helpscoutdocs.com/article/423-wishlist-settings"}
+                    <CustomErrorBanner link={AppDocsLinks.article["423"]}
                                        message={message} setMessage={setMessage} setIsError={setIsError}
                                        isError={isError}/>
                     <Layout.Section>
@@ -167,8 +168,8 @@ const General = () => {
                                                         }
                                                     })}>
                                                         <BlockStack gap={"150"}>
-                                                            <Text as={"p"} fontWeight='semibold'>{x.title}</Text>
-                                                            <Text>{x.description}</Text>
+                                                            <Text as={"span"} fontWeight='semibold'>{x.title}</Text>
+                                                            <Text as={"span"}>{x.description}</Text>
                                                         </BlockStack>
                                                     </div>
                                                 </InlineStack>
@@ -181,7 +182,7 @@ const General = () => {
                             }
                             <Box padding={"500"}>
                                 <BlockStack gap={"200"}>
-                                    <Text fontWeight='semibold'>Redirect Type</Text>
+                                    <Text fontWeight='semibold' as={"span"}>Redirect Type</Text>
                                     <ButtonGroup variant="segmented">
                                         {
                                             Array.from(Array(3)).map((_, i) => {
@@ -215,24 +216,24 @@ const General = () => {
                                                 value: setting.is_variant_wishlist == "1" ? "0" : "1"
                                             }
                                         })}>
-                                            <Text fontWeight='semibold'>Product variant wishlists</Text>
-                                            <Text>If enabled, wishlists will be shown based on the product variant,
+                                            <Text fontWeight='semibold' as={"span"}>Product variant wishlists</Text>
+                                            <Text as={"span"}>If enabled, wishlists will be shown based on the product variant,
                                                 whereas disabling it will result in wishlists being displayed solely
                                                 based on products.</Text>
                                         </div>
-                                        <Text tone="caution">Please note: If you wish to see the wishlist for a specific
+                                        <Text tone="caution" as={"span"}>Please note: If you wish to see the wishlist for a specific
                                             product variant, you will need to add this shortcode.</Text>
-                                        <Text tone="caution">If you choose variant wishlist, make sure to add the below
+                                        <Text tone="caution" as={"span"}>If you choose variant wishlist, make sure to add the below
                                             shortcode. Otherwise, the wishlist will not be shown.</Text>
                                         <FormLayout>
                                             <FormLayout.Group>
                                                 <BlockStack gap={"150"}>
-                                                    <Text>Product page shortcode</Text>
+                                                    <Text as={"span"}>Product page shortcode</Text>
                                                     <CopyCode
                                                         value={`<div class="th_prd_wl_btn" data-product_id="{{product.id}}" data-variant_id="{{product.selected_or_first_available_variant.id}}"></div>`}/>
                                                 </BlockStack>
                                                 <BlockStack gap={"150"}>
-                                                    <Text>Collection page shortcode</Text>
+                                                    <Text as={"span"}>Collection page shortcode</Text>
                                                     <CopyCode
                                                         value={`<div class="th_wl_col_btn" data-product_id="{{product.id}}" data-variant_id="{{product.selected_or_first_available_variant.id}}"></div>`}/>
                                                 </BlockStack>
@@ -254,7 +255,7 @@ const General = () => {
                     primaryAction={{content: 'Yes', onAction: GuestWishlistConfirmation, loading: isLoading}}
                     secondaryActions={[{content: 'No', onAction: handleChangeModal,}]}>
                     <Modal.Section>
-                        <Text>
+                        <Text as={"span"}>
                             <Text as={"span"} tone={"warning"} fontWeight={"semibold"}>WARNING!</Text> All the Guest
                             Customers Product Information will be removed from our server and there is no way back. Are
                             you sure you want to do this?

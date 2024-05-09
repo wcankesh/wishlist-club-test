@@ -4,6 +4,7 @@ import {apiService, baseUrl, capitalizeMessage} from "../../../utils/Constant";
 import {useNavigate} from "react-router-dom"
 import ToastMessage from "../../Comman/ToastMessage";
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
+import {AppDocsLinks} from "../../../utils/AppDocsLinks";
 
 const initialState = {
     subject: "",
@@ -175,14 +176,14 @@ const WishlistEmail = () => {
                     {message !== "" && isError === false ?
                         <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
                                       setIsErrorServer={setIsErrorServer}/> : ""}
-                    <CustomErrorBanner link={"https://webcontrive.helpscoutdocs.com/article/425-wishlist-email-settings"} message={message} setMessage={setMessage} setIsError={setIsError}
+                    <CustomErrorBanner link={AppDocsLinks.article["425"]} message={message} setMessage={setMessage} setIsError={setIsError}
                                        isError={isError}/>
                     <Layout.Section>
                         <Card padding={"0"}>
                             <Box padding={"400"}>
                                 <BlockStack gap={"100"}>
-                                    <Text as={"h2"} variant={"headingMd"}>From Email & Name</Text>
-                                    <Text as={"p"} tone={"subdued"}>Add the "Name" in From name and "Email id" in From email you want users to see while receiving the Wishlist alerts</Text>
+                                    <Text as={"span"} variant={"headingMd"}>From Email & Name</Text>
+                                    <Text as={"span"} tone={"subdued"}>Add the "Name" in From name and "Email id" in From email you want users to see while receiving the Wishlist alerts</Text>
                                 </BlockStack>
                             </Box>
                             <Divider/>
@@ -217,9 +218,9 @@ const WishlistEmail = () => {
                         <Card padding={"0"}>
                             <Box padding={"400"}>
                                 <BlockStack gap={"100"}>
-                                    <Text as={"h2"} variant={"headingMd"}>Email Customization</Text>
-                                    <Text as={"p"} tone={"subdued"}>Send alerts when the products are on Wishlist. Also, send price drop & restock alerts for the products in Wishlist.</Text>
-                                    <Text as={"p"} tone={"caution"}><b>Note: </b> These all the notifications(Wishlist Items, Price Drop Alerts, and Restock Alerts) are sent to customers if the <b>Guest Wishlist</b> option disable.</Text>
+                                    <Text as={"span"} variant={"headingMd"}>Email Customization</Text>
+                                    <Text as={"span"} tone={"subdued"}>Send alerts when the products are on Wishlist. Also, send price drop & restock alerts for the products in Wishlist.</Text>
+                                    <Text as={"span"} tone={"caution"}><b>Note: </b> These all the notifications(Wishlist Items, Price Drop Alerts, and Restock Alerts) are sent to customers if the <b>Guest Wishlist</b> option disable.</Text>
                                 </BlockStack>
                             </Box>
                             <Divider/>
@@ -231,8 +232,8 @@ const WishlistEmail = () => {
                                                 <InlineStack align={"space-between"} blockAlign={"start"} wrap={false} gap={"200"}>
                                                     <InlineStack gap={"400"} wrap={false}>
                                                         <BlockStack gap={"100"}>
-                                                            <Text fontWeight='semibold'>{x.title}</Text>
-                                                            <Text tone={"subdued"}>{x.description}</Text>
+                                                            <Text fontWeight='semibold' as={"span"}>{x.title}</Text>
+                                                            <Text tone={"subdued"} as={"span"}>{x.description}</Text>
                                                         </BlockStack>
                                                     </InlineStack>
                                                     {isLoading ? <Badge><div style={{width: 62}}>&nbsp;</div>
@@ -251,8 +252,8 @@ const WishlistEmail = () => {
                         <Card>
                             <BlockStack gap={"400"}>
                                 <BlockStack gap={"100"}>
-                                    <Text as={"h2"} variant={"headingMd"}>Wishlist Notifications</Text>
-                                    <Text as={"p"} tone={"subdued"}>
+                                    <Text as={"span"} variant={"headingMd"}>Wishlist Notifications</Text>
+                                    <Text as={"span"} tone={"subdued"}>
                                         Enabling this setting allows store owners to stay updated through email notifications when users add products to their wishlist.
                                     </Text>
                                 </BlockStack>

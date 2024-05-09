@@ -1,9 +1,39 @@
-
+import React from "react";
 import {ApiService} from "./ApiService"
+import {Facebook, Instagram, LinkedIn, Pinterest, Telegram, Twitter} from "./AppImages";
 
 export const baseUrl = "/wishlist/admin"
 
 export const apiService = new ApiService();
+
+export const openUrlInNewWindow = (url, target = "_blank") => {
+    return url ? window.open(url, target) : console.error("URL is missing.");
+};
+
+export const toggleStringFlag = (value) => {
+    return value === "0" ? "1" : "0";
+};
+
+export const toggleBoolean = (value) => {
+    return value === "false" ? "true" : "false";
+};
+
+export const toggleNumberFlag = (value) => {
+    return value === 0 ? 1 : 0;
+};
+
+export const facebookImage = (<img src={Facebook} width={12} alt={"facebook"}/>);
+export const instagramImage = (<img src={Instagram} width={12} alt={"instagram"}/>);
+export const twitterImage = (<img src={Twitter} width={12} alt={"twitter"}/>);
+export const telegramImage = (<img src={Telegram} width={12} alt={"telegram"}/>);
+export const linkedInImage = (<img src={LinkedIn} width={12} alt={"linkedIn"}/>);
+export const pinterestImage = (<img src={Pinterest} width={12} alt={"pinterest"}/>);
+
+
+
+export const capitalizeMessage = (message) => {
+    return (message || "").split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+}
 
 export const currencySymbol = {
     AED: 'د.إ',
@@ -192,8 +222,4 @@ export const currencySymbol = {
     ZMW: 'ZK',
     ZWD: 'Z$',
     ZWL: '$'
-}
-
-export const capitalizeMessage = (message) => {
-    return (message || "").split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
 }

@@ -9,7 +9,7 @@ import SubscriberForm from "./SubscriberForm";
 import SubscriberMsg from "./SubscriberMsg";
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
 import ToastMessage from "../../Comman/ToastMessage";
-
+import {AppDocsLinks} from "../../../utils/AppDocsLinks";
 
 const initialState = {
     product_page_widget: {
@@ -144,9 +144,11 @@ const BackInStockDesign = () => {
     const updateBisSetting = async () => {
 
         let validationErrors = {};
-        let tempObj = {submit_button_text: backInStockDesign.subscription_form.submit_button_text,
+        let tempObj = {
+            submit_button_text: backInStockDesign.subscription_form.submit_button_text,
             success_message: backInStockDesign.subscription_message.success_message,
-            already_subscribed_message: backInStockDesign.subscription_message.already_subscribed_message}
+            already_subscribed_message: backInStockDesign.subscription_message.already_subscribed_message
+        }
         Object.keys(tempObj).forEach((name) => {
             const error = formValidate(name, tempObj[name]);
             if (error && error.length > 0) {
@@ -190,46 +192,24 @@ const BackInStockDesign = () => {
         navigate(`${baseUrl}/back-in-stock`)
     }
 
-
     const handleTabChange = (selectedTabIndex) => {
         let IsTabChange = true
         Object.keys(backInStockDesignError).map((x) => {
-            if(backInStockDesignError[x] !== ""){
+            if (backInStockDesignError[x] !== "") {
                 IsTabChange = false
             }
         })
-        if(IsTabChange){
+        if (IsTabChange) {
             setSelected(selectedTabIndex)
         }
     }
 
     const tabs = [
-        {
-            id: 'all-customers-1',
-            content: 'Product Page',
-            accessibilityLabel: 'All customers',
-            panelID: 'all-customers-content-1',
-        },
-        {
-            id: 'accepts-marketing-1',
-            content: 'Home Page',
-            panelID: 'accepts-marketing-content-1',
-        },
-        {
-            id: 'repeat-customers-1',
-            content: 'Collection Page',
-            panelID: 'repeat-customers-content-1',
-        },
-        {
-            id: 'prospects-1',
-            content: 'Subscriber Form',
-            panelID: 'prospects-content-1',
-        },
-        {
-            id: 'subscriber-1',
-            content: 'Subscriber Message',
-            panelID: 'prospects-content-1',
-        },
+        {id: 'all-customers-1', content: 'Product Page', panelID: 'all-customers-content-1'},
+        {id: 'accepts-marketing-1', content: 'Home Page', panelID: 'accepts-marketing-content-1'},
+        {id: 'repeat-customers-1', content: 'Collection Page', panelID: 'repeat-customers-content-1'},
+        {id: 'prospects-1', content: 'Subscriber Form', panelID: 'prospects-content-1'},
+        {id: 'subscriber-1', content: 'Subscriber Message', panelID: 'prospects-content-1'},
     ];
 
     return (
@@ -238,33 +218,25 @@ const BackInStockDesign = () => {
                   primaryAction={{content: "Save", onAction: updateBisSetting, loading: isLoading}}>
 
                 <Layout>
-                    {message !== "" && isError === false ? <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer}/> : ""}
-                    <CustomErrorBanner link={"https://webcontrive.helpscoutdocs.com/article/525-how-to-set-back-in-stock-button-and-email"} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError}/>
+                    {message !== "" && isError === false ?
+                        <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
+                                      setIsErrorServer={setIsErrorServer}/> : ""}
+                    <CustomErrorBanner link={AppDocsLinks.article["525"]} message={message} setMessage={setMessage}
+                                       setIsError={setIsError} isError={isError}/>
                     <Layout.Section fullWidth>
                         <Card padding={0} roundedAbove={"md"}>
                             <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>
                         </Card>
                     </Layout.Section>
                     {selected == 0 &&
-                    <ProductPage
-                        backInStockDesign={backInStockDesign}
-                        setBackInStockDesign={setBackInStockDesign}
-
-                    />
+                    <ProductPage backInStockDesign={backInStockDesign} setBackInStockDesign={setBackInStockDesign}/>
                     }
                     {selected == 1 &&
-                    <HomePage
-                        backInStockDesign={backInStockDesign}
-                        setBackInStockDesign={setBackInStockDesign}
-
-                    />
+                    <HomePage backInStockDesign={backInStockDesign} setBackInStockDesign={setBackInStockDesign}/>
                     }
                     {selected == 2 &&
-                    <CollectionPage
-                        backInStockDesign={backInStockDesign}
-                        setBackInStockDesign={setBackInStockDesign}
-
-                    />}
+                    <CollectionPage backInStockDesign={backInStockDesign} setBackInStockDesign={setBackInStockDesign}/>
+                    }
                     {selected == 3 && <SubscriberForm
                         backInStockDesign={backInStockDesign}
                         setBackInStockDesign={setBackInStockDesign}
@@ -280,15 +252,8 @@ const BackInStockDesign = () => {
                         backInStockDesignError={backInStockDesignError}
                         formValidate={formValidate}
                     />}
-
                 </Layout>
-                <PageActions
-                    primaryAction={{
-                        content: 'Save',
-                        onAction: updateBisSetting,
-                        loading: isLoading
-                    }}
-                />
+                <PageActions primaryAction={{content: 'Save', onAction: updateBisSetting, loading: isLoading}}/>
             </Page>
         </Fragment>
     );

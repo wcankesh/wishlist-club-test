@@ -64,8 +64,8 @@ const Settings = () => {
                                                 <InlineStack wrap={false} gap={"400"} blockAlign={"start"}>
                                                     <div className={"sgi_icon"}><Icon source={x.icon} tone={"subdued"}/></div>
                                                     <BlockStack>
-                                                        <Text fontWeight='medium'>{x.tabName}</Text>
-                                                        <Text tone={"subdued"}>{x.description}</Text>
+                                                        <Text fontWeight='medium' as={"span"}>{x.tabName}</Text>
+                                                        <Text tone={"subdued"} as={"span"}>{x.description}</Text>
                                                     </BlockStack>
                                                 </InlineStack>
                                             </Box>

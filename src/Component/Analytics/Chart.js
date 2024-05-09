@@ -11,25 +11,21 @@ const Chart = ({setState, wishlistAddDateWise, wishlistPageViewDateWise}) => {
     };
     const renderOption = () => {
         const options = {
-            chart: {
-                type: "spline",
-            },
+            chart: {type: "spline"},
             tooltip: {
                 useHTML: true,
                 formatter: function () {
-                    return(
+                    return (
                         '<div>' +
-                        '<div class="mb-2"><Text variant="headingXs" as="h6">' + moment(this.x).format("ll") + '</Text></div>' +
-                        '<div class="mb-2"><Text  variant="headingSm" as="h6">'+`${this.y}`+'</Text></div>' +
-                        '<div><Text variant="headingXs" as="h6">'+this.series.name+'</Text></div>' +
+                        '<div class="mb-2"><Text variant="headingXs" as="span">' + moment(this.x).format("ll") + '</Text></div>' +
+                        '<div class="mb-2"><Text  variant="headingSm" as="span">' + `${this.y}` + '</Text></div>' +
+                        '<div><Text variant="headingXs" as="span">' + this.series.name + '</Text></div>' +
                         '</div>'
                     )
                 },
-                style: {
-                    color: '#000'
-                },
+                style: {color: '#000'},
                 valueDecimals: 0,
-                padding:10,
+                padding: 10,
                 borderRadius: 12,
                 borderWidth: 1,
                 borderColor: '#caced3',
@@ -39,67 +35,37 @@ const Chart = ({setState, wishlistAddDateWise, wishlistPageViewDateWise}) => {
             title: "",
             yAxis: {
                 softMin: 0,
-                softMax:  1,
+                softMax: 1,
                 labels: {
                     formatter: function () {
-                        return  this.value;
+                        return this.value;
                     }
                 },
-                title: {
-                    text: "",
-                },
+                title: {text: ""},
             },
-            xAxis: {
-                crosshair: {
-                    width: 1,
-                },
-                type: "datetime",
-            },
-            credits: {
-                enabled: false,
-            },
+            xAxis: {crosshair: {width: 1}, type: "datetime",},
+            credits: {enabled: false,},
             series: [
                 {
                     name: "Add To Wishlist",
                     data: wishlistAddDateWise,
                     color: "#352F6C",
-                    marker: {
-                        fillColor: "#352F6C",
-                        lineColor: "white",
-                        lineWidth: 1,
-                        radius: 4,
-                        enabled: false
-                    },
+                    marker: {fillColor: "#352F6C", lineColor: "white", lineWidth: 1, radius: 4, enabled: false},
                 },
                 {
                     name: "Wishlist View",
                     data: wishlistPageViewDateWise,
                     color: "#FFD255",
-                    marker: {
-                        fillColor: "#FFD255",
-                        lineColor: "white",
-                        lineWidth: 1,
-                        radius: 4,
-                        enabled: false
-                    },
+                    marker: {fillColor: "#FFD255", lineColor: "white", lineWidth: 1, radius: 4, enabled: false},
                 },
             ],
             plotOptions: {
-                line: {
-                    dataLabels: {
-                        enabled: false,
-                    },
-                    enableMouseTracking: true,
-                },
-                series: {
-                    animation: true,
-                    fillOpacity: 0.25,
-                },
+                line: {dataLabels: {enabled: false,}, enableMouseTracking: true,},
+                series: {animation: true, fillOpacity: 0.25,},
             },
         };
         return options;
     };
-
 
     return (
         <Layout.Section>
@@ -109,16 +75,11 @@ const Chart = ({setState, wishlistAddDateWise, wishlistPageViewDateWise}) => {
                     </InlineStack>
                     <InlineStack align={"end"}>
                         <div className="datepicker-contain">
-                            <DateRangePicker
-                                onChange={handleCallback}
-                            />
+                            <DateRangePicker onChange={handleCallback}/>
                         </div>
                     </InlineStack>
                 </BlockStack>
-                <HighchartsReact
-                    highcharts={Highcharts}
-                    options={renderOption()}
-                />
+                <HighchartsReact highcharts={Highcharts} options={renderOption()}/>
             </Card>
         </Layout.Section>
     );

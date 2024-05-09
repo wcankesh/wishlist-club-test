@@ -6,6 +6,7 @@ import ToastMessage from "../../Comman/ToastMessage";
 import CollectionDesign from "./CollectionDesign"
 import ProductDesign from "./ProductDesign"
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
+import {AppDocsLinks} from "../../../utils/AppDocsLinks";
 
 const initialState = {
     button_type: "3",
@@ -165,7 +166,7 @@ const  WishlistDesign = () => {
                   primaryAction={{content: "Save", onAction: updateLauncher, loading: isLoading}}>
                 <Layout>
                     {message !== "" && isError === false ? <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer}/> : ""}
-                    <CustomErrorBanner link={"https://webcontrive.helpscoutdocs.com/article/424-how-to-customize-wishlist-button"} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError} />
+                    <CustomErrorBanner link={AppDocsLinks.article["424"]} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError} />
                     <Layout.Section fullWidth>
                         <Card padding={"0"}>
                             <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>

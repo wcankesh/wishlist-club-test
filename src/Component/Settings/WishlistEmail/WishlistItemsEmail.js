@@ -12,10 +12,19 @@ import {
 } from "@shopify/polaris";
 import {useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
-import {apiService, baseUrl, capitalizeMessage} from "../../../utils/Constant";
+import {
+    apiService,
+    baseUrl,
+    capitalizeMessage,
+    facebookImage,
+    instagramImage, linkedInImage, pinterestImage, telegramImage,
+    twitterImage
+} from "../../../utils/Constant";
 import ColorInput from "../../Comman/ColorInput"
 import ToastMessage from "../../Comman/ToastMessage"
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
+import {AppDocsLinks} from "../../../utils/AppDocsLinks";
+import {ProductGroup1242, ProductGroup1249} from "../../../utils/AppImages";
 
 const initialSate = {
     subject: "Wishlist1 Club Products!!!",
@@ -360,7 +369,7 @@ const WishlistItemsEmail = () => {
                   >
                 <Layout>
                     {message !== "" && isError === false ? <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer}/> : ""}
-                    <CustomErrorBanner link={"https://webcontrive.helpscoutdocs.com/article/425-wishlist-email-settings"} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError}/>
+                    <CustomErrorBanner link={AppDocsLinks.article["425"]} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError}/>
 
                     <Layout.Section>
                         <Card padding={"0"}>
@@ -550,7 +559,7 @@ const WishlistItemsEmail = () => {
                                 selected === 2 && <Fragment>
                                     <Box padding={"400"} paddingBlockStart={"200"}>
                                         <BlockStack gap={"200"}>
-                                            <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Email logo</Text>
+                                            <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}>Email logo</Text>
                                             <FormLayout>
                                                 <FormLayout.Group condensed>
                                                     <RadioButton
@@ -603,7 +612,7 @@ const WishlistItemsEmail = () => {
                                     <Divider />
                                     <Box padding={"400"}>
                                         <BlockStack gap={"200"}>
-                                            <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Email body customization</Text>
+                                            <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}>Email body customization</Text>
                                             <FormLayout>
                                                 <FormLayout.Group condensed>
                                                     <ColorInput label="Background color" name="background_color"
@@ -649,7 +658,7 @@ const WishlistItemsEmail = () => {
                                     <Divider />
                                     <Box padding={"400"}>
                                         <BlockStack gap={"200"}>
-                                            <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Add to Cart Button customization</Text>
+                                            <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}>Add to Cart Button customization</Text>
                                             <FormLayout>
                                                 <FormLayout.Group condensed>
                                                     <ColorInput label={"Button Background color"} name="add_to_cart_btn_bg_color"
@@ -723,7 +732,7 @@ const WishlistItemsEmail = () => {
                                     <Divider />
                                     <Box padding={"400"}>
                                         <BlockStack gap={"200"}>
-                                            <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>View Product Button customization</Text>
+                                            <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}>View Product Button customization</Text>
                                             <FormLayout>
                                                 <FormLayout.Group condensed>
                                                     <ColorInput label={"Button Background color"} name="view_product_btn_bg_color"
@@ -801,7 +810,7 @@ const WishlistItemsEmail = () => {
                     <Layout.Section variant={"oneThird"}>
                         <Card padding={"0"}>
                             <Box padding={"400"}>
-                                <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>{emailSetting.subject}</Text>
+                                <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}>{emailSetting.subject}</Text>
                             </Box>
                             <Box>
                                 <div className="email-template-live-preview-wrapper">
@@ -830,7 +839,7 @@ const WishlistItemsEmail = () => {
                                                         <tr style={{paddingTop: '10px'}}>
                                                             <table>
                                                                 <tr>
-                                                                    {["https://cdn.shopify.com/s/files/1/0629/5207/9596/products/Group1242.png?v=1672138033","https://cdn.shopify.com/s/files/1/0629/5207/9596/products/Group1249.png?v=1672138031"].map((x) => {
+                                                                    {[ProductGroup1242,ProductGroup1249].map((x) => {
                                                                         return(
                                                                             <td>
                                                                                 <table>
@@ -872,12 +881,12 @@ const WishlistItemsEmail = () => {
                                                         </tr>
                                                         <tr className="social-networks-wrapper">
                                                             <td className="social-networks" style={{textAlign: 'center', paddingBottom: '20px'}}>
-                                                                <button className="instagram bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: emailSetting.wishlist_social.instagram !== null && emailSetting.wishlist_social.instagram.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: emailSetting.wishlist_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}><img src="https://storage.googleapis.com/static.shopgram.io/restock-icons/instagram.png" width={12} alt="instagram"/></button>
-                                                                <button className="facebook bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: emailSetting.wishlist_social.facebook !== null && emailSetting.wishlist_social.facebook.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: emailSetting.wishlist_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}><img src="https://storage.googleapis.com/static.shopgram.io/restock-icons/facebook.png" width={12} alt="facebook"/></button>
-                                                                <button className="twitter bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: emailSetting.wishlist_social.twitter !== null && emailSetting.wishlist_social.twitter.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: emailSetting.wishlist_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}><img src="https://storage.googleapis.com/static.shopgram.io/restock-icons/twitter.png" width={12} alt="twitter"/></button>
-                                                                <button className="telegram bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: emailSetting.wishlist_social.telegram !== null && emailSetting.wishlist_social.telegram.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: emailSetting.wishlist_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}><img src="https://storage.googleapis.com/static.shopgram.io/restock-icons/telegram.png" width={12} alt="telegram"/></button>
-                                                                <button className="linkedin bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: emailSetting.wishlist_social.linkedin !== null && emailSetting.wishlist_social.linkedin.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: emailSetting.wishlist_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}><img src="https://storage.googleapis.com/static.shopgram.io/restock-icons/linkedin.png" width={12} alt="linkedin"/></button>
-                                                                <button className="pinterest bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: emailSetting.wishlist_social.pinterest !== null && emailSetting.wishlist_social.pinterest.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: emailSetting.wishlist_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}><img src="https://storage.googleapis.com/static.shopgram.io/restock-icons/pinterest.png" width={12} alt="pinterest"/></button>
+                                                                <button className="instagram bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: emailSetting.wishlist_social.instagram !== null && emailSetting.wishlist_social.instagram.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: emailSetting.wishlist_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}>{instagramImage}</button>
+                                                                <button className="facebook bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: emailSetting.wishlist_social.facebook !== null && emailSetting.wishlist_social.facebook.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: emailSetting.wishlist_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}>{facebookImage}</button>
+                                                                <button className="twitter bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: emailSetting.wishlist_social.twitter !== null && emailSetting.wishlist_social.twitter.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: emailSetting.wishlist_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}>{twitterImage}</button>
+                                                                <button className="telegram bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: emailSetting.wishlist_social.telegram !== null && emailSetting.wishlist_social.telegram.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: emailSetting.wishlist_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}>{telegramImage}</button>
+                                                                <button className="linkedin bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: emailSetting.wishlist_social.linkedin !== null && emailSetting.wishlist_social.linkedin.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: emailSetting.wishlist_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}>{linkedInImage}</button>
+                                                                <button className="pinterest bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: emailSetting.wishlist_social.pinterest !== null && emailSetting.wishlist_social.pinterest.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: emailSetting.wishlist_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}>{pinterestImage}</button>
                                                             </td>
                                                         </tr>
                                                         </tbody>

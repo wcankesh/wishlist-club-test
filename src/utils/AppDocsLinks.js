@@ -1,8 +1,8 @@
 export const AppDocsLinks = {
-    BackInStockData: "https://wishlist.thimatic-apps.com/assets/images/BackInStockData.csv",
-    GetPostman: "https://documenter.getpostman.com/view/17366629/2s93eVVYTr",
-    WishListClubData: "https://wishlist.thimatic-apps.com/assets/images/WishListClubData.csv",
-    WriteReviewModal:"https://apps.shopify.com/wishlist-club#modal-show=WriteReviewModal",
+    backInStockData: "https://wishlist.thimatic-apps.com/assets/images/BackInStockData.csv",
+    getPostman: "https://documenter.getpostman.com/view/17366629/2s93eVVYTr",
+    wishListClubData: "https://wishlist.thimatic-apps.com/assets/images/WishListClubData.csv",
+    writeReviewModal:"https://apps.shopify.com/wishlist-club#modal-show=WriteReviewModal",
     facebook: "https://www.facebook.com/groups/238834717807393",
     canny: "",
     collection: {

@@ -35,23 +35,25 @@ const Analytics = () => {
             }
             const response = await apiService.Analytics(payload);
             if (response.status === 200) {
-                SetAnalytics({ wishlistOrderAmount: response?.data?.wishlistOrderAmount || 0, wishlistPageView: response?.data?.totalWishlistPageView || 0, totalItem: response?.data?.totalItem || 0, totalWishlist: response?.data?.totalWishlist || 0, totalUniqueItem:response?.data?.totalUniqueItem || 0, cartProduct: response?.data?.cartProduct || 0, wishlistOrder: response?.data?.wishlistOrder || 0,})
+                SetAnalytics({
+                    wishlistOrderAmount: response?.data?.wishlistOrderAmount || 0,
+                    wishlistPageView: response?.data?.totalWishlistPageView || 0,
+                    totalItem: response?.data?.totalItem || 0,
+                    totalWishlist: response?.data?.totalWishlist || 0,
+                    totalUniqueItem: response?.data?.totalUniqueItem || 0,
+                    cartProduct: response?.data?.cartProduct || 0,
+                    wishlistOrder: response?.data?.wishlistOrder || 0,
+                })
                 setCurrency(response.data.currency);
                 setTopProducts(response?.data?.top10Products || [])
                 let wishlistAddDate = [];
                 let wishlistPageViewDate = [];
                 (response.data.wishlistAddDateWise || []).map((j) => {
-                    let obj = {
-                        x: new Date(j.x),
-                        y: Number(j.y)
-                    }
+                    let obj = {x: new Date(j.x), y: Number(j.y)}
                     wishlistAddDate.push(obj)
                 });
                 (response.data.wishlistPageViewDateWise || []).map((j) => {
-                    let obj = {
-                        x: new Date(j.x),
-                        y: Number(j.y)
-                    }
+                    let obj = { x: new Date(j.x), y: Number(j.y) }
                     wishlistPageViewDate.push(obj)
                 });
                 setWishlistAddDateWise(wishlistAddDate);
@@ -69,7 +71,8 @@ const Analytics = () => {
         <Page title={"Analytics"}>
             <Layout>
                 <CountAnalytics analytics={analytics} currency={currency}/>
-                <Chart setState={setState} wishlistAddDateWise={wishlistAddDateWise} wishlistPageViewDateWise={wishlistPageViewDateWise}/>
+                <Chart setState={setState} wishlistAddDateWise={wishlistAddDateWise}
+                       wishlistPageViewDateWise={wishlistPageViewDateWise}/>
                 <Layout.Section>
                     <TopProducts topProducts={topProducts} isLoading={isLoading}/>
                 </Layout.Section>

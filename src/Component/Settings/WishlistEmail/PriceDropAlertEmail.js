@@ -11,10 +11,19 @@ import {
 } from "@shopify/polaris";
 import {useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
-import {apiService, baseUrl, capitalizeMessage} from "../../../utils/Constant";
+import {
+    apiService,
+    baseUrl,
+    capitalizeMessage,
+    facebookImage,
+    instagramImage, linkedInImage, pinterestImage, telegramImage,
+    twitterImage
+} from "../../../utils/Constant";
 import ColorInput from "../../Comman/ColorInput"
 import ToastMessage from "../../Comman/ToastMessage"
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
+import {AppDocsLinks} from "../../../utils/AppDocsLinks";
+import {ProductGroup1242} from "../../../utils/AppImages";
 
 
 const initialSate = {
@@ -346,7 +355,7 @@ const PriceDropAlertEmail = () => {
                   }
                 >
                 {message !== "" && isError === false ? <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer}/> : ""}
-                <CustomErrorBanner link={"https://webcontrive.helpscoutdocs.com/article/425-wishlist-email-settings"} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError} />
+                <CustomErrorBanner link={AppDocsLinks.article["425"]} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError} />
                 <Layout>
 
                     <Layout.Section>
@@ -523,7 +532,7 @@ const PriceDropAlertEmail = () => {
                                 selected === 2 && <Fragment>
                                     <Box padding={"400"} paddingBlockStart={"200"}>
                                         <BlockStack gap={"200"}>
-                                            <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Email
+                                            <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}>Email
                                                 logo</Text>
                                             <FormLayout>
                                                 <FormLayout.Group condensed>
@@ -579,7 +588,7 @@ const PriceDropAlertEmail = () => {
                                     <Divider/>
                                     <Box padding={"400"}>
                                         <BlockStack gap={"200"}>
-                                            <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Email body
+                                            <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}>Email body
                                                 customization</Text>
                                             <FormLayout>
                                                 <FormLayout.Group condensed>
@@ -627,7 +636,7 @@ const PriceDropAlertEmail = () => {
                                     <Divider/>
                                     <Box padding={"400"}>
                                         <BlockStack gap={"200"}>
-                                            <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Add to Cart
+                                            <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}>Add to Cart
                                                 Button customization</Text>
                                             <FormLayout>
                                                 <FormLayout.Group condensed>
@@ -705,7 +714,7 @@ const PriceDropAlertEmail = () => {
                                     <Divider/>
                                     <Box padding={"400"}>
                                         <BlockStack gap={"200"}>
-                                            <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>View Product
+                                            <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}>View Product
                                                 Button customization</Text>
                                             <FormLayout>
                                                 <FormLayout.Group condensed>
@@ -788,7 +797,7 @@ const PriceDropAlertEmail = () => {
                     <Layout.Section variant={"oneThird"}>
                         <Card padding={"0"}>
                             <Box padding={"400"}>
-                                <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>{emailSetting.price_drop_email_subject}</Text>
+                                <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}>{emailSetting.price_drop_email_subject}</Text>
                             </Box>
                             <Box>
                                 <div className="email-template-live-preview-wrapper">
@@ -829,7 +838,7 @@ const PriceDropAlertEmail = () => {
                                                             <tr>
                                                                 <td className="product-image" style={{paddingTop: '20px'}}>
                                                                     <div style={{width: '100%', height: '100%', borderRadius: '10px',  marginRight: "3px"}}>
-                                                                        <img src="https://cdn.shopify.com/s/files/1/0629/5207/9596/products/Group1242.png?v=1672138033" alt="Dacia blouse" width={470} style={{display: 'block', margin: 'auto', maxWidth: '50%', borderRadius: '10px',border: '1px solid rgb(201, 202, 204)',}}/>
+                                                                        <img src={ProductGroup1242} alt="Dacia blouse" width={470} style={{display: 'block', margin: 'auto', maxWidth: '50%', borderRadius: '10px',border: '1px solid rgb(201, 202, 204)',}}/>
                                                                     </div>
                                                                 </td>
                                                             </tr>
@@ -860,12 +869,12 @@ const PriceDropAlertEmail = () => {
                                                             </tr>
                                                             <tr className="social-networks-wrapper">
                                                                 <td className="social-networks" style={{textAlign: 'center', paddingBottom: '20px'}}>
-                                                                    <button className="instagram bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: emailSetting.price_drop_social.instagram !== null && emailSetting.price_drop_social.instagram.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: emailSetting.price_drop_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}><img src="https://storage.googleapis.com/static.shopgram.io/restock-icons/instagram.png" width={12} alt="instagram"/></button>
-                                                                    <button className="facebook bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: emailSetting.price_drop_social.facebook !== null && emailSetting.price_drop_social.facebook.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: emailSetting.price_drop_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}><img src="https://storage.googleapis.com/static.shopgram.io/restock-icons/facebook.png" width={12} alt="facebook"/></button>
-                                                                    <button className="twitter bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: emailSetting.price_drop_social.twitter !== null && emailSetting.price_drop_social.twitter.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: emailSetting.price_drop_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}><img src="https://storage.googleapis.com/static.shopgram.io/restock-icons/twitter.png" width={12} alt="twitter"/></button>
-                                                                    <button className="telegram bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: emailSetting.price_drop_social.telegram !== null && emailSetting.price_drop_social.telegram.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: emailSetting.price_drop_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}><img src="https://storage.googleapis.com/static.shopgram.io/restock-icons/telegram.png" width={12} alt="telegram"/></button>
-                                                                    <button className="linkedin bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: emailSetting.price_drop_social.linkedin !== null && emailSetting.price_drop_social.linkedin.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: emailSetting.price_drop_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}><img src="https://storage.googleapis.com/static.shopgram.io/restock-icons/linkedin.png" width={12} alt="linkedin"/></button>
-                                                                    <button className="pinterest bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: emailSetting?.price_drop_social?.pinterest !== null && emailSetting?.price_drop_social?.pinterest?.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: emailSetting.price_drop_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}><img src="https://storage.googleapis.com/static.shopgram.io/restock-icons/pinterest.png" width={12} alt="pinterest"/></button>
+                                                                    <button className="instagram bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: emailSetting.price_drop_social.instagram !== null && emailSetting.price_drop_social.instagram.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: emailSetting.price_drop_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}>{instagramImage}</button>
+                                                                    <button className="facebook bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: emailSetting.price_drop_social.facebook !== null && emailSetting.price_drop_social.facebook.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: emailSetting.price_drop_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}>{facebookImage}</button>
+                                                                    <button className="twitter bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: emailSetting.price_drop_social.twitter !== null && emailSetting.price_drop_social.twitter.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: emailSetting.price_drop_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}>{twitterImage}</button>
+                                                                    <button className="telegram bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: emailSetting.price_drop_social.telegram !== null && emailSetting.price_drop_social.telegram.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: emailSetting.price_drop_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}>{telegramImage}</button>
+                                                                    <button className="linkedin bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: emailSetting.price_drop_social.linkedin !== null && emailSetting.price_drop_social.linkedin.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: emailSetting.price_drop_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}>{linkedInImage}</button>
+                                                                    <button className="pinterest bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: emailSetting?.price_drop_social?.pinterest !== null && emailSetting?.price_drop_social?.pinterest?.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: emailSetting.price_drop_style.add_to_cart_btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}>{pinterestImage}</button>
                                                                 </td>
                                                             </tr>
 

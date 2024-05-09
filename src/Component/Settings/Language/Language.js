@@ -5,6 +5,7 @@ import {apiService, baseUrl, capitalizeMessage} from "../../../utils/Constant";
 import ColorInput from "../../Comman/ColorInput"
 import ToastMessage from "../../Comman/ToastMessage"
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
+import {AppDocsLinks} from "../../../utils/AppDocsLinks";
 
 
 const initialState = {
@@ -353,7 +354,7 @@ const Language = () => {
                   primaryAction={{content: "Save", onAction: updateLabel, loading: isLoading}}>
                 <Layout>
                     {message !== "" && isError === false ? <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer}/> : ""}
-                    <CustomErrorBanner link={"https://webcontrive.helpscoutdocs.com/article/426-wishlist-language-settings"} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError} />
+                    <CustomErrorBanner link={AppDocsLinks.article["426"]} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError} />
                     <Layout.Section>
                         <BlockStack gap={"400"}>
                             <Card padding={"0"}>

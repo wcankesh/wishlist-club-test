@@ -1,21 +1,10 @@
 import React, {Fragment, useState, useEffect} from 'react';
 import {
-    Page,
-    Layout,
-    Text,
-    Card,
-    InlineStack,
-    BlockStack,
-    Divider,
-    Box,
-    Icon,
-    Badge,
+    Page, Layout, Text, Card, InlineStack, BlockStack, Divider, Box, Icon, Badge,
 } from '@shopify/polaris';
 import {apiService, baseUrl} from "../../../utils/Constant";
 import {useNavigate} from "react-router-dom"
-import {
-    NotificationFilledMajor, NotificationMajor
-} from '@shopify/polaris-icons';
+import {NotificationFilledMajor, NotificationMajor} from '@shopify/polaris-icons';
 
 
 const BackInStockEmail = () => {
@@ -56,14 +45,10 @@ const BackInStockEmail = () => {
         }
     };
 
-
-    const onBack = () => {
-        navigate(`${baseUrl}/back-in-stock`)
-    }
-
     return (
         <Fragment>
-            <Page title={"Back In Stock Email"} backAction={{content: 'BAckInStock', onAction: onBack}}>
+            <Page title={"Back In Stock Email"}
+                  backAction={{content: 'BAckInStock', onAction: () => navigate(`${baseUrl}/back-in-stock`)}}>
                 <Layout>
                     <Layout.Section>
                         <Card padding={"0"}>
@@ -75,8 +60,8 @@ const BackInStockEmail = () => {
                                                 <div className={"sgi_icon"}><Icon source={x.icon} tone={"subdued"}/>
                                                 </div>
                                                 <BlockStack>
-                                                    <Text fontWeight='medium'>{x.title}</Text>
-                                                    <Text tone={"subdued"}>{x.description}</Text>
+                                                    <Text as={"span"} fontWeight='medium'>{x.title}</Text>
+                                                    <Text as={"span"} tone={"subdued"}>{x.description}</Text>
                                                 </BlockStack>
                                                 {isLoading ? <Badge>
                                                     <div style={{width: 62}}>&nbsp;</div>
@@ -84,13 +69,10 @@ const BackInStockEmail = () => {
                                                     tone={x.checked ? "success" : "critical"}>{x.checked ? "Enabled" : "Disabled"} </Badge>}
                                             </InlineStack>
                                         </Box>
-                                        {
-                                            BisEmail.length - 1 === i ? "" : <Divider/>
-                                        }
+                                        {BisEmail.length - 1 === i ? "" : <Divider/>}
                                     </div>
                                 )
-                            })
-                            }
+                            })}
                         </Card>
                     </Layout.Section>
                 </Layout>

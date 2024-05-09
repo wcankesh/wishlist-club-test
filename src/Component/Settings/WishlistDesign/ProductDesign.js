@@ -19,6 +19,7 @@ import {
 import {Icons} from "../../../utils/Icons";
 import ColorInput from "../../Comman/ColorInput";
 import {Helmet} from "react-helmet";
+import {Product1, Product3} from "../../../utils/AppImages";
 
 
 const ProductDesign = ({wishlistSetting, setWishlistSetting, updateIcon, file, setFile, isSVGLoading, deleteIcon}) => {
@@ -155,7 +156,7 @@ const ProductDesign = ({wishlistSetting, setWishlistSetting, updateIcon, file, s
                                                 {uploadedFile}
                                                 {fileUpload}
                                             </DropZone>
-                                            <Text tone={"subdued"}>Note: You can add only svg</Text>
+                                            <Text tone={"subdued"} as={"span"}>Note: You can add only svg</Text>
                                         </BlockStack>
                                     </FormLayout.Group>
                                     <FormLayout.Group condensed>
@@ -339,11 +340,11 @@ const ProductDesign = ({wishlistSetting, setWishlistSetting, updateIcon, file, s
                         <BlockStack gap={"500"}>
                             <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Preview (before adding to wishlist)</Text>
                             <InlineStack align={"center"}>
-                                <img src={"https://wishlist.thimatic-apps.com/assets/images/product1.jpg"} width={"100px"}/>
+                                <img src={Product1} width={"100px"}/>
                             </InlineStack>
                             <BlockStack gap={"200"}>
-                                <Text as='h3' fontWeight={"bold"}>AKAMAI TOP // PALMS COLLIDE</Text>
-                                <Text>Rs. 80.00</Text>
+                                <Text as='span' fontWeight={"bold"}>AKAMAI TOP // PALMS COLLIDE</Text>
+                                <Text as={"span"}>Rs. 80.00</Text>
                                 <Button size={"large"} fullWidth>Add to cart</Button>
                                 <div className="d-flex wishlist_position">
                                     <button className="wl_btn wishlist_btn_before">
@@ -363,11 +364,11 @@ const ProductDesign = ({wishlistSetting, setWishlistSetting, updateIcon, file, s
                         <BlockStack gap={"400"}>
                             <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Preview (after adding to wishlist)</Text>
                             <InlineStack gap={"400"} align={"center"}>
-                                <img src={"https://wishlist.thimatic-apps.com/assets/images/product1.jpg"} width={"100px"}/>
+                                <img src={Product1} width={"100px"}/>
                             </InlineStack>
                             <BlockStack gap={"200"}>
-                                <Text as='h3' fontWeight={"bold"}>AKAMAI TOP // PALMS COLLIDE</Text>
-                                <Text>Rs. 80.00</Text>
+                                <Text as='span' fontWeight={"bold"}>AKAMAI TOP // PALMS COLLIDE</Text>
+                                <Text as={"span"}>Rs. 80.00</Text>
                                 <Button size={"large"} fullWidth>Add to cart</Button>
                                 <div className=" d-flex wishlist_position">
                                     <button className="wl_btn wishlist_btn_after">
