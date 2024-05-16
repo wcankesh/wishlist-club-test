@@ -1,13 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {
-    Page,
-    Layout,
-    Pagination,
-    Badge,
-    Text,
-    Card,
-    IndexTable,
-    EmptySearchResult, Button, Popover, ResourceList, Thumbnail, InlineStack,
+    Page, Layout, Pagination, Badge, Text, Card, IndexTable, EmptySearchResult, Button,
+    Popover, ResourceList, Thumbnail, InlineStack,
 } from "@shopify/polaris"
 import {apiService, capitalizeMessage,} from "../../utils/Constant";
 import ToastMessage from "../Comman/ToastMessage";
@@ -16,30 +10,19 @@ import {AppDocsLinks} from "../../utils/AppDocsLinks";
 
 const EmailHistory = () => {
     const limit = 10;
-
     const [isLoading, setIsLoading] = useState(false);
-
     const [email, setEmail] = useState({lists: []});
-
-    const [EmailPageNo, setEmailPageNo] = useState(1)
-
+    const [EmailPageNo, setEmailPageNo] = useState(1);
     const [emailPage, setEmailPage] = useState(1);
-
-    const [isError, setIsError] = useState(false)
-    const [isErrorServer, setIsErrorServer] = useState(false)
-    const [message, setMessage] = useState("")
-
+    const [isError, setIsError] = useState(false);
+    const [isErrorServer, setIsErrorServer] = useState(false);
+    const [message, setMessage] = useState("");
     const [selectedProductIndex, setSelectedProductIndex] = useState(null);
-    const totalPageCountEmail = Math.ceil(emailPage / limit)
-
-
-
+    const totalPageCountEmail = Math.ceil(emailPage / limit);
 
     useEffect(() => {
         Email();
-    }, [EmailPageNo])
-
-
+    }, [EmailPageNo]);
 
     const Email = async () => {
         setIsLoading(true);
@@ -78,10 +61,8 @@ const EmailHistory = () => {
         setEmailPageNo(pCount)
     }
 
-    const resourceNameEmail = {
-        singular: 'email history',
-        plural: 'email historys',
-    };
+    const resourceNameEmail = { singular: 'email history', plural: 'email historys'};
+
     return (
         <Page title={"Email History"}>
             {message !== "" && isError === false ?
@@ -153,7 +134,7 @@ const EmailHistory = () => {
                             }
                             <IndexTable.Row>
                                 <IndexTable.Cell>
-                                    &nbsp;
+                                    <Text as={"span"} fontWeight={"semibold"}> Total : {emailPage || 0} item(s) </Text>
                                 </IndexTable.Cell>
                                 <IndexTable.Cell>
                                     &nbsp;
@@ -167,7 +148,7 @@ const EmailHistory = () => {
                                 <IndexTable.Cell>
                                     <div className={"d-flex"} style={{justifyContent: "end"}}>
                                         <Pagination
-                                            label={EmailPageNo}
+                                            label={`${EmailPageNo} / ${totalPageCountEmail}`}
                                             hasPrevious={EmailPageNo > 1}
                                             onPrevious={() => onChangePaginationEmail('minus')}
                                             hasNext={EmailPageNo < totalPageCountEmail}

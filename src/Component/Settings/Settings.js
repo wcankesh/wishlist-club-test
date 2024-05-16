@@ -1,83 +1,71 @@
 import React, {Fragment} from 'react';
-import {Text, Page, Layout, Icon, BlockStack, InlineStack, Card, Divider, Box} from "@shopify/polaris";
-import {LanguageMinor, DomainNewMajor, ThemesMajor, SettingsMajor, EmailMajor, BillingStatementDollarMajor, InstallMinor} from "@shopify/polaris-icons";
+import {Page, Layout} from "@shopify/polaris";
+import {
+    LanguageMinor, DomainNewMajor, ThemesMajor, SettingsMajor, EmailMajor,
+    BillingStatementDollarMajor, InstallMinor
+} from "@shopify/polaris-icons";
 import {useNavigate} from "react-router-dom";
 import {baseUrl} from "../../utils/Constant";
+import WishlistCardMenu from "../Comman/WishlistCardMenu";
 
 const Settings = () => {
     const navigate = useNavigate()
     const setting = [
         {
             icon: SettingsMajor,
-            tabName: "General",
-            description: "Unlock a range of options to customize your wishlist's General settings.",
-            path: "settings/general"
+            name: "General",
+            text: "Unlock a range of options to customize your wishlist's General settings.",
+            link: "settings/general"
         },
         {
             icon: ThemesMajor,
-            tabName: "Wishlist Design",
-            description: "Manage the design settings of your wishlist specifically for the product and collection pages.",
-            path: "settings/wishlist-design"
+            name: "Wishlist Design",
+            text: "Manage the design settings of your wishlist specifically for the product and collection pages.",
+            link: "settings/wishlist-design"
         },
         {
             icon: EmailMajor,
-            tabName: "Wishlist Email",
-            description: "Adjust your email preferences for wishlist items, price-drop alerts, and restock notifications for products in your wishlist.",
-            path: "settings/email"
+            name: "Wishlist Email",
+            text: "Adjust your email preferences for wishlist items, price-drop alerts, and restock notifications for products in your wishlist.",
+            link: "settings/email"
 
         },
         {
             icon: LanguageMinor,
-            tabName: "Language",
-            description: "Customize the wishlist alert message, wishlist page, and popup label here.",
-            path: "settings/language"
+            name: "Language",
+            text: "Customize the wishlist alert message, wishlist page, and popup label here.",
+            link: "settings/language"
         },
         {
             icon: DomainNewMajor,
-            tabName: "Headless",
-            description: "Utilize this API to personalize your wishlist according to your unique needs.",
-            path: "settings/headless"
+            name: "Headless",
+            text: "Utilize this API to personalize your wishlist according to your unique needs.",
+            link: "settings/headless"
         },
         {
             icon: BillingStatementDollarMajor,
-            tabName: "Plan & Price",
-            description: "This option displays the pricing plans that are available.",
-            path: "settings/plan"
+            name: "Plan & Price",
+            text: "This option displays the pricing plans that are available.",
+            link: "settings/plan"
         },
         {
             icon: InstallMinor,
-            tabName: "Installation",
-            description: "The manual installation processes are displayed in this option.",
-            path: "settings/installation"
+            name: "Installation",
+            text: "The manual installation processes are displayed in this option.",
+            link: "settings/installation"
         },
-    ]
+    ];
+
+    const onRedirect = (link) => {
+        navigate(`${baseUrl}/${link}`);
+    }
+
     return (
         <Fragment>
             <Page title={"Settings"}>
                 <Layout>
                     <Layout.Section>
-                        <Card padding={"0"}>
-                                {(setting || []).map((x, i) => {
-                                    return (
-                                        <div className={"cursor-pointer"} onClick={() => navigate(`${baseUrl}/${x.path}`)}>
-                                            <Box padding={"500"}>
-                                                <InlineStack wrap={false} gap={"400"} blockAlign={"start"}>
-                                                    <div className={"sgi_icon"}><Icon source={x.icon} tone={"subdued"}/></div>
-                                                    <BlockStack>
-                                                        <Text fontWeight='medium' as={"span"}>{x.tabName}</Text>
-                                                        <Text tone={"subdued"} as={"span"}>{x.description}</Text>
-                                                    </BlockStack>
-                                                </InlineStack>
-                                            </Box>
-                                            {
-                                                setting.length - 1 === i ? "" : <Divider/>
-                                            }
-                                        </div>
-                                    )
-                                })
-                                }
-
-                        </Card>
+                        <WishlistCardMenu data={setting} onRedirect={(link) => onRedirect(link)} column="three"/>
                     </Layout.Section>
                 </Layout>
             </Page>

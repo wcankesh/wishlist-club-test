@@ -1,4 +1,4 @@
-import React, {Fragment, useCallback, useEffect, useState} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import {
     ButtonGroup, Button, Text, Layout, Page, FormLayout, Modal, BlockStack, InlineStack, Card,
     Divider, Box, Checkbox
@@ -88,14 +88,8 @@ const General = () => {
         if (name === "guest_wishlist" && value == 0) {
             setActiveGuestModal(true)
         } else {
-            setSetting({
-                ...setting,
-                [name]: value
-            })
-            let payload = {
-                ...setting,
-                [name]: value
-            }
+            setSetting({...setting, [name]: value})
+            let payload = {...setting, [name]: value}
             const response = await apiService.updateSetting(payload, setting.id)
             if (response.status === 200) {
                 setIsError(false)
@@ -108,11 +102,6 @@ const General = () => {
                 setIsError(true)
             }
         }
-
-    }
-
-    const onBack = () => {
-        navigate(`${baseUrl}/settings`)
     }
 
     const GuestWishlistConfirmation = async () => {
@@ -136,17 +125,15 @@ const General = () => {
         }
     }
 
-
     return (
         <Fragment>
-            <Page title={"General"} backAction={{content: 'Settings', onAction: onBack}}>
+            <Page title={"General"} backAction={{content: 'Settings', onAction: () => navigate(`${baseUrl}/settings`)}}>
                 <Layout>
                     {message !== "" && isError === false ?
                         <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
                                       setIsErrorServer={setIsErrorServer}/> : ""}
-                    <CustomErrorBanner link={AppDocsLinks.article["423"]}
-                                       message={message} setMessage={setMessage} setIsError={setIsError}
-                                       isError={isError}/>
+                    <CustomErrorBanner link={AppDocsLinks.article["423"]} message={message} setMessage={setMessage}
+                                       setIsError={setIsError} isError={isError}/>
                     <Layout.Section>
                         <Card padding={"0"}>
                             {general.map((x, i) => {
@@ -155,17 +142,12 @@ const General = () => {
                                         <InlineStack key={i} blockAlign={"start"}>
                                             <Box padding={"500"}>
                                                 <InlineStack gap={400} wrap={false}>
-                                                    <Checkbox checked={x.checked} onChange={(checked) => handleChange({
-                                                        target: {
-                                                            name: x.name,
-                                                            value: x.checked ? "0" : "1"
-                                                        }
-                                                    })}/>
+                                                    <Checkbox checked={x.checked} disabled={isLoading}
+                                                              onChange={(checked) => handleChange({
+                                                                  target: {name: x.name, value: x.checked ? "0" : "1"}
+                                                              })}/>
                                                     <div className={"cursor-pointer"} onClick={() => handleChange({
-                                                        target: {
-                                                            name: x.name,
-                                                            value: x.checked ? "0" : "1"
-                                                        }
+                                                        target: {name: x.name, value: x.checked ? "0" : "1"}
                                                     })}>
                                                         <BlockStack gap={"150"}>
                                                             <Text as={"span"} fontWeight='semibold'>{x.title}</Text>
@@ -178,36 +160,30 @@ const General = () => {
                                         <Divider/>
                                     </Fragment>
                                 )
-                            })
-                            }
+                            })}
                             <Box padding={"500"}>
                                 <BlockStack gap={"200"}>
                                     <Text fontWeight='semibold' as={"span"}>Redirect Type</Text>
                                     <ButtonGroup variant="segmented">
-                                        {
-                                            Array.from(Array(3)).map((_, i) => {
-                                                return (
-                                                    <Button
-                                                        pressed={setting?.redirect_type === i}
-                                                        onClick={() => handleChange({
-                                                            target: {name: "redirect_type", value: i}
-                                                        })}
-                                                    > {i === 0 ? "Cart" : i === 1 ? "Checkout" : "Callback"}</Button>
-                                                )
-                                            })
-                                        }
+                                        {Array.from(Array(3)).map((_, i) => {
+                                            return (
+                                                <Button
+                                                    pressed={setting?.redirect_type === i}
+                                                    onClick={() => handleChange({
+                                                        target: {name: "redirect_type", value: i}
+                                                    })}
+                                                > {i === 0 ? "Cart" : i === 1 ? "Checkout" : "Callback"}</Button>
+                                            )
+                                        })}
                                     </ButtonGroup>
                                 </BlockStack>
                             </Box>
                             <Divider/>
                             <Box padding={"500"}>
                                 <InlineStack gap={"400"} blockAlign={"start"} wrap={false}>
-                                    <Checkbox checked={setting.is_variant_wishlist == "1"}
+                                    <Checkbox checked={setting.is_variant_wishlist == "1"} disabled={isLoading}
                                               onChange={(checked) => handleChange({
-                                                  target: {
-                                                      name: "is_variant_wishlist",
-                                                      value: checked ? "1" : "0"
-                                                  }
+                                                  target: {name: "is_variant_wishlist", value: checked ? "1" : "0"}
                                               })}/>
                                     <BlockStack gap={"100"}>
                                         <div className={"cursor-pointer"} onClick={() => handleChange({
@@ -216,15 +192,16 @@ const General = () => {
                                                 value: setting.is_variant_wishlist == "1" ? "0" : "1"
                                             }
                                         })}>
-                                            <Text fontWeight='semibold' as={"span"}>Product variant wishlists</Text>
-                                            <Text as={"span"}>If enabled, wishlists will be shown based on the product variant,
-                                                whereas disabling it will result in wishlists being displayed solely
-                                                based on products.</Text>
+                                            <Text fontWeight='semibold' as={"span"}>Product variant wishlists </Text>
+                                            <Text as={"span"}>
+                                                {`If enabled, wishlists will be shown based on the product variant, whereas disabling it will result in wishlists being displayed solely based on products.`}
+                                            </Text>
                                         </div>
-                                        <Text tone="caution" as={"span"}>Please note: If you wish to see the wishlist for a specific
-                                            product variant, you will need to add this shortcode.</Text>
-                                        <Text tone="caution" as={"span"}>If you choose variant wishlist, make sure to add the below
-                                            shortcode. Otherwise, the wishlist will not be shown.</Text>
+                                        <Text tone="caution" as={"span"}>
+                                            {`Please note: If you wish to see the wishlist for a specific product variant, you will need to add this shortcode.`}
+                                        </Text>
+                                        <Text tone="caution" as={"span"}>
+                                            {`If you choose variant wishlist, make sure to add the below shortcode. Otherwise, the wishlist will not be shown.`}</Text>
                                         <FormLayout>
                                             <FormLayout.Group>
                                                 <BlockStack gap={"150"}>
@@ -248,24 +225,19 @@ const General = () => {
             </Page>
             {
                 activeGuestModal &&
-                <Modal
-                    open={activeGuestModal}
-                    onClose={handleChangeModal}
-                    title={"Really want to deactivate Guest Wishlist?"}
-                    primaryAction={{content: 'Yes', onAction: GuestWishlistConfirmation, loading: isLoading}}
-                    secondaryActions={[{content: 'No', onAction: handleChangeModal,}]}>
+                <Modal open={activeGuestModal} onClose={handleChangeModal}
+                       title={"Really want to deactivate Guest Wishlist?"}
+                       primaryAction={{content: 'Yes', onAction: GuestWishlistConfirmation, loading: isLoading}}
+                       secondaryActions={[{content: 'No', onAction: handleChangeModal,}]}>
                     <Modal.Section>
                         <Text as={"span"}>
-                            <Text as={"span"} tone={"warning"} fontWeight={"semibold"}>WARNING!</Text> All the Guest
-                            Customers Product Information will be removed from our server and there is no way back. Are
-                            you sure you want to do this?
+                            <Text as={"span"} tone={"warning"} fontWeight={"semibold"}>WARNING! </Text>
+                            {`All the Guest Customers Product Information will be removed from our server and there is no way back. Are you sure you want to do this?`}
                         </Text>
                     </Modal.Section>
                 </Modal>
             }
-
         </Fragment>
     );
 }
-export default General
-
+export default General;

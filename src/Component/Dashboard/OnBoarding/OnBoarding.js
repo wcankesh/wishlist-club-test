@@ -1,18 +1,11 @@
-import React, {Fragment, useCallback, useEffect, useState} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import {
-  Text,
-  Button,
-  BlockStack,
-  Card,
-  InlineStack,
-  Collapsible,
-  Icon,
-  Link,
+  Text, Button, BlockStack, Card, InlineStack, Collapsible, Icon, Link,
   Divider, Box, ButtonGroup
 } from "@shopify/polaris"
 import {CaretUpMinor, CaretDownMinor,TickMinor} from "@shopify/polaris-icons"
 import ToastMessage from "../../Comman/ToastMessage";
-import {apiService, baseUrl} from "../../../utils/Constant";
+import {apiService, baseUrl, openUrlInNewWindow} from "../../../utils/Constant";
 import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom"
 
@@ -30,10 +23,7 @@ const OnBoarding = () => {
       if (response.status === 200) {
         let newArray = [];
         response.data.map((x, i) => {
-          let Obj = {
-            label: x.name,
-            value: x.id.toString()
-          }
+          let Obj = { label: x.name, value: x.id.toString() }
           newArray.push(Obj)
         })
         setThemeList(newArray);
@@ -47,30 +37,12 @@ const OnBoarding = () => {
   };
 
   const boardingOptions = [
-    {
-      selected: 0,
-      title: "Activate Wishlist Club Embed"
-    },
-    {
-      selected: 1,
-      title: "Add Wishlist Block to Collection and Product Pages"
-    },
-    {
-      selected: 2,
-      title: "Add Wishlist Icon or Menu in Header"
-    },
-    {
-      selected: 3,
-      title: "Add Back in Stock Block to Collection and Product Pages"
-    },
-    {
-      selected: 4,
-      title: "Customize Wishlist & Back in Stock Layout"
-    },
-  ]
-  const onBoardingStepChange = (url)=>{
-    window.open(url,"_blank");
-  }
+    {selected: 0,title: "Activate Wishlist Club Embed"},
+    {selected: 1,title: "Add Wishlist Block to Collection and Product Pages"},
+    {selected: 2,title: "Add Wishlist Icon or Menu in Header"},
+    {selected: 3,title: "Add Back in Stock Block to Collection and Product Pages"},
+    {selected: 4,title: "Customize Wishlist & Back in Stock Layout"},
+  ];
 
   return (
     <Fragment>
@@ -90,8 +62,7 @@ const OnBoarding = () => {
           </div>
         </Box>
 
-        <Collapsible
-          open={open} id="basic-collapsible" expandOnPrint
+        <Collapsible open={open} id="basic-collapsible" expandOnPrint
           transition={{duration: "500ms", timingFunction: "ease-in-out"}}>
 
           <Divider/>
@@ -128,7 +99,7 @@ const OnBoarding = () => {
                                       sure to save your adjustments to make them active.</Text>
                                     <InlineStack>
                                       <Button variant="primary"
-                                              onClick={() => window.open(shopDetails?.on_boardig?.extension, '_blank')}>Activate</Button>
+                                              onClick={() => openUrlInNewWindow(shopDetails?.on_boardig?.extension)}>Activate</Button>
                                     </InlineStack>
                                   </BlockStack>
                                 </Box>
@@ -145,9 +116,9 @@ const OnBoarding = () => {
                                       to activate the Wishlist Block.</Text>
                                     <ButtonGroup>
                                       <Button variant="primary"
-                                               onClick={() => window.open(shopDetails?.on_boardig?.collection, '_blank')}>Add Collection Block</Button>
+                                               onClick={() => openUrlInNewWindow(shopDetails?.on_boardig?.collection)}>Add Collection Block</Button>
                                       <Button variant="primary"
-                                              onClick={() => window.open(shopDetails?.on_boardig?.wishlist, '_blank')}>Add
+                                              onClick={() => openUrlInNewWindow(shopDetails?.on_boardig?.wishlist)}>Add
                                         Product Block</Button>
                                     </ButtonGroup>
                                   </BlockStack>
@@ -165,7 +136,7 @@ const OnBoarding = () => {
                                         Icon" button.</Text>
                                       <InlineStack>
                                         <Button variant="primary"
-                                                onClick={() => window.open(shopDetails?.on_boardig?.head, '_blank')}>Add
+                                                onClick={() => openUrlInNewWindow(shopDetails?.on_boardig?.head)}>Add
                                           Wishlist Icon</Button>
                                       </InlineStack>
                                     </BlockStack>
@@ -201,10 +172,10 @@ const OnBoarding = () => {
                                       Block.</Text>
                                     <ButtonGroup>
                                       <Button variant="primary"
-                                              onClick={() => window.open(shopDetails?.on_boardig?.bis_collection, '_blank')}>Add
+                                              onClick={() => openUrlInNewWindow(shopDetails?.on_boardig?.bis_collection)}>Add
                                         Back in Stock to Collection Page</Button>
                                       <Button variant="primary"
-                                              onClick={() => window.open(shopDetails?.on_boardig?.bis, '_blank')}>Add
+                                              onClick={() => openUrlInNewWindow(shopDetails?.on_boardig?.bis)}>Add
                                         Back in Stock to Product Page</Button>
                                     </ButtonGroup>
                                   </BlockStack>

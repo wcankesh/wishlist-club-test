@@ -6,6 +6,7 @@ import {
     SmileyHappyMajor, SmileySadMajor, CancelMajor
 } from '@shopify/polaris-icons';
 import {AppDocsLinks} from "../../../utils/AppDocsLinks";
+import {openUrlInNewWindow} from "../../../utils/Constant";
 
 const Feedback = ({onRemoveBanner}) => {
     return (
@@ -21,7 +22,7 @@ const Feedback = ({onRemoveBanner}) => {
                             <Text as={"span"}>How would you describe your experience using the Wishlist Club app?</Text>
                             <ButtonGroup>
                                 <Button size="large" icon={SmileyHappyMajor}
-                                        onClick={() => window.open(AppDocsLinks.writeReviewModal, "_blank")}>Good</Button>
+                                        onClick={() => openUrlInNewWindow(AppDocsLinks.writeReviewModal)}>Good</Button>
                                 <Button size="large" icon={SmileySadMajor}
                                         onClick={() => window.Beacon("toggle")}>Bad</Button>
                             </ButtonGroup>

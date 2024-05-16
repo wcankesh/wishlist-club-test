@@ -1,54 +1,37 @@
 import React, {Fragment} from 'react';
-import {Text, Divider, Page, Layout, Thumbnail, Icon, Card, BlockStack, InlineStack, Box} from "@shopify/polaris";
+import {Page, Layout} from "@shopify/polaris";
 import {EmailMajor, ThemesMajor} from "@shopify/polaris-icons";
 import {useNavigate} from "react-router-dom";
 import {baseUrl} from "../../utils/Constant";
+import WishlistCardMenu from "../Comman/WishlistCardMenu";
 
 const BackInStock = () => {
     const navigate = useNavigate()
     const BackInStock = [
         {
             icon: EmailMajor,
-            tabName: "Back In Stock Email",
-            description: "Manage your preferences for back-in-stock notifications and thank-you notifications using this section.",
-            path: "back-in-stock/email"
+            name: "Back In Stock Email",
+            text: "Manage your preferences for back-in-stock notifications and thank-you notifications using this section.",
+            link: "back-in-stock/email"
         },
         {
             icon: ThemesMajor,
-            tabName: "Back In Stock Design",
-            description: "Customize the design of your back-in-stock notifications for the home & collection page, subscriber form, and subscriber message.",
-            path: "back-in-stock/design"
+            name: "Back In Stock Design",
+            text: "Customize the design of your back-in-stock notifications for the home & collection page, subscriber form, and subscriber message.",
+            link: "back-in-stock/design"
         },
-    ]
+    ];
+
+    const onRedirect = (link) => {
+        navigate(`${baseUrl}/${link}`);
+    };
+
     return (
         <Fragment>
             <Page title={"Back In Stock"}>
                 <Layout>
                     <Layout.Section>
-                        <Card padding={"0"}>
-                            {
-                                (BackInStock || []).map((x, i) => {
-                                    return (
-                                        <div onClick={() => navigate(`${baseUrl}/${x.path}`)} className={"cursor-pointer"}>
-                                            <Box padding={"500"}>
-                                                <InlineStack gap={400} wrap={false}>
-                                                    <div className={"sgi_icon"}>
-                                                        <Icon source={x.icon} tone={"subdued"}/>
-                                                    </div>
-                                                    <BlockStack>
-                                                        <Text as={"span"} fontWeight="medium">{x.tabName}</Text>
-                                                        <Text as={"span"} tone={"subdued"}>{x.description}</Text>
-                                                    </BlockStack>
-                                                </InlineStack>
-                                            </Box>
-                                            {
-                                                BackInStock.length - 1 === i ? "" : <Divider/>
-                                            }
-                                        </div>
-                                    )
-                                })
-                            }
-                        </Card>
+                        <WishlistCardMenu data={BackInStock} onRedirect={(link) => onRedirect(link)} column="two"/>
                     </Layout.Section>
                 </Layout>
             </Page>

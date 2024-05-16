@@ -5,7 +5,7 @@ import HelpDesk from "./HelpDesk/HelpDesk"
 import {useDispatch, useSelector} from "react-redux";
 import Feedback from "./Feedback/Feedback";
 import {Shop_details} from "../../redux/action/action";
-import {apiService} from "../../utils/Constant";
+import {apiService, openUrlInNewWindow} from "../../utils/Constant";
 
 const Dashboard = () => {
   let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -57,7 +57,7 @@ const Dashboard = () => {
             {
               shopDetails.extension_status === false ? shopDetails && shopDetails.bannerDisplaySetting["extension_status"] !== "true" ? <Layout.Section>
                 <Banner
-                    action={{content: "Activate", onAction: () => window.open(`https://${shopDetails.shop}/admin/themes/current/editor?context=apps`, "_blank",)}}
+                    action={{content: "Activate", onAction: () => openUrlInNewWindow(`https://${shopDetails.shop}/admin/themes/current/editor?context=apps`)}}
                     title={"Activate Wishlist Club App"} tone={"warning"}
                     onDismiss={() => onRemoveBanner("extension_status")}
                 >

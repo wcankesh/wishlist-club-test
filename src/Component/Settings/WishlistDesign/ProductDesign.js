@@ -310,7 +310,7 @@ const ProductDesign = ({wishlistSetting, setWishlistSetting, updateIcon, file, s
                             <Divider/>
                             <Box padding={"400"} >
                                 <BlockStack gap={"400"}>
-                                    <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Wishlist page layout</Text>
+                                    <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}>Wishlist page layout</Text>
                                     <FormLayout>
                                         <Select
                                             options={options}
@@ -338,7 +338,7 @@ const ProductDesign = ({wishlistSetting, setWishlistSetting, updateIcon, file, s
                 <BlockStack gap={"400"}>
                     <Card padding={"400"}>
                         <BlockStack gap={"500"}>
-                            <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Preview (before adding to wishlist)</Text>
+                            <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}>Preview (before adding to wishlist)</Text>
                             <InlineStack align={"center"}>
                                 <img src={Product1} width={"100px"}/>
                             </InlineStack>
@@ -362,7 +362,7 @@ const ProductDesign = ({wishlistSetting, setWishlistSetting, updateIcon, file, s
                     </Card>
                     <Card padding={"400"}>
                         <BlockStack gap={"400"}>
-                            <Text as={"h2"} variant={"headingMd"} fontWeight={"medium"}>Preview (after adding to wishlist)</Text>
+                            <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}>Preview (after adding to wishlist)</Text>
                             <InlineStack gap={"400"} align={"center"}>
                                 <img src={Product1} width={"100px"}/>
                             </InlineStack>

@@ -1,4 +1,3 @@
-import React from "react";
 import {ApiService} from "./ApiService"
 import {Facebook, Instagram, LinkedIn, Pinterest, Telegram, Twitter} from "./AppImages";
 
@@ -28,8 +27,6 @@ export const twitterImage = (<img src={Twitter} width={12} alt={"twitter"}/>);
 export const telegramImage = (<img src={Telegram} width={12} alt={"telegram"}/>);
 export const linkedInImage = (<img src={LinkedIn} width={12} alt={"linkedIn"}/>);
 export const pinterestImage = (<img src={Pinterest} width={12} alt={"pinterest"}/>);
-
-
 
 export const capitalizeMessage = (message) => {
     return (message || "").split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')

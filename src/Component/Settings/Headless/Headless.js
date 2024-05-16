@@ -1,23 +1,25 @@
 import React, {useEffect, useState, Fragment} from 'react';
-import TagsInput from 'react-tagsinput'
-import 'react-tagsinput/react-tagsinput.css'
-import {Page, Layout, Button, FormLayout, PageActions, Text, Card, BlockStack, Box, InlineStack} from "@shopify/polaris"
+import TagsInput from 'react-tagsinput';
+import 'react-tagsinput/react-tagsinput.css';
+import {
+    Page, Layout, Button, FormLayout, PageActions, Text, Card, BlockStack, InlineStack
+} from "@shopify/polaris";
 import {useNavigate} from "react-router-dom";
 import {apiService, baseUrl, capitalizeMessage, openUrlInNewWindow} from "../../../utils/Constant";
-import ToastMessage from "../../Comman/ToastMessage"
-import CopyCode from "../../Comman/CopyCode"
+import ToastMessage from "../../Comman/ToastMessage";
+import CopyCode from "../../Comman/CopyCode";
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
 import {AppDocsLinks} from "../../../utils/AppDocsLinks";
 
 const Headless = () => {
-    const navigate = useNavigate()
-    const [isLoading, setIsLoading] = useState(false)
-    const [isTokenLoading, setIsTokenLoading] = useState(false)
-    const [headLess, setHeadLess] = useState({domain: []})
-    const [headLessToken, setHeadLessToken] = useState()
-    const [message, setMessage] = useState("")
-    const [isError, setIsError] = useState(false)
-    const [isErrorServer, setIsErrorServer] = useState(false)
+    const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
+    const [isTokenLoading, setIsTokenLoading] = useState(false);
+    const [headLess, setHeadLess] = useState({domain: []});
+    const [headLessToken, setHeadLessToken] = useState();
+    const [message, setMessage] = useState("");
+    const [isError, setIsError] = useState(false);
+    const [isErrorServer, setIsErrorServer] = useState(false);
 
     useEffect(() => {
         const getHeadless = async () => {
@@ -53,7 +55,7 @@ const Headless = () => {
             setIsError(true)
             setIsLoading(false)
         }
-    }
+    };
 
     const updateHeadless = async () => {
         setIsTokenLoading(true)
@@ -75,11 +77,11 @@ const Headless = () => {
             setIsError(true)
             setIsTokenLoading(false)
         }
-    }
+    };
 
     const defaultPasteSplit = (data) => {
         return data.split(',').map(d => d.trim())
-    }
+    };
 
     const onChange = (e) => {
         const {value, name} = e.target;
@@ -87,71 +89,50 @@ const Headless = () => {
         setHeadLess({...headLess, [name]: clone})
     };
 
-    const onBack = () => {
-        navigate(`${baseUrl}/settings`)
-    }
     return (
         <Fragment>
-            <Page title={"Headless"} backAction={{content: 'Settings', onAction: onBack}}
-                  primaryAction={{
-                      content: "Save", onAction: updateHeadless, loading: isTokenLoading
-                  }}>
+            <Page title={"Headless"} backAction={{content: 'Settings', onAction: () => navigate(`${baseUrl}/settings`)}}
+                  primaryAction={{content: "Save", onAction: updateHeadless, loading: isTokenLoading}}>
                 <Layout>
                     {message !== "" && isError === false ?
                         <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
                                       setIsErrorServer={setIsErrorServer}/> : ""}
-                    <CustomErrorBanner link={AppDocsLinks.collection["416"]}
-                                       message={message} setMessage={setMessage} setIsError={setIsError}
-                                       isError={isError}/>
-                    <Layout.AnnotatedSection
-                        id="storeDetails"
-                        title="Headless Settings"
-                        description={
-                            <BlockStack gap={"400"}>
-                                <Text as={"span"} tone={"subdued"}>
-                                    {`Enhance your store's capabilities by integrating our API. By establishing a 
-                                    connection to our API, you gain the ability to fetch wishlist products and 
-                                    seamlessly integrate them into the frontend presentation of your store. 
-                                    This integration provides you with the flexibility to customize and personalize the
-                                    design and layout to meet your exact requirements and create a unique shopping 
-                                    experience for your customers."`} </Text>
-                                <InlineStack>
-                                    <Button onClick={() => openUrlInNewWindow(AppDocsLinks.getPostman)}>
-                                        API Document </Button>
-                                </InlineStack>
-                            </BlockStack>
-                        }>
-                        <Card padding={"0"}>
-                            <Box padding={"500"}>
-                                <BlockStack gap={"500"}>
-                                    <InlineStack align={"end"}>
-                                        <Button onClick={getHeadlessToken} loading={isLoading}>Generate Token</Button>
-                                    </InlineStack>
-                                    <FormLayout>
-                                        <BlockStack gap={"100"}>
-                                            <label>Domain</label>
-                                            <TagsInput
-                                                className={`react-tagsinput`}
-                                                value={headLess.domain || []}
-                                                onChange={(value) => onChange({target: {name: "domain", value}})}
-                                                pasteSplit={defaultPasteSplit}
-                                                addOnPaste={true}
-                                                onlyUnique={true}
-                                                inputProps={{placeholder: 'Enter domain'}}/>
-                                        </BlockStack>
+                    <CustomErrorBanner link={AppDocsLinks.collection["416"]} message={message} setMessage={setMessage}
+                                       setIsError={setIsError} isError={isError}/>
 
-                                        <CopyCode label={"Access Token"} value={headLess.token}/>
-                                        <Text as={"span"} tone={"caution"}> <Text as={"span"} fontWeight={"bold"}> Please Note </Text>:
-                                            Reach out to our dedicated support team and provide them with the domain you
-                                            want to use with the API. They will guide you through the whitelisting
-                                            process
-                                            and ensure that the API is enabled for your specified domain. Without
-                                            whitelisting the domain API will not work. </Text>
-                                    </FormLayout>
-                                </BlockStack>
-                            </Box>
+                    <Layout.Section>
+                        <Card>
+                            <BlockStack gap={"500"}>
+                                <InlineStack align={"space-between"} blockAlign={"center"}>
+                                    <Text as={"span"} variant={"headingMd"}>{"Headless Settings"}</Text>
+                                    <Button onClick={() => openUrlInNewWindow(AppDocsLinks.getPostman)}
+                                            variant={"plain"}> API Document </Button>
+                                </InlineStack>
+
+                                <Text as={"span"} tone={"subdued"}>
+                                    {`Enhance your store's capabilities by integrating our API. By establishing a connection to our API, you gain the ability to fetch wishlist products and seamlessly integrate them into the frontend presentation of your store. This integration provides you with the flexibility to customize and personalize the design and layout to meet your exact requirements and create a unique shopping experience for your customers."`}
+                                </Text>
+                                <InlineStack align={"end"}>
+                                    <Button onClick={getHeadlessToken} loading={isLoading}>Generate Token</Button>
+                                </InlineStack>
+                                <FormLayout>
+                                    <BlockStack gap={"100"}>
+                                        <label>Domain</label>
+                                        <TagsInput className={`react-tagsinput`} value={headLess.domain || []}
+                                            onChange={(value) => onChange({target: {name: "domain", value}})}
+                                            pasteSplit={defaultPasteSplit} addOnPaste={true} onlyUnique={true}
+                                            inputProps={{placeholder: 'Enter domain'}}/>
+                                    </BlockStack>
+
+                                    <CopyCode label={"Access Token"} value={headLess.token}/>
+                                    <Text as={"span"} tone={"caution"}>
+                                        <Text as={"span"} fontWeight={"bold"}> Please Note </Text>:
+                                        {`Reach out to our dedicated support team and provide them with the domain you want to use with the API. They will guide you through the whitelisting process and ensure that the API is enabled for your specified domain. Without whitelisting the domain API will not work.`}
+                                    </Text>
+                                </FormLayout>
+                            </BlockStack>
                         </Card>
-                    </Layout.AnnotatedSection>
+                    </Layout.Section>
                 </Layout>
                 <PageActions primaryAction={{content: 'Save', onAction: updateHeadless, loading: isTokenLoading}}/>
             </Page>

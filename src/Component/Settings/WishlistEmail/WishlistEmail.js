@@ -1,5 +1,8 @@
-import React, {Fragment, useEffect, useState} from 'react';
-import {Page, Layout, FormLayout, TextField, Text, Button, Card, BlockStack, InlineStack, Box, Divider, Badge, Checkbox} from "@shopify/polaris";
+import React, {useEffect, useState} from 'react';
+import {
+    Page, Layout, TextField, Text, Button, Card, BlockStack, InlineStack, Box, Divider, Badge,
+    Checkbox, OptionList
+} from "@shopify/polaris";
 import {apiService, baseUrl, capitalizeMessage} from "../../../utils/Constant";
 import {useNavigate} from "react-router-dom"
 import ToastMessage from "../../Comman/ToastMessage";
@@ -17,19 +20,19 @@ const initialState = {
     stock_reminder: 0,
     weekly_reminder: 0,
     is_notification_mail: 0,
-}
-const initialStateError = {
-    from_email: ""
-}
+};
+const initialStateError = {from_email: ""};
+
 const WishlistEmail = () => {
     const navigate = useNavigate();
     const [emailSetting, setEmailSetting] = useState(initialState);
     const [emailSettingError, setEmailSettingError] = useState(initialStateError);
-    const [isLoading, setIsLoading] = useState(true)
-    const [isSave, setIsSave] = useState(false)
-    const [isError, setIsError] = useState(false)
-    const [isErrorServer, setIsErrorServer] = useState(false)
-    const [message, setMessage] = useState("")
+    const [isLoading, setIsLoading] = useState(true);
+    const [isSave, setIsSave] = useState(false);
+    const [isError, setIsError] = useState(false);
+    const [isErrorServer, setIsErrorServer] = useState(false);
+    const [message, setMessage] = useState("");
+    const [selectedOption, setSelectedOption] = useState(["1"]);
     const Customization_Email = [
         {
             title: "Wishlist Items",
@@ -90,10 +93,8 @@ const WishlistEmail = () => {
             setEmailSettingError(validationErrors);
             return;
         }
-        setIsSave( true);
-        const payload = {
-            ...emailSetting
-        }
+        setIsSave(true);
+        const payload = {...emailSetting};
         const formData = new FormData();
         formData.append("payload", JSON.stringify(payload))
         const response = await apiService.updateEmailSetting(formData, emailSetting.id);
@@ -115,9 +116,7 @@ const WishlistEmail = () => {
 
     const notificationUpdate = async (e) => {
         const {name, value} = e.target;
-        const payload = {
-            ...emailSetting, [name]: value,
-        }
+        const payload = {...emailSetting, [name]: value,}
         const formData = new FormData();
         formData.append("payload", JSON.stringify(payload))
         const response = await apiService.updateEmailSetting(formData, emailSetting.id);
@@ -135,10 +134,7 @@ const WishlistEmail = () => {
 
     const handleChange = (e) => {
         const {name, value} = e.target
-        setEmailSetting({
-            ...emailSetting,
-            [name]: value
-        })
+        setEmailSetting({...emailSetting, [name]: value})
         setEmailSettingError({...emailSettingError, [name]: value.trim() ? "" : emailSettingError[name]})
     }
 
@@ -151,7 +147,6 @@ const WishlistEmail = () => {
         const validRegex =
             /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
         switch (name) {
-
             case "from_email":
                 if (value && !value?.match(validRegex)) {
                     return "Enter a valid email address";
@@ -165,105 +160,115 @@ const WishlistEmail = () => {
     };
 
     const onBack = () => {
-        navigate(`${baseUrl}/settings`)
-    }
-
+        navigate(`${baseUrl}/settings`);
+    };
 
     return (
-        <Fragment>
-            <Page title={"Wishlist Email"} backAction={{content: 'Settings', onAction: onBack}}>
-                <Layout>
-                    {message !== "" && isError === false ?
-                        <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
-                                      setIsErrorServer={setIsErrorServer}/> : ""}
-                    <CustomErrorBanner link={AppDocsLinks.article["425"]} message={message} setMessage={setMessage} setIsError={setIsError}
-                                       isError={isError}/>
-                    <Layout.Section>
-                        <Card padding={"0"}>
-                            <Box padding={"400"}>
-                                <BlockStack gap={"100"}>
-                                    <Text as={"span"} variant={"headingMd"}>From Email & Name</Text>
-                                    <Text as={"span"} tone={"subdued"}>Add the "Name" in From name and "Email id" in From email you want users to see while receiving the Wishlist alerts</Text>
-                                </BlockStack>
-                            </Box>
-                            <Divider/>
-                            <Box padding={"400"}>
-                                <BlockStack gap={"400"}>
-                                    <FormLayout>
-                                        <FormLayout.Group>
-                                            <TextField
-                                                label="From name"
-                                                value={emailSetting.from_name}
-                                                onChange={(value) => handleChange({target: {name: "from_name", value}})}
-                                            />
-                                            <TextField
-                                                type="email"
-                                                label="From email"
-                                                value={emailSetting.from_email}
-                                                onChange={(value) => handleChange({target: {name: "from_email", value}})}
-                                                name={"from_email"}
-                                                error={emailSettingError.from_email}
-                                                onBlur={onBlur}
-                                            />
-                                        </FormLayout.Group>
-                                    </FormLayout>
-                                    <InlineStack align={"end"}>
-                                        <Button variant={"primary"} loading={isSave} onClick={saveEmailSetting}>Save</Button>
-                                    </InlineStack>
-                                </BlockStack>
-                            </Box>
-                        </Card>
-                    </Layout.Section>
-                    <Layout.Section>
-                        <Card padding={"0"}>
-                            <Box padding={"400"}>
-                                <BlockStack gap={"100"}>
-                                    <Text as={"span"} variant={"headingMd"}>Email Customization</Text>
-                                    <Text as={"span"} tone={"subdued"}>Send alerts when the products are on Wishlist. Also, send price drop & restock alerts for the products in Wishlist.</Text>
-                                    <Text as={"span"} tone={"caution"}><b>Note: </b> These all the notifications(Wishlist Items, Price Drop Alerts, and Restock Alerts) are sent to customers if the <b>Guest Wishlist</b> option disable.</Text>
-                                </BlockStack>
-                            </Box>
-                            <Divider/>
-                            {
-                                (Customization_Email || []).map((x, i) => {
-                                    return (
-                                        <div onClick={() => navigate(`${baseUrl}/${x.path}`)} className={"cursor-pointer"} key={i}>
-                                            <Box padding={"400"}>
-                                                <InlineStack align={"space-between"} blockAlign={"start"} wrap={false} gap={"200"}>
-                                                    <InlineStack gap={"400"} wrap={false}>
-                                                        <BlockStack gap={"100"}>
-                                                            <Text fontWeight='semibold' as={"span"}>{x.title}</Text>
-                                                            <Text tone={"subdued"} as={"span"}>{x.description}</Text>
-                                                        </BlockStack>
-                                                    </InlineStack>
-                                                    {isLoading ? <Badge><div style={{width: 62}}>&nbsp;</div>
-                                                    </Badge> : <Badge tone={x.checked ? "success" : "critical"}>{x.checked ? "Enabled" : "Disabled"} </Badge>}
-                                                </InlineStack>
-                                            </Box>
-                                            <Divider/>
-                                        </div>
-                                    )
-                                })
-                            }
-                        </Card>
-                    </Layout.Section>
+        <Page title={"Wishlist Email"} backAction={{content: 'Settings', onAction: onBack}}>
+            <Layout>
+                {message !== "" && isError === false ?
+                    <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
+                                  setIsErrorServer={setIsErrorServer}/> : ""}
+                <CustomErrorBanner link={AppDocsLinks.article["425"]} message={message} setMessage={setMessage}
+                                   setIsError={setIsError} isError={isError}/>
 
-                    <Layout.Section>
-                        <Card>
-                            <BlockStack gap={"400"}>
-                                <BlockStack gap={"100"}>
-                                    <Text as={"span"} variant={"headingMd"}>Wishlist Notifications</Text>
-                                    <Text as={"span"} tone={"subdued"}>
-                                        Enabling this setting allows store owners to stay updated through email notifications when users add products to their wishlist.
-                                    </Text>
-                                </BlockStack>
-                                <Checkbox label={"Notification mail"} onChange={(checked) => notificationUpdate({target: {name: "is_notification_mail", value: checked ? "1" : "0"}})} checked={emailSetting.is_notification_mail == 1}/>
+                <Layout.Section variant="oneThird">
+                    <Card padding={"100"}>
+                        <OptionList onChange={setSelectedOption} selected={selectedOption}
+                                    options={[
+                                        {value: "1", label: "From Email & Name"},
+                                        {value: "2", label: "Email Customization"},
+                                        {value: "3", label: "Wishlist Notifications"},
+                                    ]}/>
+                    </Card>
+                </Layout.Section>
+
+                <Layout.Section>
+                    {selectedOption.includes("1") && <Card padding={"0"}>
+                        <Box padding={"400"}>
+                            <BlockStack gap={"100"}>
+                                <Text as={"span"} variant={"headingMd"}>From Email & Name</Text>
+                                <Text as={"span"} tone={"subdued"}>Add the "Name" in From name and "Email id" in
+                                    From email you want users to see while receiving the Wishlist alerts</Text>
                             </BlockStack>
-                        </Card>
-                    </Layout.Section>
-                </Layout>
-            </Page>
-        </Fragment>
+                        </Box>
+                        <Divider/>
+                        <Box padding={"400"}>
+                            <BlockStack gap={"400"}>
+                                <TextField label="From name" value={emailSetting.from_name}
+                                           onChange={(value) => handleChange({
+                                               target: {name: "from_name", value}
+                                           })}/>
+                                <TextField type="email" label="From email" value={emailSetting.from_email}
+                                           name={"from_email"} error={emailSettingError.from_email}
+                                           onBlur={onBlur}
+                                           onChange={(value) => handleChange({
+                                               target: {name: "from_email", value}
+                                           })}/>
+                                <InlineStack align={"end"}>
+                                    <Button variant={"primary"} loading={isSave}
+                                            onClick={saveEmailSetting}>Save</Button>
+                                </InlineStack>
+                            </BlockStack>
+                        </Box>
+                    </Card>}
+
+                    {selectedOption.includes("2") && <Card padding={"0"}>
+                        <Box padding={"400"}>
+                            <BlockStack gap={"100"}>
+                                <Text as={"span"} variant={"headingMd"}>Email Customization</Text>
+                                <Text as={"span"} tone={"subdued"}>Send alerts when the products are on Wishlist.
+                                    Also, send price drop & restock alerts for the products in Wishlist.</Text>
+                                <Text as={"span"} tone={"caution"}><b>Note: </b> These all the
+                                    notifications(Wishlist Items, Price Drop Alerts, and Restock Alerts) are sent to
+                                    customers if the <b>Guest Wishlist</b> option disable.</Text>
+                            </BlockStack>
+                        </Box>
+                        <Divider/>
+                        {
+                            (Customization_Email || []).map((x, i) => {
+                                return (
+                                    <div onClick={() => navigate(`${baseUrl}/${x.path}`)}
+                                         className={"cursor-pointer"} key={i}>
+                                        <Box padding={"400"}>
+                                            <InlineStack align={"space-between"} blockAlign={"start"} wrap={false}
+                                                         gap={"200"}>
+                                                <InlineStack gap={"400"} wrap={false}>
+                                                    <BlockStack gap={"100"}>
+                                                        <Text fontWeight='semibold' as={"span"}>{x.title}</Text>
+                                                        <Text tone={"subdued"} as={"span"}>{x.description}</Text>
+                                                    </BlockStack>
+                                                </InlineStack>
+                                                {isLoading ? <Badge>
+                                                    <div style={{width: 62}}>&nbsp;</div>
+                                                </Badge> : <Badge
+                                                    tone={x.checked ? "success" : "critical"}>{x.checked ? "Enabled" : "Disabled"} </Badge>}
+                                            </InlineStack>
+                                        </Box>
+                                        <Divider/>
+                                    </div>
+                                )
+                            })}
+                    </Card>}
+
+                    {selectedOption.includes("3") && <Card>
+                        <BlockStack gap={"400"}>
+                            <BlockStack gap={"100"}>
+                                <Text as={"span"} variant={"headingMd"}>Wishlist Notifications</Text>
+                                <Text as={"span"} tone={"subdued"}>
+                                    Enabling this setting allows store owners to stay updated through email
+                                    notifications when users add products to their wishlist.
+                                </Text>
+                            </BlockStack>
+                            <Checkbox label={"Notification mail"} onChange={(checked) => notificationUpdate({
+                                target: {name: "is_notification_mail", value: checked ? 1 : 0}
+                            })} checked={emailSetting.is_notification_mail == 1}/>
+                        </BlockStack>
+                    </Card>}
+                </Layout.Section>
+            </Layout>
+        </Page>
+
     );
 }
 export default WishlistEmail

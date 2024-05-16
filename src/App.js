@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Route, Routes, Navigate, BrowserRouter, useLocation, useNavigate} from "react-router-dom";
+import {Route, Routes, Navigate, BrowserRouter} from "react-router-dom";
 import '@shopify/polaris/build/esm/styles.css';
 import "./style.css";
 import DefaultLayout from './Component/DefaultLayout/DefaultLayout';
