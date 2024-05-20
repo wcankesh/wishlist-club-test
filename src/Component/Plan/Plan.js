@@ -256,18 +256,18 @@ const Plan = () => {
 
                                                         <div className={col}>{y.basic === true || y.basic === false ?
                                                             <span
-                                                                className="icons">{y.basic === true ? Icons.verifiedIcon : minusIcon}</span> : y.basic}</div>
+                                                                className="icons">{y.basic === true ? Icons.verifiedIcon : minusIcon}</span> : `${y.basic}/Month`}</div>
                                                         <div className={col}>{(y.pro === true || y.pro === false) ?
                                                             <span
-                                                                className="icons">{y.pro === true ? Icons.verifiedIcon : minusIcon}</span> : y.pro}</div>
+                                                                className="icons">{y.pro === true ? Icons.verifiedIcon : minusIcon}</span> : `${y.pro}/Month`}</div>
                                                         <div
                                                             className={col}>{(y.advance === true || y.advance === false) ?
                                                             <span
-                                                                className="icons">{y.advance === true ? Icons.verifiedIcon : minusIcon}</span> : y.advance}</div>
+                                                                className="icons">{y.advance === true ? Icons.verifiedIcon : minusIcon}</span> : `${y.advance}/Month`}</div>
                                                         <div
                                                             className={col}>{(y.enterprise === true || y.enterprise === false) ?
                                                             <span
-                                                                className="icons">{y.enterprise === true ? Icons.verifiedIcon : minusIcon}</span> : y.enterprise}</div>
+                                                                className="icons">{y.enterprise === true ? Icons.verifiedIcon : minusIcon}</span> : `${y.enterprise}/Month`}</div>
                                                     </div>
                                                 </div>
                                             </li>
