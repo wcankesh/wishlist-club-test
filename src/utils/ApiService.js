@@ -149,6 +149,10 @@ export class ApiService {
         return await this.getData(`${apiBaseUrl}/api/themes`);
     }
 
+    async checkTheme(payload) {
+        return await this.postData(`${apiBaseUrl}/api/check-theme`,payload);
+    }
+
     async codeSetup(payload) {
         return await this.postData(`${apiBaseUrl}/api/code-setup`, payload);
     }
@@ -254,5 +258,12 @@ export class ApiService {
 
     async bisImport(payload, isFormData) {
         return await this.postData(`${apiBaseUrl}/api/bis/import`, payload, isFormData);
+    }
+
+    async enableBackInStock(payload) {
+        return await this.postData(`${apiBaseUrl}/api/enable-bis`, payload)
+    }
+    async onBoarding(payload) {
+        return await this.postData(`${apiBaseUrl}/api/complete-onboarding`, payload)
     }
 }

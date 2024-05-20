@@ -22,7 +22,8 @@ const intialState = {
   on_boardig: {},
   upgrade: "1",
   install_url: "",
-  bis_import_export_btn:false
+  bis_import_export_btn:false,
+  onboarding:"0",
 }
 
 export const StoreReducer = (state = intialState, action) => {

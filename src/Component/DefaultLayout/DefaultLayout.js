@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Frame,FooterHelp, Link, Text, Modal} from '@shopify/polaris';
+import {Frame, FooterHelp, Link, Text, Modal} from '@shopify/polaris';
 import {Outlet, useLocation, useNavigate} from 'react-router-dom';
 import {baseUrl} from "../../utils/Constant"
 import {useSelector} from 'react-redux';
@@ -14,61 +14,38 @@ const DefaultLayout = () => {
     const urlParams = new URLSearchParams(location.search);
     const host = urlParams.get('host');
     const shopDetails = useSelector(state => state.shopDetails);
-    const config = {
-        apiKey: apiKey,
-        host: host,
-        forceRedirect: process.env.NODE_ENV === 'development' ? false : true
-    };
+    const config = {apiKey: apiKey, host: host, forceRedirect: process.env.NODE_ENV === 'development' ? false : true};
+
     useEffect(() => {
-        if(shopDetails.plan_type == "0" || shopDetails.is_older_shop == 1){
+        if (shopDetails.plan_type == "0" || shopDetails.is_older_shop == 1) {
             navigate(`${baseUrl}/settings/plan`)
         }
-        if(shopDetails?.upgrade == "0"){
+        if (shopDetails?.upgrade == "0") {
             document.body.classList.add('hide-popup-close-icon');
         }
-    }, [])
+        if (shopDetails.onboarding == 0) {
+            navigate(`${baseUrl}/onboarding`)
+        }
+    }, []);
 
     const onAuthorize = () => {
         setIsUpdateLoading(true)
         window.open(shopDetails.install_url, "_top");
     };
 
+    const navigationLinks = [
+        {label: 'Analytics', destination: `${baseUrl}/analytics`},
+        {label: 'Back In Stock', destination: `${baseUrl}/back-in-stock`},
+        {label: 'Wishlist Items', destination: `${baseUrl}/wishlist-items`},
+        {label: 'Email History', destination: `${baseUrl}/email-history`},
+        {label: 'Settings', destination: `${baseUrl}/settings`},
+    ];
+
     return (
         <div>
             <Provider config={config}>
-                <NavigationMenu
-                    navigationLinks={[
-                        // {
-                        //     label: 'Dashboard',
-                        //     destination: `${baseUrl}/dashboard`,
-                        // },
-                        {
-                            label: 'Analytics',
-                            destination: `${baseUrl}/analytics`
-
-                        },
-                        {
-                            label: 'Back In Stock',
-                            destination: `${baseUrl}/back-in-stock`
-
-                        },
-                        {
-                            label: 'Wishlist Items',
-
-                            destination: `${baseUrl}/wishlist-items`
-                        },
-                        {
-                            label: 'Email History',
-                            destination: `${baseUrl}/email-history`
-                        },
-                        {
-                            label: 'Settings',
-
-                            destination: `${baseUrl}/settings`
-                        }
-
-                    ]}
-                    matcher={(link, location) => link.destination === location.pathname}
+                <NavigationMenu navigationLinks={shopDetails.onboarding == 0 ? [] :navigationLinks}
+                                matcher={(link, location) => link.destination === location.pathname}
                 />
                 <Frame>
                     <RoutePropagator location={location}/>

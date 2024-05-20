@@ -19,6 +19,7 @@ import Plan from "../Component/Plan/Plan";
 import Installation from "../Component/Installation/Installation";
 import BackInStockDesign from "../Component/BackInStock/BackInStockDesign/BackInStockDesign";
 import EmailHistory from "../Component/EmailHistory/EmailHistory";
+import OnBoardingApp from "../Component/OnBoardingApp/OnBoardingApp";
 
 export const routes = [
     {path: `${baseUrl}/dashboard`, component: <Dashboard/>},
@@ -41,4 +42,5 @@ export const routes = [
     {path: `${baseUrl}/settings/plan`, component: <Plan/>},
     {path: `${baseUrl}/settings/installation`, component: <Installation/>},
     {path: `${baseUrl}/email-history`, component: <EmailHistory/>},
+    {path: `${baseUrl}/onboarding`, component: <OnBoardingApp/>},
 ]

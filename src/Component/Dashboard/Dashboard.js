@@ -37,6 +37,7 @@ const Dashboard = () => {
   }else if (shopDetails.plan_type === "9") {
     productPercent = (shopDetails.sent_email * 100 / 100)
   }
+
   return (
       <Fragment>
         <Page
@@ -95,10 +96,10 @@ const Dashboard = () => {
             {/*    </BlockStack>*/}
             {/*  </Card>*/}
             {/*</Layout.Section>*/}
-            {/*<Layout.Section>*/}
+            {/*<Layout.Section variant={"fullWidth"}>*/}
             {/*  <OnBoarding/>*/}
             {/*</Layout.Section>*/}
-            <Layout.Section>
+            <Layout.Section variant={"fullWidth"}>
               <HelpDesk/>
             </Layout.Section>
               {

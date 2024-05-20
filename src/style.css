@@ -52,7 +52,6 @@
     font-display: swap;
 }
 
-
 @font-face {
     font-family: 'Lucida Sans';
     src: url('./utils/Fonts/LucidaSans-Demi.woff2') format('woff2'),
@@ -79,6 +78,7 @@
     font-style: normal;
     font-display: swap;
 }
+
 @font-face {
     font-family: 'Roboto';
     font-weight: normal;
@@ -182,3 +182,7 @@ ul.PlanPriceList li.ppl_item .pplContent .icons {align-items: center;display: fl
     .branding-icon {height: 60px;width: 100px;}
     .branding-icon svg {width: 40px;}
 }
+
+.onBoardingIcon img {width: 100%;}
+.confetti-main{position: relative;overflow: hidden;}
+.confetti{position: absolute;bottom: 0;z-index: 1;object-fit: contain;pointer-events: none; height: 100%;width: 100%;}

@@ -32,3 +32,8 @@ export {default as WlCollection} from '../Img/WlCollection.webp';
 export {default as WlCollectionPre} from '../Img/WlCollectionPre.webp';
 export {default as WlProduct1} from '../Img/WlProduct1.webp';
 export {default as WlProductPre} from '../Img/WlProductPre.webp';
+export {default as Confetti} from '../Img/Confetti.webp';
+export {default as StepOneImage} from '../Img/StepOne.webp';
+export {default as StepTwoImage} from '../Img/StepTwo.webp';
+export {default as StepThreeImage} from '../Img/StepThree.webp';
+export {default as StepFourImage} from '../Img/StepFour.webp';
