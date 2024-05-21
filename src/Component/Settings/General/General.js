@@ -110,6 +110,8 @@ const General = () => {
         setIsLoading(true)
         setSetting({...setting, guest_wishlist: "0"})
         let payload = {...setting, guest_wishlist: "0"}
+        delete payload.is_bis_email_enable;
+        delete payload.bis_id;
         const response = await apiService.updateSetting(payload, setting.id)
         if (response.status === 200) {
             setIsError(false)
