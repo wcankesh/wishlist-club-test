@@ -90,6 +90,8 @@ const General = () => {
         } else {
             setSetting({...setting, [name]: value})
             let payload = {...setting, [name]: value}
+            delete payload.is_bis_email_enable;
+            delete payload.bis_id;
             const response = await apiService.updateSetting(payload, setting.id)
             if (response.status === 200) {
                 setIsError(false)

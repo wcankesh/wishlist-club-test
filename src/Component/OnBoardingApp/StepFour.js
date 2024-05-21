@@ -26,7 +26,7 @@ const StepFour = ({urlParams, shopDetails}) => {
         delete params["extension"]
         delete params["skip"]
         delete params["isBlockCapable"]
-        dispatch(Shop_details({...shopDetails, onboarding_flow: "1"}));
+        dispatch(Shop_details({...shopDetails, onboarding: "1"}));
         navigate({pathname: `${baseUrl}/${url}`, search: qs.stringify({...params})});
     }
     return (
