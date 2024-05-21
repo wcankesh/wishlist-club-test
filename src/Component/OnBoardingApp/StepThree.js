@@ -104,7 +104,7 @@ const StepThree = ({step, setStep, urlParams, shopDetails}) => {
                                                   onChange={(checked) => handleBackInStockEmail({
                                                       target: {
                                                           name: "is_bis_email_enable",
-                                                          value: setting.is_bis_email_enable ? "0" : "1"
+                                                          value: setting.is_bis_email_enable == "1" ? "0" : "1"
                                                       }
                                                   })}/>
 
