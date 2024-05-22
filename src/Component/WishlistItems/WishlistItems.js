@@ -220,8 +220,8 @@ const WishlistItems = () => {
 
     return (
         <Page title={"Wishlist Items"}
-              primaryAction={selected === 0 ? {content: 'Import', onAction: handleChange} : null}
-              secondaryActions={selected === 0 ? [{content: 'Export', onAction: Export}] : []}>
+              primaryAction={{content: 'Import', onAction: handleChange}}
+              secondaryActions={[{content: 'Export', onAction: Export}]}>
             <Layout>
                 {message !== "" && isError === false ?
                     <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
