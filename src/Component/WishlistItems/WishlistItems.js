@@ -395,7 +395,7 @@ const WishlistItems = () => {
                                                 <Text as={"span"}>{z?.status == 0 ?
                                                     <Badge tone="critical">Fail</Badge> : z?.status == 1 ?
                                                         <Badge tone="success">Success</Badge> : z?.status == 2 ?
-                                                            <Badge tone="attention">Fail</Badge> : null}</Text>
+                                                            <Badge tone="attention">In Progress</Badge> : null}</Text>
                                             </IndexTable.Cell>
                                             <IndexTable.Cell>
                                                 <Text as={"span"}>{z?.created_at}</Text>
