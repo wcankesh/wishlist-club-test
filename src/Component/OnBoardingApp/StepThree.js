@@ -7,6 +7,7 @@ import qs from "qs";
 import {useNavigate} from "react-router-dom";
 import {StepThreeImage} from "../../utils/AppImages";
 import ToastMessage from "../Comman/ToastMessage";
+import SwitchButton from "../Comman/SwitchButton";
 
 const StepThree = ({step, setStep, urlParams, shopDetails}) => {
     const navigate = useNavigate();
@@ -99,21 +100,20 @@ const StepThree = ({step, setStep, urlParams, shopDetails}) => {
                                     </BlockStack>
 
                                     <BlockStack gap={"400"}>
-                                        <Checkbox label={`Activate Back-In-stock Feature`}
-                                                  checked={setting.is_bis_email_enable == "1"} disabled={isLoading}
-                                                  onChange={(checked) => handleBackInStockEmail({
-                                                      target: {
-                                                          name: "is_bis_email_enable",
-                                                          value: setting.is_bis_email_enable == "1" ? "0" : "1"
-                                                      }
-                                                  })}/>
-
+                                        <InlineStack gap={"200"} blockAlign={"center"} wrap={false}>
+                                            <SwitchButton
+                                                checked={setting.is_bis_email_enable == "1"}
+                                                onChange={handleBackInStockEmail} name={"is_bis_email_enable"}
+                                            />
+                                            <Text as={"span"}>{`Activate Back-In-stock Feature`}</Text>
+                                        </InlineStack>
                                         {(data || []).map((x, i) => {
                                             return (
-                                                <Checkbox label={x.label} checked={x.checked} disabled={isLoading}
-                                                          onChange={(checked) => handleChange({
-                                                              target: {name: x.name, value: x.checked ? "0" : "1"}
-                                                          })}/>
+                                                <InlineStack gap={"200"} blockAlign={"center"} key={i} wrap={false}>
+                                                    <SwitchButton checked={x.checked} name={x.name}
+                                                                  onChange={handleChange}/>
+                                                    <Text as={"span"}>{x.label}</Text>
+                                                </InlineStack>
                                             )
                                         })}
                                     </BlockStack>
