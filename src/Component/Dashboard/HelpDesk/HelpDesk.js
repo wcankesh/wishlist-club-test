@@ -34,10 +34,10 @@ const HelpDesk = () => {
         },
         {
             icon: BackInStock,
-            title: "Back In Stock",
-            description: "Let the users subscribe for sold-out products and receive notifications when back in stock for ultimate convenience.",
-            buttonText: 'Setup Now',
-            link: `${baseUrl}/back-in-stock`,
+            title: "Personalize Email template",
+            description: "Tailor your email templates for wishlist items, price-drop alerts, and restock notifications to enhance customer engagement.",
+            buttonText: 'Customize Now',
+            link: `${baseUrl}/settings/email`,
             type: "navigate"
         }
     ];
