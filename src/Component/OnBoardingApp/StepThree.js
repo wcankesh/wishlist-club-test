@@ -5,8 +5,9 @@ import {
 import {apiService, baseUrl} from "../../utils/Constant";
 import qs from "qs";
 import {useNavigate} from "react-router-dom";
-import {StepThreeImage} from "../../utils/AppImages";
+import {StepThreeImage, StepTwoImage} from "../../utils/AppImages";
 import SwitchButton from "../Comman/SwitchButton";
+import LazyLoadImage from "../Comman/LazyLoadImage";
 
 const StepThree = ({step, setStep, urlParams, shopDetails}) => {
     const navigate = useNavigate();
@@ -90,33 +91,35 @@ const StepThree = ({step, setStep, urlParams, shopDetails}) => {
                 <Box paddingBlockStart={"800"} paddingBlockEnd={"800"} paddingInlineEnd={"1000"}
                      paddingInlineStart={"1000"}>
                     <BlockStack gap={"800"}>
-                        <InlineGrid columns={{xs:1,sm:1,md:2,lg:2,xl:2}} gap={"800"}>
+                        <InlineGrid columns={{xs: 1, sm: 1, md: 2, lg: 2, xl: 2}} gap={"800"}>
                             <BlockStack gap={"1600"}>
-                                    <BlockStack gap={"100"}>
-                                        <Text variant="bodyLg" as="span">Step: 3</Text>
-                                        <Text variant="headingLg" as="span">{`Enable Additional Features`}</Text>
-                                    </BlockStack>
+                                <BlockStack gap={"100"}>
+                                    <Text variant="bodyLg" as="span">Step: 3</Text>
+                                    <Text variant="headingLg" as="span">{`Enable Additional Features`}</Text>
+                                </BlockStack>
 
-                                    <BlockStack gap={"500"}>
-                                        <InlineStack gap={"200"} blockAlign={"center"} wrap={false}>
-                                            <SwitchButton
-                                                checked={setting.is_bis_email_enable == "1"}
-                                                onChange={handleBackInStockEmail} name={"is_bis_email_enable"}
-                                            />
-                                            <Text as={"span"}>{`Activate Back-In-stock Feature`}</Text>
-                                        </InlineStack>
-                                        {(data || []).map((x, i) => {
-                                            return (
-                                                <InlineStack gap={"200"} blockAlign={"center"} key={i} wrap={false}>
-                                                    <SwitchButton checked={x.checked} name={x.name}
-                                                                  onChange={handleChange}/>
-                                                    <Text as={"span"}>{x.label}</Text>
-                                                </InlineStack>
-                                            )
-                                        })}
-                                    </BlockStack>
+                                <BlockStack gap={"500"}>
+                                    <InlineStack gap={"200"} blockAlign={"center"} wrap={false}>
+                                        <SwitchButton
+                                            checked={setting.is_bis_email_enable == "1"}
+                                            onChange={handleBackInStockEmail} name={"is_bis_email_enable"}
+                                        />
+                                        <Text as={"span"}>{`Activate Back-In-stock Feature`}</Text>
+                                    </InlineStack>
+                                    {(data || []).map((x, i) => {
+                                        return (
+                                            <InlineStack gap={"200"} blockAlign={"center"} key={i} wrap={false}>
+                                                <SwitchButton checked={x.checked} name={x.name}
+                                                              onChange={handleChange}/>
+                                                <Text as={"span"}>{x.label}</Text>
+                                            </InlineStack>
+                                        )
+                                    })}
+                                </BlockStack>
                             </BlockStack>
-                            <div className={"onBoardingIcon"}><img src={StepThreeImage} alt={""}/></div>
+                            <div className={"onBoardingIcon"}>
+                                <LazyLoadImage src={StepThreeImage} alt="Image"/>
+                            </div>
                         </InlineGrid>
                         <InlineStack align={"space-between"}>
                             <ButtonGroup gap={"tight"}>

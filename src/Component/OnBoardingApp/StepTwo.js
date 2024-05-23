@@ -7,7 +7,8 @@ import {apiService, baseUrl, openUrlInNewWindow} from "../../utils/Constant";
 import qs from "qs";
 import {useNavigate} from "react-router-dom";
 import {RefreshMajor, ExternalMinor} from '@shopify/polaris-icons';
-import {StepTwoImage} from "../../utils/AppImages";
+import {StepOneImage, StepTwoImage} from "../../utils/AppImages";
+import LazyLoadImage from "../Comman/LazyLoadImage";
 
 const StepTwo = ({step, setStep, urlParams, shopDetails, extensionId, setExtensionId}) => {
     const navigate = useNavigate();
@@ -159,14 +160,15 @@ const StepTwo = ({step, setStep, urlParams, shopDetails, extensionId, setExtensi
                                 {isBlockCapable &&
                                 <BlockStack inlineAlign={"start"} gap={"400"}>
                                     <Text as={"span"}>{`Add wishlist icon to product page`}</Text>
-                                    <Button variant={"primary"} icon={ExternalMinor} onClick={()=>openUrlInNewWindow(isWishlistUrl)}>
+                                    <Button variant={"primary"} icon={ExternalMinor}
+                                            onClick={() => openUrlInNewWindow(isWishlistUrl)}>
                                         {`Activate`}</Button>
                                 </BlockStack>
                                 }
 
                             </BlockStack>
                             <div className={"onBoardingIcon"}>
-                                <img src={StepTwoImage} alt={""}/>
+                                <LazyLoadImage src={StepTwoImage} alt="Image"/>
                             </div>
                         </InlineGrid>
                         <InlineStack align={"space-between"}>

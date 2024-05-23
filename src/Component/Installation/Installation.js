@@ -8,6 +8,7 @@ import {
     BsiCollectionPage, BsiCollectionPre, BsiProductPage, BsiProductPre, StartOurApp, WlActionCodeEdit,
     WlActionCodeEdit1, WlActionCodeEdit2, WlCollection, WlCollectionPre, WlProduct1, WlProductPre
 } from "../../utils/AppImages";
+import LazyLoadImage from "../Comman/LazyLoadImage";
 
 const Installation = () => {
     const shopDetails = useSelector((state) => state.shopDetails)
@@ -17,9 +18,9 @@ const Installation = () => {
     const renderLinkImage = (imageData) => {
         return (
             <Link url={imageData} external>
-                <img loading={"lazy"} className='install-img' src={imageData} width="100%" height="100%"/>
+                <LazyLoadImage src={imageData} alt="Image" className="install-img"/>
             </Link>
-        )
+        );
     };
 
     return (
@@ -60,7 +61,6 @@ const Installation = () => {
 
                     {selectedOption.includes("2") &&
                     <BlockStack gap={"400"}>
-
                         <Card>
                             <BlockStack gap={"400"}>
                                 <Text variant='headingMd' as={"span"} fontWeight={"bold"}>{`Manually Install`}</Text>

@@ -171,7 +171,6 @@ ul.PlanPriceList li.ppl_item .pplContent .icons {align-items: center;display: fl
 .sgi_icon .Polaris-Icon {height: 30px;width: 30px;}
 
 .remove-cursor .Polaris-ResourceItem{cursor: inherit;}
-
 .hide-popup-close-icon .Polaris-Modal-Dialog__Modal .Polaris-Button--iconOnly{display: none;}
 
 @media (max-width: 991px) {
@@ -186,3 +185,8 @@ ul.PlanPriceList li.ppl_item .pplContent .icons {align-items: center;display: fl
 .onBoardingIcon img {width: 100%;}
 .confetti-main{position: relative;overflow: hidden;}
 .confetti{position: absolute;bottom: 0;z-index: 1;object-fit: contain;pointer-events: none; height: 100%;width: 100%;}
+
+.lazy-load-image-container {}
+.loading-placeholder, .error-placeholder {display: flex;align-items: center;justify-content: center;height: 200px}
+.error-placeholder {color: #ff0000;}
+img {display: block;max-width: 100%;height: auto;}

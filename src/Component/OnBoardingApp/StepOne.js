@@ -6,6 +6,7 @@ import {useNavigate} from "react-router-dom";
 import {StepOneImage} from "../../utils/AppImages";
 import {CircleTickOutlineMinor} from "@shopify/polaris-icons";
 import {AppDocsLinks} from "../../utils/AppDocsLinks";
+import LazyLoadImage from "../Comman/LazyLoadImage";
 
 const benefitsList = [
     {text: "Increase customer engagement"},
@@ -53,7 +54,9 @@ const StepOne = ({step, setStep, urlParams, shopDetails}) => {
                                 </BlockStack>
                             </BlockStack>
                         </BlockStack>
-                        <div className={"onBoardingIcon"}><img src={StepOneImage} alt={""}/></div>
+                        <div className={"onBoardingIcon"}>
+                           <LazyLoadImage src={StepOneImage} alt="Image" />
+                        </div>
                     </InlineGrid>
 
                     <InlineStack align={"start"} gap={"200"} blockAlign={"center"}>

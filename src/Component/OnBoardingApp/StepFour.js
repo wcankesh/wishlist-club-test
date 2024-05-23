@@ -4,10 +4,11 @@ import {baseUrl, openUrlInNewWindow} from "../../utils/Constant";
 import qs from "qs";
 import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
-import {Confetti, StepFourImage} from "../../utils/AppImages";
+import {Confetti, StepFourImage, StepThreeImage} from "../../utils/AppImages";
 import {Shop_details} from "../../redux/action/action";
 import {ExternalMinor} from "@shopify/polaris-icons";
 import {AppDocsLinks} from "../../utils/AppDocsLinks";
+import LazyLoadImage from "../Comman/LazyLoadImage";
 
 const StepFour = ({urlParams, shopDetails}) => {
     const [isConfetti, setIsConfetti] = useState(true);
@@ -51,7 +52,9 @@ const StepFour = ({urlParams, shopDetails}) => {
                                     </Text>
                                 </BlockStack>
                                 <BlockStack gap={"400"} inlineAlign={"start"}>
-                                    <Button variant={"primary"} icon={ExternalMinor} onClick={()=>openUrlInNewWindow(AppDocsLinks.writeReviewModal)}>Share Feedback</Button>
+                                    <Button variant={"primary"} icon={ExternalMinor}
+                                            onClick={() => openUrlInNewWindow(AppDocsLinks.writeReviewModal)}>Share
+                                        Feedback</Button>
                                     <Text as={"span"} variant={"headingMd"}>{`Next Step?`}</Text>
                                     <Button variant={"primary"} icon={ExternalMinor}
                                             onClick={() => onStepChange("settings/wishlist-design")}>
@@ -59,7 +62,7 @@ const StepFour = ({urlParams, shopDetails}) => {
                                 </BlockStack>
                             </BlockStack>
                             <div className={"onBoardingIcon"}>
-                                <img src={StepFourImage} alt={""}/>
+                                <LazyLoadImage src={StepFourImage} alt="Image"/>
                             </div>
                         </InlineGrid>
                         <InlineStack align={"end"}>
