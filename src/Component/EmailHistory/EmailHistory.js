@@ -68,9 +68,9 @@ const EmailHistory = () => {
             {message !== "" && isError === false ?
                 <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
                               setIsErrorServer={setIsErrorServer}/> : ""}
+            <Layout>
             <CustomErrorBanner link={AppDocsLinks.article["515"]} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError}
                                />
-            <Layout>
                 <Layout.Section>
                     <Card padding={"050"}>
                         <IndexTable
