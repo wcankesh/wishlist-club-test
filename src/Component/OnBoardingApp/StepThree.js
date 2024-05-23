@@ -1,12 +1,11 @@
 import React, {useState, Fragment, useEffect} from 'react';
 import {
-    BlockStack, Box, Card, InlineStack, Button, Text, InlineGrid, ButtonGroup, Checkbox
+    BlockStack, Box, Card, InlineStack, Button, Text, InlineGrid, ButtonGroup
 } from "@shopify/polaris";
-import {apiService, baseUrl, capitalizeMessage} from "../../utils/Constant";
+import {apiService, baseUrl} from "../../utils/Constant";
 import qs from "qs";
 import {useNavigate} from "react-router-dom";
 import {StepThreeImage} from "../../utils/AppImages";
-import ToastMessage from "../Comman/ToastMessage";
 import SwitchButton from "../Comman/SwitchButton";
 
 const StepThree = ({step, setStep, urlParams, shopDetails}) => {
@@ -91,15 +90,14 @@ const StepThree = ({step, setStep, urlParams, shopDetails}) => {
                 <Box paddingBlockStart={"800"} paddingBlockEnd={"800"} paddingInlineEnd={"1000"}
                      paddingInlineStart={"1000"}>
                     <BlockStack gap={"800"}>
-                        <InlineGrid columns={2} gap={"800"}>
-                            <BlockStack gap={"600"}>
-                                <BlockStack gap={"400"}>
+                        <InlineGrid columns={{xs:1,sm:1,md:2,lg:2,xl:2}} gap={"800"}>
+                            <BlockStack gap={"1600"}>
                                     <BlockStack gap={"100"}>
                                         <Text variant="bodyLg" as="span">Step: 3</Text>
                                         <Text variant="headingLg" as="span">{`Enable Additional Features`}</Text>
                                     </BlockStack>
 
-                                    <BlockStack gap={"400"}>
+                                    <BlockStack gap={"500"}>
                                         <InlineStack gap={"200"} blockAlign={"center"} wrap={false}>
                                             <SwitchButton
                                                 checked={setting.is_bis_email_enable == "1"}
@@ -117,7 +115,6 @@ const StepThree = ({step, setStep, urlParams, shopDetails}) => {
                                             )
                                         })}
                                     </BlockStack>
-                                </BlockStack>
                             </BlockStack>
                             <div className={"onBoardingIcon"}><img src={StepThreeImage} alt={""}/></div>
                         </InlineGrid>

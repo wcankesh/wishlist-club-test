@@ -1,10 +1,11 @@
 import React from 'react';
 import {BlockStack, Box, Card, InlineStack, Button, Text, InlineGrid, ButtonGroup, Icon} from "@shopify/polaris";
-import {baseUrl} from "../../utils/Constant";
+import {baseUrl, openUrlInNewWindow} from "../../utils/Constant";
 import qs from "qs";
 import {useNavigate} from "react-router-dom";
 import {StepOneImage} from "../../utils/AppImages";
 import {CircleTickOutlineMinor} from "@shopify/polaris-icons";
+import {AppDocsLinks} from "../../utils/AppDocsLinks";
 
 const benefitsList = [
     {text: "Increase customer engagement"},
@@ -27,7 +28,7 @@ const StepOne = ({step, setStep, urlParams, shopDetails}) => {
         <Card padding={"0"}>
             <Box paddingBlockStart={"800"} paddingBlockEnd={"800"} paddingInlineEnd={"1000"}
                  paddingInlineStart={"1000"}>
-                <BlockStack gap={"400"}>
+                <BlockStack gap={"500"}>
                     <InlineGrid columns={2} gap={"800"}>
                         <BlockStack gap={"800"}>
                             <BlockStack gap={"200"}>
@@ -55,12 +56,12 @@ const StepOne = ({step, setStep, urlParams, shopDetails}) => {
                         <div className={"onBoardingIcon"}><img src={StepOneImage} alt={""}/></div>
                     </InlineGrid>
 
-                    <ButtonGroup gap={"tight"}>
-                        <Button variant={"primary"}
-                                onClick={() => window.open("https://calendly.com/wcapps/30min", "_blank")}>
-                            Book onboarding call </Button>
+                    <InlineStack align={"start"} gap={"200"} blockAlign={"center"}>
                         <Button variant={"primary"} onClick={onStepChange}> Get Started </Button>
-                    </ButtonGroup>
+                        {/*<Button variant={"plain"} onClick={() => openUrlInNewWindow(AppDocsLinks.calendly30Min)}>*/}
+                        {/*    Book onboarding call*/}
+                        {/*</Button>*/}
+                    </InlineStack>
                 </BlockStack>
             </Box>
         </Card>

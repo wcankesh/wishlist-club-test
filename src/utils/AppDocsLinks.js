@@ -5,6 +5,7 @@ export const AppDocsLinks = {
     writeReviewModal:"https://apps.shopify.com/wishlist-club#modal-show=WriteReviewModal",
     facebook: "https://www.facebook.com/groups/238834717807393",
     canny: "",
+    calendly30Min:"https://calendly.com/wcapps/30min",
     collection: {
         "416": "https://webcontrive.helpscoutdocs.com/collection/416-wishlist-club",
     },
