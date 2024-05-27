@@ -160,11 +160,10 @@ const BisStockAnalytics = () => {
                                         disabled={shopDetails.plan_type !== "8" ? shopDetails.bis_import_export_btn === false : false}
                                         onClick={() => Export()}>Export</Button>
                                 </div>
-                                <div className="Polaris-ActionMenu-SecondaryAction">
-                                    <Button
+                                    <Button variant={"primary"}
                                         disabled={shopDetails.plan_type !== "8" ? shopDetails.bis_import_export_btn === false : false}
                                         onClick={() => handleImportChange()}>Import</Button>
-                                </div>
+
                             </InlineStack>
                         </InlineStack>
                     </Box>

@@ -153,14 +153,15 @@ const StepTwo = ({step, setStep, urlParams, shopDetails, extensionId, setExtensi
                                 {
                                     selectedTheme !== "" ? <div>
                                         <Button onClick={() => onActiveStep()} loading={isLoading} icon={ExternalMinor}
-                                                variant={"primary"} disabled={extensionEnabled || selectedTheme === ""}>
+                                                disabled={extensionEnabled || selectedTheme === ""}
+                                                variant={"plain"}>
                                             {extensionEnabled ? "Activated" : "Activate"}
                                         </Button></div> : ""
                                 }
                                 {isBlockCapable &&
                                 <BlockStack inlineAlign={"start"} gap={"400"}>
                                     <Text as={"span"}>{`Add wishlist icon to product page`}</Text>
-                                    <Button variant={"primary"} icon={ExternalMinor}
+                                    <Button variant={"plain"} icon={ExternalMinor}
                                             onClick={() => openUrlInNewWindow(isWishlistUrl)}>
                                         {`Activate`}</Button>
                                 </BlockStack>

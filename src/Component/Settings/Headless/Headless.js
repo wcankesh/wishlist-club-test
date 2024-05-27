@@ -105,28 +105,34 @@ const Headless = () => {
                             <BlockStack gap={"500"}>
                                 <InlineStack align={"space-between"} blockAlign={"center"}>
                                     <Text as={"span"} variant={"headingMd"}>{"Headless Settings"}</Text>
-                                    <Button onClick={() => openUrlInNewWindow(AppDocsLinks.getPostman)}
-                                            variant={"plain"}> API Document </Button>
+                                    <InlineStack align={"end"} gap={"200"}>
+                                        <Button onClick={() => openUrlInNewWindow(AppDocsLinks.getPostman)}
+                                                variant={"plain"}> API Document </Button>
+                                        <div className="Polaris-ActionMenu-SecondaryAction">
+                                            <Button onClick={getHeadlessToken} loading={isLoading}>
+                                                Generate Token </Button>
+                                        </div>
+                                    </InlineStack>
                                 </InlineStack>
 
                                 <Text as={"span"} tone={"subdued"}>
                                     {`Enhance your store's capabilities by integrating our API. By establishing a connection to our API, you gain the ability to fetch wishlist products and seamlessly integrate them into the frontend presentation of your store. This integration provides you with the flexibility to customize and personalize the design and layout to meet your exact requirements and create a unique shopping experience for your customers."`}
                                 </Text>
-                                <InlineStack align={"end"}>
-                                    <Button onClick={getHeadlessToken} loading={isLoading}>Generate Token</Button>
-                                </InlineStack>
+                                {/*<InlineStack align={"end"}>*/}
+                                {/*    <Button onClick={getHeadlessToken} loading={isLoading}>Generate Token</Button>*/}
+                                {/*</InlineStack>*/}
                                 <FormLayout>
                                     <BlockStack gap={"100"}>
                                         <label>Domain</label>
                                         <TagsInput className={`react-tagsinput`} value={headLess.domain || []}
-                                            onChange={(value) => onChange({target: {name: "domain", value}})}
-                                            pasteSplit={defaultPasteSplit} addOnPaste={true} onlyUnique={true}
-                                            inputProps={{placeholder: 'Enter domain'}}/>
+                                                   onChange={(value) => onChange({target: {name: "domain", value}})}
+                                                   pasteSplit={defaultPasteSplit} addOnPaste={true} onlyUnique={true}
+                                                   inputProps={{placeholder: 'Enter domain'}}/>
                                     </BlockStack>
 
                                     <CopyCode label={"Access Token"} value={headLess.token}/>
                                     <Text as={"span"} tone={"caution"}>
-                                        <Text as={"span"} fontWeight={"bold"}> Please Note </Text>:
+                                        <Text as={"span"} fontWeight={"bold"}> Please Note:{" "}</Text>
                                         {`Reach out to our dedicated support team and provide them with the domain you want to use with the API. They will guide you through the whitelisting process and ensure that the API is enabled for your specified domain. Without whitelisting the domain API will not work.`}
                                     </Text>
                                 </FormLayout>
