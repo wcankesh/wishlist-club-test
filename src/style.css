@@ -190,3 +190,9 @@ ul.PlanPriceList li.ppl_item .pplContent .icons {align-items: center;display: fl
 .loading-placeholder, .error-placeholder {display: flex;align-items: center;justify-content: center;height: 200px}
 .error-placeholder {color: #ff0000;}
 img {display: block;max-width: 100%;height: auto;}
+
+.plan-header ul.PlanPriceList{border: 0;}
+.plan-header ul li.ppl_item{background-color: transparent;border: 0;}
+.plan-header ul li .pplLabel{padding: 0; padding-right: 5px}
+.plan-header ul li .pplContent {padding: 0; border: 0}
+.plan-header .row,.plan-header .Polaris-ShadowBevel{height: 100%}

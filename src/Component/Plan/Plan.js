@@ -1,5 +1,8 @@
 import React, {Fragment, useState} from 'react';
-import {Page, Layout, ProgressBar, Button, Banner, Text, BlockStack, InlineStack, Card, Icon} from "@shopify/polaris";
+import {
+    Page, Layout, ProgressBar, Button, Banner, Text, BlockStack, InlineStack, Card, Icon,
+    Grid, InlineGrid
+} from "@shopify/polaris";
 import {useDispatch, useSelector} from "react-redux";
 import moment from "moment";
 import {Icons} from "../../utils/Icons";
@@ -15,6 +18,9 @@ const Plan = () => {
     const [isLoading, setIsLoading] = useState("");
     const shopDetails = useSelector(state => state.shopDetails);
     const navigate = useNavigate();
+    const isFreePlan = shopDetails.plan_type === "0" || shopDetails.plan_type === "1";
+
+
     const onUpdatePlan = async (planType) => {
         setIsLoading(planType)
         const response = await apiService.upgradePlan({planType: planType, plan_interval: "0"})
@@ -32,7 +38,7 @@ const Plan = () => {
     }
 
     let productPercent = 0;
-    if (shopDetails.plan_type === "0" || shopDetails.plan_type === "1") {
+    if (isFreePlan) {
         productPercent = (shopDetails.sent_email * 100 / 50)
     } else if (shopDetails.plan_type === "5") {
         productPercent = (shopDetails.sent_email * 100 / 500)
@@ -46,45 +52,17 @@ const Plan = () => {
         productPercent = (shopDetails.sent_email * 100 / 100)
     }
     const plan = [
-        (shopDetails.plan_type === "1") ? {
-            plan: "Free",
-            planType: "1",
-            price: "0",
-            btn_text: "Downgrade"
-        } : "",
-        {
-            plan: "Basic",
-            planType: "5",
-            price: "4.99",
-            btn_text: "Activated"
-
-        },
-        {
-            plan: "Pro",
-            planType: "6",
-            price: "9.99",
-            btn_text: "Upgrade"
-
-        },
-        {
-            plan: "Advance",
-            planType: "7",
-            price: "14.99",
-            btn_text: "Upgrade"
-
-        },
-        {
-            plan: "Enterprise",
-            planType: "8",
-            price: "24.99",
-            btn_text: "Upgrade"
-        },
+        {plan: "Free", planType: "1", price: "0", btn_text: "Downgrade"},
+        {plan: "Basic", planType: "5", price: "4.99", btn_text: "Activated"},
+        {plan: "Pro", planType: "6", price: "9.99", btn_text: "Upgrade"},
+        {plan: "Advance", planType: "7", price: "14.99", btn_text: "Upgrade"},
+        {plan: "Enterprise", planType: "8", price: "24.99", btn_text: "Upgrade"},
     ]
 
     const planTable = [
         {
             title: 'Email for Price drop, Restock, Wishlist, Back in stock',
-            free: (shopDetails.plan_type === "1") ? "50" : "",
+            free: isFreePlan ? "50" : "",
             basic: "500",
             pro: "2000",
             advance: "5000",
@@ -186,105 +164,101 @@ const Plan = () => {
             advance: false,
             enterprise: true,
         },
-
     ];
 
     const newBackInStockPlan = () => {
         return (
-            <Fragment>
-                <Layout.Section>
-                    <Card padding={"0"}>
-                        <div className="planpriceWrap">
-                            <ul className="PlanPriceList ">
-                                <li className="ppl_item">
-                                    <div className="pplLabel">
-                                        <BlockStack gap={"300"}>
-                                            <Text variant="headingLg" as="span">Current Plan
-                                                : {(shopDetails.plan_type === "0" || shopDetails.plan_type === "1") ? "Free" : shopDetails.plan_type === "5" ? "Basic" : shopDetails.plan_type === "6" ? "Pro" : shopDetails.plan_type === "7" ? "Advance" : shopDetails.plan_type === "8" ? "Enterprise" : shopDetails.plan_type === "9" ? "Starter" : ""}</Text>
-                                            <Text
-                                                as={"span"}>{moment(shopDetails?.billing_schedule?.billing_start_date).format("MMMM DD")} - {moment(shopDetails?.billing_schedule?.billing_end_date).format("MMMM DD")}</Text>
-                                            <Text as={"span"}>Mail
-                                                sent {`${shopDetails.sent_email}/${(shopDetails.plan_type === "0" || shopDetails.plan_type === "1") ? "50" : shopDetails.plan_type === "5" ? "500" : shopDetails.plan_type === "6" ? "2000" : shopDetails.plan_type === "7" ? "5000" : shopDetails.plan_type === "8" ? "10000" : shopDetails.plan_type === "9" ? "100" : ""}`}</Text>
-                                            <ProgressBar progress={productPercent} size="small" tone="primary"/>
-                                        </BlockStack>
-                                    </div>
+            <div className="planpriceWrap">
+                <ul className="PlanPriceList ">
+                    {/*<li className="ppl_item">*/}
+                    {/*    <div className="pplLabel">*/}
+                    {/*<BlockStack gap={"300"}>*/}
+                    {/*    <Text variant="headingLg" as="span">Plans*/}
+                    {/*    </Text>*/}
+                    {/*    <Text variant="headingLg" as="span">Current Plan*/}
+                    {/*        : {(shopDetails.plan_type === "0" || shopDetails.plan_type === "1") ? "Free" : shopDetails.plan_type === "5" ? "Basic" : shopDetails.plan_type === "6" ? "Pro" : shopDetails.plan_type === "7" ? "Advance" : shopDetails.plan_type === "8" ? "Enterprise" : shopDetails.plan_type === "9" ? "Starter" : ""}</Text>*/}
+                    {/*    <Text*/}
+                    {/*        as={"span"}>{moment(shopDetails?.billing_schedule?.billing_start_date).format("MMMM DD")} - {moment(shopDetails?.billing_schedule?.billing_end_date).format("MMMM DD")}</Text>*/}
+                    {/*    <Text as={"span"}>Mail*/}
+                    {/*        sent {`${shopDetails.sent_email}/${(shopDetails.plan_type === "0" || shopDetails.plan_type === "1") ? "50" : shopDetails.plan_type === "5" ? "500" : shopDetails.plan_type === "6" ? "2000" : shopDetails.plan_type === "7" ? "5000" : shopDetails.plan_type === "8" ? "10000" : shopDetails.plan_type === "9" ? "100" : ""}`}</Text>*/}
+                    {/*    <ProgressBar progress={productPercent} size="small" tone="primary"/>*/}
+                    {/*</BlockStack>*/}
+                    {/*    </div>*/}
+                    {/*    <div className="pplContent">*/}
+                    {/*        <div className="row">*/}
+                    {/*            {(plan || []).filter((x) => x).map((x, i) => {*/}
+                    {/*                const col = shopDetails.plan_type == "1" ? "col col-5" : "col col-4";*/}
+                    {/*                return (*/}
+                    {/*                    <div className={col} key={i}>*/}
+                    {/*                        <BlockStack gap={"300"}>*/}
+                    {/*                            <Text variant="headingLg" as="h5">{x.plan}</Text>*/}
+                    {/*                            <InlineStack blockAlign={"baseline"} align={"center"}>*/}
+                    {/*                                <Text as="span" tone="success"*/}
+                    {/*                                      variant="headingXl">${x.price}</Text>*/}
+                    {/*                                <Text variant="bodySm" as="span">*/}
+                    {/*                                    /month*/}
+                    {/*                                </Text>*/}
+                    {/*                            </InlineStack>*/}
+                    {/*                            <InlineStack align={"center"}>*/}
+                    {/*                                <Button variant={"primary"}*/}
+                    {/*                                        onClick={() => onUpdatePlan(x.planType)}*/}
+                    {/*                                        loading={isLoading == x.planType}*/}
+                    {/*                                        disabled={shopDetails.plan_type == x.planType ? true : false}>*/}
+                    {/*                                    {shopDetails.plan_type == x.planType ? "Activated" : shopDetails.is_older_shop == 1 ? "Upgrade" : shopDetails.plan_type === "9" ? "Upgrade" : shopDetails.plan_type > x.planType ? "Downgrade" : x.planType === "9" ? "Downgrade" : "Upgrade"}*/}
+                    {/*                                </Button>*/}
+                    {/*                            </InlineStack>*/}
+                    {/*                        </BlockStack>*/}
+                    {/*                    </div>*/}
+                    {/*                )*/}
+                    {/*            })}*/}
+                    {/*        </div>*/}
+                    {/*    </div>*/}
+                    {/*</li>*/}
+                    {
+                        (planTable || []).map((y, j) => {
+                            const col = shopDetails.plan_type == "1" ? "col col-5" : "col col-4";
+                            return (
+                                <li className="ppl_item" key={j}>
+                                    <div className="pplLabel">{y.title}</div>
                                     <div className="pplContent">
                                         <div className="row">
-                                            {(plan || []).filter((x) => x).map((x, i) => {
-                                                const col = shopDetails.plan_type == "1" ? "col col-5" : "col col-4";
-                                                return (
-                                                    <div className={col} key={i}>
-                                                        <BlockStack gap={"300"}>
-                                                            <Text variant="headingLg" as="h5">{x.plan}</Text>
-                                                            <InlineStack blockAlign={"baseline"} align={"center"}>
-                                                                <Text as="span" tone="success"
-                                                                      variant="headingXl">${x.price}</Text>
-                                                                <Text variant="bodySm" as="span">
-                                                                    /month
-                                                                </Text>
-                                                            </InlineStack>
-                                                            <InlineStack align={"center"}>
-                                                                <Button variant={"primary"}
-                                                                        onClick={() => onUpdatePlan(x.planType)}
-                                                                        loading={isLoading == x.planType}
-                                                                        disabled={shopDetails.plan_type == x.planType ? true : false}>
-                                                                    {shopDetails.plan_type == x.planType ? "Activated" : shopDetails.is_older_shop == 1 ? "Upgrade" : shopDetails.plan_type === "9" ? "Upgrade" : shopDetails.plan_type > x.planType ? "Downgrade" : x.planType === "9" ? "Downgrade" : "Upgrade"}
-                                                                </Button>
-                                                            </InlineStack>
-                                                        </BlockStack>
-                                                    </div>
-                                                )
-                                            })}
+                                            {
+                                                shopDetails.plan_type == "1" ? <div
+                                                    className={col}>{(y.free === true || y.free === false) ?
+                                                    <span
+                                                        className="icons">{y.free === true ? Icons.verifiedIcon : minusIcon}</span> : y.free}
+                                                </div> : ""
+                                            }
+
+                                            <div className={col}>{y.basic === true || y.basic === false ?
+                                                <span
+                                                    className="icons">{y.basic === true ? Icons.verifiedIcon : minusIcon}</span> : `${y.basic}/Month`}</div>
+                                            <div className={col}>{(y.pro === true || y.pro === false) ?
+                                                <span
+                                                    className="icons">{y.pro === true ? Icons.verifiedIcon : minusIcon}</span> : `${y.pro}/Month`}</div>
+                                            <div
+                                                className={col}>{(y.advance === true || y.advance === false) ?
+                                                <span
+                                                    className="icons">{y.advance === true ? Icons.verifiedIcon : minusIcon}</span> : `${y.advance}/Month`}</div>
+                                            <div
+                                                className={col}>{(y.enterprise === true || y.enterprise === false) ?
+                                                <span
+                                                    className="icons">{y.enterprise === true ? Icons.verifiedIcon : minusIcon}</span> : `${y.enterprise}/Month`}</div>
                                         </div>
                                     </div>
                                 </li>
-                                {
-                                    (planTable || []).map((y, j) => {
-                                        const col = shopDetails.plan_type == "1" ? "col col-5" : "col col-4";
-                                        return (
-                                            <li className="ppl_item" key={j}>
-                                                <div className="pplLabel">{y.title}</div>
-                                                <div className="pplContent">
-                                                    <div className="row">
-                                                        {
-                                                            shopDetails.plan_type == "1" ? <div
-                                                                className={col}>{(y.free === true || y.free === false) ?
-                                                                <span
-                                                                    className="icons">{y.free === true ? Icons.verifiedIcon : minusIcon}</span> : y.free}
-                                                            </div> : ""
-                                                        }
-
-                                                        <div className={col}>{y.basic === true || y.basic === false ?
-                                                            <span
-                                                                className="icons">{y.basic === true ? Icons.verifiedIcon : minusIcon}</span> : `${y.basic}/Month`}</div>
-                                                        <div className={col}>{(y.pro === true || y.pro === false) ?
-                                                            <span
-                                                                className="icons">{y.pro === true ? Icons.verifiedIcon : minusIcon}</span> : `${y.pro}/Month`}</div>
-                                                        <div
-                                                            className={col}>{(y.advance === true || y.advance === false) ?
-                                                            <span
-                                                                className="icons">{y.advance === true ? Icons.verifiedIcon : minusIcon}</span> : `${y.advance}/Month`}</div>
-                                                        <div
-                                                            className={col}>{(y.enterprise === true || y.enterprise === false) ?
-                                                            <span
-                                                                className="icons">{y.enterprise === true ? Icons.verifiedIcon : minusIcon}</span> : `${y.enterprise}/Month`}</div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        )
-                                    })
-                                }
-                            </ul>
-                        </div>
-                    </Card>
-                </Layout.Section>
-            </Fragment>
+                            )
+                        })
+                    }
+                </ul>
+            </div>
         )
     }
+
     return (
         <Fragment>
-            <Page title={"Plan & Price"}
-                  backAction={shopDetails.plan_type == "0" || shopDetails.is_older_shop == 1 ? "" : {
+            <Page title={"Plan & Price"} fullWidth={false}
+                  backAction={isFreePlan || shopDetails.is_older_shop == 1 ? "" : {
                       content: 'BAckInStock', onAction: () => navigate(`${baseUrl}/settings`)
                   }}>
                 <Layout>
@@ -294,7 +268,67 @@ const Plan = () => {
                             the app's backend and frontend functionality being disabled.
                         </p>
                     </Banner></Layout.Section> : ""}
-                    {newBackInStockPlan()}
+                    <Layout.Section variant={"fullWidth"}>
+                        <BlockStack gap={"200"}>
+                            <div className="planpriceWrap plan-header">
+                                <ul className="PlanPriceList ">
+                                    <li className="ppl_item">
+                                        <div className="pplLabel">
+                                            <Card>
+                                                <BlockStack gap={"200"}>
+                                                    <Text variant="headingLg" as="span">Current Plan
+                                                        : {isFreePlan ? "Free" : shopDetails.plan_type === "5" ? "Basic" : shopDetails.plan_type === "6" ? "Pro" : shopDetails.plan_type === "7" ? "Advance" : shopDetails.plan_type === "8" ? "Enterprise" : shopDetails.plan_type === "9" ? "Starter" : ""}
+                                                    </Text>
+                                                    <Text
+                                                        as={"span"}>{moment(shopDetails?.billing_schedule?.billing_start_date).format("MMMM DD")} - {moment(shopDetails?.billing_schedule?.billing_end_date).format("MMMM DD")}</Text>
+                                                    <Text as={"span"}>Mail
+                                                        sent {`${shopDetails.sent_email}/${isFreePlan ? "50" : shopDetails.plan_type === "5" ? "500" : shopDetails.plan_type === "6" ? "2000" : shopDetails.plan_type === "7" ? "5000" : shopDetails.plan_type === "8" ? "10000" : shopDetails.plan_type === "9" ? "100" : ""}`}</Text>
+                                                    <ProgressBar progress={productPercent} size="small" tone="primary"/>
+                                                </BlockStack>
+                                            </Card>
+                                        </div>
+                                        <div className="pplContent">
+                                            <div className="row">
+                                                {(plan || []).map((x, i) => {
+                                                    const col = isFreePlan ? "col col-5" : "col col-4";
+                                                    if (!isFreePlan && x.planType === "1") {
+                                                        return null;
+                                                    }
+                                                    return (
+                                                        <div className={col}>
+                                                            <Card key={i}>
+                                                                <BlockStack gap={"500"}>
+                                                                    <Text variant="headingLg" as="h5"
+                                                                          alignment={"center"}>{x.plan}</Text>
+                                                                    <InlineStack blockAlign={"baseline"}
+                                                                                 align={"center"} wrap={false}>
+                                                                        <Text as="span" tone="success"
+                                                                              variant="headingLg">${x.price}</Text>
+                                                                        <Text variant="bodySm" as="span">
+                                                                            /month
+                                                                        </Text>
+                                                                    </InlineStack>
+                                                                    <InlineStack align={"center"}>
+                                                                        <Button variant={"primary"}
+                                                                                onClick={() => onUpdatePlan(x.planType)}
+                                                                                loading={isLoading == x.planType}
+                                                                                disabled={shopDetails.plan_type == x.planType ? true : false}>
+                                                                            {shopDetails.plan_type == x.planType ? "Activated" : shopDetails.is_older_shop == 1 ? "Upgrade" : shopDetails.plan_type === "9" ? "Upgrade" : shopDetails.plan_type > x.planType ? "Downgrade" : x.planType === "9" ? "Downgrade" : "Upgrade"}
+                                                                        </Button>
+                                                                    </InlineStack>
+                                                                </BlockStack>
+                                                            </Card>
+                                                        </div>
+                                                    )
+                                                })}
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            {newBackInStockPlan()}
+                        </BlockStack>
+                    </Layout.Section>
                 </Layout>
             </Page>
         </Fragment>
