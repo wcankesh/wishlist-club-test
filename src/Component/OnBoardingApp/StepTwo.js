@@ -3,7 +3,7 @@ import {
     BlockStack, Box, Card, InlineStack, Button, Text, InlineGrid, ButtonGroup, Select,
     Icon, Modal, List
 } from "@shopify/polaris";
-import {apiService, baseUrl, openUrlInNewWindow} from "../../utils/Constant";
+import {apiService, baseUrl, openUrlInNewWindow, seconadryButton, secondaryButton} from "../../utils/Constant";
 import qs from "qs";
 import {useNavigate} from "react-router-dom";
 import {RefreshMajor, ExternalMinor} from '@shopify/polaris-icons';
@@ -151,19 +151,19 @@ const StepTwo = ({step, setStep, urlParams, shopDetails, extensionId, setExtensi
                                     </InlineStack>
                                 </BlockStack>
                                 {
-                                    selectedTheme !== "" ? <div>
+                                    selectedTheme !== "" ? <div className={secondaryButton}>
                                         <Button onClick={() => onActiveStep()} loading={isLoading} icon={ExternalMinor}
-                                                disabled={extensionEnabled || selectedTheme === ""}
-                                                variant={"plain"}>
+                                                disabled={extensionEnabled || selectedTheme === ""}>
                                             {extensionEnabled ? "Activated" : "Activate"}
                                         </Button></div> : ""
                                 }
                                 {isBlockCapable &&
                                 <BlockStack inlineAlign={"start"} gap={"400"}>
                                     <Text as={"span"}>{`Add wishlist icon to product page`}</Text>
-                                    <Button variant={"plain"} icon={ExternalMinor}
-                                            onClick={() => openUrlInNewWindow(isWishlistUrl)}>
-                                        {`Activate`}</Button>
+                                    <div className={secondaryButton}>
+                                        <Button icon={ExternalMinor}
+                                                onClick={() => openUrlInNewWindow(isWishlistUrl)}>{`Activate`}</Button>
+                                    </div>
                                 </BlockStack>
                                 }
 
@@ -175,7 +175,9 @@ const StepTwo = ({step, setStep, urlParams, shopDetails, extensionId, setExtensi
                         <InlineStack align={"space-between"}>
                             <ButtonGroup gap={"tight"}>
                                 <Button onClick={() => onStepChange(step - 1)}>Back</Button>
-                                <Button variant={"plain"} onClick={() => onSkip(step + 1)}>Skip</Button>
+                                <div className={secondaryButton}>
+                                    <Button onClick={() => onSkip(step + 1)}>Skip</Button>
+                                </div>
                             </ButtonGroup>
                             <Button disabled={!extensionEnabled || selectedTheme === ""} variant={"primary"}
                                     onClick={() => onStepChange(step + 1)}>Next</Button>

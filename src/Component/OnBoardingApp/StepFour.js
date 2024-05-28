@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {BlockStack, Box, Card, Button, Text, InlineGrid, InlineStack} from "@shopify/polaris";
-import {baseUrl, openUrlInNewWindow} from "../../utils/Constant";
+import {baseUrl, openUrlInNewWindow, secondaryButton} from "../../utils/Constant";
 import qs from "qs";
 import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
@@ -52,13 +52,17 @@ const StepFour = ({urlParams, shopDetails}) => {
                                     </Text>
                                 </BlockStack>
                                 <BlockStack gap={"400"} inlineAlign={"start"}>
-                                    <Button variant={"primary"} icon={ExternalMinor}
-                                            onClick={() => openUrlInNewWindow(AppDocsLinks.writeReviewModal)}>Share
-                                        Feedback</Button>
+                                    <div className={secondaryButton}>
+                                        <Button icon={ExternalMinor}
+                                                onClick={() => openUrlInNewWindow(AppDocsLinks.writeReviewModal)}>Share
+                                            Feedback</Button>
+                                    </div>
                                     <Text as={"span"} variant={"headingMd"}>{`Next Step?`}</Text>
-                                    <Button variant={"primary"} icon={ExternalMinor}
-                                            onClick={() => onStepChange("settings/wishlist-design")}>
-                                        Customize Wishlist Icon</Button>
+                                    <div className={secondaryButton}>
+                                        <Button icon={ExternalMinor}
+                                                onClick={() => onStepChange("settings/wishlist-design")}>
+                                            Customize Wishlist Icon</Button>
+                                    </div>
                                 </BlockStack>
                             </BlockStack>
                             <div className={"onBoardingIcon"}>

@@ -27,10 +27,6 @@ const StepThree = ({step, setStep, urlParams, shopDetails}) => {
         const response = await apiService.getSetting();
         if (response.status === 200) {
             setSetting(response.data);
-        } else if (response.status === 500) {
-            setIsLoading(false)
-        } else {
-            setIsLoading(false)
         }
     }
 
@@ -51,16 +47,18 @@ const StepThree = ({step, setStep, urlParams, shopDetails}) => {
     }
 
     const onStepChange = async (steps, isBack) => {
+        setIsLoading(true)
         if (isBack === false) {
             const response = await apiService.onBoarding({shop: shopDetails.shop, onboarding: "1"});
             if (response.status === 200) {
                 const isSkip = urlParams.get("skip") || "1";
-
+                setIsLoading(false)
             }
         }
         setStep(Number(steps))
         const params = Object.fromEntries(urlParams);
         navigate({pathname: `${baseUrl}/onboarding`, search: qs.stringify({...params, step: steps})});
+        setIsLoading(false)
     };
 
     const handleBackInStockEmail = async (e) => {
@@ -126,8 +124,8 @@ const StepThree = ({step, setStep, urlParams, shopDetails}) => {
                                 <Button onClick={() => onStepChange(step - 1, true)}>Back</Button>
                                 {/*<Button variant={"plain"} onClick={() => onStepChange(step + 1, false)}>Skip</Button>*/}
                             </ButtonGroup>
-                            <Button onClick={() => onStepChange(step + 1, false)} variant={"primary"}>
-                                Next </Button>
+                            <Button onClick={() => onStepChange(step + 1, false)} variant={"primary"}
+                                    loading={isLoading}> Next </Button>
                         </InlineStack>
                     </BlockStack>
                 </Box>

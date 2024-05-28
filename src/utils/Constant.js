@@ -5,6 +5,8 @@ export const baseUrl = "/wishlist/admin"
 
 export const apiService = new ApiService();
 
+export const secondaryButton ="Polaris-ActionMenu-SecondaryAction";
+
 export const openUrlInNewWindow = (url, target = "_blank") => {
     return url ? window.open(url, target) : console.error("URL is missing.");
 };
