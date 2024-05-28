@@ -36,7 +36,7 @@ const WishlistEmail = () => {
     const Customization_Email = [
         {
             title: "Wishlist Items",
-            description: "Email notification will be sent if the items have already been added to the wishlist.",
+            description: "Users will receive a wishlist reminder email based on the specified number of days.",
             path: "settings/email/wishlist-items",
             name: "is_email_reminder_on_off",
             value: emailSetting.is_email_reminder_on_off,
@@ -219,9 +219,9 @@ const WishlistEmail = () => {
                                 <Text as={"span"} variant={"headingMd"}>Email Customization</Text>
                                 <Text as={"span"} tone={"subdued"}>Send alerts when the products are on Wishlist.
                                     Also, send price drop & restock alerts for the products in Wishlist.</Text>
-                                <Text as={"span"} tone={"caution"}><b>Note: </b> These all the
-                                    notifications(Wishlist Items, Price Drop Alerts, and Restock Alerts) are sent to
-                                    customers if the <b>Guest Wishlist</b> option disable.</Text>
+                                <Text as={"span"} tone={"caution"}><b>Note: </b> These notifications (Wishlist Items,
+                                    Price Drop Alerts, and Restock Alerts) are exclusively sent to registered users and
+                                    not to guest users.</Text>
                             </BlockStack>
                         </Box>
                         <Divider/>
