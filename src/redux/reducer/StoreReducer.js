@@ -24,6 +24,9 @@ const intialState = {
   install_url: "",
   bis_import_export_btn:false,
   onboarding:"0",
+  shop_display_banner: {
+    app_plan_headless: true,
+  }
 }
 
 export const StoreReducer = (state = intialState, action) => {

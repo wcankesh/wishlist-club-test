@@ -10,6 +10,8 @@ import ToastMessage from "../../Comman/ToastMessage";
 import CopyCode from "../../Comman/CopyCode";
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
 import {AppDocsLinks} from "../../../utils/AppDocsLinks";
+import PaidPlanBanner from "../../Comman/PaidPlanBanner";
+import {useSelector} from "react-redux";
 
 const Headless = () => {
     const navigate = useNavigate();
@@ -20,6 +22,8 @@ const Headless = () => {
     const [message, setMessage] = useState("");
     const [isError, setIsError] = useState(false);
     const [isErrorServer, setIsErrorServer] = useState(false);
+    const shopDetails = useSelector((state) => state.shopDetails);
+    const planAccess = shopDetails.plan_type !== "8";
 
     useEffect(() => {
         const getHeadless = async () => {
@@ -31,8 +35,8 @@ const Headless = () => {
                 setMessage(capitalizeMessage(response.message))
                 setIsErrorServer(true);
             } else {
-                setMessage(capitalizeMessage(response.message))
-                setIsError(true)
+                // setMessage(capitalizeMessage(response.message))
+                // setIsError(true);
             }
         }
         getHeadless();
@@ -92,11 +96,16 @@ const Headless = () => {
     return (
         <Fragment>
             <Page title={"Headless"} backAction={{content: 'Settings', onAction: () => navigate(`${baseUrl}/settings`)}}
-                  primaryAction={{content: "Save", onAction: updateHeadless, loading: isTokenLoading}}>
+                  primaryAction={{
+                      content: "Save", onAction: updateHeadless, loading: isTokenLoading, disabled: planAccess
+                  }}>
                 <Layout>
                     {message !== "" && isError === false ?
                         <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
                                       setIsErrorServer={setIsErrorServer}/> : ""}
+                    {planAccess && (shopDetails && shopDetails.shop_display_banner["app_plan_headless"] != "false") ?
+                        <Layout.Section variant={"fullWidth"}>
+                            <PaidPlanBanner planTitle="Enterprise" type={"app_plan_headless"}/></Layout.Section> : ""}
                     <CustomErrorBanner link={AppDocsLinks.collection["416"]} message={message} setMessage={setMessage}
                                        setIsError={setIsError} isError={isError}/>
 
@@ -107,9 +116,10 @@ const Headless = () => {
                                     <Text as={"span"} variant={"headingMd"}>{"Headless Settings"}</Text>
                                     <InlineStack align={"end"} gap={"200"}>
                                         <Button onClick={() => openUrlInNewWindow(AppDocsLinks.getPostman)}
-                                                variant={"plain"}> API Document </Button>
+                                                variant={"plain"} disabled={planAccess}> API Document </Button>
                                         <div className="Polaris-ActionMenu-SecondaryAction">
-                                            <Button onClick={getHeadlessToken} loading={isLoading}>
+                                            <Button onClick={getHeadlessToken} loading={isLoading}
+                                                    disabled={planAccess}>
                                                 Generate Token </Button>
                                         </div>
                                     </InlineStack>
@@ -127,7 +137,7 @@ const Headless = () => {
                                         <TagsInput className={`react-tagsinput`} value={headLess.domain || []}
                                                    onChange={(value) => onChange({target: {name: "domain", value}})}
                                                    pasteSplit={defaultPasteSplit} addOnPaste={true} onlyUnique={true}
-                                                   inputProps={{placeholder: 'Enter domain'}}/>
+                                                   inputProps={{placeholder: 'Enter domain'}} disabled={planAccess}/>
                                     </BlockStack>
 
                                     <CopyCode label={"Access Token"} value={headLess.token}/>
@@ -140,7 +150,9 @@ const Headless = () => {
                         </Card>
                     </Layout.Section>
                 </Layout>
-                <PageActions primaryAction={{content: 'Save', onAction: updateHeadless, loading: isTokenLoading}}/>
+                <PageActions primaryAction={{
+                    content: 'Save', onAction: updateHeadless, loading: isTokenLoading, disabled: planAccess
+                }}/>
             </Page>
         </Fragment>
     );

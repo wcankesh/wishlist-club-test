@@ -28,7 +28,7 @@ const CopyCode = ({value,label}) => {
 
                 {label && <label>{label}</label> }
                 <div className='copy-code' id={`cc${firstId}copy`} >
-                    <TextField className='cc-input-text' value={value} id={`cc${secondId}text`} />
+                    <TextField className='cc-input-text' value={value} id={`cc${secondId}text`} readOnly/>
                     <button className='cc-copy' onClick={() => onCopyCode(`cc${firstId}copy`, `cc${secondId}text`)} disabled={!value}>{Icons.copyIcon}{Icons.copyIconTrue}</button>
                 </div>
 
