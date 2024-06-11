@@ -19,15 +19,13 @@ const Plan = () => {
     const [isLoading, setIsLoading] = useState("");
     const shopDetails = useSelector(state => state.shopDetails);
     const navigate = useNavigate();
-    const isFreePlan = shopDetails.plan_type === "0" || shopDetails.plan_type === "1";
     const [isEmailPlan, setIsEmailPlan] = useState("");
     const [isEmailLoading, setIsEmailLoading] = useState(false);
     const [message, setMessage] = useState("");
     const [isError, setIsError] = useState(false);
     const [isErrorServer, setIsErrorServer] = useState(false);
     const [billingData, setBillingData] = useState([]);
-    const [activeEmailPlan, setActiveEmailPlan] = useState({})
-
+    const [activeEmailPlan, setActiveEmailPlan] = useState({});
     useEffect(() => {
         const getBilling = async () => {
             const response = await apiService.getBilling();
@@ -61,7 +59,7 @@ const Plan = () => {
     }
 
     let productPercent = 0;
-    if (isFreePlan) {
+    if (shopDetails.plan_type === "0" || shopDetails.plan_type === "1") {
         productPercent = (shopDetails.sent_email * 100 / 50)
     } else if (shopDetails.plan_type === "5") {
         productPercent = (shopDetails.sent_email * 100 / 500)
@@ -75,17 +73,23 @@ const Plan = () => {
         productPercent = (shopDetails.sent_email * 100 / 100)
     }
     const plan = [
-        {plan: "Free", planType: "1", price: "0", btn_text: "Downgrade"},
+        (shopDetails.plan_type === "1") ?  {
+            plan: "Free",
+            planType: "1",
+            price: "0",
+            btn_text: "Downgrade"
+
+        } : "",
         {plan: "Basic", planType: "5", price: "4.99", btn_text: "Activated"},
         {plan: "Pro", planType: "6", price: "9.99", btn_text: "Upgrade"},
         {plan: "Advance", planType: "7", price: "14.99", btn_text: "Upgrade"},
         {plan: "Enterprise", planType: "8", price: "24.99", btn_text: "Upgrade"},
-    ];
+    ]
 
     const planTable = [
         {
             title: 'Email for Price drop, Restock, Wishlist, Back in stock',
-            free: isFreePlan ? "50" : "",
+            free: (shopDetails.plan_type === "1") ? "50" : "",
             basic: "500",
             pro: "2000",
             advance: "5000",
@@ -187,6 +191,7 @@ const Plan = () => {
             advance: false,
             enterprise: true,
         },
+
     ];
 
     const emailPlan = [
@@ -196,7 +201,7 @@ const Plan = () => {
         {label: "Buy 4000 Emails at $8", value: "4000"},
         {label: "Buy 5000 Emails at $10", value: "5000"},
     ];
-    const emailPrice = {"1000": "2", "2000": "4", "3000": "6", "4000": "8", "5000": "10"}
+    const emailPrice = {"1000": "2", "2000": "4", "3000": "6", "4000": "8", "5000": "10"};
 
     const onUpdateEmailPlan = async (emails, price) => {
         setIsEmailLoading(true);
@@ -209,6 +214,36 @@ const Plan = () => {
         }
         setIsEmailLoading(false);
     }
+
+    const resourceNameBillingData = {singular: 'billing', plural: 'billing'};
+
+    const rowMarkupBillingData = (billingData || []).map((x, i) => (
+            <IndexTable.Row key={i}>
+                <IndexTable.Cell>
+                    <Text as="span">{moment(x.created_at).format('YY-MM-DD')}</Text>
+                </IndexTable.Cell>
+                <IndexTable.Cell>
+                    <Text as="span">${x.price}</Text>
+                </IndexTable.Cell>
+                <IndexTable.Cell>
+                    <Text as="span">{x.emails}</Text>
+                </IndexTable.Cell>
+                <IndexTable.Cell>
+                    <Text as="span">{x.recurring_emails}</Text>
+                </IndexTable.Cell>
+                <IndexTable.Cell>
+                    <Text as="span">{x.total_emails}</Text>
+                </IndexTable.Cell>
+                <IndexTable.Cell>
+                    <Text as="span">{x.used_emails}</Text>
+                </IndexTable.Cell>
+                <IndexTable.Cell>
+                    <Badge
+                        tone={x.is_active === 1 ? "success" : "attention"}>{x.is_active === 1 ? "Active" : "Inactive"}</Badge>
+                </IndexTable.Cell>
+            </IndexTable.Row>
+        ),
+    );
 
     const newBackInStockPlan = () => {
         return (
@@ -299,47 +334,16 @@ const Plan = () => {
         )
     }
 
-    const resourceNameBillingData = {singular: 'billing', plural: 'billing'};
-
-    const rowMarkupBillingData = (billingData || []).map((x, i) => (
-            <IndexTable.Row key={i}>
-                <IndexTable.Cell>
-                    <Text as="span">{moment(x.created_at).format('YY-MM-DD')}</Text>
-                </IndexTable.Cell>
-                <IndexTable.Cell>
-                    <Text as="span">${x.price}</Text>
-                </IndexTable.Cell>
-                <IndexTable.Cell>
-                    <Text as="span">{x.emails}</Text>
-                </IndexTable.Cell>
-                <IndexTable.Cell>
-                    <Text as="span">{x.recurring_emails}</Text>
-                </IndexTable.Cell>
-                <IndexTable.Cell>
-                    <Text as="span">{x.total_emails}</Text>
-                </IndexTable.Cell>
-                <IndexTable.Cell>
-                    <Text as="span">{x.used_emails}</Text>
-                </IndexTable.Cell>
-                <IndexTable.Cell>
-                    <Badge
-                        tone={x.is_active === 1 ? "success" : "attention"}>{x.is_active === 1 ? "Active" : "Inactive"}</Badge>
-                </IndexTable.Cell>
-            </IndexTable.Row>
-        ),
-    );
-
     return (
         <Fragment>
-            <Page title={"Plan & Price"} fullWidth={false}
-                  backAction={isFreePlan || shopDetails.is_older_shop == 1 ? "" : {
+            <Page title={"Plan & Price"}
+                  backAction={shopDetails.plan_type === "1" || shopDetails.is_older_shop == 1 ? "" : {
                       content: 'BAckInStock', onAction: () => navigate(`${baseUrl}/settings`)
                   }}>
                 <Layout>
                     {message !== "" && isError === false ?
                         <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
                                       setIsErrorServer={setIsErrorServer}/> : ""}
-
                     {shopDetails.is_older_shop == 1 ? <Layout.Section><Banner title="Update your plan" tone="warning">
                         <p>
                             Please revise your plan by or before September 30th 2023. Failure to do so will result in
@@ -355,26 +359,25 @@ const Plan = () => {
                                             <Card>
                                                 <BlockStack gap={"200"}>
                                                     <Text variant="headingLg" as="span">Current Plan
-                                                        : {isFreePlan ? "Free" : shopDetails.plan_type === "5" ? "Basic" : shopDetails.plan_type === "6" ? "Pro" : shopDetails.plan_type === "7" ? "Advance" : shopDetails.plan_type === "8" ? "Enterprise" : shopDetails.plan_type === "9" ? "Starter" : ""}
+                                                        : {shopDetails.plan_type === "1" ? "Free" : shopDetails.plan_type === "5" ? "Basic" : shopDetails.plan_type === "6" ? "Pro" : shopDetails.plan_type === "7" ? "Advance" : shopDetails.plan_type === "8" ? "Enterprise" : shopDetails.plan_type === "9" ? "Starter" : ""}
                                                     </Text>
                                                     <Text
                                                         as={"span"}>{moment(shopDetails?.billing_schedule?.billing_start_date).format("MMMM DD")} - {moment(shopDetails?.billing_schedule?.billing_end_date).format("MMMM DD")}</Text>
                                                     <Text as={"span"}>Mail
-                                                        sent {`${shopDetails.sent_email}/${isFreePlan ? "50" : shopDetails.plan_type === "5" ? "500" : shopDetails.plan_type === "6" ? "2000" : shopDetails.plan_type === "7" ? "5000" : shopDetails.plan_type === "8" ? "10000" : shopDetails.plan_type === "9" ? "100" : ""}`}</Text>
+                                                        sent {`${shopDetails.sent_email}/${shopDetails.plan_type === "1" ? "50" : shopDetails.plan_type === "5" ? "500" : shopDetails.plan_type === "6" ? "2000" : shopDetails.plan_type === "7" ? "5000" : shopDetails.plan_type === "8" ? "10000" : shopDetails.plan_type === "9" ? "100" : ""}`}</Text>
                                                     <ProgressBar progress={productPercent} size="small" tone="primary"/>
                                                     {activeEmailPlan && activeEmailPlan.is_active === 1 &&
-                                                    <Text as={"span"}>Addon Mail {`${activeEmailPlan.used_emails}/${activeEmailPlan.total_emails}`}</Text>
+                                                    <Text as={"span"}>Addon
+                                                        Mail {`${activeEmailPlan.used_emails}/${activeEmailPlan.total_emails}`}</Text>
                                                     }
                                                 </BlockStack>
                                             </Card>
                                         </div>
                                         <div className="pplContent">
                                             <div className="row">
-                                                {(plan || []).map((x, i) => {
-                                                    const col = isFreePlan ? "col col-5" : "col col-4";
-                                                    if (!isFreePlan && x.planType === "1") {
-                                                        return null;
-                                                    }
+                                                {(plan || []).filter((x) => x).map((x, i) => {
+                                                    const col = shopDetails.plan_type == "1" ? "col col-5" : "col col-4";
+
                                                     return (
                                                         <div className={col}>
                                                             <Card key={i}>

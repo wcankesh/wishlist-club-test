@@ -17,16 +17,15 @@ const DefaultLayout = () => {
     const config = {apiKey: apiKey, host: host, forceRedirect: process.env.NODE_ENV === 'development' ? false : true};
 
     useEffect(() => {
-        if (shopDetails.plan_type == "0" || shopDetails.is_older_shop == 1) {
-            navigate(`${baseUrl}/settings/plan`)
-        }
-        if (shopDetails?.upgrade == "0") {
+        if(shopDetails?.upgrade == "0"){
             document.body.classList.add('hide-popup-close-icon');
         }
         if (shopDetails.onboarding == 0) {
             navigate(`${baseUrl}/onboarding`)
+        } else if(shopDetails.plan_type == "0" || shopDetails.is_older_shop == 1){
+            navigate(`${baseUrl}/settings/plan`)
         }
-    }, []);
+    }, [])
 
     const onAuthorize = () => {
         setIsUpdateLoading(true)
