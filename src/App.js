@@ -28,7 +28,8 @@ const App = () => {
                     on_boardig: response?.on_boardig,
                     install_url: response?.install_url,
                     bis_import_export_btn: response?.bis_import_export_btn,
-                    onboarding: response.data.onboarding
+                    onboarding: response.data.onboarding,
+                    addon_email_notification: response.data.addon_email_notification,
                 }))
                 setIsLoading(false)
             } else if (response.status === 201 && response.data.is_install === false) {

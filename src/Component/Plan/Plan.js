@@ -1,15 +1,16 @@
-import React, {Fragment, useState} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import {
     Page, Layout, ProgressBar, Button, Banner, Text, BlockStack, InlineStack, Card, Icon,
-    Grid, InlineGrid
+    Select, Grid, IndexTable, Box, Badge
 } from "@shopify/polaris";
 import {useDispatch, useSelector} from "react-redux";
 import moment from "moment";
 import {Icons} from "../../utils/Icons";
-import {apiService, baseUrl, openUrlInNewWindow} from "../../utils/Constant";
+import {apiService, baseUrl, capitalizeMessage, openUrlInNewWindow} from "../../utils/Constant";
 import {Shop_details} from "../../redux/action/action";
 import {useNavigate} from "react-router-dom";
 import {MinusMinor} from "@shopify/polaris-icons";
+import ToastMessage from "../Comman/ToastMessage";
 
 const minusIcon = <Icon source={MinusMinor}/>;
 
@@ -19,7 +20,29 @@ const Plan = () => {
     const shopDetails = useSelector(state => state.shopDetails);
     const navigate = useNavigate();
     const isFreePlan = shopDetails.plan_type === "0" || shopDetails.plan_type === "1";
+    const [isEmailPlan, setIsEmailPlan] = useState("");
+    const [isEmailLoading, setIsEmailLoading] = useState(false);
+    const [message, setMessage] = useState("");
+    const [isError, setIsError] = useState(false);
+    const [isErrorServer, setIsErrorServer] = useState(false);
+    const [billingData, setBillingData] = useState([]);
+    const [activeEmailPlan, setActiveEmailPlan] = useState({})
 
+    useEffect(() => {
+        const getBilling = async () => {
+            const response = await apiService.getBilling();
+            if (response.status === 200) {
+                setIsError(false);
+                const activeObject = response.data.find((x) => x.is_active === 1);
+                setActiveEmailPlan(activeObject);
+                setBillingData(response.data);
+            } else if (response.status === 500) {
+                setMessage(capitalizeMessage(response.message))
+                setIsErrorServer(true);
+            }
+        }
+        getBilling();
+    }, []);
 
     const onUpdatePlan = async (planType) => {
         setIsLoading(planType)
@@ -57,7 +80,7 @@ const Plan = () => {
         {plan: "Pro", planType: "6", price: "9.99", btn_text: "Upgrade"},
         {plan: "Advance", planType: "7", price: "14.99", btn_text: "Upgrade"},
         {plan: "Enterprise", planType: "8", price: "24.99", btn_text: "Upgrade"},
-    ]
+    ];
 
     const planTable = [
         {
@@ -166,6 +189,27 @@ const Plan = () => {
         },
     ];
 
+    const emailPlan = [
+        {label: "Buy 1000 Emails at $2", value: "1000"},
+        {label: "Buy 2000 Emails at $4", value: "2000"},
+        {label: "Buy 3000 Emails at $6", value: "3000"},
+        {label: "Buy 4000 Emails at $8", value: "4000"},
+        {label: "Buy 5000 Emails at $10", value: "5000"},
+    ];
+    const emailPrice = {"1000": "2", "2000": "4", "3000": "6", "4000": "8", "5000": "10"}
+
+    const onUpdateEmailPlan = async (emails, price) => {
+        setIsEmailLoading(true);
+        const payload = {emails: emails, price: price}
+        const response = await apiService.upgradeEmailPlan(payload);
+        if (response.status === 200) {
+            if (response && response.data && response.data.confirmation_url) {
+                openUrlInNewWindow(response.data.confirmation_url, '_top');
+            }
+        }
+        setIsEmailLoading(false);
+    }
+
     const newBackInStockPlan = () => {
         return (
             <div className="planpriceWrap">
@@ -255,6 +299,36 @@ const Plan = () => {
         )
     }
 
+    const resourceNameBillingData = {singular: 'billing', plural: 'billing'};
+
+    const rowMarkupBillingData = (billingData || []).map((x, i) => (
+            <IndexTable.Row key={i}>
+                <IndexTable.Cell>
+                    <Text as="span">{moment(x.created_at).format('YY-MM-DD')}</Text>
+                </IndexTable.Cell>
+                <IndexTable.Cell>
+                    <Text as="span">${x.price}</Text>
+                </IndexTable.Cell>
+                <IndexTable.Cell>
+                    <Text as="span">{x.emails}</Text>
+                </IndexTable.Cell>
+                <IndexTable.Cell>
+                    <Text as="span">{x.recurring_emails}</Text>
+                </IndexTable.Cell>
+                <IndexTable.Cell>
+                    <Text as="span">{x.total_emails}</Text>
+                </IndexTable.Cell>
+                <IndexTable.Cell>
+                    <Text as="span">{x.used_emails}</Text>
+                </IndexTable.Cell>
+                <IndexTable.Cell>
+                    <Badge
+                        tone={x.is_active === 1 ? "success" : "attention"}>{x.is_active === 1 ? "Active" : "Inactive"}</Badge>
+                </IndexTable.Cell>
+            </IndexTable.Row>
+        ),
+    );
+
     return (
         <Fragment>
             <Page title={"Plan & Price"} fullWidth={false}
@@ -262,6 +336,10 @@ const Plan = () => {
                       content: 'BAckInStock', onAction: () => navigate(`${baseUrl}/settings`)
                   }}>
                 <Layout>
+                    {message !== "" && isError === false ?
+                        <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
+                                      setIsErrorServer={setIsErrorServer}/> : ""}
+
                     {shopDetails.is_older_shop == 1 ? <Layout.Section><Banner title="Update your plan" tone="warning">
                         <p>
                             Please revise your plan by or before September 30th 2023. Failure to do so will result in
@@ -284,6 +362,9 @@ const Plan = () => {
                                                     <Text as={"span"}>Mail
                                                         sent {`${shopDetails.sent_email}/${isFreePlan ? "50" : shopDetails.plan_type === "5" ? "500" : shopDetails.plan_type === "6" ? "2000" : shopDetails.plan_type === "7" ? "5000" : shopDetails.plan_type === "8" ? "10000" : shopDetails.plan_type === "9" ? "100" : ""}`}</Text>
                                                     <ProgressBar progress={productPercent} size="small" tone="primary"/>
+                                                    {activeEmailPlan && activeEmailPlan.is_active === 1 &&
+                                                    <Text as={"span"}>Addon Mail {`${activeEmailPlan.used_emails}/${activeEmailPlan.total_emails}`}</Text>
+                                                    }
                                                 </BlockStack>
                                             </Card>
                                         </div>
@@ -297,7 +378,8 @@ const Plan = () => {
                                                     return (
                                                         <div className={col}>
                                                             <Card key={i}>
-                                                                <BlockStack gap={"500"}>
+                                                                <BlockStack
+                                                                    gap={activeEmailPlan && activeEmailPlan.is_active === 1 ? "800" : "500"}>
                                                                     <Text variant="headingLg" as="h5"
                                                                           alignment={"center"}>{x.plan}</Text>
                                                                     <InlineStack blockAlign={"baseline"}
@@ -327,6 +409,56 @@ const Plan = () => {
                                 </ul>
                             </div>
                             {newBackInStockPlan()}
+
+                            <Card padding={"025"} roundedAbove={false}>
+                                <Box padding={"400"}>
+                                    <BlockStack gap={"300"} align={"start"}>
+                                        <BlockStack gap={"150"}>
+                                            <Text as={"span"} variant={"headingMd"}>{"Add-on email"}</Text>
+                                            <Text as={"span"} variant={"bodySm"}>
+                                                {"If you’re nearing 80% of your current email notification limit, consider purchasing an AddOn to continue sending emails without interruption. Our AddOns offer extra email notifications at a one-time cost for life time, ensuring your communications remain uninterrupted. Please note that AddOns are non-refundable."}
+                                            </Text>
+                                        </BlockStack>
+
+
+                                        <Grid>
+                                            <Grid.Cell columnSpan={{xs: 6, sm: 6, md: 6, lg: 9, xl: 9}}>
+                                                <Select
+                                                    label={<Text
+                                                        variant={"headingSm"}>{"Here are the available AddOn options:"}</Text>}
+                                                    placeholder={"Select plan"}
+                                                    value={isEmailPlan} options={emailPlan}
+                                                    onChange={(value) => setIsEmailPlan(value)}/>
+                                            </Grid.Cell>
+                                            <Grid.Cell columnSpan={{xs: 6, sm: 6, md: 6, lg: 3, xl: 3}}>
+                                                <div style={{paddingTop: "25px"}}>
+                                                    <Button variant={"primary"} loading={isEmailLoading}
+                                                            disabled={isEmailPlan === ""}
+                                                            onClick={() => onUpdateEmailPlan(isEmailPlan, emailPrice[isEmailPlan])}>{"Buy now"}</Button>
+                                                </div>
+                                            </Grid.Cell>
+                                        </Grid>
+                                    </BlockStack>
+                                </Box>
+
+                                {billingData && billingData?.length > 0 &&
+                                <IndexTable
+                                    resourceName={resourceNameBillingData}
+                                    itemCount={billingData.length}
+                                    headings={[
+                                        {title: 'Date'},
+                                        {title: 'Price'},
+                                        {title: 'Emails Limit'},
+                                        {title: 'Recurring Emails'},
+                                        {title: 'Total Emails'},
+                                        {title: 'Used Emails'},
+                                        {title: 'Status'},
+                                    ]}
+                                    selectable={false}>
+                                    {rowMarkupBillingData}
+                                </IndexTable>
+                                }
+                            </Card>
                         </BlockStack>
                     </Layout.Section>
                 </Layout>

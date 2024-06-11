@@ -24,6 +24,7 @@ const intialState = {
   install_url: "",
   bis_import_export_btn:false,
   onboarding:"0",
+  addon_email_notification:false,
   shop_display_banner: {
     app_plan_headless: true,
   }
