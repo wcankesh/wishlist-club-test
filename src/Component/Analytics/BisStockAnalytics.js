@@ -160,7 +160,7 @@ const BisStockAnalytics = () => {
                                         disabled={shopDetails.plan_type !== "8" ? shopDetails.bis_import_export_btn === false : false}
                                         onClick={() => Export()}>Export</Button>
                                 </div>
-                                    <Button variant={"primary"}
+                                <Button variant={"primary"}
                                         disabled={shopDetails.plan_type !== "8" ? shopDetails.bis_import_export_btn === false : false}
                                         onClick={() => handleImportChange()}>Import</Button>
 
@@ -184,67 +184,57 @@ const BisStockAnalytics = () => {
                             </Grid.Cell>
                         </Grid>
                     </Box>
-                    <Box paddingBlockEnd={"200"}>
-                        <IndexTable
-                            resourceName={selected === 0 ? resourceNameRequest : selected === 1 ? resourceNameAwaitingStock : selected === 2 ? resourceNameSentNotification : null}
-                            itemCount={isLoading ? 0 : bisAnalytics.length}
-                            loading={isLoading}
-                            emptyState={<EmptySearchResult
-                                title={selected === 0 ? 'No Request found' : selected === 1 ? 'No Awaiting Stock found' : selected === 2 ? 'No Sent Notifications Found' : null}
-                                withIllustration={(!isLoading) || !isLoading}/>}
-                            hasMoreItems={isLoading}
-                            headings={[
-                                {title: 'Product'},
-                                {title: 'Email'},
-                                {title: 'Request Status'},
-                                {title: 'Request Time'},
-                            ]}
-                            selectable={false}
-                        >{(bisAnalytics || []).map((x, i) => {
-                            return (
-                                <IndexTable.Row key={i} id={i}>
-                                    <IndexTable.Cell>
-                                        <InlineStack blockAlign={"center"} gap="200" wrap={false}>
-                                            <Thumbnail size={"small"} source={x.image}/>
-                                            <Text as={"span"}>{x.title}</Text>
-                                        </InlineStack>
-                                    </IndexTable.Cell>
-                                    <IndexTable.Cell>
-                                        <Text as={"span"}>{x.email}</Text>
-                                    </IndexTable.Cell>
-                                    <IndexTable.Cell>
-                                        <Fragment>{x.is_in_stock == 0 ? <Badge tone="info">Awaiting stock</Badge> :
-                                            <Badge tone="success">Available stock</Badge>}</Fragment>
-                                    </IndexTable.Cell>
-                                    <IndexTable.Cell>
-                                        <Text as={"span"}>{moment(x.created_at).format('L')}</Text>
-                                    </IndexTable.Cell>
-                                </IndexTable.Row>
-                            )
-                        })}
-                            <IndexTable.Row>
+
+                    <IndexTable
+                        resourceName={selected === 0 ? resourceNameRequest : selected === 1 ? resourceNameAwaitingStock : selected === 2 ? resourceNameSentNotification : null}
+                        itemCount={isLoading ? 0 : bisAnalytics.length}
+                        loading={isLoading}
+                        emptyState={<EmptySearchResult
+                            title={selected === 0 ? 'No Request found' : selected === 1 ? 'No Awaiting Stock found' : selected === 2 ? 'No Sent Notifications Found' : null}
+                            withIllustration={(!isLoading) || !isLoading}/>}
+                        hasMoreItems={isLoading}
+                        headings={[
+                            {title: 'Product'},
+                            {title: 'Email'},
+                            {title: 'Request Status'},
+                            {title: 'Request Time'},
+                        ]}
+                        selectable={false}
+                    >{(bisAnalytics || []).map((x, i) => {
+                        return (
+                            <IndexTable.Row key={i} id={i}>
                                 <IndexTable.Cell>
-                                    &nbsp;
+                                    <InlineStack blockAlign={"center"} gap="200" wrap={false}>
+                                        <Thumbnail size={"small"} source={x.image}/>
+                                        <Text as={"span"}>{x.title}</Text>
+                                    </InlineStack>
                                 </IndexTable.Cell>
                                 <IndexTable.Cell>
-                                    &nbsp;
+                                    <Text as={"span"}>{x.email}</Text>
                                 </IndexTable.Cell>
                                 <IndexTable.Cell>
-                                    &nbsp;
+                                    <Fragment>{x.is_in_stock == 0 ? <Badge tone="info">Awaiting stock</Badge> :
+                                        <Badge tone="success">Available stock</Badge>}</Fragment>
                                 </IndexTable.Cell>
                                 <IndexTable.Cell>
-                                    <div className={"d-flex"} style={{justifyContent: "end"}}>
-                                        <Pagination
-                                            label={PageNo}
-                                            hasPrevious={PageNo > 1}
-                                            onPrevious={() => onChangePagination('minus')}
-                                            hasNext={PageNo < totalPageCount}
-                                            onNext={() => onChangePagination('plus')}
-                                        />
-                                    </div>
+                                    <Text as={"span"}>{moment(x.created_at).format('L')}</Text>
                                 </IndexTable.Cell>
                             </IndexTable.Row>
-                        </IndexTable>
+                        )
+                    })}
+                    </IndexTable>
+                    <Box padding={'300'} borderBlockStartWidth={'025'} borderColor={'border-secondary'}>
+                        <InlineStack align={'end'} blockAlign={'center'}>
+                            <div className={"d-flex"} style={{justifyContent: "end"}}>
+                                <Pagination
+                                    label={PageNo}
+                                    hasPrevious={PageNo > 1}
+                                    onPrevious={() => onChangePagination('minus')}
+                                    hasNext={PageNo < totalPageCount}
+                                    onNext={() => onChangePagination('plus')}
+                                />
+                            </div>
+                        </InlineStack>
                     </Box>
                 </Card>
             </Layout.Section>

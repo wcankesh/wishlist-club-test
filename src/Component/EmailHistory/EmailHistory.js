@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {
     Page, Layout, Pagination, Badge, Text, Card, IndexTable, EmptySearchResult, Button,
-    Popover, ResourceList, Thumbnail, InlineStack,
+    Popover, ResourceList, Thumbnail, InlineStack, Box,
 } from "@shopify/polaris"
 import {apiService, capitalizeMessage,} from "../../utils/Constant";
 import ToastMessage from "../Comman/ToastMessage";
@@ -63,6 +63,16 @@ const EmailHistory = () => {
 
     const resourceNameEmail = { singular: 'email history', plural: 'email historys'};
 
+    const emailTypeLabel = {
+        1:"Wishlist reminder",
+        2:"Price drop alert",
+        3:"Restock alert",
+        4:"Share wishlist",
+        5:"Back In Stock thank you",
+        6:"Back In Stock alert",
+        7:"Wishlist notification",
+    }
+
     return (
         <Page title={"Email History"}>
             {message !== "" && isError === false ?
@@ -96,7 +106,7 @@ const EmailHistory = () => {
                                                 <Text as={"span"}>{z.email}</Text>
                                             </IndexTable.Cell>
                                             <IndexTable.Cell>
-                                                <span className={`custom-badge badge-type-${z.type}`}>{`${z.type == 1 ? "Wishlist reminder" : z.type == 2 ? "Price drop alert" : z.type == 3 ? "Restock alert" : z.type == 4 ? "Share wishlist" : z.type == 5 ? "Back In Stock thank you" : z.type == 6 ? "Back In Stock alert" : z.type == 7 ? "Wishlist notification" : ""}`}</span>
+                                                <span className={`custom-badge badge-type-${z.type}`}>{emailTypeLabel[z.type]}</span>
                                             </IndexTable.Cell>
                                             <IndexTable.Cell>
                                                 <Popover
@@ -132,32 +142,21 @@ const EmailHistory = () => {
                                     )
                                 })
                             }
-                            <IndexTable.Row>
-                                <IndexTable.Cell>
-                                    <Text as={"span"} fontWeight={"semibold"}> Total : {emailPage || 0} item(s) </Text>
-                                </IndexTable.Cell>
-                                <IndexTable.Cell>
-                                    &nbsp;
-                                </IndexTable.Cell>
-                                <IndexTable.Cell>
-                                    &nbsp;
-                                </IndexTable.Cell>
-                                <IndexTable.Cell>
-                                    &nbsp;
-                                </IndexTable.Cell>
-                                <IndexTable.Cell>
-                                    <div className={"d-flex"} style={{justifyContent: "end"}}>
-                                        <Pagination
-                                            label={`${EmailPageNo} / ${totalPageCountEmail}`}
-                                            hasPrevious={EmailPageNo > 1}
-                                            onPrevious={() => onChangePaginationEmail('minus')}
-                                            hasNext={EmailPageNo < totalPageCountEmail}
-                                            onNext={() => onChangePaginationEmail('plus')}
-                                        />
-                                    </div>
-                                </IndexTable.Cell>
-                            </IndexTable.Row>
                         </IndexTable>
+                        <Box padding={'300'} borderBlockStartWidth={'025'} borderColor={'border-secondary'}>
+                            <InlineStack align={'space-between'} blockAlign={'center'}>
+                                <Text as={"span"} fontWeight={"semibold"}> Total : {emailPage || 0} item(s) </Text>
+                                <div className={"d-flex"} style={{justifyContent: "end"}}>
+                                    <Pagination
+                                        label={`${EmailPageNo} / ${totalPageCountEmail}`}
+                                        hasPrevious={EmailPageNo > 1}
+                                        onPrevious={() => onChangePaginationEmail('minus')}
+                                        hasNext={EmailPageNo < totalPageCountEmail}
+                                        onNext={() => onChangePaginationEmail('plus')}
+                                    />
+                                </div>
+                            </InlineStack>
+                        </Box>
                     </Card>
                 </Layout.Section>
             </Layout>

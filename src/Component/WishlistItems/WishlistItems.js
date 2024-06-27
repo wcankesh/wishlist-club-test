@@ -273,27 +273,22 @@ const WishlistItems = () => {
                                     </IndexTable.Row>
                                 )
                             })}
-                                <IndexTable.Row>
-                                    <IndexTable.Cell>
-                                        <Text as={"span"}
-                                              fontWeight={"semibold"}> Total: {totalProduct || 0} item(s) </Text>
-                                    </IndexTable.Cell>
-                                    <IndexTable.Cell>
-                                        &nbsp;
-                                    </IndexTable.Cell>
-                                    <IndexTable.Cell>
-                                        <div className={"d-flex"} style={{justifyContent: "end"}}>
-                                            <Pagination
-                                                label={`${ProductPage} / ${totalPageCountProduct}`}
-                                                hasPrevious={ProductPage > 1}
-                                                onPrevious={() => onChangePaginationProduct('minus')}
-                                                hasNext={ProductPage < totalPageCountProduct}
-                                                onNext={() => onChangePaginationProduct('plus')}
-                                            />
-                                        </div>
-                                    </IndexTable.Cell>
-                                </IndexTable.Row>
                             </IndexTable>
+                            <Box padding={'300'} borderBlockStartWidth={'025'} borderColor={'border-secondary'}>
+                                <InlineStack align={'space-between'} blockAlign={'center'}>
+                                    <Text as={"span"}
+                                          fontWeight={"semibold"}> Total: {totalProduct || 0} item(s) </Text>
+                                    <div className={"d-flex"} style={{justifyContent: "end"}}>
+                                        <Pagination
+                                            label={`${ProductPage} / ${totalPageCountProduct}`}
+                                            hasPrevious={ProductPage > 1}
+                                            onPrevious={() => onChangePaginationProduct('minus')}
+                                            hasNext={ProductPage < totalPageCountProduct}
+                                            onNext={() => onChangePaginationProduct('plus')}
+                                        />
+                                    </div>
+                                </InlineStack>
+                            </Box>
                         </Card>
                     }
                     {
@@ -343,30 +338,22 @@ const WishlistItems = () => {
                                         </IndexTable.Row>
                                     )
                                 })}
-                                <IndexTable.Row>
-                                    <IndexTable.Cell>
-                                        <Text as={"span"} fontWeight={"semibold"}> Total
-                                            : {userPage || 0} item(s) </Text>
-                                    </IndexTable.Cell>
-                                    <IndexTable.Cell>
-                                        &nbsp;
-                                    </IndexTable.Cell>
-                                    <IndexTable.Cell>
-                                        &nbsp;
-                                    </IndexTable.Cell>
-                                    <IndexTable.Cell>
-                                        <div className={"d-flex"} style={{justifyContent: "end"}}>
-                                            <Pagination
-                                                label={`${PageNo} / ${totalPageCountUser}`}
-                                                hasPrevious={PageNo > 1}
-                                                onPrevious={() => onChangePaginationUser('minus')}
-                                                hasNext={PageNo < totalPageCountUser}
-                                                onNext={() => onChangePaginationUser('plus')}
-                                            />
-                                        </div>
-                                    </IndexTable.Cell>
-                                </IndexTable.Row>
                             </IndexTable>
+                            <Box padding={'300'} borderBlockStartWidth={'025'} borderColor={'border-secondary'}>
+                                <InlineStack align={'space-between'} blockAlign={'center'}>
+                                    <Text as={"span"} fontWeight={"semibold"}> Total
+                                        : {userPage || 0} item(s) </Text>
+                                    <div className={"d-flex"} style={{justifyContent: "end"}}>
+                                        <Pagination
+                                            label={`${PageNo} / ${totalPageCountUser}`}
+                                            hasPrevious={PageNo > 1}
+                                            onPrevious={() => onChangePaginationUser('minus')}
+                                            hasNext={PageNo < totalPageCountUser}
+                                            onNext={() => onChangePaginationUser('plus')}
+                                        />
+                                    </div>
+                                </InlineStack>
+                            </Box>
                         </Card>
                     }
                     {
@@ -410,30 +397,22 @@ const WishlistItems = () => {
                                         </IndexTable.Row>
                                     )
                                 })}
-                                <IndexTable.Row>
-                                    <IndexTable.Cell>
-                                        <Text as={"span"} fontWeight={"semibold"}> Total
-                                            : {importHisPage || 0} item(s) </Text>
-                                    </IndexTable.Cell>
-                                    <IndexTable.Cell>
-                                        &nbsp;
-                                    </IndexTable.Cell>
-                                    <IndexTable.Cell>
-                                        &nbsp;
-                                    </IndexTable.Cell>
-                                    <IndexTable.Cell>
-                                        <div className={"d-flex"} style={{justifyContent: "end"}}>
-                                            <Pagination
-                                                label={`${importHisPageNo} / ${totalPageCountImport}`}
-                                                hasPrevious={importHisPageNo > 1}
-                                                onPrevious={() => onChangePaginationImportHistory('minus')}
-                                                hasNext={importHisPageNo < totalPageCountImport}
-                                                onNext={() => onChangePaginationImportHistory('plus')}
-                                            />
-                                        </div>
-                                    </IndexTable.Cell>
-                                </IndexTable.Row>
                             </IndexTable>
+                            <Box padding={'300'} borderBlockStartWidth={'025'} borderColor={'border-secondary'}>
+                                <InlineStack align={'space-between'} blockAlign={'center'}>
+                                    <Text as={"span"} fontWeight={"semibold"}> Total
+                                        : {importHisPage || 0} item(s) </Text>
+                                    <div className={"d-flex"} style={{justifyContent: "end"}}>
+                                        <Pagination
+                                            label={`${importHisPageNo} / ${totalPageCountImport}`}
+                                            hasPrevious={importHisPageNo > 1}
+                                            onPrevious={() => onChangePaginationImportHistory('minus')}
+                                            hasNext={importHisPageNo < totalPageCountImport}
+                                            onNext={() => onChangePaginationImportHistory('plus')}
+                                        />
+                                    </div>
+                                </InlineStack>
+                            </Box>
                         </Card>
                     }
                 </Layout.Section>
