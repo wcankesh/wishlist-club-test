@@ -196,3 +196,9 @@ img {display: block;max-width: 100%;height: auto;}
 .plan-header ul li .pplLabel{padding: 0; padding-right: 5px}
 .plan-header ul li .pplContent {padding: 0; border: 0}
 .plan-header .row,.plan-header .Polaris-ShadowBevel{height: 100%}
+
+.tooltip-box {pointer-events: auto;cursor: pointer;}
+.tooltip-box button {pointer-events: none;}
+.tooltip-crown {display: flex;flex-wrap: wrap;align-items: center;cursor: pointer;}
+.tooltip-crown svg {width: 16px;height: 16px;fill: #bd8e3e;}
+.tooltip-crown:hover:before {content: '';display: inline-block;border: 1px solid #bd8e3e;position: absolute;inset: -3px;border-radius: 50%;}

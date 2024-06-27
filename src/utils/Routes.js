@@ -20,6 +20,8 @@ import Installation from "../Component/Installation/Installation";
 import BackInStockDesign from "../Component/BackInStock/BackInStockDesign/BackInStockDesign";
 import EmailHistory from "../Component/EmailHistory/EmailHistory";
 import OnBoardingApp from "../Component/OnBoardingApp/OnBoardingApp";
+import Integration from "../Component/Settings/Integration/Integration";
+import IntegrationDetails from "../Component/Settings/Integration/IntegrationDetails/IntegrationDetails";
 
 export const routes = [
     {path: `${baseUrl}/dashboard`, component: <Dashboard/>},
@@ -41,6 +43,8 @@ export const routes = [
     {path: `${baseUrl}/settings/headless`, component: <Headless/>},
     {path: `${baseUrl}/settings/plan`, component: <Plan/>},
     {path: `${baseUrl}/settings/installation`, component: <Installation/>},
+    {path: `${baseUrl}/settings/integration`, component: <Integration/>},
+    {path: `${baseUrl}/settings/integration/:type`, component: <IntegrationDetails/>},
     {path: `${baseUrl}/email-history`, component: <EmailHistory/>},
     {path: `${baseUrl}/onboarding`, component: <OnBoardingApp/>},
 ]

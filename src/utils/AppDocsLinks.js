@@ -6,6 +6,7 @@ export const AppDocsLinks = {
     facebook: "https://www.facebook.com/groups/238834717807393",
     canny: "",
     calendly30Min:"https://calendly.com/wcapps/30min",
+    klaviyoApiKey:"https://www.klaviyo.com/login?next=/settings/account/api-keys",
     collection: {
         "416": "https://webcontrive.helpscoutdocs.com/collection/416-wishlist-club",
     },

@@ -2,7 +2,7 @@ import React, {Fragment} from 'react';
 import {Page, Layout} from "@shopify/polaris";
 import {
     LanguageMinor, DomainNewMajor, ThemesMajor, SettingsMajor, EmailMajor,
-    BillingStatementDollarMajor, InstallMinor
+    BillingStatementDollarMajor, InstallMinor, DnsSettingsMajor
 } from "@shopify/polaris-icons";
 import {useNavigate} from "react-router-dom";
 import {baseUrl} from "../../utils/Constant";
@@ -53,6 +53,12 @@ const Settings = () => {
             name: "Installation",
             text: "The manual installation processes are displayed in this option.",
             link: "settings/installation"
+        },
+        {
+            icon: DnsSettingsMajor,
+            name: "Integrations",
+            text: "Connect your other applications to the Wishlist Club.",
+            link: "settings/integration"
         },
     ];
 

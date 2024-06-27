@@ -1,7 +1,7 @@
 import React, {Fragment, useEffect, useState} from 'react';
 import {
     Page, Layout, ProgressBar, Button, Banner, Text, BlockStack, InlineStack, Card, Icon,
-    Select, Grid, IndexTable, Box, Badge
+    Select, Grid, IndexTable, Box, Badge,Modal,
 } from "@shopify/polaris";
 import {useDispatch, useSelector} from "react-redux";
 import moment from "moment";
@@ -26,6 +26,25 @@ const Plan = () => {
     const [isErrorServer, setIsErrorServer] = useState(false);
     const [billingData, setBillingData] = useState([]);
     const [activeEmailPlan, setActiveEmailPlan] = useState({});
+    const [isPlan, setIsPlan] = useState();
+    const [downgradeModal, setDowngradeModal] = useState(false);
+
+    const onCloseModel = () => {
+        setIsPlan('')
+        setDowngradeModal(false);
+    }
+
+    const onPlanClickButton = (i) => {
+        if (shopDetails && shopDetails.plan_type > i) {
+            setIsPlan(i);
+            setDowngradeModal(true);
+        } else {
+            onUpdatePlan(i);
+        }
+    };
+
+
+
     useEffect(() => {
         const getBilling = async () => {
             const response = await apiService.getBilling();
@@ -191,6 +210,14 @@ const Plan = () => {
             advance: false,
             enterprise: true,
         },
+        {
+            title: 'Klaviyo Integration',
+            free: false,
+            basic: false,
+            pro: false,
+            advance: false,
+            enterprise: true,
+        },
 
     ];
 
@@ -336,6 +363,25 @@ const Plan = () => {
 
     return (
         <Fragment>
+            <Modal open={downgradeModal} titleHidden onClose={onCloseModel}>
+                <Modal.Section>
+                    <BlockStack gap={"500"}>
+                        <Text as={"span"} variant={"headingLg"} alignment={"center"}>
+                            {`Plan Downgrade Impact`}
+                        </Text>
+                        <Text as={"span"} variant={"bodyMd"} alignment={"center"}>
+                            {`By downgrading from the your current plan, you may lose access to certain features and integrations. Each plan has different email notification limits, and any active integrations may be deactivated. Please ensure you understand these changes before proceeding with the downgrade.`}
+                        </Text>
+                        <InlineStack align={"center"} gap={"200"}>
+                            <Button size={"large"} onClick={onCloseModel}>Cancel</Button>
+                            <Button size={"large"} loading={isLoading == isPlan} variant={"primary"}
+                                    onClick={() => onUpdatePlan(isPlan)}>Downgrade</Button>
+                        </InlineStack>
+                    </BlockStack>
+                </Modal.Section>
+            </Modal>
+
+
             <Page title={"Plan & Price"}
                   backAction={shopDetails.plan_type === "1" || shopDetails.is_older_shop == 1 ? "" : {
                       content: 'BAckInStock', onAction: () => navigate(`${baseUrl}/settings`)
@@ -395,7 +441,7 @@ const Plan = () => {
                                                                     </InlineStack>
                                                                     <InlineStack align={"center"}>
                                                                         <Button variant={"primary"}
-                                                                                onClick={() => onUpdatePlan(x.planType)}
+                                                                                onClick={() => onPlanClickButton(x.planType)}
                                                                                 loading={isLoading == x.planType}
                                                                                 disabled={shopDetails.plan_type == x.planType ? true : false}>
                                                                             {shopDetails.plan_type == x.planType ? "Activated" : shopDetails.is_older_shop == 1 ? "Upgrade" : shopDetails.plan_type === "9" ? "Upgrade" : shopDetails.plan_type > x.planType ? "Downgrade" : x.planType === "9" ? "Downgrade" : "Upgrade"}

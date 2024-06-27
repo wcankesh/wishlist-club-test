@@ -11,18 +11,6 @@ export const openUrlInNewWindow = (url, target = "_blank") => {
     return url ? window.open(url, target) : console.error("URL is missing.");
 };
 
-export const toggleStringFlag = (value) => {
-    return value === "0" ? "1" : "0";
-};
-
-export const toggleBoolean = (value) => {
-    return value === "false" ? "true" : "false";
-};
-
-export const toggleNumberFlag = (value) => {
-    return value === 0 ? 1 : 0;
-};
-
 export const facebookImage = (<img src={Facebook} width={12} alt={"facebook"}/>);
 export const instagramImage = (<img src={Instagram} width={12} alt={"instagram"}/>);
 export const twitterImage = (<img src={Twitter} width={12} alt={"twitter"}/>);

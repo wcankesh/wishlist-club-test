@@ -272,7 +272,16 @@ export class ApiService {
     async enableBackInStock(payload) {
         return await this.postData(`${apiBaseUrl}/api/enable-bis`, payload)
     }
+
     async onBoarding(payload) {
         return await this.postData(`${apiBaseUrl}/api/complete-onboarding`, payload)
+    }
+
+    async getIntegration(payload) {
+        return await this.getData(`${apiBaseUrl}/api/integration/get?${qs.stringify(payload)}`);
+    }
+
+    async createIntegration(payload) {
+        return await this.postData(`${apiBaseUrl}/api/integration/create`, payload)
     }
 }
