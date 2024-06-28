@@ -5,6 +5,7 @@ import {
 import {apiService, baseUrl} from "../../../utils/Constant";
 import {useNavigate} from "react-router-dom"
 import {NotificationFilledMajor, NotificationMajor} from '@shopify/polaris-icons';
+import {RenderLoading} from "../../../utils/RenderLoading";
 
 
 const BackInStockEmail = () => {
@@ -63,9 +64,7 @@ const BackInStockEmail = () => {
                                                     <Text as={"span"} fontWeight='medium'>{x.title}</Text>
                                                     <Text as={"span"} tone={"subdued"}>{x.description}</Text>
                                                 </BlockStack>
-                                                {isLoading ? <Badge>
-                                                    <div style={{width: 62}}>&nbsp;</div>
-                                                </Badge> : <Badge
+                                                {isLoading ? RenderLoading?.badge : <Badge
                                                     tone={x.checked ? "success" : "critical"}>{x.checked ? "Enabled" : "Disabled"} </Badge>}
                                             </InlineStack>
                                         </Box>

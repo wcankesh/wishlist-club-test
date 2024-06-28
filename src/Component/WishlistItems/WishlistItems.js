@@ -10,6 +10,8 @@ import {useSelector} from "react-redux";
 import ToastMessage from "../Comman/ToastMessage";
 import CustomErrorBanner from "../Comman/CustomErrorBanner";
 import {AppDocsLinks} from "../../utils/AppDocsLinks";
+import {tableLoading} from "../../utils/RenderLoading";
+import {ExportMinor, ImportMinor} from "@shopify/polaris-icons";
 
 
 const WishlistItems = () => {
@@ -218,10 +220,83 @@ const WishlistItems = () => {
         );
     };
 
+    const rowMarkupWishlistProduct = (wlProduct || []).map((x, i) => {
+        return (
+            <IndexTable.Row key={i} id={i} position={i}>
+                <IndexTable.Cell>
+                    <InlineStack blockAlign={"center"} gap={"400"} wrap={false}>
+                        <Thumbnail size={"small"} source={x.product.image}/>
+                        <Text as={"span"}>{x.product.title}</Text>
+                    </InlineStack>
+                </IndexTable.Cell>
+                <IndexTable.Cell>
+                    <Text
+                        alignment={"end"}>{currencySymbol[shopDetails.currency]}{x.product.price}</Text>
+                </IndexTable.Cell>
+                <IndexTable.Cell>
+                    <Text alignment={"end"}>{x.total}</Text>
+                </IndexTable.Cell>
+            </IndexTable.Row>
+        )
+    })
+
+    const rowMarkupWishlistUser = (wlUser || []).map((y, i) => {
+        return (
+            <IndexTable.Row key={i} id={i}>
+                <IndexTable.Cell>
+                    <Text
+                        as={"span"}>{(y.first_name || y.last_name) ? `${y.first_name} ${y.last_name}` : "Guest"}</Text>
+                </IndexTable.Cell>
+                <IndexTable.Cell>
+                    <Text as={"span"}>{y.email ? y.email : " - "}</Text>
+                </IndexTable.Cell>
+                <IndexTable.Cell>
+                    <Popover sectioned active={popoverActive === i}
+                             activator={<Button variant={"plain"} textAlign={"end"}
+                                                disclosure={popoverActive === i ? 'up' : 'down'}
+                                                onClick={() => togglePopoverActive(i)}>{y.products.length} Products</Button>}
+                             onClose={() => togglePopoverActive(i)}
+                             ariaHaspopup={false}>
+                        <Popover.Pane>
+                            {renderPopoverContent(y.products)}
+                        </Popover.Pane>
+                    </Popover>
+                </IndexTable.Cell>
+                <IndexTable.Cell>
+                    <Text as={"span"}>{moment(y.updated_at).format("L")}</Text>
+                </IndexTable.Cell>
+            </IndexTable.Row>
+        )
+    })
+
+    const rowMarkupImportHistory = (importHistory.lists || []).map((z, k) => {
+        return (
+            <IndexTable.Row key={k} id={k}>
+                <IndexTable.Cell>
+                    <Text as={"span"}>{z?.status == 0 ?
+                        <Badge tone="critical">Fail</Badge> : z?.status == 1 ?
+                            <Badge tone="success">Success</Badge> : z?.status == 2 ?
+                                <Badge tone="attention">In Progress</Badge> : null}</Text>
+                </IndexTable.Cell>
+                <IndexTable.Cell>
+                    <Text as={"span"}>{z?.created_at}</Text>
+                </IndexTable.Cell>
+                <IndexTable.Cell>
+                    <Text
+                        as={"span"}>{z?.execute_time ? z?.execute_time : "-"}</Text>
+                </IndexTable.Cell>
+                <IndexTable.Cell>
+                    <Text as={"span"}>{z?.total}</Text>
+                </IndexTable.Cell>
+            </IndexTable.Row>
+        )
+    })
+
+
     return (
         <Page title={"Wishlist Items"}
-              primaryAction={{content: 'Import', onAction: handleChange}}
-              secondaryActions={[{content: 'Export', onAction: Export}]}>
+              primaryAction={{content: 'Import', onAction: handleChange, icon: ImportMinor}}
+              secondaryActions={[{content: 'Export', onAction: Export, icon: ExportMinor}]}>
             <Layout>
                 {message !== "" && isError === false ?
                     <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
@@ -243,7 +318,7 @@ const WishlistItems = () => {
                             </Box>
                             <IndexTable
                                 resourceName={resourceNameWishlistProduct}
-                                itemCount={isLoading ? 0 : wlProduct.length}
+                                itemCount={isLoading ? limit : wlProduct.length}
                                 loading={isLoading}
                                 emptyState={<EmptySearchResult title={'No product wishlist found'}
                                                                withIllustration={(!isLoading) || !isLoading}/>}
@@ -253,26 +328,8 @@ const WishlistItems = () => {
                                     {title: 'Price', alignment: 'end'},
                                     {title: 'Item Count', alignment: 'end'},
                                 ]}
-                                selectable={false}
-                            >{(wlProduct || []).map((x, i) => {
-                                return (
-                                    <IndexTable.Row key={i} id={i} position={i}>
-                                        <IndexTable.Cell>
-                                            <InlineStack blockAlign={"center"} gap={"400"} wrap={false}>
-                                                <Thumbnail size={"small"} source={x.product.image}/>
-                                                <Text as={"span"}>{x.product.title}</Text>
-                                            </InlineStack>
-                                        </IndexTable.Cell>
-                                        <IndexTable.Cell>
-                                            <Text
-                                                alignment={"end"}>{currencySymbol[shopDetails.currency]}{x.product.price}</Text>
-                                        </IndexTable.Cell>
-                                        <IndexTable.Cell>
-                                            <Text alignment={"end"}>{x.total}</Text>
-                                        </IndexTable.Cell>
-                                    </IndexTable.Row>
-                                )
-                            })}
+                                selectable={false}>
+                                {isLoading ? tableLoading(limit, 3) : rowMarkupWishlistProduct}
                             </IndexTable>
                             <Box padding={'300'} borderBlockStartWidth={'025'} borderColor={'border-secondary'}>
                                 <InlineStack align={'space-between'} blockAlign={'center'}>
@@ -299,7 +356,7 @@ const WishlistItems = () => {
                             </Box>
                             <IndexTable
                                 resourceName={resourceNameWishlistUser}
-                                itemCount={isLoading ? 0 : wlUser.length}
+                                itemCount={isLoading ? limit : wlUser.length}
                                 emptyState={<EmptySearchResult title={'No user wishlist found'}
                                                                withIllustration={(!isLoading) || !isLoading}/>}
                                 loading={isLoading}
@@ -310,34 +367,7 @@ const WishlistItems = () => {
                                     {title: 'Last Update'},
                                 ]}
                                 selectable={false}>
-                                {wlUser.map((y, i) => {
-                                    return (
-                                        <IndexTable.Row key={i} id={i}>
-                                            <IndexTable.Cell>
-                                                <Text
-                                                    as={"span"}>{(y.first_name || y.last_name) ? `${y.first_name} ${y.last_name}` : "Guest"}</Text>
-                                            </IndexTable.Cell>
-                                            <IndexTable.Cell>
-                                                <Text as={"span"}>{y.email ? y.email : " - "}</Text>
-                                            </IndexTable.Cell>
-                                            <IndexTable.Cell>
-                                                <Popover sectioned active={popoverActive === i}
-                                                         activator={<Button variant={"plain"} textAlign={"end"}
-                                                                            disclosure={popoverActive === i ? 'up' : 'down'}
-                                                                            onClick={() => togglePopoverActive(i)}>{y.products.length} Products</Button>}
-                                                         onClose={() => togglePopoverActive(i)}
-                                                         ariaHaspopup={false}>
-                                                    <Popover.Pane>
-                                                        {renderPopoverContent(y.products)}
-                                                    </Popover.Pane>
-                                                </Popover>
-                                            </IndexTable.Cell>
-                                            <IndexTable.Cell>
-                                                <Text as={"span"}>{moment(y.updated_at).format("L")}</Text>
-                                            </IndexTable.Cell>
-                                        </IndexTable.Row>
-                                    )
-                                })}
+                                {isLoading ? tableLoading(limit, 4) : rowMarkupWishlistUser}
                             </IndexTable>
                             <Box padding={'300'} borderBlockStartWidth={'025'} borderColor={'border-secondary'}>
                                 <InlineStack align={'space-between'} blockAlign={'center'}>
@@ -364,7 +394,7 @@ const WishlistItems = () => {
                             </Box>
                             <IndexTable
                                 resourceName={resourceNameImportHistory}
-                                itemCount={isLoading ? 0 : importHistory.lists.length}
+                                itemCount={isLoading ? limit : importHistory.lists.length}
                                 emptyState={<EmptySearchResult title={'No wishlist import history found'}
                                                                withIllustration={(!isLoading) || !isLoading}/>}
                                 loading={isLoading}
@@ -375,28 +405,7 @@ const WishlistItems = () => {
                                     {title: 'Total'},
                                 ]}
                                 selectable={false}>
-                                {importHistory.lists.map((z, k) => {
-                                    return (
-                                        <IndexTable.Row key={k} id={k}>
-                                            <IndexTable.Cell>
-                                                <Text as={"span"}>{z?.status == 0 ?
-                                                    <Badge tone="critical">Fail</Badge> : z?.status == 1 ?
-                                                        <Badge tone="success">Success</Badge> : z?.status == 2 ?
-                                                            <Badge tone="attention">In Progress</Badge> : null}</Text>
-                                            </IndexTable.Cell>
-                                            <IndexTable.Cell>
-                                                <Text as={"span"}>{z?.created_at}</Text>
-                                            </IndexTable.Cell>
-                                            <IndexTable.Cell>
-                                                <Text
-                                                    as={"span"}>{z?.execute_time ? z?.execute_time : "-"}</Text>
-                                            </IndexTable.Cell>
-                                            <IndexTable.Cell>
-                                                <Text as={"span"}>{z?.total}</Text>
-                                            </IndexTable.Cell>
-                                        </IndexTable.Row>
-                                    )
-                                })}
+                                {isLoading ? tableLoading(limit, 4) : rowMarkupImportHistory}
                             </IndexTable>
                             <Box padding={'300'} borderBlockStartWidth={'025'} borderColor={'border-secondary'}>
                                 <InlineStack align={'space-between'} blockAlign={'center'}>

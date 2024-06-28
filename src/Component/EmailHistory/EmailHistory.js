@@ -7,6 +7,7 @@ import {apiService, capitalizeMessage,} from "../../utils/Constant";
 import ToastMessage from "../Comman/ToastMessage";
 import CustomErrorBanner from "../Comman/CustomErrorBanner";
 import {AppDocsLinks} from "../../utils/AppDocsLinks";
+import {tableLoading} from "../../utils/RenderLoading";
 
 const EmailHistory = () => {
     const limit = 10;
@@ -61,17 +62,62 @@ const EmailHistory = () => {
         setEmailPageNo(pCount)
     }
 
-    const resourceNameEmail = { singular: 'email history', plural: 'email historys'};
+    const resourceNameEmail = {singular: 'email history', plural: 'email historys'};
 
     const emailTypeLabel = {
-        1:"Wishlist reminder",
-        2:"Price drop alert",
-        3:"Restock alert",
-        4:"Share wishlist",
-        5:"Back In Stock thank you",
-        6:"Back In Stock alert",
-        7:"Wishlist notification",
-    }
+        1: "Wishlist reminder",
+        2: "Price drop alert",
+        3: "Restock alert",
+        4: "Share wishlist",
+        5: "Back In Stock thank you",
+        6: "Back In Stock alert",
+        7: "Wishlist notification",
+    };
+
+    const rowMarkup = (email.lists || []).map((z, i) => {
+        return (
+            <IndexTable.Row key={i} id={i}>
+                <IndexTable.Cell>
+                    <Text as={"span"}>{z.email}</Text>
+                </IndexTable.Cell>
+                <IndexTable.Cell>
+                    <span className={`custom-badge badge-type-${z.type}`}>{emailTypeLabel[z.type]}</span>
+                </IndexTable.Cell>
+                <IndexTable.Cell>
+                    <Popover
+                        active={selectedProductIndex === i}
+                        activator={<Button variant={"plain"} removeUnderline onClick={() => togglePopoverActive(i)}
+                                           disclosure={selectedProductIndex === i ? 'up' : 'down'}>{z.type == 1 || z.type == 2 || z.type == 3 || z.type == 4 || z.type == 7 ? `${z.wishlist_products.length} Products` : `${z.bis_products.length} Products`}</Button>}
+                        onClose={() => togglePopoverActive(i)}
+                    >
+                        <Popover.Pane>
+                            <div className={"remove-cursor"}>
+                                <ResourceList
+                                    items={((z.type == 1 || z.type == 2 || z.type == 3 || z.type == 4 || z.type == 7 ? z.wishlist_products : z.bis_products) || [])}
+                                    renderItem={(item) => {
+                                        const {title} = item
+                                        return (
+                                            <ResourceList.Item>
+                                                <InlineStack blockAlign={"center"} gap="200" wrap={false}>
+                                                    <Thumbnail size={"small"} source={item.image}/>
+                                                    <Text as={"span"}>{title}</Text>
+                                                </InlineStack>
+                                            </ResourceList.Item>
+                                        )
+                                    }}/>
+                            </div>
+                        </Popover.Pane>
+                    </Popover>
+                </IndexTable.Cell>
+                <IndexTable.Cell>
+                    <Text as={"span"}>{z.created_at}</Text>
+                </IndexTable.Cell>
+                <IndexTable.Cell>
+                    <Text as={"span"}>{z.message_id ? <Badge tone="success">Sent</Badge> : ""}</Text>
+                </IndexTable.Cell>
+            </IndexTable.Row>
+        )
+    })
 
     return (
         <Page title={"Email History"}>
@@ -79,13 +125,14 @@ const EmailHistory = () => {
                 <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
                               setIsErrorServer={setIsErrorServer}/> : ""}
             <Layout>
-            <CustomErrorBanner link={AppDocsLinks.article["515"]} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError}
-                               />
+                <CustomErrorBanner link={AppDocsLinks.article["515"]} message={message} setMessage={setMessage}
+                                   setIsError={setIsError} isError={isError}
+                />
                 <Layout.Section>
                     <Card padding={"050"}>
                         <IndexTable
                             resourceName={resourceNameEmail}
-                            itemCount={isLoading ? 0 : email.lists.length}
+                            itemCount={isLoading ? limit : email.lists.length}
                             emptyState={<EmptySearchResult title={'No email history found'}
                                                            withIllustration={(!isLoading) || !isLoading}/>}
                             loading={isLoading}
@@ -98,51 +145,9 @@ const EmailHistory = () => {
                             ]}
                             selectable={false}
                         >
-                            {
-                                email.lists.map((z, i) => {
-                                    return (
-                                        <IndexTable.Row key={i} id={i}>
-                                            <IndexTable.Cell>
-                                                <Text as={"span"}>{z.email}</Text>
-                                            </IndexTable.Cell>
-                                            <IndexTable.Cell>
-                                                <span className={`custom-badge badge-type-${z.type}`}>{emailTypeLabel[z.type]}</span>
-                                            </IndexTable.Cell>
-                                            <IndexTable.Cell>
-                                                <Popover
-                                                    active={selectedProductIndex === i}
-                                                    activator={<Button variant={"plain"} removeUnderline onClick={() => togglePopoverActive(i)} disclosure={selectedProductIndex === i ? 'up' : 'down'}>{z.type == 1 || z.type == 2 || z.type == 3 || z.type == 4 || z.type == 7 ? `${z.wishlist_products.length} Products` : `${z.bis_products.length} Products`}</Button>}
-                                                    onClose={() => togglePopoverActive(i)}
-                                                >
-                                                    <Popover.Pane>
-                                                        <div className={"remove-cursor"}>
-                                                            <ResourceList items={((z.type == 1 || z.type == 2 || z.type == 3 || z.type == 4 || z.type == 7 ? z.wishlist_products : z.bis_products) || [] )} renderItem={(item) => {
-                                                                const {title} = item
-                                                                return (
-                                                                    <ResourceList.Item>
-                                                                        <InlineStack blockAlign={"center"} gap="200" wrap={false} >
-                                                                            <Thumbnail size={"small"} source={item.image}/>
-                                                                            <Text as={"span"}>{title}</Text>
-                                                                        </InlineStack>
-                                                                    </ResourceList.Item>
-                                                                )
-                                                            }}/>
-                                                        </div>
-                                                    </Popover.Pane>
-
-                                                </Popover>
-                                            </IndexTable.Cell>
-                                            <IndexTable.Cell>
-                                                <Text as={"span"}>{z.created_at}</Text>
-                                            </IndexTable.Cell>
-                                            <IndexTable.Cell>
-                                                <Text as={"span"}>{z.message_id ? <Badge tone="success">Sent</Badge> : ""}</Text>
-                                            </IndexTable.Cell>
-                                        </IndexTable.Row>
-                                    )
-                                })
-                            }
+                            {isLoading ? tableLoading(limit, 5) : rowMarkup}
                         </IndexTable>
+
                         <Box padding={'300'} borderBlockStartWidth={'025'} borderColor={'border-secondary'}>
                             <InlineStack align={'space-between'} blockAlign={'center'}>
                                 <Text as={"span"} fontWeight={"semibold"}> Total : {emailPage || 0} item(s) </Text>

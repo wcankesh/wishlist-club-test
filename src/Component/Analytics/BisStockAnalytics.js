@@ -1,7 +1,7 @@
-import React, {Fragment, useState, useEffect, useCallback} from 'react';
+import React, {Fragment, useCallback, useEffect, useState} from 'react';
 import {
-    Button, Card, Text, InlineStack, Layout, Tabs, TextField, Pagination, Thumbnail,
-    Grid, Box, Badge, EmptySearchResult, IndexTable, Modal, BlockStack, Link, DropZone,
+    Badge, BlockStack, Box, Button, Card, DropZone, EmptySearchResult, Grid, IndexTable,
+    InlineStack, Layout, Link, Modal, Pagination, Tabs, Text, TextField, Thumbnail,
 } from '@shopify/polaris';
 import {apiService, capitalizeMessage} from "../../utils/Constant";
 import moment from "moment";
@@ -9,6 +9,8 @@ import DateRangePicker from "../Comman/DateRangePicker";
 import {useSelector} from "react-redux";
 import ToastMessage from "../Comman/ToastMessage";
 import {AppDocsLinks} from "../../utils/AppDocsLinks";
+import {tableLoading} from "../../utils/RenderLoading";
+import {ExportMinor, ImportMinor} from "@shopify/polaris-icons";
 
 const BisStockAnalytics = () => {
     const shopDetails = useSelector((state) => state.shopDetails)
@@ -143,6 +145,29 @@ const BisStockAnalytics = () => {
         setFile("");
     };
 
+    const rowMarkup = (bisAnalytics || []).map((x, i) => {
+        return (
+            <IndexTable.Row key={i} id={i}>
+                <IndexTable.Cell>
+                    <InlineStack blockAlign={"center"} gap="200" wrap={false}>
+                        <Thumbnail size={"small"} source={x.image}/>
+                        <Text as={"span"}>{x.title}</Text>
+                    </InlineStack>
+                </IndexTable.Cell>
+                <IndexTable.Cell>
+                    <Text as={"span"}>{x.email}</Text>
+                </IndexTable.Cell>
+                <IndexTable.Cell>
+                    <Fragment>{x.is_in_stock == 0 ? <Badge tone="info">Awaiting stock</Badge> :
+                        <Badge tone="success">Available stock</Badge>}</Fragment>
+                </IndexTable.Cell>
+                <IndexTable.Cell>
+                    <Text as={"span"}>{moment(x.created_at).format('L')}</Text>
+                </IndexTable.Cell>
+            </IndexTable.Row>
+        )
+    })
+
     return (
         <Fragment>
             {message !== "" && isError === true ?
@@ -157,10 +182,11 @@ const BisStockAnalytics = () => {
                             <InlineStack gap={"200"}>
                                 <div className="Polaris-ActionMenu-SecondaryAction">
                                     <Button
+                                        icon={ExportMinor}
                                         disabled={shopDetails.plan_type !== "8" ? shopDetails.bis_import_export_btn === false : false}
                                         onClick={() => Export()}>Export</Button>
                                 </div>
-                                <Button variant={"primary"}
+                                <Button variant={"primary"} icon={ImportMinor}
                                         disabled={shopDetails.plan_type !== "8" ? shopDetails.bis_import_export_btn === false : false}
                                         onClick={() => handleImportChange()}>Import</Button>
 
@@ -187,7 +213,7 @@ const BisStockAnalytics = () => {
 
                     <IndexTable
                         resourceName={selected === 0 ? resourceNameRequest : selected === 1 ? resourceNameAwaitingStock : selected === 2 ? resourceNameSentNotification : null}
-                        itemCount={isLoading ? 0 : bisAnalytics.length}
+                        itemCount={isLoading ? limit : bisAnalytics.length}
                         loading={isLoading}
                         emptyState={<EmptySearchResult
                             title={selected === 0 ? 'No Request found' : selected === 1 ? 'No Awaiting Stock found' : selected === 2 ? 'No Sent Notifications Found' : null}
@@ -199,29 +225,8 @@ const BisStockAnalytics = () => {
                             {title: 'Request Status'},
                             {title: 'Request Time'},
                         ]}
-                        selectable={false}
-                    >{(bisAnalytics || []).map((x, i) => {
-                        return (
-                            <IndexTable.Row key={i} id={i}>
-                                <IndexTable.Cell>
-                                    <InlineStack blockAlign={"center"} gap="200" wrap={false}>
-                                        <Thumbnail size={"small"} source={x.image}/>
-                                        <Text as={"span"}>{x.title}</Text>
-                                    </InlineStack>
-                                </IndexTable.Cell>
-                                <IndexTable.Cell>
-                                    <Text as={"span"}>{x.email}</Text>
-                                </IndexTable.Cell>
-                                <IndexTable.Cell>
-                                    <Fragment>{x.is_in_stock == 0 ? <Badge tone="info">Awaiting stock</Badge> :
-                                        <Badge tone="success">Available stock</Badge>}</Fragment>
-                                </IndexTable.Cell>
-                                <IndexTable.Cell>
-                                    <Text as={"span"}>{moment(x.created_at).format('L')}</Text>
-                                </IndexTable.Cell>
-                            </IndexTable.Row>
-                        )
-                    })}
+                        selectable={false}>
+                        {isLoading ? tableLoading(limit, 4) : rowMarkup}
                     </IndexTable>
                     <Box padding={'300'} borderBlockStartWidth={'025'} borderColor={'border-secondary'}>
                         <InlineStack align={'end'} blockAlign={'center'}>

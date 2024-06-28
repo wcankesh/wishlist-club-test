@@ -9,6 +9,7 @@ import {apiService, baseUrl, capitalizeMessage} from "../../../../utils/Constant
 import {initialConnected, initialKlaviyo, validateForm} from "../CommonUse/CommonUse";
 import {Badge, Card, Layout, OptionList, Page, PageActions,} from "@shopify/polaris";
 import ToastMessage from "../../../Comman/ToastMessage";
+import {RenderLoading} from "../../../../utils/RenderLoading";
 
 const IntegrationDetails = () => {
     const {type} = useParams();
@@ -141,7 +142,7 @@ const IntegrationDetails = () => {
         <Page backAction={{content: 'Settings', onAction: () => navigate(`${baseUrl}/settings/integration`)}}
               title={`${currentType[type].title}`}
               primaryAction={
-                  isPageLoading ? badgeSkeleton :
+                  isPageLoading ? RenderLoading?.badge :
                       <Badge size={'small'} tone={currentType[type].isConnected ? 'success' : 'critical'}>
                           {currentType[type].isConnected ? 'Connected' : 'Not connected'}
                       </Badge>

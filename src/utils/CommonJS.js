@@ -1,5 +1,4 @@
 import React from "react";
-import {Badge} from "@shopify/polaris";
 
 export const isChecked = (value) => {
     if (typeof value === "string") {
@@ -35,5 +34,3 @@ export const LabelWrapper = ({label})=>{
         </div>
     )
 };
-
-export const badgeSkeleton =(<Badge><div style={{width: 62}}>&nbsp;</div></Badge>);
