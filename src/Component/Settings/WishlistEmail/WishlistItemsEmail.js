@@ -25,6 +25,7 @@ import ToastMessage from "../../Comman/ToastMessage"
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
 import {AppDocsLinks} from "../../../utils/AppDocsLinks";
 import {ProductGroup1242, ProductGroup1249} from "../../../utils/AppImages";
+import {formValidate} from "../../Comman/formValidate";
 
 const initialSate = {
     subject: "Wishlist1 Club Products!!!",
@@ -261,46 +262,6 @@ const WishlistItemsEmail = () => {
         const {name, value} = e.target
         setEmailSettingError({...emailSettingError, [name]: formValidate(name, value)})
     }
-
-    const formValidate = (name, value) => {
-        const validRegex =
-            /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-        switch (name) {
-            case "subject":
-                if (!value || value.trim() === "") {
-                    return "Email subject is required";
-                } else {
-                    return "";
-                }
-            case "email_body":
-                if (!value || value.trim() === "") {
-                    return "Email body is required";
-                } else {
-                    return "";
-                }
-            case "add_to_cart_button_text":
-                if (!value || value.trim() === "") {
-                    return "Add to cart label is required";
-                } else {
-                    return "";
-                }
-            case "view_product_button_text":
-                if (!value || value.trim() === "") {
-                    return "Visit product label is required";
-                } else {
-                    return "";
-                }
-            case "reply_to_mail":
-                if (value && !value.match(validRegex)) {
-                    return "Enter a valid reply to email address";
-                } else {
-                    return "";
-                }
-            default: {
-                return "";
-            }
-        }
-    };
 
     const handleTabChange = (selectedTabIndex) => {
         let IsTabChange = true

@@ -25,6 +25,7 @@ import {useSelector} from "react-redux";
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
 import {ProductGroup1242} from "../../../utils/AppImages";
 import {AppDocsLinks} from "../../../utils/AppDocsLinks";
+import {formValidate} from "../../Comman/formValidate";
 
 const initialSate = {
     restock_email_subject: "Restock Alert!!!",
@@ -243,46 +244,6 @@ const RestockAlertEmail = () => {
         const {name, value} = e.target
         setEmailSettingError({...emailSettingError, [name]: formValidate(name, value)})
     }
-
-    const formValidate = (name, value) => {
-        const validRegex =
-            /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-        switch (name) {
-            case "restock_email_subject":
-                if (!value || value.trim() === "") {
-                    return "Email subject is required";
-                } else {
-                    return "";
-                }
-            case "restock_email_body":
-                if (!value || value.trim() === "") {
-                    return "Email body is required";
-                } else {
-                    return "";
-                }
-            case "add_to_cart_button_text":
-                if (!value || value.trim() === "") {
-                    return "Add to cart label is required";
-                } else {
-                    return "";
-                }
-            case "view_product_button_text":
-                if (!value || value.trim() === "") {
-                    return "Visit product label is required";
-                } else {
-                    return "";
-                }
-            case "restock_email_reply_to_email":
-                if (value && !value?.match(validRegex)) {
-                    return "Enter a valid reply to email address";
-                } else {
-                    return "";
-                }
-            default: {
-                return "";
-            }
-        }
-    };
 
     const handleTabChange = (selectedTabIndex) => {
         let IsTabChange = true

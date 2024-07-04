@@ -10,6 +10,7 @@ import SubscriberMsg from "./SubscriberMsg";
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
 import ToastMessage from "../../Comman/ToastMessage";
 import {AppDocsLinks} from "../../../utils/AppDocsLinks";
+import {formValidate} from "../../Comman/formValidate";
 
 const initialState = {
     product_page_widget: {
@@ -114,32 +115,6 @@ const BackInStockDesign = () => {
             setIsError(true)
         }
     }
-
-    const formValidate = (name, value) => {
-        switch (name) {
-            case "success_message":
-                if (!value || value.trim() === "") {
-                    return "Message is required";
-                } else {
-                    return "";
-                }
-            case "already_subscribed_message":
-                if (!value || value.trim() === "") {
-                    return "Already subscribed message is required";
-                } else {
-                    return "";
-                }
-            case "submit_button_text":
-                if (!value || value.trim() === "") {
-                    return "Submit button text is required";
-                } else {
-                    return "";
-                }
-            default: {
-                return "";
-            }
-        }
-    };
 
     const updateBisSetting = async () => {
 

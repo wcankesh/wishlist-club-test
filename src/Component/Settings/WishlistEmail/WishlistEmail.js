@@ -8,6 +8,7 @@ import {useNavigate} from "react-router-dom"
 import ToastMessage from "../../Comman/ToastMessage";
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
 import {AppDocsLinks} from "../../../utils/AppDocsLinks";
+import {formValidate} from "../../Comman/formValidate";
 
 const initialState = {
     subject: "",
@@ -142,22 +143,6 @@ const WishlistEmail = () => {
         const {name, value} = e.target
         setEmailSettingError({...emailSettingError, [name]: formValidate(name, value)})
     }
-
-    const formValidate = (name, value) => {
-        const validRegex =
-            /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-        switch (name) {
-            case "from_email":
-                if (value && !value?.match(validRegex)) {
-                    return "Enter a valid email address";
-                } else {
-                    return "";
-                }
-            default: {
-                return "";
-            }
-        }
-    };
 
     const onBack = () => {
         navigate(`${baseUrl}/settings`);

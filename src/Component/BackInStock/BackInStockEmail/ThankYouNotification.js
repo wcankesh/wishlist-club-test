@@ -32,6 +32,7 @@ import ColorInput from "../../Comman/ColorInput";
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
 import SwitchButton from "../../Comman/SwitchButton";
 import {AppDocsLinks} from "../../../utils/AppDocsLinks";
+import {formValidate} from "../../Comman/formValidate";
 
 const initialState = {
     thankyou_from_mail: "",
@@ -269,47 +270,6 @@ const ThankYouNotification = () => {
         const {name, value} = e.target
         setBackInStockEmailError({...backInStockEmailError, [name]: formValidate(name, value)})
     }
-
-
-    const formValidate = (name, value) => {
-        const validRegex =
-            /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-        switch (name) {
-            case "email_subject":
-                if (!value || value.trim() === "") {
-                    return "Email subject is required";
-                } else {
-                    return "";
-                }
-            case "email_title":
-                if (!value || value.trim() === "") {
-                    return "Email title is required";
-                } else {
-                    return "";
-                }
-            case "email_description":
-                if (!value || value.trim() === "") {
-                    return "Email description is required";
-                } else {
-                    return "";
-                }
-            case "button_text":
-                if (!value || value.trim() === "") {
-                    return "Continue shopping label is required";
-                } else {
-                    return "";
-                }
-            case "thankyou_from_mail":
-                if (value && !value?.match(validRegex)) {
-                    return "Enter a valid email address";
-                } else {
-                    return "";
-                }
-            default: {
-                return "";
-            }
-        }
-    };
 
     const handleTabChange = (selectedTabIndex) => {
         let IsTabChange = true
