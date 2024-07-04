@@ -1,11 +1,11 @@
 import React, {Fragment} from 'react';
-import {Card, Button, Text, InlineStack, BlockStack, InlineGrid} from "@shopify/polaris";
+import {BlockStack, Button, Card, InlineGrid, InlineStack, Text} from "@shopify/polaris";
 import {BackInStock, GuestWishlist, Language, WishlistDesign} from "../../../utils/AppImages";
 import {baseUrl} from "../../../utils/Constant";
-import {useHandleRedirection} from "../../Comman/useHandleRedirection";
+import {useNavigate} from "react-router-dom";
 
 const HelpDesk = () => {
-    const handleRedirection = useHandleRedirection();
+    const navigate = useNavigate()
 
     const brandingList = [
         {
@@ -60,8 +60,7 @@ const HelpDesk = () => {
                                             {x.title}
                                         </Text>
                                         <Text as={"span"}>{x.description}</Text>
-                                        <Button onClick={() => handleRedirection(x.link, x.type)}>
-                                            {x.buttonText}</Button>
+                                        <Button onClick={() => navigate(x.link)}> {x.buttonText} </Button>
                                     </BlockStack>
                                 </InlineStack>
                             </Card>
