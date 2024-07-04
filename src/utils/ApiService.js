@@ -205,6 +205,14 @@ export class ApiService {
         return await this.postData(`${apiBaseUrl}/api/label/${id}`, payload);
     }
 
+    async getEmailVerification() {
+        return await this.getData(`${apiBaseUrl}/api/bis/setting`);
+    }
+
+    async updateEmailVerification(payload) {
+        return await this.postData(`${apiBaseUrl}/api/bis/edit-message`, payload);
+    }
+
     async emailSetting() {
         return await this.getData(`${apiBaseUrl}/api/email-setting`);
     }

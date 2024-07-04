@@ -53,24 +53,71 @@ const Language = () => {
     const [message, setMessage] = useState("")
     const [isError, setIsError] = useState(false)
     const [isErrorServer, setIsErrorServer] = useState(false)
-    const [selectedOption, setSelectedOption] = useState(["1"]);
+    const [selectedOption, setSelectedOption] = useState("1");
+    const [emailVeriMsg, setEmailVeriMsg] = useState({
+        id: 0,
+        email_verify_message: 'We have sent verification mail to your email. Please verify your email.'
+    })
+
+    const Label = async () => {
+        const response = await apiService.getLabel();
+        if (response.status === 200) {
+            setIsError(false)
+            setLabelData(response.data)
+        } else if (response.status === 500) {
+            setMessage(capitalizeMessage(response.message))
+            setIsErrorServer(true);
+        } else {
+            setMessage(capitalizeMessage(response.message))
+            setIsError(true)
+        }
+    }
+
+    const getEmailVerification = async () => {
+        const response = await apiService.getEmailVerification();
+        if (response.status === 200) {
+            setIsError(false)
+            setEmailVeriMsg((state) => ({
+                ...state,
+                id: response.data.id,
+                email_verify_message: response.data.email_verify_message
+            }))
+        } else if (response.status === 500) {
+            setMessage(capitalizeMessage(response.message))
+            setIsErrorServer(true);
+        } else {
+            setMessage(capitalizeMessage(response.message))
+            setIsError(true)
+        }
+    }
 
     useEffect(() => {
-        const Label = async () => {
-            const response = await apiService.getLabel();
-            if (response.status === 200) {
-                setIsError(false)
-                setLabelData(response.data)
-            } else if (response.status === 500) {
-                setMessage(capitalizeMessage(response.message))
-                setIsErrorServer(true);
-            } else {
-                setMessage(capitalizeMessage(response.message))
-                setIsError(true)
-            }
+        if (selectedOption === "4") {
+            getEmailVerification()
+        } else {
+            Label()
         }
-        Label()
-    }, []);
+    }, [selectedOption]);
+
+    const updateEmailVerification = async () => {
+        setIsLoading(true)
+        let payload = {...emailVeriMsg}
+        const response = await apiService.updateEmailVerification(payload)
+        if (response.status === 200) {
+            setIsError(false)
+            setIsLoading(false)
+            setMessage(capitalizeMessage(response.message))
+            getEmailVerification()
+        } else if (response.status === 500) {
+            setMessage(capitalizeMessage(response.message))
+            setIsErrorServer(true);
+            setIsLoading(false)
+        } else {
+            setMessage(capitalizeMessage(response.message))
+            setIsError(true)
+            setIsLoading(false)
+        }
+    }
 
     const updateLabel = async () => {
         setIsLoading(true)
@@ -96,7 +143,7 @@ const Language = () => {
         setLabelData({...labelData, [name]: value,})
     };
 
-    const Langaguge = [
+    const Languages = [
         {
             title: "Wishlist Page Label", tab: "1",
             PageLabel: [
@@ -194,7 +241,7 @@ const Language = () => {
                     name: "wishlist_dropdown_text", value: labelData.wishlist_dropdown_text
                 },
                 {
-                    label: "Create button color", filed: " color",
+                    label: "Create button color", filed: "color",
                     name: "wishlist_model_create_button_text_colour",
                     value: labelData.wishlist_model_create_button_text_colour
                 },
@@ -204,12 +251,12 @@ const Language = () => {
                     value: labelData.wishlist_model_create_button_bg_colour
                 },
                 {
-                    label: "Cancel button color", filed: " color",
+                    label: "Cancel button color", filed: "color",
                     name: "wishlist_model_cancel_button_text_colour",
                     value: labelData.wishlist_model_cancel_button_text_colour
                 },
                 {
-                    label: "Cancel button background color", filed: " color",
+                    label: "Cancel button background color", filed: "color",
                     name: "wishlist_model_cancel_button_bg_colour",
                     value: labelData.wishlist_model_cancel_button_bg_colour
                 },
@@ -243,11 +290,11 @@ const Language = () => {
                     name: "success_message_bg_color", value: labelData.success_message_bg_color
                 },
                 {
-                    label: "Success message color", filed: " color",
+                    label: "Success message color", filed: "color",
                     name: "success_message_text_color", value: labelData.success_message_text_color
                 },
                 {
-                    label: "Error message background color", filed: " color",
+                    label: "Error message background color", filed: "color",
                     name: "error_message_bg_color", value: labelData.error_message_bg_color
                 },
                 {
@@ -264,7 +311,11 @@ const Language = () => {
 
     return (
         <Page title={"Language"} backAction={{content: 'Settings', onAction: onBack}}
-              primaryAction={{content: "Save", onAction: updateLabel, loading: isLoading}}>
+              primaryAction={{
+                  content: "Save", onAction: () => {
+                      selectedOption === "4" ? updateEmailVerification() : updateLabel()
+                  }, loading: isLoading
+              }}>
             <Layout>
                 {message !== "" && isError === false ?
                     <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
@@ -274,19 +325,20 @@ const Language = () => {
 
                 <Layout.Section variant="oneThird">
                     <Card padding={"100"}>
-                        <OptionList onChange={setSelectedOption} selected={selectedOption}
+                        <OptionList onChange={(event) => setSelectedOption(event[0])} selected={selectedOption}
                                     options={[
                                         {value: "1", label: "Wishlist Page Label"},
                                         {value: "2", label: "Wishlist Popup Label"},
                                         {value: "3", label: "Wishlist Alert Message"},
+                                        {value: "4", label: "Email Verification Message"},
                                     ]}/>
                     </Card>
                 </Layout.Section>
 
                 <Layout.Section>
-                    {(Langaguge || []).map((x, i) => {
+                    {(Languages || []).map((x, i) => {
                         return (
-                            selectedOption.includes(x.tab) &&
+                            selectedOption === x.tab &&
                             <Card padding={"400"} key={i}>
                                 <BlockStack gap={"400"}>
                                     <Text as={"span"} variant={"headingMd"}>{x.title}</Text>
@@ -310,9 +362,35 @@ const Language = () => {
                             </Card>
                         )
                     })}
+
+                    {
+                        selectedOption === "4" &&
+                        <Card padding={"400"}>
+                            <BlockStack gap={"400"}>
+                                <BlockStack gap={'100'}>
+                                    <Text as={"span"} variant={"headingMd"}>{'Email Verification Message'}</Text>
+                                    <Text as={"span"} tone="subdued" variant="bodyMd" breakWord>
+                                        {'Customers receive an email verification upon subscribing. Please compose the email verification note below.'}
+                                    </Text>
+                                </BlockStack>
+                                <Grid gap="4" columns={{xs: 1, sm: 1, md: 2, lg: 2, xl: 2}} alignItems="end">
+                                    <TextField label={'Email Verification Message'}
+                                               value={emailVeriMsg?.email_verify_message}
+                                               onChange={(value) => setEmailVeriMsg({
+                                                   ...emailVeriMsg,
+                                                   email_verify_message: value
+                                               })}/>
+                                </Grid>
+                            </BlockStack>
+                        </Card>
+                    }
                 </Layout.Section>
             </Layout>
-            <PageActions primaryAction={{content: 'Save', onAction: updateLabel, loading: isLoading}}/>
+            <PageActions primaryAction={{
+                content: 'Save', onAction: () => {
+                    selectedOption === "4" ? updateEmailVerification() : updateLabel()
+                }, loading: isLoading
+            }}/>
         </Page>
     );
 };
