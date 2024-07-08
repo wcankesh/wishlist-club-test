@@ -202,3 +202,5 @@ img {display: block;max-width: 100%;height: auto;}
 .tooltip-crown {display: flex;flex-wrap: wrap;align-items: center;cursor: pointer;}
 .tooltip-crown svg {width: 16px;height: 16px;fill: #bd8e3e;}
 .tooltip-crown:hover:before {content: '';display: inline-block;border: 1px solid #bd8e3e;position: absolute;inset: -3px;border-radius: 50%;}
+
+.planText{font-size: 10px;color: #fff;letter-spacing: 0.5px;text-transform: uppercase;cursor: context-menu; font-weight: 600;background-color: #bd8e3e;display: inline-block;padding: 3px 9px;line-height: 14px;border-radius: 4px;}

@@ -9,9 +9,12 @@ import ToastMessage from "../../Comman/ToastMessage"
 import CopyCode from "../../Comman/CopyCode"
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
 import {AppDocsLinks} from "../../../utils/AppDocsLinks";
+import {RenderLoading} from "../../../utils/RenderLoading";
+import {useSelector} from "react-redux";
 
 const General = () => {
     const navigate = useNavigate();
+    const shopDetails = useSelector(state => state.shopDetails);
     const [setting, setSetting] = useState({
         app_enable: "0",
         guest_wishlist: "0",
@@ -19,7 +22,8 @@ const General = () => {
         share_wishlist: "0",
         is_dispaly_add_to_cart_all: "0",
         is_variant_wishlist: "0",
-        redirect_type: 0
+        redirect_type: 0,
+        remove_wishlist_type: '1',
     })
     const [isLoading, setIsLoading] = useState(false)
     const [activeGuestModal, setActiveGuestModal] = useState(false);
@@ -139,91 +143,120 @@ const General = () => {
                     <CustomErrorBanner link={AppDocsLinks.article["423"]} message={message} setMessage={setMessage}
                                        setIsError={setIsError} isError={isError}/>
                     <Layout.Section>
-                        <Card padding={"0"}>
-                            {general.map((x, i) => {
-                                return (
-                                    <Fragment>
-                                        <InlineStack key={i} blockAlign={"start"}>
-                                            <Box padding={"500"}>
-                                                <InlineStack gap={400} wrap={false}>
-                                                    <Checkbox checked={x.checked} disabled={isLoading}
-                                                              onChange={(checked) => handleChange({
-                                                                  target: {name: x.name, value: x.checked ? "0" : "1"}
-                                                              })}/>
-                                                    <div className={"cursor-pointer"} onClick={() => handleChange({
-                                                        target: {name: x.name, value: x.checked ? "0" : "1"}
-                                                    })}>
-                                                        <BlockStack gap={"150"}>
-                                                            <Text as={"span"} fontWeight='semibold'>{x.title}</Text>
-                                                            <Text as={"span"}>{x.description}</Text>
-                                                        </BlockStack>
-                                                    </div>
-                                                </InlineStack>
-                                            </Box>
-                                        </InlineStack>
-                                        <Divider/>
-                                    </Fragment>
-                                )
-                            })}
-                            <Box padding={"500"}>
-                                <BlockStack gap={"200"}>
-                                    <Text fontWeight='semibold' as={"span"}>Redirect Type</Text>
-                                    <ButtonGroup variant="segmented">
-                                        {Array.from(Array(3)).map((_, i) => {
-                                            return (
-                                                <Button
-                                                    pressed={setting?.redirect_type === i}
-                                                    onClick={() => handleChange({
-                                                        target: {name: "redirect_type", value: i}
-                                                    })}
-                                                > {i === 0 ? "Cart" : i === 1 ? "Checkout" : "Callback"}</Button>
-                                            )
-                                        })}
-                                    </ButtonGroup>
-                                </BlockStack>
-                            </Box>
-                            <Divider/>
-                            <Box padding={"500"}>
-                                <InlineStack gap={"400"} blockAlign={"start"} wrap={false}>
-                                    <Checkbox checked={setting.is_variant_wishlist == "1"} disabled={isLoading}
-                                              onChange={(checked) => handleChange({
-                                                  target: {name: "is_variant_wishlist", value: checked ? "1" : "0"}
-                                              })}/>
-                                    <BlockStack gap={"100"}>
-                                        <div className={"cursor-pointer"} onClick={() => handleChange({
-                                            target: {
-                                                name: "is_variant_wishlist",
-                                                value: setting.is_variant_wishlist == "1" ? "0" : "1"
-                                            }
-                                        })}>
-                                            <Text fontWeight='semibold' as={"span"}>Product variant wishlists </Text>
-                                            <Text as={"span"}>
-                                                {`If enabled, wishlists will be shown based on the product variant, whereas disabling it will result in wishlists being displayed solely based on products.`}
-                                            </Text>
-                                        </div>
-                                        <Text tone="caution" as={"span"}>
-                                            {`Please note: If you wish to see the wishlist for a specific product variant, you will need to add this shortcode.`}
+                        {isLoading ? <Card> {RenderLoading.commonParagraph} </Card> :
+                            <Card padding={"0"}>
+                                {general.map((x, i) => {
+                                    return (
+                                        <Fragment>
+                                            <InlineStack key={i} blockAlign={"start"}>
+                                                <Box padding={"500"}>
+                                                    <InlineStack gap={400} wrap={false}>
+                                                        <Checkbox checked={x.checked} disabled={isLoading}
+                                                                  onChange={(checked) => handleChange({
+                                                                      target: {
+                                                                          name: x.name,
+                                                                          value: x.checked ? "0" : "1"
+                                                                      }
+                                                                  })}/>
+                                                        <div className={"cursor-pointer"} onClick={() => handleChange({
+                                                            target: {name: x.name, value: x.checked ? "0" : "1"}
+                                                        })}>
+                                                            <BlockStack gap={"150"}>
+                                                                <Text as={"span"} fontWeight='semibold'>{x.title}</Text>
+                                                                <Text as={"span"}>{x.description}</Text>
+                                                            </BlockStack>
+                                                        </div>
+                                                    </InlineStack>
+                                                </Box>
+                                            </InlineStack>
+                                            <Divider/>
+                                        </Fragment>
+                                    )
+                                })}
+                                <Box padding={"500"}>
+                                    <BlockStack gap={"200"}>
+                                        <Text fontWeight='semibold' as={"span"}>Redirect Type
+                                            {shopDetails.plan_type < '7' && <div className={'planText'}>Pro</div>}
                                         </Text>
-                                        <Text tone="caution" as={"span"}>
-                                            {`If you choose variant wishlist, make sure to add the below shortcode. Otherwise, the wishlist will not be shown.`}</Text>
-                                        <FormLayout>
-                                            <FormLayout.Group>
-                                                <BlockStack gap={"150"}>
-                                                    <Text as={"span"}>Product page shortcode</Text>
-                                                    <CopyCode
-                                                        value={`<div class="th_prd_wl_btn" data-product_id="{{product.id}}" data-variant_id="{{product.selected_or_first_available_variant.id}}"></div>`}/>
-                                                </BlockStack>
-                                                <BlockStack gap={"150"}>
-                                                    <Text as={"span"}>Collection page shortcode</Text>
-                                                    <CopyCode
-                                                        value={`<div class="th_wl_col_btn" data-product_id="{{product.id}}" data-variant_id="{{product.selected_or_first_available_variant.id}}"></div>`}/>
-                                                </BlockStack>
-                                            </FormLayout.Group>
-                                        </FormLayout>
+                                        <ButtonGroup variant="segmented">
+                                            {Array.from(Array(3)).map((_, i) => {
+                                                return (
+                                                    <Button
+                                                        pressed={setting?.redirect_type === i}
+                                                        onClick={() => handleChange({
+                                                            target: {name: "redirect_type", value: i}
+                                                        })}
+                                                    > {i === 0 ? "Cart" : i === 1 ? "Checkout" : "Callback"}</Button>
+                                                )
+                                            })}
+                                        </ButtonGroup>
                                     </BlockStack>
-                                </InlineStack>
-                            </Box>
-                        </Card>
+                                </Box>
+                                <Divider/>
+                                <Box padding={"500"}>
+                                    <BlockStack gap={"200"}>
+                                        <Text fontWeight='semibold' as={"span"}>Remove Product
+                                            {shopDetails.plan_type < '7' && <div className={'planText'}>Pro</div>}
+                                        </Text>
+                                        <ButtonGroup variant="segmented">
+                                            <Button
+                                                pressed={setting?.remove_wishlist_type === 1}
+                                                onClick={() => handleChange({
+                                                    target: {name: "remove_wishlist_type", value: 1}
+                                                })}>{"After add to cart"}</Button>
+
+                                            <Button
+                                                pressed={setting?.remove_wishlist_type === 2}
+                                                onClick={() => handleChange({
+                                                    target: {name: "remove_wishlist_type", value: 2}
+                                                })}> {"After place order"}</Button>
+                                        </ButtonGroup>
+                                    </BlockStack>
+                                </Box>
+                                <Divider/>
+                                <Box padding={"500"}>
+                                    <InlineStack gap={"400"} blockAlign={"start"} wrap={false}>
+                                        <Checkbox checked={setting.is_variant_wishlist == "1"} disabled={isLoading}
+                                                  onChange={(checked) => handleChange({
+                                                      target: {name: "is_variant_wishlist", value: checked ? "1" : "0"}
+                                                  })}/>
+                                        <BlockStack gap={"100"}>
+                                            <div className={"cursor-pointer"} onClick={() => handleChange({
+                                                target: {
+                                                    name: "is_variant_wishlist",
+                                                    value: setting.is_variant_wishlist == "1" ? "0" : "1"
+                                                }
+                                            })}>
+                                                <Text fontWeight='semibold' as={"span"}>Product variant
+                                                    wishlists </Text>
+                                                <Text as={"span"}>
+                                                    {`If enabled, wishlists will be shown based on the product variant, whereas disabling it will result in wishlists being displayed solely based on products.`}
+                                                </Text>
+                                            </div>
+                                            <Text tone="caution" as={"span"}>
+                                                {`Please note: If you wish to see the wishlist for a specific product variant, you will need to add this shortcode.`}
+                                            </Text>
+                                            <Text tone="caution" as={"span"}>
+                                                {`If you choose variant wishlist, make sure to add the below shortcode. Otherwise, the wishlist will not be shown.`}</Text>
+                                            <FormLayout>
+                                                <FormLayout.Group>
+                                                    <BlockStack gap={"150"}>
+                                                        <Text as={"span"}>Product page shortcode</Text>
+                                                        <CopyCode
+                                                            value={`<div class="th_prd_wl_btn" data-product_id="{{product.id}}" data-variant_id="{{product.selected_or_first_available_variant.id}}"></div>`}/>
+                                                    </BlockStack>
+                                                    <BlockStack gap={"150"}>
+                                                        <Text as={"span"}>Collection page shortcode</Text>
+                                                        <CopyCode
+                                                            value={`<div class="th_wl_col_btn" data-product_id="{{product.id}}" data-variant_id="{{product.selected_or_first_available_variant.id}}"></div>`}/>
+                                                    </BlockStack>
+                                                </FormLayout.Group>
+                                            </FormLayout>
+                                        </BlockStack>
+                                    </InlineStack>
+                                </Box>
+                            </Card>
+                        }
                     </Layout.Section>
                 </Layout>
             </Page>
