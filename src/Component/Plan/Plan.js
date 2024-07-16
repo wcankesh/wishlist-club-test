@@ -218,7 +218,14 @@ const Plan = () => {
             advance: false,
             enterprise: true,
         },
-
+        {
+            title: 'Wishlist Auto-Remove',
+            free: false,
+            basic: false,
+            pro: true,
+            advance: true,
+            enterprise: true,
+        },
     ];
 
     const emailPlan = [

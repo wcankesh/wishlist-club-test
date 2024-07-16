@@ -1,7 +1,18 @@
 import React, {Fragment, useEffect, useState} from 'react';
 import {
-    ButtonGroup, Button, Text, Layout, Page, FormLayout, Modal, BlockStack, InlineStack, Card,
-    Divider, Box, Checkbox
+    BlockStack,
+    Box,
+    Button,
+    ButtonGroup,
+    Card,
+    Checkbox,
+    Divider,
+    FormLayout,
+    InlineStack,
+    Layout,
+    Modal,
+    Page,
+    Text
 } from '@shopify/polaris'
 import {useNavigate} from "react-router-dom";
 import {apiService, baseUrl, capitalizeMessage} from "../../../utils/Constant";
@@ -23,7 +34,7 @@ const General = () => {
         is_dispaly_add_to_cart_all: 0,
         is_variant_wishlist: 0,
         redirect_type: 0,
-        remove_wishlist_type: 1,
+        remove_wishlist_type: 2,
     })
     const [isLoading, setIsLoading] = useState(false)
     const [activeGuestModal, setActiveGuestModal] = useState(false);
@@ -133,6 +144,12 @@ const General = () => {
         }
     }
 
+    const removeProduct = [
+        {label: 'When added to cart', value: 1},
+        {label: 'When an order is placed', value: 2},
+        {label: 'Never', value: 3},
+    ]
+
     return (
         <Fragment>
             <Page title={"General"} backAction={{content: 'Settings', onAction: () => navigate(`${baseUrl}/settings`)}}>
@@ -174,47 +191,6 @@ const General = () => {
                                     )
                                 })}
                                 <Box padding={"500"}>
-                                    <BlockStack gap={"200"}>
-                                        <Text fontWeight='semibold' as={"span"}>Redirect Type
-                                            {shopDetails.plan_type < '7' && <div className={'planText'}>Pro</div>}
-                                        </Text>
-                                        <ButtonGroup variant="segmented">
-                                            {Array.from(Array(3)).map((_, i) => {
-                                                return (
-                                                    <Button
-                                                        pressed={setting?.redirect_type === i}
-                                                        onClick={() => handleChange({
-                                                            target: {name: "redirect_type", value: i}
-                                                        })}
-                                                    > {i === 0 ? "Cart" : i === 1 ? "Checkout" : "Callback"}</Button>
-                                                )
-                                            })}
-                                        </ButtonGroup>
-                                    </BlockStack>
-                                </Box>
-                                <Divider/>
-                                <Box padding={"500"}>
-                                    <BlockStack gap={"200"}>
-                                        <Text fontWeight='semibold' as={"span"}>Remove Product
-                                            {shopDetails.plan_type < '7' && <div className={'planText'}>Pro</div>}
-                                        </Text>
-                                        <ButtonGroup variant="segmented">
-                                            <Button
-                                                pressed={setting?.remove_wishlist_type === 1}
-                                                onClick={() => handleChange({
-                                                    target: {name: "remove_wishlist_type", value: 1}
-                                                })}>{"After add to cart"}</Button>
-
-                                            <Button
-                                                pressed={setting?.remove_wishlist_type === 2}
-                                                onClick={() => handleChange({
-                                                    target: {name: "remove_wishlist_type", value: 2}
-                                                })}> {"After place order"}</Button>
-                                        </ButtonGroup>
-                                    </BlockStack>
-                                </Box>
-                                <Divider/>
-                                <Box padding={"500"}>
                                     <InlineStack gap={"400"} blockAlign={"start"} wrap={false}>
                                         <Checkbox checked={setting.is_variant_wishlist == "1"} disabled={isLoading}
                                                   onChange={(checked) => handleChange({
@@ -254,6 +230,53 @@ const General = () => {
                                             </FormLayout>
                                         </BlockStack>
                                     </InlineStack>
+                                </Box>
+                                <Divider/>
+                                <Box padding={"500"}>
+                                    <BlockStack gap={"200"}>
+                                        <Text fontWeight='semibold' as={"span"}>Redirect Type{'  '}
+                                            {shopDetails.plan_type < '7' && <div className={'planText'}>Pro</div>}
+                                        </Text>
+                                        <ButtonGroup variant="segmented">
+                                            {Array.from(Array(3)).map((_, i) => {
+                                                return (
+                                                    <Button
+                                                        disabled={shopDetails.plan_type < '7'}
+                                                        pressed={setting?.redirect_type === i}
+                                                        onClick={() => handleChange({
+                                                            target: {name: "redirect_type", value: i}
+                                                        })}
+                                                    > {i === 0 ? "Cart" : i === 1 ? "Checkout" : "Callback"}</Button>
+                                                )
+                                            })}
+                                        </ButtonGroup>
+                                    </BlockStack>
+                                </Box>
+                                <Divider/>
+                                <Box padding={"500"}>
+                                    <BlockStack gap={"200"}>
+                                        <Text fontWeight='semibold' as={"span"}>Wishlist Auto-Remove{'  '}
+                                            {shopDetails.plan_type < '6' && <div className={'planText'}>Pro</div>}
+                                        </Text>
+                                        <ButtonGroup variant="segmented">
+                                            {(removeProduct || []).map((x, i) => {
+                                                return (
+                                                    <Button key={i}
+                                                            disabled={shopDetails.plan_type < '6'}
+                                                            pressed={setting?.remove_wishlist_type === x.value}
+                                                            onClick={() => handleChange({
+                                                                target: {
+                                                                    name: "remove_wishlist_type",
+                                                                    value: x.value
+                                                                }
+                                                            })}>{x.label}</Button>
+                                                )
+                                            })}
+                                        </ButtonGroup>
+                                        <Text as={'span'} variant={'bodyMd'}>
+                                            {`Choose when to remove products from the wishlist: upon adding to cart, placing an order, or not at all. By default, wishlist items will be removed when the customer purchases the product.`}
+                                        </Text>
+                                    </BlockStack>
                                 </Box>
                             </Card>
                         }
