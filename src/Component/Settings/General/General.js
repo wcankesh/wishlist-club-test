@@ -16,14 +16,14 @@ const General = () => {
     const navigate = useNavigate();
     const shopDetails = useSelector(state => state.shopDetails);
     const [setting, setSetting] = useState({
-        app_enable: "0",
-        guest_wishlist: "0",
-        multiple_wishlist: "0",
-        share_wishlist: "0",
-        is_dispaly_add_to_cart_all: "0",
-        is_variant_wishlist: "0",
+        app_enable: 0,
+        guest_wishlist: 0,
+        multiple_wishlist: 0,
+        share_wishlist: 0,
+        is_dispaly_add_to_cart_all: 0,
+        is_variant_wishlist: 0,
         redirect_type: 0,
-        remove_wishlist_type: '1',
+        remove_wishlist_type: 1,
     })
     const [isLoading, setIsLoading] = useState(false)
     const [activeGuestModal, setActiveGuestModal] = useState(false);
@@ -40,50 +40,50 @@ const General = () => {
             title: "App enable",
             description: "Switch setting to enable or disable app functionality.",
             name: "app_enable",
-            checked: setting.app_enable == "1"
+            checked: setting.app_enable === 1
         },
         {
             title: "Guest wishlist",
             description: "Allow your customers to add their favorite items to wishlist without login. All items will be migrated to your account, once they log in.",
             name: "guest_wishlist",
-            checked: setting.guest_wishlist == "1"
+            checked: setting.guest_wishlist === 1
         },
         {
             title: "Multiple wishlists",
             description: "Let your customers make wishlists in multiple categories and give them more flexibility to manage",
             name: "multiple_wishlist",
-            checked: setting.multiple_wishlist == "1"
+            checked: setting.multiple_wishlist === 1
         },
         {
             title: "Share wishlist",
             description: "Share your full wishlist on social media or provide a separate public link.",
             name: "share_wishlist",
-            checked: setting.share_wishlist == "1"
+            checked: setting.share_wishlist === 1
         },
         {
             title: "Add to cart all the products",
             description: "Allow your customer to add all the wishlist products in the cart.",
             name: "is_dispaly_add_to_cart_all",
-            checked: setting.is_dispaly_add_to_cart_all == "1"
+            checked: setting.is_dispaly_add_to_cart_all === 1
         },
     ]
 
-    useEffect(() => {
-        const Setting = async () => {
-            const response = await apiService.getSetting();
-            if (response.status === 200) {
-                setSetting(response.data)
-                setIsError(false)
-            } else if (response.status === 500) {
-                setMessage(capitalizeMessage(response.message))
-                setIsErrorServer(true);
-                setIsLoading(false)
-            } else {
-                setMessage(capitalizeMessage(response.message))
-                setIsError(true)
-                setIsLoading(false)
-            }
+    const Setting = async () => {
+        setIsLoading(true)
+        const response = await apiService.getSetting();
+        if (response.status === 200) {
+            setSetting(response.data)
+            setIsError(false)
+        } else if (response.status === 500) {
+            setMessage(capitalizeMessage(response.message))
+            setIsErrorServer(true);
+        } else {
+            setMessage(capitalizeMessage(response.message))
+            setIsError(true)
         }
+        setIsLoading(false)
+    }
+    useEffect(() => {
         Setting();
     }, []);
 
@@ -155,11 +155,11 @@ const General = () => {
                                                                   onChange={(checked) => handleChange({
                                                                       target: {
                                                                           name: x.name,
-                                                                          value: x.checked ? "0" : "1"
+                                                                          value: x.checked ? 0 : 1
                                                                       }
                                                                   })}/>
                                                         <div className={"cursor-pointer"} onClick={() => handleChange({
-                                                            target: {name: x.name, value: x.checked ? "0" : "1"}
+                                                            target: {name: x.name, value: x.checked ? 0 : 1}
                                                         })}>
                                                             <BlockStack gap={"150"}>
                                                                 <Text as={"span"} fontWeight='semibold'>{x.title}</Text>

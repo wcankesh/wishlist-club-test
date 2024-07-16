@@ -9,6 +9,7 @@ import ToastMessage from "../../Comman/ToastMessage";
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
 import {AppDocsLinks} from "../../../utils/AppDocsLinks";
 import {formValidate} from "../../Comman/formValidate";
+import {validateForm} from "../../../utils/CommonJS";
 
 const initialState = {
     subject: "",
@@ -61,7 +62,6 @@ const WishlistEmail = () => {
         }
     ]
 
-    useEffect(() => {
         const EmailSetting = async () => {
             const response = await apiService.emailSetting();
             if (response.status === 200) {
@@ -78,20 +78,14 @@ const WishlistEmail = () => {
                 setIsLoading(false)
             }
         }
+
+    useEffect(() => {
         EmailSetting()
     }, []);
 
 
     const saveEmailSetting = async () => {
-        let validationErrors = {};
-        Object.keys(emailSetting).forEach((name) => {
-            const error = formValidate(name, emailSetting[name]);
-            if (error && error.length > 0) {
-                validationErrors[name] = error;
-            }
-        });
-        if (Object.keys(validationErrors).length > 0) {
-            setEmailSettingError(validationErrors);
+        if (validateForm(emailSetting, setEmailSettingError,formValidate)) {
             return;
         }
         setIsSave(true);
@@ -123,6 +117,7 @@ const WishlistEmail = () => {
         const response = await apiService.updateEmailSetting(formData, emailSetting.id);
         if (response.status === 200) {
             setMessage(capitalizeMessage(response.message))
+            EmailSetting()
         } else if (response.status === 500) {
             setMessage(capitalizeMessage(response.message))
             setIsErrorServer(true);
@@ -247,7 +242,7 @@ const WishlistEmail = () => {
                             </BlockStack>
                             <Checkbox label={"Notification mail"} onChange={(checked) => notificationUpdate({
                                 target: {name: "is_notification_mail", value: checked ? 1 : 0}
-                            })} checked={emailSetting.is_notification_mail == 1}/>
+                            })} checked={emailSetting.is_notification_mail === 1}/>
                         </BlockStack>
                     </Card>}
                 </Layout.Section>
