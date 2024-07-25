@@ -28,12 +28,9 @@ const StepFour = ({urlParams, shopDetails}) => {
         delete params["skip"]
         delete params["isBlockCapable"]
         dispatch(Shop_details({...shopDetails, onboarding: "1"}));
-        if(shopDetails.plan_type == "0" || shopDetails.is_older_shop == 1){
-            navigate(`${baseUrl}/settings/plan`)
-        } else {
-            navigate({pathname: `${baseUrl}/${url}`, search: qs.stringify({...params})});
-        }
+        navigate({pathname: `${baseUrl}/${url}`, search: qs.stringify({...params})});
     }
+
     return (
         <div className="confetti-main">
             {isConfetti && <img src={Confetti} className="confetti" style={{transform: `scale(1.3)`}} alt={""}/>}

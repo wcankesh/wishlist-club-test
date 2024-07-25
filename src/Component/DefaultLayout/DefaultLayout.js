@@ -17,14 +17,15 @@ const DefaultLayout = () => {
     const config = {apiKey: apiKey, host: host, forceRedirect: process.env.NODE_ENV === 'development' ? false : true};
 
     useEffect(() => {
-        if(shopDetails?.upgrade == "0"){
+        if (shopDetails?.upgrade == "0") {
             document.body.classList.add('hide-popup-close-icon');
         }
-        if (shopDetails.onboarding == 0) {
-            navigate(`${baseUrl}/onboarding`)
-        } else if(shopDetails.plan_type == "0" || shopDetails.is_older_shop == 1){
+        if (shopDetails.plan_type == "0" || shopDetails.is_older_shop == 1) {
             navigate(`${baseUrl}/settings/plan`)
+        } else if (shopDetails.onboarding == 0) {
+            navigate(`${baseUrl}/onboarding`)
         }
+
     }, [])
 
     const onAuthorize = () => {
@@ -43,24 +44,30 @@ const DefaultLayout = () => {
     return (
         <div>
             <Provider config={config}>
-                <NavigationMenu navigationLinks={shopDetails.onboarding == 0 ? [] :navigationLinks}
+                <NavigationMenu navigationLinks={shopDetails.onboarding == 0 ? [] : navigationLinks}
                                 matcher={(link, location) => link.destination === location.pathname}
                 />
                 <Frame>
                     <RoutePropagator location={location}/>
                     <Outlet/>
-                    <Modal onClose={() => {}} open={shopDetails?.upgrade == "0"} title="Authorize our latest app update" primaryAction={{content: "Authorize", onAction: onAuthorize, loading: isUpdateLoading}}>
+                    <Modal onClose={() => {
+                    }} open={shopDetails?.upgrade == "0"} title="Authorize our latest app update"
+                           primaryAction={{content: "Authorize", onAction: onAuthorize, loading: isUpdateLoading}}>
                         <Modal.Section>
                             <Text as={"span"}>Hey there,</Text>
                             <br/>
                             <Text as={"span"}>
-                                Our app has been updated to align with the most recent changes in Shopify. To maintain your access to our review services, please authorize us from the <b>"Admin Account"</b> to continue using our services. Please <Link onClick={() => window.Beacon('toggle')} removeUnderline>contact us</Link> if you face any difficulty.
+                                Our app has been updated to align with the most recent changes in Shopify. To maintain
+                                your access to our review services, please authorize us from the <b>"Admin
+                                Account"</b> to continue using our services. Please <Link
+                                onClick={() => window.Beacon('toggle')} removeUnderline>contact us</Link> if you face
+                                any difficulty.
                             </Text>
                         </Modal.Section>
                     </Modal>
                     <FooterHelp>
                         <div className="FooterHelp__Content">
-                           if you need any help, please &nbsp;
+                            if you need any help, please &nbsp;
                             <Link onClick={() => window.Beacon("toggle")}>
                                 Contact us
                             </Link>
