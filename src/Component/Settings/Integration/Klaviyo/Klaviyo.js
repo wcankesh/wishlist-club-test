@@ -1,6 +1,6 @@
 import React from 'react';
 import {BlockStack, Card, Checkbox, Divider, InlineStack, Link, List, Text, TextField} from "@shopify/polaris";
-import {isChecked, LabelWrapper, toggleFlag} from "../../../../utils/CommonJS";
+import {isChecked, LabelWrapper, toggleFlag} from "../../../../utils/Constant";
 import {KlaviyoPin} from "../../../../utils/AppImages";
 import {AppDocsLinks} from "../../../../utils/AppDocsLinks";
 import {formValidate} from "../CommonUse/CommonUse";

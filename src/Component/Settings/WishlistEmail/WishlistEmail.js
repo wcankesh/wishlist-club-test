@@ -3,13 +3,12 @@ import {
     Page, Layout, TextField, Text, Button, Card, BlockStack, InlineStack, Box, Divider, Badge,
     Checkbox, OptionList
 } from "@shopify/polaris";
-import {apiService, baseUrl, capitalizeMessage} from "../../../utils/Constant";
+import {apiService, baseUrl, capitalizeMessage,validateForm} from "../../../utils/Constant";
 import {useNavigate} from "react-router-dom"
 import ToastMessage from "../../Comman/ToastMessage";
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
 import {AppDocsLinks} from "../../../utils/AppDocsLinks";
 import {formValidate} from "../../Comman/formValidate";
-import {validateForm} from "../../../utils/CommonJS";
 
 const initialState = {
     subject: "",
@@ -34,7 +33,7 @@ const WishlistEmail = () => {
     const [isError, setIsError] = useState(false);
     const [isErrorServer, setIsErrorServer] = useState(false);
     const [message, setMessage] = useState("");
-    const [selectedOption, setSelectedOption] = useState(["1"]);
+    const [selectedOption, setSelectedOption] = useState("1");
     const Customization_Email = [
         {
             title: "Wishlist Items",
@@ -154,7 +153,7 @@ const WishlistEmail = () => {
 
                 <Layout.Section variant="oneThird">
                     <Card padding={"100"}>
-                        <OptionList onChange={setSelectedOption} selected={selectedOption}
+                        <OptionList onChange={(event) => setSelectedOption(event[0])} selected={selectedOption}
                                     options={[
                                         {value: "1", label: "From Email & Name"},
                                         {value: "2", label: "Email Customization"},
@@ -164,7 +163,8 @@ const WishlistEmail = () => {
                 </Layout.Section>
 
                 <Layout.Section>
-                    {selectedOption.includes("1") && <Card padding={"0"}>
+                    {selectedOption=== "1" &&
+                    <Card padding={"0"}>
                         <Box padding={"400"}>
                             <BlockStack gap={"100"}>
                                 <Text as={"span"} variant={"headingMd"}>From Email & Name</Text>
@@ -193,7 +193,8 @@ const WishlistEmail = () => {
                         </Box>
                     </Card>}
 
-                    {selectedOption.includes("2") && <Card padding={"0"}>
+                    {selectedOption=== "2" &&
+                    <Card padding={"0"}>
                         <Box padding={"400"}>
                             <BlockStack gap={"100"}>
                                 <Text as={"span"} variant={"headingMd"}>Email Customization</Text>
@@ -231,7 +232,8 @@ const WishlistEmail = () => {
                             })}
                     </Card>}
 
-                    {selectedOption.includes("3") && <Card>
+                    {selectedOption=== "3" &&
+                    <Card>
                         <BlockStack gap={"400"}>
                             <BlockStack gap={"100"}>
                                 <Text as={"span"} variant={"headingMd"}>Wishlist Notifications</Text>

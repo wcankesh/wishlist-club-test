@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect, useState} from 'react';
+import React, {Fragment, useEffect, useRef, useState} from 'react';
 import {
     Page,
     Layout,
@@ -8,16 +8,16 @@ import {
     Text,
     TextField,
     Select,
-    PageActions, RadioButton, DropZone, Thumbnail, Tabs, Button
+    PageActions, RadioButton, DropZone, Thumbnail, Tabs, Button, InlineGrid
 } from "@shopify/polaris";
 import {useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {
     apiService,
     baseUrl,
-    capitalizeMessage,
+    capitalizeMessage, checkRecordUpdate,
     facebookImage,
-    instagramImage, linkedInImage, pinterestImage, telegramImage,
+    instagramImage, linkedInImage, pinterestImage, telegramImage, templateJson,
     twitterImage
 } from "../../../utils/Constant";
 import ColorInput from "../../Comman/ColorInput"
@@ -26,8 +26,11 @@ import CustomErrorBanner from "../../Comman/CustomErrorBanner";
 import {AppDocsLinks} from "../../../utils/AppDocsLinks";
 import {ProductGroup1242, ProductGroup1249} from "../../../utils/AppImages";
 import {formValidate} from "../../Comman/formValidate";
+import EmailEditorComponent from "../../Comman/EmailEditorComponent";
 
 const initialSate = {
+
+
     subject: "Wishlist1 Club Products!!!",
     email_body: "aaYou have added few product on your wishlist, please check those here:",
     reply_to_mail: "",
@@ -56,8 +59,8 @@ const initialSate = {
         view_product_btn_border_size: "",
         view_product_btn_horizontal_padding: "",
         view_product_btn_vertical_padding: "",
-        add_to_cart_btn_border_radius : 10,
-        view_product_btn_border_radius : 10
+        add_to_cart_btn_border_radius: 10,
+        view_product_btn_border_radius: 10
     },
     wishlist_social: {
         facebook: "",
@@ -84,9 +87,13 @@ const initialSateError = {
 }
 
 const WishlistItemsEmail = () => {
-    const navigate = useNavigate()
+    const codeTemplate = useRef(null);
+    const navigate = useNavigate();
+    const [isDirty, setIsDirty] = useState(false);
     const [emailSetting, setEmailSetting] = useState(initialSate);
+    const [oldEmailSetting, setOldEmailSetting] = useState(initialSate);
     const [emailSettingError, setEmailSettingError] = useState(initialSateError);
+    const [wishlistItemsEmailJson, setWishlistItemsEmailJson] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [isError, setIsError] = useState(false)
     const [isErrorServer, setIsErrorServer] = useState(false)
@@ -106,7 +113,7 @@ const WishlistItemsEmail = () => {
     const theme = [
         {label: "Dark", value: "1"},
         {label: "Light", value: "2"},
-    ]
+    ];
     const fontFamily = [
         {label: "Roboto", value: "roboto"},
         {label: "Times New Roman", value: "Times New Roman"},
@@ -115,28 +122,37 @@ const WishlistItemsEmail = () => {
         {label: "Helvetica", value: "Helvetica"},
         {label: "Lucida Sans", value: "Lucida Sans"},
         {label: "Tahoma", value: "Tahoma"},
-    ]
+    ];
+
+    const checkChange = (newData, oldData) => {
+        const isChange = checkRecordUpdate(newData, oldData);
+        setIsDirty(isChange);
+    }
+
+    const EmailSetting = async () => {
+        const response = await apiService.emailSetting();
+        if (response.status === 200) {
+            setEmailSetting(response.data)
+            setOldEmailSetting(response.data)
+            setWishlistItemsEmailJson(JSON.parse(response.data && response.data.wishlist_json))
+        } else if (response.status === 500) {
+            setMessage(capitalizeMessage(response.message))
+            setIsErrorServer(true);
+        } else {
+            setMessage(capitalizeMessage(response.message))
+            setIsError(true)
+        }
+    }
 
     useEffect(() => {
-        const EmailSetting = async () => {
-            const response = await apiService.emailSetting();
-            if (response.status === 200) {
-                setEmailSetting(response.data)
-            } else if (response.status === 500) {
-                setMessage(capitalizeMessage(response.message))
-                setIsErrorServer(true);
-            } else {
-                setMessage(capitalizeMessage(response.message))
-                setIsError(true)
-            }
-        }
         EmailSetting()
     }, []);
 
     const saveEmailSetting = async (record, isLoad) => {
-        if(isLoad){
+        if (isLoad) {
             let validationErrors = {};
-            let tempObj = { subject: emailSetting.subject,
+            let tempObj = {
+                subject: emailSetting.subject,
                 email_body: emailSetting.email_body,
                 reply_to_mail: emailSetting.reply_to_mail,
                 add_to_cart_button_text: emailSetting.wishlist_content.add_to_cart_button_text,
@@ -164,7 +180,7 @@ const WishlistItemsEmail = () => {
             delete emailSetting.restock_logo;
         }
         let newEmailSetting = {...emailSetting, ...record}
-        const formData = new FormData();
+        let formData = new FormData();
         Object.keys(newEmailSetting).forEach((x) => {
             if ((typeof (newEmailSetting[x]) === "object") && newEmailSetting[x] !== null) {
             } else {
@@ -178,32 +194,40 @@ const WishlistItemsEmail = () => {
             }
         })
         formData.append("payload", JSON.stringify(newEmailSetting))
-        const response = await apiService.updateEmailSetting(formData, emailSetting.id)
-        if (response.status === 200) {
-            setMessage(capitalizeMessage(response.message))
-            setIsLoading(false);
-        } else if (response.status === 500) {
-            setMessage(capitalizeMessage(response.message))
-            setIsErrorServer(true);
-            setIsLoading(false);
-        } else {
-            setMessage(capitalizeMessage(response.message))
-            setIsError(true);
-            setIsLoading(false);
-        }
+
+        codeTemplate.current.editor.exportHtml(async (data) => {
+            const {design, html} = data;
+            formData.append("wishlist_json", JSON.stringify(design));
+            formData.append("wishlist_html", html);
+
+            const response = await apiService.updateEmailSetting(formData, emailSetting.id);
+
+            if (response.status === 200) {
+                setMessage(capitalizeMessage(response.message));
+                setIsLoading(false);
+                EmailSetting();
+            } else if (response.status === 500) {
+                setOldEmailSetting(emailSetting)
+                setMessage(capitalizeMessage(response.message));
+                setIsErrorServer(true);
+                setIsLoading(false);
+                setIsDirty(false)
+            } else {
+                setIsDirty(false)
+                setMessage(capitalizeMessage(response.message));
+                setIsError(true);
+                setIsLoading(false);
+            }
+        });
 
     }
 
     const handleChange = (e) => {
         const {name, value} = e.target
-        setEmailSetting({
-            ...emailSetting,
-            [name]: value
-        })
-        if(emailSettingError[name]){
-            setEmailSettingError({...emailSettingError, [name]: value.trim()  ? "" : emailSettingError[name]})
+        setEmailSetting({...emailSetting, [name]: value})
+        if (emailSettingError[name]) {
+            setEmailSettingError({...emailSettingError, [name]: value.trim() ? "" : emailSettingError[name]})
         }
-
     }
 
     const wlItemOnChangeStyle = (e) => {
@@ -231,8 +255,8 @@ const WishlistItemsEmail = () => {
             wishlist_content: {...emailSetting.wishlist_content, [name]: value},
 
         })
-        if(emailSettingError[name]){
-            setEmailSettingError({...emailSettingError, [name]: value.trim()  ? "" : emailSettingError[name]})
+        if (emailSettingError[name]) {
+            setEmailSettingError({...emailSettingError, [name]: value.trim() ? "" : emailSettingError[name]})
         }
     }
 
@@ -243,7 +267,9 @@ const WishlistItemsEmail = () => {
             {
                 (selectedWlLogo || emailSetting.wishlist_logo) ?
                     <Fragment>
-                        {selectedWlLogo?.name ? <Thumbnail source={window.URL.createObjectURL(selectedWlLogo)}/> : emailSetting && emailSetting.wishlist_logo ? <Thumbnail source={emailSetting.wishlist_logo}/> : ""}
+                        {selectedWlLogo?.name ? <Thumbnail
+                            source={window.URL.createObjectURL(selectedWlLogo)}/> : emailSetting && emailSetting.wishlist_logo ?
+                            <Thumbnail source={emailSetting.wishlist_logo}/> : ""}
                     </Fragment>
                     : ""
             }
@@ -266,11 +292,11 @@ const WishlistItemsEmail = () => {
     const handleTabChange = (selectedTabIndex) => {
         let IsTabChange = true
         Object.keys(emailSettingError).map((x) => {
-            if(emailSettingError[x] !== ""){
+            if (emailSettingError[x] !== "") {
                 IsTabChange = false
             }
         })
-        if(IsTabChange){
+        if (IsTabChange) {
             setSelected(selectedTabIndex)
         }
     }
@@ -303,6 +329,11 @@ const WishlistItemsEmail = () => {
         saveEmailSetting({[e.target.name]: e.target.value}, false)
     }
 
+    const onDesignChangeCode = () => {
+        codeTemplate.current.editor.exportHtml((data) => {
+            const {design} = data;
+        });
+    };
 
     return (
         <Fragment>
@@ -323,16 +354,21 @@ const WishlistItemsEmail = () => {
                                      checked={emailSetting.is_email_reminder_on_off == 0}
                               />
                               <label className="witch-button-label" htmlFor={"is_email_reminder_on_off"}/>
-                          </div>&nbsp;&nbsp;
-                          <Button variant="primary" onClick={() => saveEmailSetting("", true)} loading={isLoading}> Save</Button>
+                          </div>
+                          &nbsp;&nbsp;
+                          <Button variant="primary" onClick={() => saveEmailSetting("", true)}
+                                  loading={isLoading}> Save</Button>
                       </Fragment>
                   }
-                  >
+            >
                 <Layout>
-                    {message !== "" && isError === false ? <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer}/> : ""}
-                    <CustomErrorBanner link={AppDocsLinks.article["425"]} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError}/>
+                    {message !== "" && isError === false ?
+                        <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
+                                      setIsErrorServer={setIsErrorServer}/> : ""}
+                    <CustomErrorBanner link={AppDocsLinks.article["425"]} message={message} setMessage={setMessage}
+                                       setIsError={setIsError} isError={isError}/>
 
-                    <Layout.Section>
+                    {/*<Layout.Section>
                         <Card padding={"0"}>
                             <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>
                             <Divider/>
@@ -517,7 +553,8 @@ const WishlistItemsEmail = () => {
                                 </Box>
                             }
                             {
-                                selected === 2 && <Fragment>
+                                selected === 2 &&
+                                <Fragment>
                                     <Box padding={"400"} paddingBlockStart={"200"}>
                                         <BlockStack gap={"200"}>
                                             <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}>Email logo</Text>
@@ -767,8 +804,8 @@ const WishlistItemsEmail = () => {
                                 </Fragment>
                             }
                         </Card>
-                    </Layout.Section>
-                    <Layout.Section variant={"oneThird"}>
+                    </Layout.Section>*/}
+                    {/*<Layout.Section variant={"oneThird"}>
                         <Card padding={"0"}>
                             <Box padding={"400"}>
                                 <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}>{emailSetting.subject}</Text>
@@ -860,8 +897,218 @@ const WishlistItemsEmail = () => {
                                 </div>
                             </Box>
                         </Card>
-                    </Layout.Section>
+                    </Layout.Section>*/}
+                    <Layout.Section variant={'fullWidth'}>
+                        <Card>
+                            <BlockStack gap={'300'}>
+                                <BlockStack gap={"200"}>
+                                    <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}> Email Settings</Text>
+                                    <InlineGrid columns={{xs: 1, sm: 1, md: 1, lg: 2, xl: 2}} gap={'150'}>
+                                        <TextField
+                                            label="Reply to email"
+                                            value={emailSetting.reply_to_mail}
+                                            onChange={(value) => handleChange({
+                                                target: {
+                                                    name: "reply_to_mail",
+                                                    value
+                                                }
+                                            })}
+                                            name={"reply_to_mail"}
+                                            onBlur={onBlur}
+                                            error={emailSettingError.reply_to_mail}
+                                        />
+                                        <Select
+                                            label="Email send after create wishlist"
+                                            options={options}
+                                            value={emailSetting.reminder_after_day.toString()}
+                                            onChange={(value) => {
+                                                handleChange({
+                                                    target: {
+                                                        name: "reminder_after_day",
+                                                        value
+                                                    }
+                                                })
+                                            }}
+                                        />
 
+                                        <TextField label='"Add to cart" label'
+                                                   value={emailSetting.wishlist_content.add_to_cart_button_text}
+                                                   onChange={(value) => {
+                                                       wlItemOnChangeContent({
+                                                           target: {
+                                                               name: "add_to_cart_button_text",
+                                                               value
+                                                           }
+                                                       })
+                                                   }}
+                                                   name={"add_to_cart_button_text"}
+                                                   onBlur={onBlur}
+                                                   error={emailSettingError.add_to_cart_button_text}
+                                        />
+                                        <TextField label='"Visit product" label'
+                                                   value={emailSetting.wishlist_content.view_product_button_text}
+                                                   onChange={(value) => {
+                                                       wlItemOnChangeContent({
+                                                           target: {
+                                                               name: "view_product_button_text",
+                                                               value
+                                                           }
+                                                       })
+                                                   }}
+                                                   name={"view_product_button_text"}
+                                                   onBlur={onBlur}
+                                                   error={emailSettingError.view_product_button_text}
+                                        />
+                                    </InlineGrid>
+                                </BlockStack>
+                                <BlockStack gap={"200"}>
+                                    <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}>Add to Cart Button
+                                        customization</Text>
+
+                                    <InlineGrid columns={{xs: 1, sm: 1, md: 2, lg: 2, xl: 3}} gap={'150'}>
+                                        <ColorInput label={"Button Background color"} name="add_to_cart_btn_bg_color"
+                                                    onChange={wlItemOnChangeStyle}
+                                                    value={emailSetting.wishlist_style.add_to_cart_btn_bg_color}/>
+                                        <ColorInput label={"Button Text color"} name="add_to_cart_btn_text_color"
+                                                    onChange={wlItemOnChangeStyle}
+                                                    value={emailSetting.wishlist_style.add_to_cart_btn_text_color}/>
+
+                                        <ColorInput label={"Button Border color"} name="add_to_cart_btn_border_color"
+                                                    onChange={wlItemOnChangeStyle}
+                                                    value={emailSetting.wishlist_style.add_to_cart_btn_border_color}/>
+                                        <TextField label={"Border Width"}
+                                                   value={emailSetting.wishlist_style.add_to_cart_btn_border_size}
+                                                   type="number"
+                                                   suffix="PX"
+                                                   onChange={(value) => {
+                                                       wlItemOnChangeStyle({
+                                                           target: {
+                                                               name: "add_to_cart_btn_border_size",
+                                                               value
+                                                           }
+                                                       })
+                                                   }}
+
+                                        />
+
+                                        <TextField label="Top & Bottom padding"
+                                                   type="number"
+                                                   value={emailSetting.wishlist_style.add_to_cart_btn_vertical_padding}
+                                                   onChange={(value) => wlItemOnChangeStyle({
+                                                       target: {
+                                                           name: "add_to_cart_btn_vertical_padding",
+                                                           value
+                                                       }
+                                                   })}
+                                                   suffix="PX"
+                                        />
+                                        <TextField label="Left & Right padding"
+                                                   type="number"
+                                                   value={emailSetting.wishlist_style.add_to_cart_btn_horizontal_padding}
+                                                   onChange={(value) => wlItemOnChangeStyle({
+                                                       target: {
+                                                           name: "add_to_cart_btn_horizontal_padding",
+                                                           value
+                                                       }
+                                                   })}
+                                                   suffix="PX"
+                                        />
+
+                                        <TextField label="Border Radius"
+                                                   type="number"
+                                                   value={emailSetting.wishlist_style.add_to_cart_btn_border_radius}
+                                                   onChange={(value) => wlItemOnChangeStyle({
+                                                       target: {
+                                                           name: "add_to_cart_btn_border_radius",
+                                                           value
+                                                       }
+                                                   })}
+                                                   min={0}
+                                                   suffix="PX"
+                                        />
+                                        <div/>
+                                    </InlineGrid>
+                                </BlockStack>
+                                <BlockStack gap={"200"}>
+                                    <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}>View Product Button
+                                        customization</Text>
+                                    <InlineGrid columns={{xs: 1, sm: 1, md: 2, lg: 2, xl: 3}} gap={'150'}>
+                                        <ColorInput label={"Button Background color"} name="view_product_btn_bg_color"
+                                                    onChange={wlItemOnChangeStyle}
+                                                    value={emailSetting.wishlist_style.view_product_btn_bg_color}/>
+                                        <ColorInput label={"Button Text color"} name="view_product_btn_text_color"
+                                                    onChange={wlItemOnChangeStyle}
+                                                    value={emailSetting.wishlist_style.view_product_btn_text_color}/>
+
+                                        <ColorInput label={"Button Border color"} name="view_product_btn_border_color"
+                                                    onChange={wlItemOnChangeStyle}
+                                                    value={emailSetting.wishlist_style.view_product_btn_border_color}/>
+                                        <TextField label={"Border Width"}
+                                                   value={emailSetting.wishlist_style.view_product_btn_border_size}
+                                                   type="number"
+                                                   suffix="PX"
+                                                   onChange={(value) => {
+                                                       wlItemOnChangeStyle({
+                                                           target: {
+                                                               name: "view_product_btn_border_size",
+                                                               value
+                                                           }
+                                                       })
+                                                   }}
+
+                                        />
+
+                                        <TextField label="Top & Bottom padding"
+                                                   type="number"
+                                                   value={emailSetting.wishlist_style.view_product_btn_vertical_padding}
+                                                   onChange={(value) => wlItemOnChangeStyle({
+                                                       target: {
+                                                           name: "view_product_btn_vertical_padding",
+                                                           value
+                                                       }
+                                                   })}
+                                                   suffix="PX"
+                                        />
+                                        <TextField label="Left & Right padding"
+                                                   type="number"
+                                                   value={emailSetting.wishlist_style.view_product_btn_horizontal_padding}
+                                                   onChange={(value) => wlItemOnChangeStyle({
+                                                       target: {
+                                                           name: "view_product_btn_horizontal_padding",
+                                                           value
+                                                       }
+                                                   })}
+                                                   suffix="PX"
+                                        />
+
+                                        <TextField label="Border Radius"
+                                                   type="number"
+                                                   value={emailSetting.wishlist_style.view_product_btn_border_radius}
+                                                   onChange={(value) => wlItemOnChangeStyle({
+                                                       target: {
+                                                           name: "view_product_btn_border_radius",
+                                                           value
+                                                       }
+                                                   })}
+                                                   min={0}
+                                                   suffix="PX"
+                                        />
+                                    </InlineGrid>
+                                </BlockStack>
+                                <BlockStack gap={"200"}>
+                                    <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}> Email Template</Text>
+                                    <div>
+                                        <EmailEditorComponent
+                                            ref={codeTemplate}
+                                            saveSetting={saveEmailSetting}
+                                            dataJson={wishlistItemsEmailJson}
+                                            onDesignChange={onDesignChangeCode}
+                                        />
+                                    </div>
+                                </BlockStack>
+                            </BlockStack>
+                        </Card>
+                    </Layout.Section>
                 </Layout>
                 <PageActions
                     primaryAction={{
