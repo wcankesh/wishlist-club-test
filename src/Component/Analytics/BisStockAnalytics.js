@@ -151,7 +151,10 @@ const BisStockAnalytics = () => {
                 <IndexTable.Cell>
                     <InlineStack blockAlign={"center"} gap="200" wrap={false}>
                         <Thumbnail size={"small"} source={x.image}/>
-                        <Text as={"span"}>{x.title}</Text>
+                        <BlockStack>
+                            <Text as={"span"}>{x.title}</Text>
+                            {x?.variant?.title !== "Default Title" && <Text as={"span"}>Variant : {x?.variant?.title}</Text>}
+                        </BlockStack>
                     </InlineStack>
                 </IndexTable.Cell>
                 <IndexTable.Cell>
