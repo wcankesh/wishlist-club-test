@@ -150,6 +150,79 @@ export const formValidate = (name, value) => {
             } else {
                 return "";
             }
+        case "add_to_cart_btn_border_size":
+            if (value < 0 || value > 10) {
+                return value < 0 ? "Border Width cannot be in negative" : "Border Width cannot exceed 10px";
+            } else {
+                return "";
+            }
+        case "add_to_cart_btn_vertical_padding":
+            if (value < 0 || value > 25) {
+                return value < 0 ? "Top & Bottom padding cannot be negative" : "Top & Bottom padding cannot exceed 25px";
+            } else {
+                return "";
+            }
+        case "add_to_cart_btn_horizontal_padding":
+            if (value < 0 || value > 25) {
+                return value < 0 ? "Left & Right padding cannot be negative" : "Left & Right padding cannot exceed 25px";
+            } else {
+                return "";
+            }
+        case "add_to_cart_btn_border_radius":
+            if (value < 0 || value > 100) {
+                return value < 0 ? "Border radius cannot be negative" : "Border radius cannot exceed 100px";
+            }  else {
+                return "";
+            }
+        case "view_product_btn_border_size":
+            if (value < 0 || value > 10) {
+                return value < 0 ? "Border Width cannot be in negative" : "Border Width cannot exceed 10px";
+            } else {
+                return "";
+            }
+        case "view_product_btn_vertical_padding":
+            if (value < 0 || value > 25) {
+                return value < 0 ? "Top & Bottom padding cannot be negative" : "Top & Bottom padding cannot exceed 25px";
+            } else {
+                return "";
+            }
+        case "view_product_btn_horizontal_padding":
+            if (value < 0 || value > 25) {
+                return value < 0 ? "Left & Right padding cannot be negative" : "Left & Right padding cannot exceed 25px";
+            } else {
+                return "";
+            }
+        case "view_product_btn_border_radius":
+            if (value < 0 || value > 100) {
+                return value < 0 ? "Border radius cannot be negative" : "Border radius cannot exceed 100px";
+            }  else {
+                return "";
+            }
+        case "btn_border_size":
+            if (value < 0 || value > 10) {
+                return value < 0 ? "Border Width cannot be in negative" : "Border Width cannot exceed 10px";
+            } else {
+                return "";
+            }
+        case "btn_vertical_padding":
+            if (value < 0 || value > 50) {
+                return value < 0 ? "Top & Bottom padding cannot be in negative" : "Top & Bottom padding cannot exceed 10px";
+            } else {
+                return "";
+            }
+        case "btn_horizontal_padding":
+            if (value < 0 || value > 50) {
+                return value < 0 ? "Left & Right padding cannot be in negative" : "Left & Right padding cannot exceed 50px";
+            } else {
+                return "";
+            }
+        case "btn_border_radius":
+            if (value < 0 || value > 100) {
+                return value < 0 ? "Button radius cannot be in negative" : "Button radius cannot exceed 100px";
+            } else {
+                return "";
+            }
+
 
         default: {
             return "";

@@ -1,6 +1,5 @@
-import React, {Fragment, useCallback, useEffect, useState} from 'react';
+import React, {Fragment, useEffect, useRef, useState} from 'react';
 import {
-    FormLayout,
     TextField,
     Layout,
     Box,
@@ -8,13 +7,11 @@ import {
     InlineStack,
     BlockStack,
     Divider,
-    RadioButton,
-    DropZone,
     Text,
-    Select,
     PageActions,
     Page,
-    Thumbnail, Tabs, Button
+    Button,
+    InlineGrid,
 } from "@shopify/polaris";
 import {useNavigate} from "react-router-dom"
 import {useSelector} from "react-redux";
@@ -24,7 +21,7 @@ import {
     baseUrl,
     capitalizeMessage,
     facebookImage,
-    instagramImage, linkedInImage, pinterestImage, telegramImage,
+    instagramImage, linkedInImage, pinterestImage, telegramImage, thankYouMessageTemplateJson,
     twitterImage
 } from "../../../utils/Constant";
 import ToastMessage from "../../Comman/ToastMessage";
@@ -33,6 +30,7 @@ import CustomErrorBanner from "../../Comman/CustomErrorBanner";
 import SwitchButton from "../../Comman/SwitchButton";
 import {AppDocsLinks} from "../../../utils/AppDocsLinks";
 import {formValidate} from "../../Comman/formValidate";
+import EmailEditorComponent from "../../Comman/EmailEditorComponent";
 
 const initialState = {
     thankyou_from_mail: "",
@@ -119,31 +117,17 @@ const initialStateError = {
 }
 
 const ThankYouNotification = () => {
+    const editorRef = useRef(null);
     const navigate = useNavigate()
     const [backInStockEmail, setbackInStockEmail] = useState(initialState);
     const [backInStockEmailError, setBackInStockEmailError] = useState(initialStateError);
     const [selectedTYLogo, setSelectedTYLogo] = useState("");
-    const [selectedBISLogo, setSelectedBISLogo] = useState("");
     const [isLoading, setIsLoading] = useState(false)
     const [isError, setIsError] = useState(false)
     const [isErrorServer, setIsErrorServer] = useState(false)
     const [message, setMessage] = useState("")
-    const [selected, setSelected] = useState(0);
-
+    const [mailTemplate,setMailTemplate] = useState({});
     const shopDetails = useSelector((state) => state.shopDetails)
-    const theme = [
-        {label: "Dark", value: "1"},
-        {label: "Light", value: "2"},
-    ]
-    const fontFamily = [
-        {label: "Roboto", value: "roboto"},
-        {label: "Times New Roman", value: "Times New Roman"},
-        {label: "Arial", value: "Arial"},
-        {label: "Georgia", value: "Georgia"},
-        {label: "Helvetica", value: "Helvetica"},
-        {label: "Lucida Sans", value: "Lucida Sans"},
-        {label: "Tahoma", value: "Tahoma"},
-    ]
 
     useEffect(() => {
         getBisEmail()
@@ -153,7 +137,8 @@ const ThankYouNotification = () => {
         const response = await apiService.bisSetting();
         if (response.status === 200) {
             setIsError(false)
-            setbackInStockEmail(response.data)
+            setbackInStockEmail(response.data);
+            setMailTemplate(JSON.parse(response.data?.thankyou_json) || thankYouMessageTemplateJson);
         } else if (response.status === 500) {
             setMessage(capitalizeMessage(response.message))
             setIsErrorServer(true);
@@ -165,7 +150,7 @@ const ThankYouNotification = () => {
 
     const onSaveBISEmail = async () => {
         let validationErrors = {};
-        const tempObj = {...backInStockEmail.thankyou_content, thankyou_from_mail: backInStockEmail.thankyou_from_mail}
+        const tempObj = {...backInStockEmail.thankyou_content,...backInStockEmail.thankyou_style, thankyou_from_mail: backInStockEmail.thankyou_from_mail}
         Object.keys(tempObj).forEach((name) => {
             const error = formValidate(name, tempObj[name]);
             if (error && error.length > 0) {
@@ -177,40 +162,37 @@ const ThankYouNotification = () => {
             return;
         }
         setIsLoading(true);
-        if (backInStockEmail.bis_branding_type == "1") {
-            delete backInStockEmail.bis_logo;
-        }
-        if (backInStockEmail.thankyou_branding_type == "1") {
-            delete backInStockEmail.thankyou_logo;
-        }
+
+        ["thankyou_html","thankyou_json","bis_json","bis_html"].forEach((key) => {
+            delete backInStockEmail[key];
+        });
+
         let newBackInStockEmail = {...backInStockEmail, id: backInStockEmail.id ? backInStockEmail.id : ""}
-        const formData = new FormData();
-        Object.keys(newBackInStockEmail).forEach((x) => {
-            if ((typeof (newBackInStockEmail[x]) === "object") && newBackInStockEmail[x] !== null) {
-
-            } else {
-                if (x === "bis_logo" && selectedBISLogo && selectedBISLogo.name) {
-                    formData.append("bis_logo", selectedBISLogo);
-                } else if (x === "thankyou_logo" && selectedTYLogo.name) {
-                    formData.append("thankyou_logo", selectedTYLogo);
-                } else if (x === "bis_logo" || x === "thankyou_logo") {
-
-                } else {
-
-                }
-            }
-        })
         const payload = JSON.stringify(newBackInStockEmail)
-        formData.append("payload", payload)
 
-        const response = await apiService.updateBisSetting(formData)
+        const formData = new FormData();
+        formData.append("payload", payload)
+        if(backInStockEmail?.new_thankyou_template == 1){
+            editorRef.current.editor.exportHtml(async (data) => {
+                const {design, html} = data;
+                setMailTemplate(design);
+                formData.append("thankyou_json", JSON.stringify(design));
+                formData.append("thankyou_html", html);
+
+                const response = await apiService.updateBisSetting(formData)
+                handleApiResponse(response);
+            })
+        } else {
+            const response = await apiService.updateBisSetting(formData)
+            handleApiResponse(response);
+        }
+    }
+
+    const handleApiResponse = (response) => {
         if (response.status === 200) {
             setIsError(false)
             setMessage(capitalizeMessage(response.message))
             setIsLoading(false);
-            getBisEmail();
-            setSelectedTYLogo("")
-            setSelectedBISLogo("")
         } else if (response.status === 500) {
             setMessage(capitalizeMessage(response.message))
             setIsErrorServer(true);
@@ -257,31 +239,11 @@ const ThankYouNotification = () => {
         }
     }
 
-    const tyOnChangeSocial = (e) => {
-        const {name, value} = e.target;
-        setbackInStockEmail({
-            ...backInStockEmail,
-            thankyou_social: {...backInStockEmail.thankyou_social, [name]: value},
-        })
-
-    }
-
     const onBlur = (e) => {
         const {name, value} = e.target
         setBackInStockEmailError({...backInStockEmailError, [name]: formValidate(name, value)})
     }
 
-    const handleTabChange = (selectedTabIndex) => {
-        let IsTabChange = true
-        Object.keys(backInStockEmailError).map((x) => {
-            if (backInStockEmailError[x] !== "") {
-                IsTabChange = false
-            }
-        })
-        if (IsTabChange) {
-            setSelected(selectedTabIndex)
-        }
-    }
 
     const handleSwitch = async (e) => {
         let obj = {...backInStockEmail, [e.target.name]: e.target.value}
@@ -311,48 +273,42 @@ const ThankYouNotification = () => {
 
     }
 
+    const onUpgradeTemplate = () => {
+        setbackInStockEmail({...backInStockEmail,new_thankyou_template:1});
+    }
+    const exportHtml = () => {
+        editorRef.current.editor.exportHtml((data) => {
+            const {design, html} = data;
+        });
+    };
 
-    const tabs = [
-        {
-            id: 'email-body-content',
-            content: 'Email content',
-            panelID: 'email-body-content',
-        },
-        {
-            id: 'email-body',
-            content: 'Social content',
-            panelID: 'email-body',
-        },
-        {
-            id: 'store-branding-1',
-            content: 'Email customization',
-            accessibilityLabel: 'store-branding-1',
-            panelID: 'store-branding-1',
-        },
+    const onChange = () => {
+        editorRef.current.editor.exportHtml((data) => {
+            const {design} = data;
+        });
+    };
 
-    ];
-
-    const handleDropZoneDrop = useCallback(
-        (_dropFiles, acceptedFiles, _rejectedFiles) =>
-            setSelectedTYLogo(acceptedFiles[0]),
-        [],
-    );
-
-    const fileUpload = (!selectedTYLogo && !backInStockEmail.thankyou_logo) ? <DropZone.FileUpload/> : "";
-
-    const uploadedFiles = (
-        <Fragment>
-            {
-                (selectedTYLogo || backInStockEmail.thankyou_logo) ?
-                    <Fragment>
-                        {
-                            selectedTYLogo ? <Thumbnail source={window.URL.createObjectURL(selectedTYLogo)}/> : backInStockEmail && backInStockEmail.thankyou_logo ? <Thumbnail source={backInStockEmail.thankyou_logo}/> : ""
-                        }
-                    </Fragment>
-                    :""
+    const onLoad = () => {
+        const tryInitializeEditor = () => {
+            if (editorRef.current && editorRef.current.editor) {
+                editorRef.current.editor.loadDesign(mailTemplate);
+                editorRef.current.editor.addEventListener('design:updated', onChange);
+            } else {
+                console.error("Email editor reference is not available yet.");
             }
-        </Fragment>
-    );
+        };
+
+        if (editorRef.current !== null) {
+            tryInitializeEditor();
+        } else {
+            const retryInterval = setInterval(() => {
+                if (editorRef.current !== null) {
+                    tryInitializeEditor();
+                    clearInterval(retryInterval);
+                }
+            }, 100);
+        }
+    };
 
     return (
         <Fragment>
@@ -370,14 +326,12 @@ const ThankYouNotification = () => {
                 <Layout>
                     {message !== "" && isError === false ? <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer}/> : ""}
                     <CustomErrorBanner link={AppDocsLinks.article["525"]} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError}/>
-                    <Layout.Section>
+                    <Layout.Section variant={"fullWidth"}>
                         <Card padding={"0"}>
-                            <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>
-                            <Divider/>
-                            {
-                                selected === 0 &&
-                                <Box padding={"400"} paddingBlockStart={"200"}>
-                                    <FormLayout>
+                            <Box padding={"400"}>
+                                <BlockStack gap={"200"}>
+                                    <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}> Email Settings</Text>
+                                    <InlineGrid columns={{xs: 1, sm: 1, md: 1, lg: 2, xl: 2}} gap={'150'}>
                                         <TextField label="Sender Email"
                                                    value={backInStockEmail.thankyou_from_mail}
                                                    onChange={(value) => {
@@ -392,55 +346,6 @@ const ThankYouNotification = () => {
                                                    onBlur={onBlur}
                                                    error={backInStockEmailError.thankyou_from_mail}
                                         />
-                                        <TextField label={"Email Subject"}
-                                                   multiline={2}
-                                                   value={backInStockEmail.thankyou_content.email_subject}
-
-                                                   onChange={(value) => {
-                                                       tyOnChangeContent({
-                                                           target: {
-                                                               name: "email_subject",
-                                                               value
-                                                           }
-                                                       })
-                                                   }}
-                                                   name={"email_subject"}
-                                                   onBlur={onBlur}
-                                                   error={backInStockEmailError.email_subject}
-                                                   helpText={"Add this {{product_name}} {{shop_name}} variable"}
-                                        />
-                                        <TextField label={"Email Title"}
-                                                   multiline={2}
-                                                   value={backInStockEmail.thankyou_content.email_title}
-                                                   onChange={(value) => {
-                                                       tyOnChangeContent({
-                                                           target: {
-                                                               name: "email_title",
-                                                               value
-                                                           }
-                                                       })
-                                                   }}
-                                                   helpText={"Add this {{product_name}} {{shop_name}} variable"}
-                                                   name={"email_title"}
-                                                   onBlur={onBlur}
-                                                   error={backInStockEmailError.email_title}
-                                        />
-                                        <TextField label={"Email Description"}
-                                                   multiline={2}
-                                                   value={backInStockEmail.thankyou_content.email_description}
-                                                   onChange={(value) => {
-                                                       tyOnChangeContent({
-                                                           target: {
-                                                               name: "email_description",
-                                                               value
-                                                           }
-                                                       })
-                                                   }}
-                                                   name={"email_description"}
-                                                   onBlur={onBlur}
-                                                   error={backInStockEmailError.email_description}
-                                                   helpText={"Add this {{shop_name}} {{product_name}} {{shop_url}} {{product_url}} variable"}/>
-
                                         <TextField label={'"Continue shopping" label'}
                                                    value={backInStockEmail.thankyou_content.button_text}
                                                    onChange={(value) => {
@@ -454,409 +359,244 @@ const ThankYouNotification = () => {
                                                    name={"button_text"}
                                                    onBlur={onBlur}
                                                    error={backInStockEmailError.button_text}
-
                                         />
-                                    </FormLayout>
-                                </Box>
-                            }
-                            {
-                                selected === 1 &&
-                                <Box padding={"400"} paddingBlockStart={"200"}>
-                                    <FormLayout>
-                                        <FormLayout.Group>
-                                            <TextField label={"Social networks title"}
-                                                       value={backInStockEmail.thankyou_social.title}
-                                                       onChange={(value) => {
-                                                           tyOnChangeSocial({
-                                                               target: {
-                                                                   name: "title",
-                                                                   value
-                                                               }
-                                                           })
-                                                       }}
-                                            />
-                                        </FormLayout.Group>
-                                        <FormLayout.Group condensed>
-                                            <TextField label={"Instagram"} prefix={"@"}
-                                                       value={backInStockEmail.thankyou_social.instagram}
-                                                       onChange={(value) => {
-                                                           tyOnChangeSocial({
-                                                               target: {
-                                                                   name: "instagram",
-                                                                   value
-                                                               }
-                                                           })
-                                                       }}
-                                            />
-                                            <TextField label={"Facebook"} prefix={"@"}
-                                                       value={backInStockEmail.thankyou_social.facebook}
-                                                       onChange={(value) => {
-                                                           tyOnChangeSocial({
-                                                               target: {
-                                                                   name: "facebook",
-                                                                   value
-                                                               }
-                                                           })
-                                                       }}
-                                            />
-                                        </FormLayout.Group>
-                                        <FormLayout.Group condensed>
-                                            <TextField label={"Twitter"} prefix={"@"}
-                                                       value={backInStockEmail.thankyou_social.twitter}
-                                                       onChange={(value) => {
-                                                           tyOnChangeSocial({
-                                                               target: {
-                                                                   name: "twitter",
-                                                                   value
-                                                               }
-                                                           })
-                                                       }}
-                                            />
-                                            <TextField label={"Telegram"} prefix={"@"}
-                                                       value={backInStockEmail.thankyou_social.telegram}
-                                                       onChange={(value) => {
-                                                           tyOnChangeSocial({
-                                                               target: {
-                                                                   name: "telegram",
-                                                                   value
-                                                               }
-                                                           })
-                                                       }}
-                                            />
-                                        </FormLayout.Group>
-                                        <FormLayout.Group condensed>
-                                            <TextField label={"Linkedin"}
-                                                       value={backInStockEmail.thankyou_social.linkedin}
-                                                       onChange={(value) => {
-                                                           tyOnChangeSocial({
-                                                               target: {
-                                                                   name: "linkedin",
-                                                                   value
-                                                               }
-                                                           })
-                                                       }}
-                                            />
-                                            <TextField label={"Pinterest"}
-                                                       value={backInStockEmail.thankyou_social.pinterest}
-                                                       onChange={(value) => {
-                                                           tyOnChangeSocial({
-                                                               target: {
-                                                                   name: "pinterest",
-                                                                   value
-                                                               }
-                                                           })
-                                                       }}
-                                            />
-                                        </FormLayout.Group>
-                                    </FormLayout>
-                                </Box>
-
-                            }
-                            {
-                                selected === 2 &&
-                                <Fragment>
-                                    <Box padding={"400"} paddingBlockStart={"200"}>
-                                        <BlockStack gap={"200"}>
-                                            <Text as={"span"} fontWeight={"medium"}>Email logo</Text>
-                                            <FormLayout>
-                                                <FormLayout.Group condensed>
-                                                    <RadioButton
-                                                        label="Logo"
-                                                        id="disabled"
-                                                        checked={backInStockEmail.thankyou_branding_type == '2'}
-                                                        value={backInStockEmail.thankyou_branding_type}
-                                                        onChange={() => handleChange({
-                                                            target: {
-                                                                name: "thankyou_branding_type",
-                                                                value: "2"
-                                                            }
-                                                        })}
-                                                    />
-                                                    <RadioButton
-                                                        label={"Store Name"}
-                                                        id="optional"
-                                                        checked={backInStockEmail.thankyou_branding_type == '1'}
-                                                        value={backInStockEmail.thankyou_branding_type}
-                                                        onChange={() => handleChange({
-                                                            target: {
-                                                                name: "thankyou_branding_type",
-                                                                value: "1"
-                                                            }
-                                                        })}
-                                                    />
-                                                    <RadioButton
-                                                        label={"Both"}
-                                                        id="both"
-                                                        checked={backInStockEmail.thankyou_branding_type == '3'}
-                                                        value={backInStockEmail.thankyou_branding_type}
-                                                        onChange={() => handleChange({
-                                                            target: {
-                                                                name: "thankyou_branding_type",
-                                                                value: "3"
-                                                            }
-                                                        })}
-                                                    />
-                                                </FormLayout.Group>
-                                                {(backInStockEmail.thankyou_branding_type == '2' || backInStockEmail.thankyou_branding_type == '3') &&
-                                                <div style={{width: 58, height: 58}}>
-                                                    <DropZone
-                                                        accept=".jpg,.png,.jpeg"
-                                                        allowMultiple={false}
-                                                        onDrop={handleDropZoneDrop}
-                                                    >
-                                                        {uploadedFiles}
-                                                        {fileUpload}
-                                                    </DropZone>
-                                                </div>}
-                                            </FormLayout>
-                                        </BlockStack>
-                                    </Box>
-                                    <Divider />
-                                    <Box padding={"400"}>
-                                        <BlockStack gap={"200"}>
-                                            <Text as={"span"} fontWeight={"medium"}>Email body customization</Text>
-                                            <FormLayout>
-                                                <FormLayout.Group condensed>
-                                                    <Select label={"Text color theme"} options={theme}
-                                                            value={backInStockEmail.thankyou_style.theme}
-                                                            onChange={(value) => {
-                                                                tyOnChangeStyle({
-                                                                    target: {
-                                                                        name: "theme",
-                                                                        value
-                                                                    }
-                                                                })
-                                                            }}
-                                                    />
-                                                    <Select label={"Font family"} options={fontFamily}
-                                                            value={backInStockEmail.thankyou_style.font_family}
-                                                            onChange={(value) => {
-                                                                tyOnChangeStyle({
-                                                                    target: {
-                                                                        name: "font_family",
-                                                                        value
-                                                                    }
-                                                                })
-                                                            }}
-                                                    />
-                                                </FormLayout.Group>
-                                                <FormLayout.Group condensed>
-                                                    <ColorInput label={"Background color"} name="background_color"
-                                                                onChange={tyOnChangeStyle}
-                                                                value={backInStockEmail.thankyou_style.background_color}/>
-                                                    <TextField type={"number"} label={"Email title font size"} suffix={"Px"}
-                                                               value={backInStockEmail.thankyou_style.title_font_size}
-                                                               onChange={(value) => {
-                                                                   tyOnChangeStyle({
-                                                                       target: {
-                                                                           name: "title_font_size",
-                                                                           value
-                                                                       }
-                                                                   })
-                                                               }}
-                                                    />
-                                                </FormLayout.Group>
-                                                <FormLayout.Group condensed>
-                                                    <TextField type={"number"} label={"Email description font size"} suffix={"Px"}
-                                                               value={backInStockEmail.thankyou_style.description_font_size}
-                                                               onChange={(value) => {
-                                                                   tyOnChangeStyle({
-                                                                       target: {
-                                                                           name: "description_font_size",
-                                                                           value
-                                                                       }
-                                                                   })
-                                                               }}
-                                                    />
-                                                    <div/>
-                                                </FormLayout.Group>
-                                            </FormLayout>
-                                        </BlockStack>
-                                    </Box>
-                                    <Divider />
-                                    <Box padding={"400"}>
-                                        <BlockStack gap={"200"}>
-                                            <Text as={"span"} fontWeight={"medium"}>Shopping button customization</Text>
-                                            <FormLayout>
-                                                <FormLayout.Group condensed>
-                                                    <ColorInput label={"Button Background color"} name="btn_bg_color"
-                                                                onChange={tyOnChangeStyle}
-                                                                value={backInStockEmail.thankyou_style.btn_bg_color}/>
-                                                    <ColorInput label={"Button Text color"} name="btn_text_color"
-                                                                onChange={tyOnChangeStyle}
-                                                                value={backInStockEmail.thankyou_style.btn_text_color}/>
-                                                </FormLayout.Group>
-                                                <FormLayout.Group condensed>
-                                                    <ColorInput label={"Button Border color"} name="btn_border_color"
-                                                                onChange={tyOnChangeStyle}
-                                                                value={backInStockEmail.thankyou_style.btn_border_color}/>
-                                                    <TextField label={"Border Width"}
-                                                               value={backInStockEmail.thankyou_style.btn_border_size}
-                                                               type="number"
-                                                               suffix="PX"
-                                                               onChange={(value) => {
-                                                                   tyOnChangeStyle({
-                                                                       target: {
-                                                                           name: "btn_border_size",
-                                                                           value
-                                                                       }
-                                                                   })
-                                                               }}
-
-                                                    />
-                                                </FormLayout.Group>
-                                                <FormLayout.Group condensed>
-                                                    <TextField label="Top & Bottom padding"
-                                                               type="number"
-                                                               value={backInStockEmail.thankyou_style.btn_vertical_padding}
-                                                               onChange={(value) => tyOnChangeStyle({
-                                                                   target: {
-                                                                       name: "btn_vertical_padding",
-                                                                       value
-                                                                   }
-                                                               })}
-                                                               suffix="PX"
-                                                    />
-                                                    <TextField label="Left & Right padding"
-                                                               type="number"
-                                                               value={backInStockEmail.thankyou_style.btn_horizontal_padding}
-                                                               onChange={(value) => tyOnChangeStyle({
-                                                                   target: {
-                                                                       name: "btn_horizontal_padding",
-                                                                       value
-                                                                   }
-                                                               })}
-                                                               suffix="PX"
-                                                    />
-                                                </FormLayout.Group>
-                                                <FormLayout.Group condensed>
-                                                    <TextField label="Border radius"
-                                                               type="number"
-                                                               value={backInStockEmail.thankyou_style.btn_border_radius}
-                                                               onChange={(value) => tyOnChangeStyle({
-                                                                   target: {
-                                                                       name: "btn_border_radius",
-                                                                       value
-                                                                   }
-                                                               })}
-                                                               suffix="PX"
-                                                    />
-                                                   <div/>
-                                                </FormLayout.Group>
-                                            </FormLayout>
-                                        </BlockStack>
-                                    </Box>
-                                </Fragment>
-                            }
-                        </Card>
-                    </Layout.Section>
-                    <Layout.Section variant={"oneThird"}>
-                        <Card padding={"0"}>
-                            <Box padding={"400"}>
-                                <BlockStack gap={400}>
-                                    <InlineStack gap={400} wrap={false}>
-                                        <div className="email-logo-preview">{Icons.email}</div>
-                                        <BlockStack>
-                                            <Text variant={"bodySm"} as={"span"}>
-                                                {backInStockEmail.thankyou_content.email_subject}
-                                            </Text>
-                                            <BlockStack>
-                                                <Text as={"span"}
-                                                      fontWeight={"bold"}>{shopDetails && shopDetails.store_name}</Text>
-                                                <Text
-                                                    className="d-inline-block" as={"span"}>{backInStockEmail.thankyou_from_mail}</Text>
-                                            </BlockStack>
-                                        </BlockStack>
-                                    </InlineStack>
+                                        <TextField label={"Email Subject"}
+                                                   value={backInStockEmail.thankyou_content.email_subject}
+                                                    multiline={2}
+                                                   onChange={(value) => {
+                                                       tyOnChangeContent({
+                                                           target: {
+                                                               name: "email_subject",
+                                                               value
+                                                           }
+                                                       })
+                                                   }}
+                                                   name={"email_subject"}
+                                                   onBlur={onBlur}
+                                                   error={backInStockEmailError.email_subject}
+                                                   helpText={"Add this {{product_name}} {{shop_name}} variable"}
+                                        />
+                                    </InlineGrid>
                                 </BlockStack>
                             </Box>
-                            <Divider />
-                            <Box  paddingBlockStart={"400"} >
-                                <BlockStack>
-                                    <div className="email-template-live-preview-wrapper">
-                                        <div className="email-template-body"
-                                             style={{fontFamily: backInStockEmail.thankyou_style.font_family}}>
-                                            <table width="100%" border={0} cellSpacing={0} cellPadding={0}
-                                                   style={{borderCollapse: 'collapse'}}>
-                                                <tbody>
-                                                <tr>
-                                                    <td align="center">
-                                                        <table className="template-table" border={0} cellSpacing={0} cellPadding={0} style={{margin: '0px auto', maxWidth: '470px', borderCollapse: 'collapse'}}>
-                                                            <thead>
-                                                            <tr className="shop-branding-wrapper" style={{backgroundColor: backInStockEmail.thankyou_style.background_color, borderRadius: '10px 10px 0px 0px',}}>
-                                                                <th className="shop-branding" style={{display: "flex",alignItems: "center", justifyContent: "center", color: 'rgb(32, 34, 35)', fontSize: '24px', fontWeight: 'bold', lineHeight: '28px', height: '70px', textAlign: 'center', paddingTop: '20px',}}>
-                                                                    {
-                                                                        backInStockEmail.thankyou_branding_type == "2" ?
-                                                                            <Fragment>
-                                                                                {selectedTYLogo && selectedTYLogo?.name ?
-                                                                                    <img src={selectedTYLogo ? URL.createObjectURL(selectedTYLogo) : ""} alt="logo" style={{maxHeight: '50px'}}/> :
-                                                                                    backInStockEmail.thankyou_logo ?
-                                                                                        <img src={backInStockEmail.thankyou_logo} alt="logo" style={{maxHeight: '50px'}}/> :
-                                                                                        <img src={""} alt="logo" style={{maxHeight: '50px'}}/>}</Fragment>
-                                                                            :
-                                                                            backInStockEmail.thankyou_branding_type == "1" ? shopDetails && shopDetails.store_name :
-                                                                                <Fragment>
-                                                                                    {selectedTYLogo?.name ?
-                                                                                        <img src={selectedTYLogo ? URL.createObjectURL(selectedTYLogo) : ""} alt="logo" style={{maxHeight: '50px'}}/> :
-                                                                                        backInStockEmail.thankyou_logo ?
-                                                                                            <img src={backInStockEmail.thankyou_logo} alt="logo" style={{maxHeight: '50px'}}/> :
-                                                                                            <img src={""} alt="logo" style={{maxHeight: '50px'}}/>}&nbsp; {shopDetails && shopDetails.store_name}
-                                                                                </Fragment>
-                                                                    }
-                                                                </th>
-                                                            </tr>
-                                                            </thead>
-                                                            <tbody className="template-body" style={{backgroundColor: backInStockEmail.thankyou_style.background_color, border: '30px solid transparent'}}>
-                                                            <tr className="title-wrapper">
-                                                                <td className="title color-text-primary" style={{fontSize: `${backInStockEmail.thankyou_style.title_font_size}px`, lineHeight: '32px', color: backInStockEmail.thankyou_style.theme == "1" ? 'rgb(93, 99, 102)' : 'rgb(186, 198, 204)', fontWeight: 400, whiteSpace: 'pre-line'}}>
-                                                                    {backInStockEmail.thankyou_content.email_title}
-                                                                </td>
-                                                            </tr>
-                                                            <tr className="description-wrapper">
-                                                                <td className="description color-text-secondary" style={{fontSize: `${backInStockEmail.thankyou_style.description_font_size}px`, lineHeight: '28px', paddingTop: '10px', color: backInStockEmail.thankyou_style.theme == "1" ? 'rgb(93, 99, 102)' : 'rgb(186, 198, 204)', whiteSpace: 'pre-line'}}>
-                                                                    {backInStockEmail.thankyou_content.email_description}
-                                                                </td>
-                                                            </tr>
+                            <Divider/>
+                            <Box padding={"400"}>
+                                <BlockStack gap={"200"}>
+                                    <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}>Shopping button customization</Text>
+                                    <InlineGrid columns={{xs: 1, sm: 1, md: 1, lg: 2, xl: 3}} gap={'150'}>
+                                        <ColorInput label={"Button Background color"} name="btn_bg_color"
+                                            onChange={tyOnChangeStyle}
+                                            value={backInStockEmail.thankyou_style.btn_bg_color}/>
+                                        <ColorInput label={"Button Text color"} name="btn_text_color"
+                                                    onChange={tyOnChangeStyle}
+                                                    value={backInStockEmail.thankyou_style.btn_text_color}/>
+                                        <ColorInput label={"Button Border color"} name="btn_border_color"
+                                                    onChange={tyOnChangeStyle}
+                                                    value={backInStockEmail.thankyou_style.btn_border_color}/>
+                                        <TextField label={"Border Width"}
+                                                   value={backInStockEmail.thankyou_style.btn_border_size}
+                                                   type="number"
+                                                   suffix="PX"
+                                                   onChange={(value) => {
+                                                       tyOnChangeStyle({
+                                                           target: {
+                                                               name: "btn_border_size",
+                                                               value
+                                                           }
+                                                       })
+                                                   }}
+                                                   max={10}
+                                                   min={0}
+                                                   name={"btn_border_size"}
+                                                   onBlur={onBlur}
+                                                   error={backInStockEmailError.btn_border_size}
+                                        />
+                                        <TextField label="Top & Bottom padding"
+                                                   type="number"
+                                                   value={backInStockEmail.thankyou_style.btn_vertical_padding}
+                                                   onChange={(value) => tyOnChangeStyle({
+                                                       target: {
+                                                           name: "btn_vertical_padding",
+                                                           value
+                                                       }
+                                                   })}
+                                                   suffix="PX"
+                                                   max={25}
+                                                   min={0}
+                                                   name={"btn_vertical_padding"}
+                                                   onBlur={onBlur}
+                                                   error={backInStockEmailError.btn_vertical_padding}
+                                        />
+                                        <TextField label="Left & Right padding"
+                                                   type="number"
+                                                   value={backInStockEmail.thankyou_style.btn_horizontal_padding}
+                                                   onChange={(value) => tyOnChangeStyle({
+                                                       target: {
+                                                           name: "btn_horizontal_padding",
+                                                           value
+                                                       }
+                                                   })}
+                                                   suffix="PX"
+                                                   max={25}
+                                                   min={0}
+                                                   name={"btn_horizontal_padding"}
+                                                   onBlur={onBlur}
+                                                   error={backInStockEmailError.btn_horizontal_padding}
+                                        />
+                                        <TextField label="Border radius"
+                                                   type="number"
+                                                   value={backInStockEmail.thankyou_style.btn_border_radius}
+                                                   onChange={(value) => tyOnChangeStyle({
+                                                       target: {
+                                                           name: "btn_border_radius",
+                                                           value
+                                                       }
+                                                   })}
+                                                   suffix="PX"
+                                                   max={100}
+                                                   min={0}
+                                                   name={"btn_border_radius"}
+                                                   onBlur={onBlur}
+                                                   error={backInStockEmailError.btn_border_radius}
+                                        />
+                                    </InlineGrid>
+                                </BlockStack>
+                            </Box>
+                            <Divider/>
+                            <Box padding={"400"}>
+                                <BlockStack gap={"200"}>
+                                    <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}>Email Template</Text>
 
-                                                            <tr>
-                                                                <td style={{paddingTop: '20px'}}>
-                                                                    <a className="buy-action-url bg-primary" style={{backgroundColor: backInStockEmail.thankyou_style.btn_bg_color, color: backInStockEmail.thankyou_style.btn_text_color, boxSizing: 'border-box', borderRadius: `${backInStockEmail.thankyou_style.btn_border_radius}px`, display: 'block', fontSize: '18px', fontWeight: 600, lineHeight: '20px', padding: `${backInStockEmail.thankyou_style.btn_vertical_padding}px ${backInStockEmail.thankyou_style.btn_horizontal_padding}px`, textAlign: 'center', textDecoration: 'none', border: `${backInStockEmail.thankyou_style.btn_border_size}px solid ${backInStockEmail.thankyou_style.btn_border_color}`}}>{backInStockEmail.thankyou_content.button_text}</a>
-                                                                </td>
-                                                            </tr>
-                                                            {
-                                                                (backInStockEmail.thankyou_social.instagram !== null && backInStockEmail.thankyou_social.instagram !== "") ||
-                                                                (backInStockEmail.thankyou_social.facebook !== null && backInStockEmail.thankyou_social.facebook !== "") ||
-                                                                (backInStockEmail.thankyou_social.twitter !== null && backInStockEmail.thankyou_social.twitter !== "") ||
-                                                                (backInStockEmail.thankyou_social.telegram !== null && backInStockEmail.thankyou_social.telegram !== "") ||
-                                                                (backInStockEmail.thankyou_social.linkedin !== null && backInStockEmail.thankyou_social.linkedin !== "") ||
-                                                                (backInStockEmail.thankyou_social.pinterest !== null && backInStockEmail.thankyou_social.pinterest !== "") ?
-                                                                    <React.Fragment>
-                                                                        <tr className="social-text-wrapper">
-                                                                            <td colSpan={3} className="social-text color-text-tertiary" style={{display: (backInStockEmail.thankyou_social.instagram !== null && backInStockEmail.thankyou_social.instagram !== "") || (backInStockEmail.thankyou_social.facebook !== null && backInStockEmail.thankyou_social.facebook !== "") || (backInStockEmail.thankyou_social.twitter !== null && backInStockEmail.thankyou_social.twitter !== "") || (backInStockEmail.thankyou_social.telegram !== null && backInStockEmail.thankyou_social.telegram !== "") || (backInStockEmail.thankyou_social.linkedin !== null && backInStockEmail.thankyou_social.linkedin !== "") || (backInStockEmail.thankyou_social.pinterest !== null && backInStockEmail.thankyou_social.pinterest !== "") ? "block" : 'none', fontWeight: 400, fontSize: '16px', textAlign: 'center', color: 'rgb(116, 124, 128)', paddingBottom: '10px', paddingTop: '30px'}}>{backInStockEmail.thankyou_social.title}</td>
-                                                                        </tr>
-                                                                        <tr className="social-networks-wrapper">
-                                                                            <td className="social-networks"
-                                                                                style={{textAlign: 'center'}}>
-                                                                                <button className="instagram bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: backInStockEmail.thankyou_social.instagram !== null && backInStockEmail.thankyou_social.instagram.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: backInStockEmail.thankyou_style.btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}>{instagramImage}</button>
-                                                                                <button className="facebook bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: backInStockEmail.thankyou_social.facebook !== null && backInStockEmail.thankyou_social.facebook.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: backInStockEmail.thankyou_style.btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}>{facebookImage}</button>
-                                                                                <button className="twitter bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: backInStockEmail.thankyou_social.twitter !== null && backInStockEmail.thankyou_social.twitter.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: backInStockEmail.thankyou_style.btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}>{twitterImage}</button>
-                                                                                <button className="telegram bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: backInStockEmail.thankyou_social.telegram !== null && backInStockEmail.thankyou_social.telegram.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: backInStockEmail.thankyou_style.btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}>{telegramImage}</button>
-                                                                                <button className="linkedin bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: backInStockEmail.thankyou_social.linkedin !== null && backInStockEmail.thankyou_social.linkedin.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: backInStockEmail.thankyou_style.btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}>{linkedInImage}</button>
-                                                                                <button className="pinterest bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: backInStockEmail.thankyou_social.pinterest !== null && backInStockEmail.thankyou_social.pinterest.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: backInStockEmail.thankyou_style.btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}>{pinterestImage}</button>
+                                    {
+                                        backInStockEmail?.new_thankyou_template == 1 ?
+                                            <EmailEditorComponent
+                                                ref={editorRef}
+                                                exportHtml={exportHtml}
+                                                onLoad={onLoad}
+                                                style={{ height: 600 }}
+                                                mailTemplate={mailTemplate}
+                                                onChange={onChange}
+                                            />
+                                        : backInStockEmail?.new_thankyou_template == 0 ?
+                                            <BlockStack gap={"400"}>
+                                                <Card padding={"0"}>
+                                                    <Box padding={"400"}>
+                                                        <BlockStack gap={400}>
+                                                            <InlineStack gap={400} wrap={false}>
+                                                                <div className="email-logo-preview">{Icons.email}</div>
+                                                                <BlockStack>
+                                                                    <Text variant={"bodySm"} as={"span"}>
+                                                                        {backInStockEmail.thankyou_content.email_subject}
+                                                                    </Text>
+                                                                    <BlockStack>
+                                                                        <Text as={"span"}
+                                                                              fontWeight={"bold"}>{shopDetails && shopDetails.store_name}</Text>
+                                                                        <Text
+                                                                            className="d-inline-block" as={"span"}>{backInStockEmail.thankyou_from_mail}</Text>
+                                                                    </BlockStack>
+                                                                </BlockStack>
+                                                            </InlineStack>
+                                                        </BlockStack>
+                                                    </Box>
+                                                    <Divider />
+                                                    <Box  paddingBlockStart={"400"} >
+                                                        <BlockStack>
+                                                            <div className="email-template-live-preview-wrapper">
+                                                                <div className="email-template-body"
+                                                                     style={{fontFamily: backInStockEmail.thankyou_style.font_family}}>
+                                                                    <table width="100%" border={0} cellSpacing={0} cellPadding={0}
+                                                                           style={{borderCollapse: 'collapse'}}>
+                                                                        <tbody>
+                                                                        <tr>
+                                                                            <td align="center">
+                                                                                <table className="template-table" border={0} cellSpacing={0} cellPadding={0} style={{margin: '0px auto', maxWidth: '470px', borderCollapse: 'collapse'}}>
+                                                                                    <thead>
+                                                                                    <tr className="shop-branding-wrapper" style={{backgroundColor: backInStockEmail.thankyou_style.background_color, borderRadius: '10px 10px 0px 0px',}}>
+                                                                                        <th className="shop-branding" style={{display: "flex",alignItems: "center", justifyContent: "center", color: 'rgb(32, 34, 35)', fontSize: '24px', fontWeight: 'bold', lineHeight: '28px', height: '70px', textAlign: 'center', paddingTop: '20px',}}>
+                                                                                            {
+                                                                                                backInStockEmail.thankyou_branding_type == "2" ?
+                                                                                                    <Fragment>
+                                                                                                        {selectedTYLogo && selectedTYLogo?.name ?
+                                                                                                            <img src={selectedTYLogo ? URL.createObjectURL(selectedTYLogo) : ""} alt="logo" style={{maxHeight: '50px'}}/> :
+                                                                                                            backInStockEmail.thankyou_logo ?
+                                                                                                                <img src={backInStockEmail.thankyou_logo} alt="logo" style={{maxHeight: '50px'}}/> :
+                                                                                                                <img src={""} alt="logo" style={{maxHeight: '50px'}}/>}</Fragment>
+                                                                                                    :
+                                                                                                    backInStockEmail.thankyou_branding_type == "1" ? shopDetails && shopDetails.store_name :
+                                                                                                        <Fragment>
+                                                                                                            {selectedTYLogo?.name ?
+                                                                                                                <img src={selectedTYLogo ? URL.createObjectURL(selectedTYLogo) : ""} alt="logo" style={{maxHeight: '50px'}}/> :
+                                                                                                                backInStockEmail.thankyou_logo ?
+                                                                                                                    <img src={backInStockEmail.thankyou_logo} alt="logo" style={{maxHeight: '50px'}}/> :
+                                                                                                                    <img src={""} alt="logo" style={{maxHeight: '50px'}}/>}&nbsp; {shopDetails && shopDetails.store_name}
+                                                                                                        </Fragment>
+                                                                                            }
+                                                                                        </th>
+                                                                                    </tr>
+                                                                                    </thead>
+                                                                                    <tbody className="template-body" style={{backgroundColor: backInStockEmail.thankyou_style.background_color, border: '30px solid transparent'}}>
+                                                                                    <tr className="title-wrapper">
+                                                                                        <td className="title color-text-primary" style={{fontSize: `${backInStockEmail.thankyou_style.title_font_size}px`, lineHeight: '32px', color: backInStockEmail.thankyou_style.theme == "1" ? 'rgb(93, 99, 102)' : 'rgb(186, 198, 204)', fontWeight: 400, whiteSpace: 'pre-line'}}>
+                                                                                            {backInStockEmail.thankyou_content.email_title}
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr className="description-wrapper">
+                                                                                        <td className="description color-text-secondary" style={{fontSize: `${backInStockEmail.thankyou_style.description_font_size}px`, lineHeight: '28px', paddingTop: '10px', color: backInStockEmail.thankyou_style.theme == "1" ? 'rgb(93, 99, 102)' : 'rgb(186, 198, 204)', whiteSpace: 'pre-line'}}>
+                                                                                            {backInStockEmail.thankyou_content.email_description}
+                                                                                        </td>
+                                                                                    </tr>
+
+                                                                                    <tr>
+                                                                                        <td style={{paddingTop: '20px'}}>
+                                                                                            <a className="buy-action-url bg-primary" style={{backgroundColor: backInStockEmail.thankyou_style.btn_bg_color, color: backInStockEmail.thankyou_style.btn_text_color, boxSizing: 'border-box', borderRadius: `${backInStockEmail.thankyou_style.btn_border_radius}px`, display: 'block', fontSize: '18px', fontWeight: 600, lineHeight: '20px', padding: `${backInStockEmail.thankyou_style.btn_vertical_padding}px ${backInStockEmail.thankyou_style.btn_horizontal_padding}px`, textAlign: 'center', textDecoration: 'none', border: `${backInStockEmail.thankyou_style.btn_border_size}px solid ${backInStockEmail.thankyou_style.btn_border_color}`}}>{backInStockEmail.thankyou_content.button_text}</a>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    {
+                                                                                        (backInStockEmail.thankyou_social.instagram !== null && backInStockEmail.thankyou_social.instagram !== "") ||
+                                                                                        (backInStockEmail.thankyou_social.facebook !== null && backInStockEmail.thankyou_social.facebook !== "") ||
+                                                                                        (backInStockEmail.thankyou_social.twitter !== null && backInStockEmail.thankyou_social.twitter !== "") ||
+                                                                                        (backInStockEmail.thankyou_social.telegram !== null && backInStockEmail.thankyou_social.telegram !== "") ||
+                                                                                        (backInStockEmail.thankyou_social.linkedin !== null && backInStockEmail.thankyou_social.linkedin !== "") ||
+                                                                                        (backInStockEmail.thankyou_social.pinterest !== null && backInStockEmail.thankyou_social.pinterest !== "") ?
+                                                                                            <React.Fragment>
+                                                                                                <tr className="social-text-wrapper">
+                                                                                                    <td colSpan={3} className="social-text color-text-tertiary" style={{display: (backInStockEmail.thankyou_social.instagram !== null && backInStockEmail.thankyou_social.instagram !== "") || (backInStockEmail.thankyou_social.facebook !== null && backInStockEmail.thankyou_social.facebook !== "") || (backInStockEmail.thankyou_social.twitter !== null && backInStockEmail.thankyou_social.twitter !== "") || (backInStockEmail.thankyou_social.telegram !== null && backInStockEmail.thankyou_social.telegram !== "") || (backInStockEmail.thankyou_social.linkedin !== null && backInStockEmail.thankyou_social.linkedin !== "") || (backInStockEmail.thankyou_social.pinterest !== null && backInStockEmail.thankyou_social.pinterest !== "") ? "block" : 'none', fontWeight: 400, fontSize: '16px', textAlign: 'center', color: 'rgb(116, 124, 128)', paddingBottom: '10px', paddingTop: '30px'}}>{backInStockEmail.thankyou_social.title}</td>
+                                                                                                </tr>
+                                                                                                <tr className="social-networks-wrapper">
+                                                                                                    <td className="social-networks"
+                                                                                                        style={{textAlign: 'center'}}>
+                                                                                                        <button className="instagram bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: backInStockEmail.thankyou_social.instagram !== null && backInStockEmail.thankyou_social.instagram.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: backInStockEmail.thankyou_style.btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}>{instagramImage}</button>
+                                                                                                        <button className="facebook bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: backInStockEmail.thankyou_social.facebook !== null && backInStockEmail.thankyou_social.facebook.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: backInStockEmail.thankyou_style.btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}>{facebookImage}</button>
+                                                                                                        <button className="twitter bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: backInStockEmail.thankyou_social.twitter !== null && backInStockEmail.thankyou_social.twitter.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: backInStockEmail.thankyou_style.btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}>{twitterImage}</button>
+                                                                                                        <button className="telegram bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: backInStockEmail.thankyou_social.telegram !== null && backInStockEmail.thankyou_social.telegram.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: backInStockEmail.thankyou_style.btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}>{telegramImage}</button>
+                                                                                                        <button className="linkedin bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: backInStockEmail.thankyou_social.linkedin !== null && backInStockEmail.thankyou_social.linkedin.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: backInStockEmail.thankyou_style.btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}>{linkedInImage}</button>
+                                                                                                        <button className="pinterest bg-secondary" style={{border: 'none', boxSizing: 'border-box', display: backInStockEmail.thankyou_social.pinterest !== null && backInStockEmail.thankyou_social.pinterest.trim() !== "" ? "inline-block" : 'none', margin: '0px 12px', backgroundColor: backInStockEmail.thankyou_style.btn_bg_color, width: '24px', height: '24px', borderRadius: '50%'}}>{pinterestImage}</button>
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            </React.Fragment> : null
+                                                                                    }
+                                                                                    </tbody>
+                                                                                </table>
                                                                             </td>
                                                                         </tr>
-                                                                    </React.Fragment> : null
-                                                            }
-                                                            </tbody>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </BlockStack>
+                                                    </Box>
+                                                </Card>
+                                                <span>
+                                            <Button onClick={onUpgradeTemplate} variant={"primary"}>Upgrade template</Button>
+                                        </span>
+                                            </BlockStack> : null
+
+                                    }
+
+
                                 </BlockStack>
                             </Box>
+
                         </Card>
                     </Layout.Section>
                 </Layout>

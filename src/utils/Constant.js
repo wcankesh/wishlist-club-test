@@ -352,7 +352,210 @@ export const templateJson = {
                                     "deletable": true,
                                     "hideable": true,
                                     "hideMobile": false,
-                                    "text": "<p style=\"font-size: 14px; line-height: 140%;\">Hello {customer_name},</p>\n<p style=\"font-size: 14px; line-height: 140%;\"> </p>\n<p style=\"font-size: 14px; line-height: 140%;\"> </p>\n<p style=\"font-size: 14px; line-height: 140%;\">Thank you for ordering our product it was a pleasure serving you. We appreciate your purchase with us, and we'd like to know more about your online shopping experience. With your help, we can make our products even better! So left the rating and your personal experience.</p>\n<p style=\"font-size: 14px; line-height: 140%;\"> </p>\n<p style=\"font-size: 14px; line-height: 140%;\">{product_html}</p>"
+                                    "text": "<p style=\"font-size: 14px; line-height: 140%;\">{shop_name},</p>\n<p style=\"font-size: 14px; line-height: 140%;\"> </p>\n<p style=\"font-size: 14px; line-height: 140%;\"> </p>\n<p style=\"font-size: 14px; line-height: 140%;\">Thank you for ordering our product it was a pleasure serving you. We appreciate your purchase with us, and we'd like to know more about your online shopping experience. With your help, we can make our products even better! So left the rating and your personal experience.</p>\n<p style=\"font-size: 14px; line-height: 140%;\"> </p>\n<p style=\"font-size: 14px; line-height: 140%;\">{product_html}</p>"
+                                },
+                                "hasDeprecatedFontControls": true
+                            }
+                        ],
+                        "values": {
+                            "backgroundColor": "",
+                            "padding": "0px",
+                            "border": {
+                                "borderTopWidth": "1px",
+                                "borderTopStyle": "solid",
+                                "borderTopColor": "#cccccc",
+                                "borderLeftWidth": "1px",
+                                "borderLeftStyle": "solid",
+                                "borderLeftColor": "#cccccc",
+                                "borderRightWidth": "1px",
+                                "borderRightStyle": "solid",
+                                "borderRightColor": "#cccccc",
+                                "borderBottomWidth": "1px",
+                                "borderBottomStyle": "solid",
+                                "borderBottomColor": "#cccccc"
+                            },
+                            "_meta": {
+                                "htmlID": "u_column_3",
+                                "htmlClassNames": "u_column"
+                            }
+                        }
+                    }
+                ],
+                "values": {
+                    "displayCondition": null,
+                    "columns": false,
+                    "backgroundColor": "#ffffff",
+                    "columnsBackgroundColor": "#ffffff",
+                    "backgroundImage": {
+                        "url": "",
+                        "fullWidth": true,
+                        "repeat": "no-repeat",
+                        "size": "custom",
+                        "position": "top-center",
+                        "customPosition": ["50%", "0%"]
+                    },
+                    "padding": "0px",
+                    "anchor": "",
+                    "hideDesktop": false,
+                    "_meta": {
+                        "htmlID": "u_row_3",
+                        "htmlClassNames": "u_row"
+                    },
+                    "selectable": true,
+                    "draggable": true,
+                    "duplicatable": true,
+                    "deletable": true,
+                    "hideable": true,
+                    "hideMobile": false,
+                    "noStackMobile": false
+                }
+            }
+        ],
+        "headers": [],
+        "footers": [],
+        "values": {
+            "popupPosition": "center",
+            "popupWidth": "600px",
+            "popupHeight": "auto",
+            "borderRadius": "10px",
+            "contentAlign": "center",
+            "contentVerticalAlign": "center",
+            "contentWidth": "700px",
+            "fontFamily": {
+                "label": "Arial",
+                "value": "arial,helvetica,sans-serif"
+            },
+            "textColor": "#000000",
+            "popupBackgroundColor": "#FFFFFF",
+            "popupBackgroundImage": {
+                "url": "",
+                "fullWidth": true,
+                "repeat": "no-repeat",
+                "size": "cover",
+                "position": "center"
+            },
+            "popupOverlay_backgroundColor": "rgba(0, 0, 0, 0.1)",
+            "popupCloseButton_position": "top-right",
+            "popupCloseButton_backgroundColor": "#DDDDDD",
+            "popupCloseButton_iconColor": "#000000",
+            "popupCloseButton_borderRadius": "0px",
+            "popupCloseButton_margin": "0px",
+            "popupCloseButton_action": {
+                "name": "close_popup",
+                "attrs": {
+                    "onClick": "document.querySelector('.u-popup-container').style.display = 'none';"
+                }
+            },
+            "backgroundColor": "#ffffff",
+            "preheaderText": "",
+            "linkStyle": {
+                "body": true,
+                "linkColor": "#0000ee",
+                "linkHoverColor": "#0000ee",
+                "linkUnderline": true,
+                "linkHoverUnderline": true
+            },
+            "backgroundImage": {
+                "url": "",
+                "fullWidth": true,
+                "repeat": "no-repeat",
+                "size": "custom",
+                "position": "top-center",
+                "customPosition": ["50%", "0%"]
+            },
+            "_meta": {
+                "htmlID": "u_body",
+                "htmlClassNames": "u_body"
+            }
+        }
+    },
+    "counters": {
+        "u_column": 5,
+        "u_row": 5,
+        "u_content_html": 1,
+        "u_content_image": 2,
+        "u_content_text": 12
+    },
+    "schemaVersion": 16
+};
+
+export const thankYouMessageTemplateJson = {
+    "body": {
+        "id": "tvzACkHHrb",
+        "rows": [
+            {
+                "id": "DQ-nz8OiK4",
+                "cells": [1],
+                "columns": [
+                    {
+                        "id": "8Ml9DnjW8t",
+                        "contents": [
+                            {
+                                "id": "hp1Mb9VXWY",
+                                "type": "image",
+                                "values": {
+                                    "containerPadding": "10px",
+                                    "anchor": "",
+                                    "src": {
+                                        "url": "https://images.unlayer.com/projects%2F0%2F1615899240499-3479669.jpg",
+                                        "width": 1500,
+                                        "height": 1000,
+                                        "autoWidth": false,
+                                        "maxWidth": "100%"
+                                    },
+                                    "textAlign": "center",
+                                    "altText": "Image",
+                                    "action": {
+                                        "name": "web",
+                                        "values": {
+                                            "href": "",
+                                            "target": "_blank"
+                                        }
+                                    },
+                                    "hideDesktop": false,
+                                    "displayCondition": null,
+                                    "_meta": {
+                                        "htmlID": "u_content_image_1",
+                                        "htmlClassNames": "u_content_image"
+                                    },
+                                    "selectable": true,
+                                    "draggable": true,
+                                    "duplicatable": true,
+                                    "deletable": true,
+                                    "hideable": true,
+                                    "hideMobile": false
+                                }
+                            },
+                            {
+                                "id": "43LZmbRuGs",
+                                "type": "text",
+                                "values": {
+                                    "containerPadding": "10px",
+                                    "anchor": "",
+                                    "fontSize": "14px",
+                                    "textAlign": "left",
+                                    "lineHeight": "140%",
+                                    "linkStyle": {
+                                        "inherit": true,
+                                        "linkColor": "#0000ee",
+                                        "linkHoverColor": "#0000ee",
+                                        "linkUnderline": true,
+                                        "linkHoverUnderline": true,
+                                        "body": false
+                                    },
+                                    "hideDesktop": false,
+                                    "displayCondition": null,
+                                    "_meta": {
+                                        "htmlID": "u_content_text_12",
+                                        "htmlClassNames": "u_content_text"
+                                    },
+                                    "selectable": true,
+                                    "draggable": true,
+                                    "duplicatable": true,
+                                    "deletable": true,
+                                    "hideable": true,
+                                    "hideMobile": false,
+                                    "text": "<p style=\"font-size: 14px; line-height: 140%;\">{shop_name},</p>\n<br>\n<p style=\"font-size: 14px; line-height: 140%;\"> </p>\n<p style=\"font-size: 14px; line-height: 140%;\">You subscribed for {product_name} successfully! </p>\n<br>\n<p style=\"font-size: 14px; line-height: 140%;\">Dear customer, we will notify you whenever {product_name} becomes available.</p>\n<p style=\"font-size: 14px; line-height: 140%;\"> </p>\n<br>\n<p style=\"font-size: 14px; line-height: 140%; text-align: center;\">{thankyou_button_html}</p>"
                                 },
                                 "hasDeprecatedFontControls": true
                             }
