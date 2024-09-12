@@ -72,6 +72,7 @@ const EmailHistory = () => {
         5: "Back In Stock thank you",
         6: "Back In Stock alert",
         7: "Wishlist notification",
+        8: "Verify email"
     };
 
     const rowMarkup = (email.lists || []).map((z, i) => {
