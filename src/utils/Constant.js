@@ -45,22 +45,33 @@ export const isChecked = (value) => {
     return false;
 };
 
-export const toggleFlag = (value) => {
+export const toggleFlag = (value, negate = false) => {
+    const normalizedValue = value === 'true' || value === '1' || value === 1 || value === true;
+    // Negate value
+    if (negate) {
+        if (typeof value === 'string') {
+            if (value === '0' || value === '1') return '0';
+            if (value === 'false' || value === 'true') return 'false';
+        } else if (typeof value === 'number') {
+            if (value === 0 || value === 1) return 0;
+        } else if (typeof value === 'boolean') {
+            return false;
+        }
+    }
+    // Toggle value
     if (typeof value === 'string') {
         if (value === '0' || value === '1') {
             return value === '0' ? '1' : '0';
         } else if (value === 'false' || value === 'true') {
             return value === 'false' ? 'true' : 'false';
-        } else {
-            throw new Error('Invalid input string value. Expected "0", "1", "false", or "true".');
         }
     } else if (typeof value === 'number') {
         return value === 0 ? 1 : 0;
     } else if (typeof value === 'boolean') {
         return !value;
-    } else {
-        throw new Error('Invalid input type. Expected string, number, or boolean.');
     }
+    // Default toggle for unexpected input types
+    return normalizedValue ? '0' : '1';
 };
 
 export const LabelWrapper = ({label}) => {
