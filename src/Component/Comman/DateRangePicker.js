@@ -66,6 +66,7 @@ const DateRangePicker = ({ onChange, fullWidth }) =>  {
         month: activeDateRange.period.since.getMonth(),
         year: activeDateRange.period.since.getFullYear(),
     });
+    const [buttonLabel , setButtonLabel] = useState(activeDateRange.title)
 
     const datePickerRef = useRef(null);
     const VALID_YYYY_MM_DD_DATE_REGEX = /^\d{4}-\d{1,2}-\d{1,2}/;
@@ -184,6 +185,11 @@ const DateRangePicker = ({ onChange, fullWidth }) =>  {
     }
     function apply() {
         setPopoverActive(false);
+        const buttonValue =
+            activeDateRange.title === "Custom"
+                ? activeDateRange.period.since.toDateString() + " - " + activeDateRange.period.until.toDateString()
+                : activeDateRange.title;
+        setButtonLabel(buttonValue)
         onChange({startDate: activeDateRange.period.since, endDate: activeDateRange.period.until})
     }
     function cancel() {
@@ -217,12 +223,7 @@ const DateRangePicker = ({ onChange, fullWidth }) =>  {
             }
         }
     }, [activeDateRange]);
-    const buttonValue =
-        activeDateRange.title === "Custom"
-            ? activeDateRange.period.since.toDateString() +
-            " - " +
-            activeDateRange.period.until.toDateString()
-            : activeDateRange.title;
+
     return (
         <Popover
             active={popoverActive}
@@ -240,7 +241,7 @@ const DateRangePicker = ({ onChange, fullWidth }) =>  {
                     fullWidth={fullWidth}
                     onClick={() => setPopoverActive(!popoverActive)}
                 >
-                    {buttonValue}
+                    {buttonLabel}
                 </Button>
             }
             onClose={() => setPopoverActive(false)}
