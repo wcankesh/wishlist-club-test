@@ -277,6 +277,17 @@ const WishlistItemsEmail = () => {
         }
     };
 
+    const getHelpText = (fieldType) => {
+        const template = emailSetting?.new_wishlist_template;
+        const variablesMap = {
+            subject: {
+                0: "Add this {{shop_name}} variable",
+                1: "Add this {shop_name} variable"
+            },
+        };
+        return variablesMap[fieldType]?.[template] || '';
+    };
+
     return (
         <Fragment>
             <Page title={"Wishlist Items"} backAction={{content: 'Settings', onAction: onBack}}
@@ -316,6 +327,18 @@ const WishlistItemsEmail = () => {
                                     <BlockStack gap={"200"}>
                                     <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}>Email Settings</Text>
                                     <InlineGrid columns={{xs: 1, sm: 1, md: 1, lg: 2, xl: 2}} gap={'150'}>
+                                        <TextField label="Email subject" value={emailSetting.subject}
+                                                   helpText={getHelpText('subject')}
+                                                   onChange={(value) => handleChange({
+                                                       target: {
+                                                           name: "subject",
+                                                           value
+                                                       }
+                                                   })}
+                                                   name={"subject"}
+                                                   onBlur={onBlur}
+                                                   error={emailSettingError.subject}
+                                        />
                                         <TextField
                                             label="Reply to email"
                                             value={emailSetting.reply_to_mail}

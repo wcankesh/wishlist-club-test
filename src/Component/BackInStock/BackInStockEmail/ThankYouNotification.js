@@ -310,6 +310,17 @@ const ThankYouNotification = () => {
         }
     };
 
+    const getHelpText = (fieldType) => {
+        const template = backInStockEmail?.new_thankyou_template;
+        const variablesMap = {
+            email_subject : {
+                0 : 'Add this {{product_name}} {{shop_name}} variable',
+                1 : 'Add this {product_name} {shop_name} variable'
+            }
+        };
+        return variablesMap[fieldType]?.[template] || '';
+    };
+
     return (
         <Fragment>
             <Page title={"Thank You Message"} backAction={{content: 'Settings', onAction: onBack}}
@@ -374,7 +385,7 @@ const ThankYouNotification = () => {
                                                    name={"email_subject"}
                                                    onBlur={onBlur}
                                                    error={backInStockEmailError.email_subject}
-                                                   helpText={"Add this {{product_name}} {{shop_name}} variable"}
+                                                   helpText={getHelpText('email_subject')}
                                         />
                                     </InlineGrid>
                                 </BlockStack>

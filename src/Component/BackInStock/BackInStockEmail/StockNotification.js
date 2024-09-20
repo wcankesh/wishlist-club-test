@@ -305,6 +305,26 @@ const StockNotification = () => {
         }
     };
 
+    const getHelpText = (fieldType) => {
+        const template = backInStockEmail?.new_bis_template;
+        const variablesMap = {
+            email_title: {
+                0: "Add this {{product_name}} {{shop_name}} variable",
+                1: "Add this {product_name} {shop_name} variable"
+            },
+            email_description: {
+                0: "Add this {{shop_name}} {{product_name}} {{shop_url}} {{product_url}} variable",
+                1: "Add this {shop_name} {product_name} {shop_url} {product_url} variable"
+            },
+            email_subject : {
+                0 : 'Add this {{product_name}} {{shop_name}} variable',
+                1 : 'Add this {product_name} {shop_name} variable'
+            }
+        };
+        return variablesMap[fieldType]?.[template] || '';
+    };
+
+
     return (
         <Fragment>
             <Page title={"Back In Stock Notification"} backAction={{content: 'Settings', onAction: onBack}}
@@ -342,9 +362,9 @@ const StockNotification = () => {
                                                            name={"email_subject"}
                                                            onBlur={onBlur}
                                                            error={backInStockEmailError.email_subject}
-                                                           helpText={"Add this {{product_name}} {{shop_name}} variable"}
+                                                           helpText={getHelpText("email_subject")}
                                                 />
-                                                <TextField label={"Email Title"}
+                                                {/*<TextField label={"Email Title"}
                                                            multiline={2}
                                                            value={backInStockEmail.bis_content.email_title}
                                                            onChange={(value) => {
@@ -355,7 +375,7 @@ const StockNotification = () => {
                                                                    }
                                                                })
                                                            }}
-                                                           helpText={"Add this {{product_name}} {{shop_name}} variable"}
+                                                           helpText={getHelpText("email_title")}
                                                            name={"email_title"}
                                                            onBlur={onBlur}
                                                            error={backInStockEmailError.email_title}
@@ -374,7 +394,8 @@ const StockNotification = () => {
                                                            name={"email_description"}
                                                            onBlur={onBlur}
                                                            error={backInStockEmailError.email_description}
-                                                           helpText={"Add this {{shop_name}} {{product_name}} {{shop_url}} {{product_url}} variable"}/>
+                                                           helpText={getHelpText("email_description")}
+                                                />*/}
                                                 <TextField label={'"Add to cart" label'}
                                                            value={backInStockEmail.bis_content.add_to_cart_button_text}
                                                            onChange={(value) => {

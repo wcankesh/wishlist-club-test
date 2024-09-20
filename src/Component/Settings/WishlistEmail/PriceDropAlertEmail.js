@@ -265,6 +265,17 @@ const PriceDropAlertEmail = () => {
         }
     };
 
+    const getHelpText = (fieldType) => {
+        const template = emailSetting?.new_price_drop_template;
+        const variablesMap = {
+            price_drop_email_subject: {
+                0: "Add this {{product_name}} {{shop_name}} variable",
+                1: "Add this {product_name} {shop_name} variable"
+            },
+        };
+        return variablesMap[fieldType]?.[template] || '';
+    };
+
     return (
         <Fragment>
             <Page title={"Price Drop Alerts"} backAction={{content: 'Settings', onAction: onBack}}
@@ -300,7 +311,7 @@ const PriceDropAlertEmail = () => {
                                         <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}> Email Settings</Text>
                                         <InlineGrid columns={{xs: 1, sm: 1, md: 1, lg: 2, xl: 2}} gap={'150'}>
                                                 <TextField label="Email subject"
-                                                           helpText="Add this {{product_name}} {{shop_name}} variable"
+                                                           helpText={getHelpText('price_drop_email_subject')}
                                                            value={emailSetting.price_drop_email_subject}
                                                            onChange={(value) => handleChange({
                                                                target: {

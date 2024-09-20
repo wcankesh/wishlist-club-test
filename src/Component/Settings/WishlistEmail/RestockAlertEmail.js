@@ -264,6 +264,17 @@ const RestockAlertEmail = () => {
         }
     };
 
+    const getHelpText = (fieldType) => {
+        const template = emailSetting.new_restock_template;
+        const variablesMap = {
+            restock_email_subject: {
+                0: "Add this {{product_name}} {{shop_name}} variable",
+                1: "Add this {product_name} {shop_name} variable"
+            },
+        };
+        return variablesMap[fieldType]?.[template] || '';
+    };
+
     return (
         <Fragment>
             <Page title={"Restock Alerts"} backAction={{content: 'Settings', onAction: onBack}}
@@ -300,7 +311,7 @@ const RestockAlertEmail = () => {
                                         <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}>Email Setting</Text>
                                         <InlineGrid columns={{xs: 1, sm: 1, md: 1, lg: 2, xl: 2}} gap={'150'}>
                                             <TextField label="Email subject"
-                                                       helpText="Add this {{product_name}} {{shop_name}} variable"
+                                                       helpText={getHelpText('restock_email_subject')}
                                                        value={emailSetting.restock_email_subject}
                                                        onChange={(value) => handleChange({
                                                            target: {
