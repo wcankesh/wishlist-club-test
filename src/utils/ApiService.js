@@ -5,7 +5,7 @@ import {isMobile, isShopifyEmbedded} from '@shopify/app-bridge/utilities';
 import qs from "qs";
 
 const instance = axios.create();
-const apiBaseUrl = "https://rivyo.com/wishlist/api/public";
+const apiBaseUrl = "https://stagingapp.webcontrive.com/wishlist/api/public";
 
 const urlParams = new URLSearchParams(window.location.search);
 const host = urlParams.get('host');

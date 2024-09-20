@@ -1,7 +1,7 @@
 {
   "name": "wishlist-club-new-test",
   "version": "0.1.0",
-  "homepage": "https://rivyo.com/wishlist/admin/",
+  "homepage": "https://stagingapp.webcontrive.com/wishlist/admin/",
   "private": true,
   "dependencies": {
     "@shopify/app-bridge": "^3.7.9",
