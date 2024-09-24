@@ -23,6 +23,7 @@ import {AppDocsLinks} from "../../../utils/AppDocsLinks";
 import {ProductGroup1242} from "../../../utils/AppImages";
 import {formValidate} from "../../Comman/formValidate";
 import EmailEditorComponent from "../../Comman/EmailEditorComponent";
+import EmailTemplateMsg from "../../Comman/EmailTemplateMsg";
 
 const initialState = {
     subject: "Wishlist1 Club Products test!!!",
@@ -538,14 +539,17 @@ const PriceDropAlertEmail = () => {
                                         <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}>Email Template</Text>
                                         {
                                             emailSetting?.new_price_drop_template == 1 ?
-                                                <EmailEditorComponent
-                                                    ref={editorRef}
-                                                    exportHtml={exportHtml}
-                                                    onLoad={onLoad}
-                                                    style={{ height: 600 }}
-                                                    mailTemplate={mailTemplate}
-                                                    onChange={onChange}
-                                                />
+                                                <BlockStack gap={"100"}>
+                                                    <EmailTemplateMsg msgArray={["{product_name} : To show product title","{shop_name} : To show the shop name","{product_html} : To show price drop product (required)"]}/>
+                                                    <EmailEditorComponent
+                                                        ref={editorRef}
+                                                        exportHtml={exportHtml}
+                                                        onLoad={onLoad}
+                                                        style={{ height: 600 }}
+                                                        mailTemplate={mailTemplate}
+                                                        onChange={onChange}
+                                                    />
+                                                </BlockStack>
                                                 :
                                             emailSetting?.new_price_drop_template == 0 ?
                                                 <BlockStack gap={"400"}>

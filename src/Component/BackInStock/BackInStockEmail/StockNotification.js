@@ -25,6 +25,7 @@ import {formValidate} from "../../Comman/formValidate";
 import {Icons} from "../../../utils/Icons";
 import {Product3} from "../../../utils/AppImages";
 import EmailEditorComponent from "../../Comman/EmailEditorComponent";
+import EmailTemplateMsg from "../../Comman/EmailTemplateMsg";
 
 const initialState = {
     bis_from_mail: "",
@@ -625,14 +626,17 @@ const StockNotification = () => {
                                         {
                                             backInStockEmail?.new_bis_template == 1 ?
                                                 <div className={"email-editor-wrap"}>
-                                                    <EmailEditorComponent
-                                                        ref={editorRef}
-                                                        exportHtml={exportHtml}
-                                                        onLoad={onLoad}
-                                                        style={{ height: 600 }}
-                                                        mailTemplate={mailTemplate}
-                                                        onChange={onChange}
-                                                    />
+                                                    <BlockStack gap={100}>
+                                                        <EmailTemplateMsg msgArray={["{shop_name} : To show the shop name","{product_name}: To show product title","{product_html}: To show product (required)"]}/>
+                                                        <EmailEditorComponent
+                                                            ref={editorRef}
+                                                            exportHtml={exportHtml}
+                                                            onLoad={onLoad}
+                                                            style={{ height: 600 }}
+                                                            mailTemplate={mailTemplate}
+                                                            onChange={onChange}
+                                                        />
+                                                    </BlockStack>
                                                 </div>
                                                 : backInStockEmail?.new_bis_template == 0 ?
                                                 <BlockStack gap={"400"}>

@@ -26,6 +26,7 @@ import {AppDocsLinks} from "../../../utils/AppDocsLinks";
 import {ProductGroup1242, ProductGroup1249} from "../../../utils/AppImages";
 import {formValidate} from "../../Comman/formValidate";
 import EmailEditorComponent from "../../Comman/EmailEditorComponent";
+import EmailTemplateMsg from "../../Comman/EmailTemplateMsg";
 
 const initialSate = {
     subject: "Wishlist1 Club Products!!!",
@@ -570,14 +571,17 @@ const WishlistItemsEmail = () => {
                                     <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}> Email Template</Text>
                                         {
                                             emailSetting?.new_wishlist_template == 1 ?
-                                                <EmailEditorComponent
-                                                    ref={editorRef}
-                                                    exportHtml={exportHtml}
-                                                    onLoad={onLoad}
-                                                    style={{ height: 600 }}
-                                                    mailTemplate={mailTemplate}
-                                                    onChange={onChange}
-                                                />
+                                                <BlockStack gap={"100"}>
+                                                    <EmailTemplateMsg msgArray={["{shop_name} : To show the shop name","{product_html} : To show wishlist product (required)"]}/>
+                                                    <EmailEditorComponent
+                                                        ref={editorRef}
+                                                        exportHtml={exportHtml}
+                                                        onLoad={onLoad}
+                                                        style={{ height: 600 }}
+                                                        mailTemplate={mailTemplate}
+                                                        onChange={onChange}
+                                                    />
+                                                </BlockStack>
                                                 : emailSetting?.new_wishlist_template == 0 ?
                                                 <BlockStack gap={"400"}>
                                                     <Card padding={"0"}>

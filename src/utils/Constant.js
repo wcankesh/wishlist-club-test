@@ -566,7 +566,7 @@ export const thankYouMessageTemplateJson = {
                                     "deletable": true,
                                     "hideable": true,
                                     "hideMobile": false,
-                                    "text": "<p style=\"font-size: 14px; line-height: 140%;\">{shop_name},</p>\n<br>\n<p style=\"font-size: 14px; line-height: 140%;\"> </p>\n<p style=\"font-size: 14px; line-height: 140%;\">You subscribed for {product_name} successfully! </p>\n<br>\n<p style=\"font-size: 14px; line-height: 140%;\">Dear customer, we will notify you whenever {product_name} becomes available.</p>\n<p style=\"font-size: 14px; line-height: 140%;\"> </p>\n<br>\n<p style=\"font-size: 14px; line-height: 140%; text-align: center;\">{thankyou_button_html}</p>"
+                                    "text": "<p style=\"font-size: 14px; line-height: 140%;\">{shop_name},</p>\n<br>\n<p style=\"font-size: 14px; line-height: 140%;\"> </p>\n<p style=\"font-size: 14px; line-height: 140%;\">You subscribed for {product_name} successfully! </p>\n<br>\n<p style=\"font-size: 14px; line-height: 140%;\">Dear customer, we will notify you whenever {product_name} becomes available.</p>\n<p style=\"font-size: 14px; line-height: 140%;\"> </p>\n<br>\n<p style=\"font-size: 14px; line-height: 140%; text-align: center;\">{product_html}</p>"
                                 },
                                 "hasDeprecatedFontControls": true
                             }

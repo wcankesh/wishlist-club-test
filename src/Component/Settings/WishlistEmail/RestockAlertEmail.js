@@ -24,6 +24,7 @@ import {ProductGroup1242} from "../../../utils/AppImages";
 import {AppDocsLinks} from "../../../utils/AppDocsLinks";
 import {formValidate} from "../../Comman/formValidate";
 import EmailEditorComponent from "../../Comman/EmailEditorComponent";
+import EmailTemplateMsg from "../../Comman/EmailTemplateMsg";
 
 const initialState = {
     restock_email_subject: "Restock Alert!!!",
@@ -535,6 +536,8 @@ const RestockAlertEmail = () => {
                                         <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}>Email Template</Text>
                                         {
                                             emailSetting.new_restock_template == 1 ?
+                                                <BlockStack gap={"100"}>
+                                                    <EmailTemplateMsg msgArray={["{product_name} : To show product title","{shop_name} : To show the shop name","{product_html} : To show restock alert product (required)"]}/>
                                                     <EmailEditorComponent
                                                         ref={editorRef}
                                                         exportHtml={exportHtml}
@@ -543,6 +546,7 @@ const RestockAlertEmail = () => {
                                                         mailTemplate={mailTemplate}
                                                         onChange={onChange}
                                                     />
+                                                </BlockStack>
                                                 :
                                                 emailSetting.new_restock_template == 0 ?
                                                     <BlockStack gap={"400"}>

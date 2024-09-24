@@ -12,6 +12,7 @@ import {
     Page,
     Button,
     InlineGrid,
+    List
 } from "@shopify/polaris";
 import {useNavigate} from "react-router-dom"
 import {useSelector} from "react-redux";
@@ -31,6 +32,7 @@ import SwitchButton from "../../Comman/SwitchButton";
 import {AppDocsLinks} from "../../../utils/AppDocsLinks";
 import {formValidate} from "../../Comman/formValidate";
 import EmailEditorComponent from "../../Comman/EmailEditorComponent";
+import EmailTemplateMsg from "../../Comman/EmailTemplateMsg";
 
 const initialState = {
     thankyou_from_mail: "",
@@ -477,17 +479,20 @@ const ThankYouNotification = () => {
                             <Box padding={"400"}>
                                 <BlockStack gap={"200"}>
                                     <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}>Email Template</Text>
-
                                     {
                                         backInStockEmail?.new_thankyou_template == 1 ?
-                                            <EmailEditorComponent
-                                                ref={editorRef}
-                                                exportHtml={exportHtml}
-                                                onLoad={onLoad}
-                                                style={{ height: 600 }}
-                                                mailTemplate={mailTemplate}
-                                                onChange={onChange}
-                                            />
+                                            <BlockStack gap={100}>
+                                                <EmailTemplateMsg msgArray={['{shop_name} : To show the shop name','{product_name}: To show product title','{product_html}: To show continue shopping button (required)']}/>
+
+                                                <EmailEditorComponent
+                                                    ref={editorRef}
+                                                    exportHtml={exportHtml}
+                                                    onLoad={onLoad}
+                                                    style={{ height: 600 }}
+                                                    mailTemplate={mailTemplate}
+                                                    onChange={onChange}
+                                                />
+                                            </BlockStack>
                                         : backInStockEmail?.new_thankyou_template == 0 ?
                                             <BlockStack gap={"400"}>
                                                 <Card padding={"0"}>
