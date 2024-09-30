@@ -1,19 +1,24 @@
-import React, {Fragment} from 'react';
-import {Banner, Layout, Page, Text} from "@shopify/polaris";
+import React, {Fragment, useState} from 'react';
+import {Banner, Layout, Page, Text, Link, Button, BlockStack, Modal, List} from "@shopify/polaris";
 import HelpDesk from "./HelpDesk/HelpDesk"
 import {useDispatch, useSelector} from "react-redux";
 import Feedback from "./Feedback/Feedback";
 import {Shop_details} from "../../redux/action/action";
 import {apiService, baseUrl, openUrlInNewWindow} from "../../utils/Constant";
 import {useNavigate} from "react-router-dom";
+import {AppDocsLinks} from "../../utils/AppDocsLinks";
+import ConformationModal from "../Comman/ConformationModal";
 
 const Dashboard = () => {
+    const [active,setActive] = useState(false);
+    const [isLoading,setIsLoading] = useState(false);
     let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     let dayName = days[new Date().getDay()];
     let hours = new Date().getHours();
     const shopDetails = useSelector((state) => state.shopDetails)
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [bannerDisplayText,setBannerDisplayText] = useState("")
 
     const onRemoveBanner = async (name) => {
         const payload = {
@@ -31,11 +36,49 @@ const Dashboard = () => {
         dispatch(Shop_details({...shopDetails, addon_email_notification: false}));
     }
 
+    const handleUpgradeNow = (text) => {
+        setActive((prevActive) => !prevActive);
+        setBannerDisplayText(text);
+    }
+
+
+    const handleConfirmation = async () =>{
+        setIsLoading(true);
+        const payload ={
+            new_wishlist_template : 1,
+            new_price_drop_template : 1,
+            new_restock_template : 1,
+            new_bis_template : 1,
+            new_thankyou_template : 1,
+        }
+        const response = await apiService.templateConfirmation(payload);
+        if (response.status === 200) {
+            setIsLoading(false);
+            setActive((active)=>!active);
+            await onRemoveBanner(bannerDisplayText);
+
+        } else {
+            setIsLoading(false);
+            setActive((active)=>!active)
+        }
+    }
+
     return (
         <Fragment>
             <Page
                 title={`Good ${hours < 12 ? "Morning" : hours >= 12 && hours <= 17 ? "Afternoon" : hours >= 17 && hours <= 24 ? "Evening" : ""} , ${shopDetails.store_name}`}
                 subtitle={`Happy ${dayName} from the WebContrive team`}>
+
+                <ConformationModal
+                    active={active}
+                    onClose={handleUpgradeNow}
+                    isLoading={isLoading}
+                    setIsLoading={setIsLoading}
+                    setActive={setActive}
+                    isEditor={false}
+                    handleConfirmation={handleConfirmation}
+                />
+
                 <Layout>
                     {
                         (shopDetails.shopify_plan === "affiliate" || shopDetails.shopify_plan === "staff" || shopDetails.shopify_plan === "plus_partner_sandbox" || shopDetails.shopify_plan === "partner_test") ?
@@ -74,11 +117,14 @@ const Dashboard = () => {
                                     shopDetails && shopDetails.bannerDisplaySetting[x.notification_title.replaceAll(" ", "_")] !== "true" ?
                                         <Layout.Section>
                                             <Banner
-                                                title={x.notification_title}
-                                                tone={x.type}
-                                                onDismiss={() => onRemoveBanner(x.notification_title.replaceAll(" ", "_"))}
+                                                title={x?.notification_title}
+                                                tone={x?.type}
+                                                onDismiss={x?.is_custom_click ? "" :() => onRemoveBanner(x?.notification_title.replaceAll(" ", "_"))}
                                             >
-                                                <span dangerouslySetInnerHTML={{__html: x.notification_description}}/>
+                                                <BlockStack gap={"100"}>
+                                                    <span dangerouslySetInnerHTML={{__html: x?.notification_description}}/>
+                                                    {x?.is_custom_click &&<span><Button onClick={()=>handleUpgradeNow(x?.notification_title.replaceAll(" ", "_"))} variant={"primary"}>{x?.button_text}</Button></span>}
+                                                </BlockStack>
                                             </Banner>
                                         </Layout.Section> : ""
                                 )
@@ -108,6 +154,7 @@ const Dashboard = () => {
                             <Feedback onRemoveBanner={onRemoveBanner}/>
                         </Layout.Section> : ""
                     }
+
                 </Layout>
             </Page>
         </Fragment>

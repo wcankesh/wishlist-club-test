@@ -692,3 +692,11 @@ export const thankYouMessageTemplateJson = {
     },
     "schemaVersion": 16
 };
+
+export const upgradePayload = {
+    new_wishlist_template : 1,
+    new_price_drop_template : 1,
+    new_restock_template : 1,
+    new_bis_template : 1,
+    new_thankyou_template : 1,
+}

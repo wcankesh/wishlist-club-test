@@ -12,7 +12,7 @@ import {
     linkedInImage, pinterestImage,
     telegramImage,
     templateJson,
-    twitterImage,
+    twitterImage, upgradePayload,
 } from "../../../utils/Constant";
 import {useNavigate} from "react-router-dom"
 import {useSelector} from "react-redux";
@@ -26,6 +26,7 @@ import {Icons} from "../../../utils/Icons";
 import {Product3} from "../../../utils/AppImages";
 import EmailEditorComponent from "../../Comman/EmailEditorComponent";
 import EmailTemplateMsg from "../../Comman/EmailTemplateMsg";
+import ConformationModal from "../../Comman/ConformationModal";
 
 const initialState = {
     bis_from_mail: "",
@@ -99,6 +100,8 @@ const StockNotification = () => {
     const [isErrorServer, setIsErrorServer] = useState(false)
     const [message, setMessage] = useState("")
     const [mailTemplate,setMailTemplate] = useState({});
+    const [active,setActive] = useState(false);
+    const [isConfirmLoading,setIsConfirmLoading] = useState(false);
     const shopDetails = useSelector((state) => state.shopDetails)
 
     useEffect(() => {
@@ -269,9 +272,6 @@ const StockNotification = () => {
         setBackInStockEmailError({...backInStockEmailError, [name]: formValidate(name, value)})
     }
 
-    const onUpgradeTemplate = () => {
-        setbackInStockEmail({...backInStockEmail,new_bis_template:1});
-    }
     const exportHtml = () => {
         editorRef.current.editor.exportHtml((data) => {
             const {design, html} = data;
@@ -325,6 +325,26 @@ const StockNotification = () => {
         return variablesMap[fieldType]?.[template] || '';
     };
 
+    const handleConfirmation = async () => {
+        setIsConfirmLoading(true);
+        const payload ={...upgradePayload}
+        const response = await apiService.templateConfirmation(payload);
+        if (response.status === 200) {
+            setIsConfirmLoading(false);
+            setActive((active)=>!active);
+            setbackInStockEmail({...backInStockEmail,new_bis_template:1});
+            setMessage(response?.message)
+        } else {
+            setIsConfirmLoading(false);
+            setActive((active)=>!active);
+            setMessage(response?.message)
+        }
+    }
+
+    const handleUpgrade = () => {
+        setActive(!active);
+    }
+
 
     return (
         <Fragment>
@@ -339,6 +359,14 @@ const StockNotification = () => {
                       </Fragment>
 
                   }>
+                <ConformationModal
+                    active={active}
+                    onClose={handleUpgrade}
+                    isLoading={isConfirmLoading}
+                    isEditor={false}
+                    handleConfirmation={handleConfirmation}
+                    isEditor={true}
+                />
                 <Layout>
                     {message !== "" && isError === false ?
                         <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer}/> : ""}
@@ -762,7 +790,7 @@ const StockNotification = () => {
                                                             </Box>
                                                         </Card>
                                                         <span>
-                                                            <Button onClick={onUpgradeTemplate} variant={"primary"}>Upgrade template</Button>
+                                                            <Button onClick={handleUpgrade} variant={"primary"}>Upgrade template</Button>
                                                         </span>
                                                 </BlockStack>
                                                 : null

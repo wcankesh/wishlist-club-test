@@ -14,7 +14,7 @@ import {
     capitalizeMessage,
     facebookImage,
     instagramImage, linkedInImage, pinterestImage, telegramImage, templateJson,
-    twitterImage
+    twitterImage, upgradePayload
 } from "../../../utils/Constant";
 import ColorInput from "../../Comman/ColorInput"
 import ToastMessage from "../../Comman/ToastMessage"
@@ -24,6 +24,7 @@ import {ProductGroup1242} from "../../../utils/AppImages";
 import {formValidate} from "../../Comman/formValidate";
 import EmailEditorComponent from "../../Comman/EmailEditorComponent";
 import EmailTemplateMsg from "../../Comman/EmailTemplateMsg";
+import ConformationModal from "../../Comman/ConformationModal";
 
 const initialState = {
     subject: "Wishlist1 Club Products test!!!",
@@ -89,6 +90,9 @@ const PriceDropAlertEmail = () => {
     const [message, setMessage] = useState("")
     const [selectedPriceLogo, setSelectedPriceLogo] = useState("");
     const [mailTemplate,setMailTemplate] = useState({});
+    const [active,setActive] = useState(false);
+    const [isConfirmLoading,setIsConfirmLoading] = useState(false);
+
     const shopDetails = useSelector((state) => state.shopDetails);
 
     useEffect(() => {
@@ -229,9 +233,6 @@ const PriceDropAlertEmail = () => {
         saveEmailSetting({[e.target.name]: e.target.value}, false)
     }
 
-    const onUpgradeTemplate = () => {
-        setEmailSetting({...emailSetting,new_price_drop_template:1});
-    }
     const exportHtml = () => {
         editorRef.current.editor.exportHtml((data) => {
             const {design, html} = data;
@@ -277,6 +278,27 @@ const PriceDropAlertEmail = () => {
         return variablesMap[fieldType]?.[template] || '';
     };
 
+    const handleUpgradeNow = () => {
+        setActive(!active);
+    }
+
+    const handleConfirmation = async () => {
+        setIsConfirmLoading(true);
+        const payload ={...upgradePayload}
+        const response = await apiService.templateConfirmation(payload);
+        if (response.status === 200) {
+            setIsConfirmLoading(false);
+            setActive((active)=>!active);
+            setEmailSetting({...emailSetting,new_price_drop_template:1});
+            setMessage(response?.message)
+        } else {
+            setIsConfirmLoading(false);
+            setActive((active)=>!active);
+            setMessage(response?.message)
+        }
+    }
+
+
     return (
         <Fragment>
             <Page title={"Price Drop Alerts"} backAction={{content: 'Settings', onAction: onBack}}
@@ -301,6 +323,15 @@ const PriceDropAlertEmail = () => {
                       </Fragment>
                   }
                 >
+                <ConformationModal
+                    active={active}
+                    onClose={handleUpgradeNow}
+                    isLoading={isConfirmLoading}
+                    isEditor={true}
+                    handleConfirmation={handleConfirmation}
+                />
+
+
                 {message !== "" && isError === false ? <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer}/> : ""}
                 <Layout>
                 <CustomErrorBanner link={AppDocsLinks.article["425"]} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError} />
@@ -646,7 +677,7 @@ const PriceDropAlertEmail = () => {
                                                         </Box>
                                                     </Card>
                                                     <span>
-                                                        <Button onClick={onUpgradeTemplate} variant={"primary"}>Upgrade template</Button>
+                                                        <Button onClick={handleUpgradeNow} variant={"primary"}>Upgrade template</Button>
                                                     </span>
                                                 </BlockStack> : null
                                         }

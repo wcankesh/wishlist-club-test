@@ -23,7 +23,7 @@ import {
     capitalizeMessage,
     facebookImage,
     instagramImage, linkedInImage, pinterestImage, telegramImage, thankYouMessageTemplateJson,
-    twitterImage
+    twitterImage, upgradePayload
 } from "../../../utils/Constant";
 import ToastMessage from "../../Comman/ToastMessage";
 import ColorInput from "../../Comman/ColorInput";
@@ -33,6 +33,7 @@ import {AppDocsLinks} from "../../../utils/AppDocsLinks";
 import {formValidate} from "../../Comman/formValidate";
 import EmailEditorComponent from "../../Comman/EmailEditorComponent";
 import EmailTemplateMsg from "../../Comman/EmailTemplateMsg";
+import ConformationModal from "../../Comman/ConformationModal";
 
 const initialState = {
     thankyou_from_mail: "",
@@ -129,6 +130,8 @@ const ThankYouNotification = () => {
     const [isErrorServer, setIsErrorServer] = useState(false)
     const [message, setMessage] = useState("")
     const [mailTemplate,setMailTemplate] = useState({});
+    const [active,setActive] = useState(false);
+    const [isConfirmLoading,setIsConfirmLoading] = useState(false);
     const shopDetails = useSelector((state) => state.shopDetails)
 
     useEffect(() => {
@@ -275,9 +278,6 @@ const ThankYouNotification = () => {
 
     }
 
-    const onUpgradeTemplate = () => {
-        setbackInStockEmail({...backInStockEmail,new_thankyou_template:1});
-    }
     const exportHtml = () => {
         editorRef.current.editor.exportHtml((data) => {
             const {design, html} = data;
@@ -323,6 +323,26 @@ const ThankYouNotification = () => {
         return variablesMap[fieldType]?.[template] || '';
     };
 
+    const handleConfirmation  = async () => {
+        setIsConfirmLoading(true);
+        const payload ={...upgradePayload}
+        const response = await apiService.templateConfirmation(payload);
+        if (response.status === 200) {
+            setIsConfirmLoading(false);
+            setActive((active)=>!active);
+            setbackInStockEmail({...backInStockEmail,new_thankyou_template:1});
+            setMessage(response?.message)
+        } else {
+            setIsConfirmLoading(false);
+            setActive((active)=>!active);
+            setMessage(response?.message)
+        }
+    }
+
+    const handleUpgrade = () => {
+        setActive(!active)
+    }
+
     return (
         <Fragment>
             <Page title={"Thank You Message"} backAction={{content: 'Settings', onAction: onBack}}
@@ -336,6 +356,14 @@ const ThankYouNotification = () => {
                       </Fragment>
                   }
             >
+                <ConformationModal
+                    active={active}
+                    onClose={handleUpgrade}
+                    isLoading={isConfirmLoading}
+                    handleConfirmation={handleConfirmation}
+                    isEditor={true}
+                />
+
                 <Layout>
                     {message !== "" && isError === false ? <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer}/> : ""}
                     <CustomErrorBanner link={AppDocsLinks.article["525"]} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError}/>
@@ -603,7 +631,7 @@ const ThankYouNotification = () => {
                                                     </Box>
                                                 </Card>
                                                 <span>
-                                            <Button onClick={onUpgradeTemplate} variant={"primary"}>Upgrade template</Button>
+                                            <Button onClick={handleUpgrade} variant={"primary"}>Upgrade template</Button>
                                         </span>
                                             </BlockStack> : null
 

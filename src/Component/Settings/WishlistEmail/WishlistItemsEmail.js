@@ -27,6 +27,7 @@ import {ProductGroup1242, ProductGroup1249} from "../../../utils/AppImages";
 import {formValidate} from "../../Comman/formValidate";
 import EmailEditorComponent from "../../Comman/EmailEditorComponent";
 import EmailTemplateMsg from "../../Comman/EmailTemplateMsg";
+import ConformationModal from "../../Comman/ConformationModal";
 
 const initialSate = {
     subject: "Wishlist1 Club Products!!!",
@@ -93,6 +94,8 @@ const WishlistItemsEmail = () => {
     const [message, setMessage] = useState("")
     const [selectedWlLogo, setSelectedWlLogo] = useState("");
     const [mailTemplate,setMailTemplate] = useState({});
+    const [active,setActive] = useState(false);
+    const [isConfirmLoading,setIsConfirmLoading] = useState(false)
     const shopDetails = useSelector((state) => state.shopDetails);
 
     const options = [
@@ -241,7 +244,8 @@ const WishlistItemsEmail = () => {
     }
 
     const onUpgrade = () => {
-        setEmailSetting({...emailSetting,new_wishlist_template:1});
+       // setEmailSetting({...emailSetting,new_wishlist_template:1});
+        handleUpgradeNow();
     }
 
     const exportHtml = () => {
@@ -289,6 +293,33 @@ const WishlistItemsEmail = () => {
         return variablesMap[fieldType]?.[template] || '';
     };
 
+    const handleUpgradeNow = () => {
+        setActive(!active);
+    }
+
+    const handleConfirmation = async () =>{
+        setIsConfirmLoading(true);
+        const payload ={
+            new_wishlist_template : 1,
+            new_price_drop_template : 1,
+            new_restock_template : 1,
+            new_bis_template : 1,
+            new_thankyou_template : 1,
+        }
+        const response = await apiService.templateConfirmation(payload);
+        if (response.status === 200) {
+            setIsConfirmLoading(false);
+            setActive((active)=>!active);
+            setEmailSetting({...emailSetting,new_wishlist_template:1});
+            setMessage(response?.message)
+        } else {
+            setIsConfirmLoading(false);
+            setActive((active)=>!active);
+            setMessage(response?.message)
+
+        }
+    }
+
     return (
         <Fragment>
             <Page title={"Wishlist Items"} backAction={{content: 'Settings', onAction: onBack}}
@@ -315,6 +346,14 @@ const WishlistItemsEmail = () => {
                       </Fragment>
                   }
             >
+                <ConformationModal
+                    active={active}
+                    onClose={handleUpgradeNow}
+                    isLoading={isConfirmLoading}
+                    isEditor={true}
+                    handleConfirmation={handleConfirmation}
+                />
+
                 <Layout>
                     {message !== "" && isError === false ?
                         <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}

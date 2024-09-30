@@ -13,7 +13,7 @@ import {
     capitalizeMessage,
     facebookImage,
     instagramImage, linkedInImage, pinterestImage, telegramImage, templateJson,
-    twitterImage
+    twitterImage, upgradePayload
 } from "../../../utils/Constant";
 import ColorInput from "../../Comman/ColorInput"
 import ToastMessage from "../../Comman/ToastMessage"
@@ -25,6 +25,7 @@ import {AppDocsLinks} from "../../../utils/AppDocsLinks";
 import {formValidate} from "../../Comman/formValidate";
 import EmailEditorComponent from "../../Comman/EmailEditorComponent";
 import EmailTemplateMsg from "../../Comman/EmailTemplateMsg";
+import ConformationModal from "../../Comman/ConformationModal";
 
 const initialState = {
     restock_email_subject: "Restock Alert!!!",
@@ -90,6 +91,8 @@ const RestockAlertEmail = () => {
     const [selectedRestockLogo, setSelectedRestockLogo] = useState("");
     const shopDetails = useSelector((state) => state.shopDetails);
     const [mailTemplate,setMailTemplate] = useState({});
+    const [active,setActive] = useState(false);
+    const [isConfirmLoading,setIsConfirmLoading] = useState(false);
 
     const onBack = () => {
         navigate(`${baseUrl}/settings/email`)
@@ -102,7 +105,7 @@ const RestockAlertEmail = () => {
     const EmailSetting = async () => {
         const response = await apiService.emailSetting();
         if (response.status === 200) {
-            setEmailSetting(response.data)
+            setEmailSetting(response.data);
             setMailTemplate(JSON.parse(response.data?.restock_json) || templateJson);
         } else if (response.status === 500) {
             setMessage(capitalizeMessage(response.message))
@@ -276,6 +279,26 @@ const RestockAlertEmail = () => {
         return variablesMap[fieldType]?.[template] || '';
     };
 
+    const handleUpgradeNow = () => {
+        setActive(!active);
+    }
+
+    const handleConfirmation = async () => {
+        setIsConfirmLoading(true);
+        const payload ={...upgradePayload}
+        const response = await apiService.templateConfirmation(payload);
+        if (response.status === 200) {
+            setIsConfirmLoading(false);
+            setActive((active)=>!active);
+            setEmailSetting({...emailSetting,new_restock_template:1});
+            setMessage(response?.message)
+        } else {
+            setIsConfirmLoading(false);
+            setActive((active)=>!active);
+            setMessage(response?.message)
+        }
+    }
+
     return (
         <Fragment>
             <Page title={"Restock Alerts"} backAction={{content: 'Settings', onAction: onBack}}
@@ -300,6 +323,14 @@ const RestockAlertEmail = () => {
                       </Fragment>
                   }
             >
+                <ConformationModal
+                    active={active}
+                    onClose={handleUpgradeNow}
+                    isLoading={isConfirmLoading}
+                    isEditor={false}
+                    handleConfirmation={handleConfirmation}
+                    isEditor={true}
+                />
                 <Layout>
                     {message !== "" && isError === false ? <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer}/> : ""}
                     <CustomErrorBanner link={AppDocsLinks.article["425"]} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError} />
@@ -648,7 +679,7 @@ const RestockAlertEmail = () => {
                                                             </Box>
                                                         </Card>
                                                         <span>
-                                                            <Button variant={"primary"} onClick={onUpgradeTemplate}>Upgrade template</Button>
+                                                            <Button variant={"primary"} onClick={handleUpgradeNow}>Upgrade template</Button>
                                                         </span>
                                                     </BlockStack> : null
                                         }

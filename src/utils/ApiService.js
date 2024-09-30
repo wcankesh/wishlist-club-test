@@ -292,4 +292,8 @@ export class ApiService {
     async createIntegration(payload) {
         return await this.postData(`${apiBaseUrl}/api/integration/create`, payload)
     }
+
+    async templateConfirmation(payload) {
+        return await this.postData(`${apiBaseUrl}/api/template-notice`, payload)
+    }
 }
