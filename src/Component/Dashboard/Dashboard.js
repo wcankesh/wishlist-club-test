@@ -119,17 +119,19 @@ const Dashboard = () => {
                                             <Banner
                                                 title={x?.notification_title}
                                                 tone={x?.type}
-                                                onDismiss={x?.is_custom_click ? "" :() => onRemoveBanner(x?.notification_title.replaceAll(" ", "_"))}
+                                                onDismiss={x?.is_close ? () => onRemoveBanner(x?.notification_title.replaceAll(" ", "_")) : null}
+                                                action={x.button_text ? {
+                                                    content: x.button_text,
+                                                    onAction: x.is_custom_click ? ()=>handleUpgradeNow(x?.notification_title.replaceAll(" ", "_")) : () => navigate(`${baseUrl}/${x.button_link}`)
+                                                } : ""}
                                             >
                                                 <BlockStack gap={"100"}>
                                                     <span dangerouslySetInnerHTML={{__html: x?.notification_description}}/>
-                                                    {x?.is_custom_click &&<span><Button onClick={()=>handleUpgradeNow(x?.notification_title.replaceAll(" ", "_"))} variant={"primary"}>{x?.button_text}</Button></span>}
                                                 </BlockStack>
                                             </Banner>
                                         </Layout.Section> : ""
                                 )
-                            })
-                            : ''
+                            }) : ''
                     }
                     {shopDetails.addon_email_notification &&
                     <Layout.Section variant={"fullWidth"}>
