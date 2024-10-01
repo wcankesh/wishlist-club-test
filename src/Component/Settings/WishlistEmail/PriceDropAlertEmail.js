@@ -272,7 +272,7 @@ const PriceDropAlertEmail = () => {
         const variablesMap = {
             price_drop_email_subject: {
                 0: "Add this {{product_name}} {{shop_name}} variable",
-                1: "Add this {product_name} {shop_name} variable"
+                1: "Add this {product_name} {shop_name} {customer_name} variable"
             },
         };
         return variablesMap[fieldType]?.[template] || '';
@@ -571,7 +571,7 @@ const PriceDropAlertEmail = () => {
                                         {
                                             emailSetting?.new_price_drop_template == 1 ?
                                                 <BlockStack gap={"100"}>
-                                                    <EmailTemplateMsg msgArray={["{product_name} : To show product title","{shop_name} : To show the shop name","{product_html} : To show price drop product (required)"]}/>
+                                                    <EmailTemplateMsg msgArray={["{product_name} : To show product title","{shop_name} : To show the shop name","{customer_name} : To show customer name ","{product_html} : To show price drop product (required)"]}/>
                                                     <EmailEditorComponent
                                                         ref={editorRef}
                                                         exportHtml={exportHtml}

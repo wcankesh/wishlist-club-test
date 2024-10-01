@@ -287,7 +287,7 @@ const WishlistItemsEmail = () => {
         const variablesMap = {
             subject: {
                 0: "Add this {{shop_name}} variable",
-                1: "Add this {shop_name} variable"
+                1: "Add this {shop_name} {customer_name} variable"
             },
         };
         return variablesMap[fieldType]?.[template] || '';
@@ -611,7 +611,7 @@ const WishlistItemsEmail = () => {
                                         {
                                             emailSetting?.new_wishlist_template == 1 ?
                                                 <BlockStack gap={"100"}>
-                                                    <EmailTemplateMsg msgArray={["{shop_name} : To show the shop name","{product_html} : To show wishlist product (required)"]}/>
+                                                    <EmailTemplateMsg msgArray={["{shop_name} : To show the shop name","{customer_name} : To show customer name ","{product_html} : To show wishlist product (required)"]}/>
                                                     <EmailEditorComponent
                                                         ref={editorRef}
                                                         exportHtml={exportHtml}
