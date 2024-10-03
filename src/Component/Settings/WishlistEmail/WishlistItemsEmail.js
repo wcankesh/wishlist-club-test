@@ -98,6 +98,7 @@ const WishlistItemsEmail = () => {
     const [isConfirmLoading,setIsConfirmLoading] = useState(false)
     const shopDetails = useSelector((state) => state.shopDetails);
 
+
     const options = [
         {label: '1 Day', value: '1'},
         {label: '2 Day', value: '2'},
@@ -468,8 +469,6 @@ const WishlistItemsEmail = () => {
                                                    }}
                                                    min={1}
                                                    name={"add_to_cart_btn_border_size"}
-                                                   onBlur={onBlur}
-                                                   error={emailSettingError.add_to_cart_btn_border_size}
                                         />
 
                                         <TextField label="Top & Bottom padding"
@@ -484,8 +483,6 @@ const WishlistItemsEmail = () => {
                                                    suffix="PX"
                                                    min={1}
                                                    name={"add_to_cart_btn_vertical_padding"}
-                                                   onBlur={onBlur}
-                                                   error={emailSettingError.add_to_cart_btn_vertical_padding}
                                         />
                                         <TextField label="Left & Right padding"
                                                    type="number"
@@ -499,8 +496,6 @@ const WishlistItemsEmail = () => {
                                                    suffix="PX"
                                                    min={1}
                                                    name={"add_to_cart_btn_horizontal_padding"}
-                                                   onBlur={onBlur}
-                                                   error={emailSettingError.add_to_cart_btn_horizontal_padding}
                                         />
 
                                         <TextField label="Border Radius"
@@ -515,8 +510,6 @@ const WishlistItemsEmail = () => {
                                                    min={0}
                                                    suffix="PX"
                                                    name={"add_to_cart_btn_border_radius"}
-                                                   onBlur={onBlur}
-                                                   error={emailSettingError.add_to_cart_btn_border_radius}
                                         />
                                         <div/>
                                     </InlineGrid>
@@ -551,8 +544,6 @@ const WishlistItemsEmail = () => {
                                                    }}
                                                    min={1}
                                                    name={"view_product_btn_border_size"}
-                                                   onBlur={onBlur}
-                                                   error={emailSettingError.view_product_btn_border_size}
                                         />
 
                                         <TextField label="Top & Bottom padding"
@@ -567,8 +558,6 @@ const WishlistItemsEmail = () => {
                                                    suffix="PX"
                                                    min={0}
                                                    name={"view_product_btn_vertical_padding"}
-                                                   onBlur={onBlur}
-                                                   error={emailSettingError.view_product_btn_vertical_padding}
                                         />
                                         <TextField label="Left & Right padding"
                                                    type="number"
@@ -582,8 +571,6 @@ const WishlistItemsEmail = () => {
                                                    suffix="PX"
                                                    min={0}
                                                    name={"view_product_btn_horizontal_padding"}
-                                                   onBlur={onBlur}
-                                                   error={emailSettingError.view_product_btn_horizontal_padding}
                                         />
 
                                         <TextField label="Border Radius"
@@ -598,8 +585,6 @@ const WishlistItemsEmail = () => {
                                                    min={0}
                                                    suffix="PX"
                                                    name={"view_product_btn_border_radius"}
-                                                   onBlur={onBlur}
-                                                   error={emailSettingError.view_product_btn_border_radius}
                                         />
                                     </InlineGrid>
                                 </BlockStack>

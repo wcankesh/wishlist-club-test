@@ -428,8 +428,7 @@ const RestockAlertEmail = () => {
                                                        max={10}
                                                        min={0}
                                                        name={"add_to_cart_btn_border_size"}
-                                                       onBlur={onBlur}
-                                                       error={emailSettingError.add_to_cart_btn_border_size}
+
                                             />
                                             <TextField label="Top & Bottom padding"
                                                        type="number"
@@ -444,8 +443,6 @@ const RestockAlertEmail = () => {
                                                        max={25}
                                                        min={0}
                                                        name={"add_to_cart_btn_vertical_padding"}
-                                                       onBlur={onBlur}
-                                                       error={emailSettingError.add_to_cart_btn_vertical_padding}
                                             />
                                             <TextField label="Left & Right padding"
                                                        type="number"
@@ -460,8 +457,6 @@ const RestockAlertEmail = () => {
                                                        max={25}
                                                        min={0}
                                                        name={"add_to_cart_btn_horizontal_padding"}
-                                                       onBlur={onBlur}
-                                                       error={emailSettingError.add_to_cart_btn_horizontal_padding}
                                             />
                                             <TextField label="Border Radius"
                                                        type="number"
@@ -475,8 +470,6 @@ const RestockAlertEmail = () => {
                                                        min={0}
                                                        suffix="PX"
                                                        name={"add_to_cart_btn_border_radius"}
-                                                       onBlur={onBlur}
-                                                       error={emailSettingError.add_to_cart_btn_border_radius}
                                             />
                                         </InlineGrid>
                                     </BlockStack>
@@ -509,8 +502,6 @@ const RestockAlertEmail = () => {
                                                        }}
                                                        min={0}
                                                        name={"view_product_btn_border_size"}
-                                                       onBlur={onBlur}
-                                                       error={emailSettingError.view_product_btn_border_size}
                                             />
                                             <TextField label="Top & Bottom padding"
                                                        type="number"
@@ -524,8 +515,6 @@ const RestockAlertEmail = () => {
                                                        suffix="PX"
                                                        min={0}
                                                        name={"view_product_btn_vertical_padding"}
-                                                       onBlur={onBlur}
-                                                       error={emailSettingError.view_product_btn_vertical_padding}
                                             />
                                             <TextField label="Left & Right padding"
                                                        type="number"
@@ -539,8 +528,6 @@ const RestockAlertEmail = () => {
                                                        suffix="PX"
                                                        min={0}
                                                        name={"view_product_btn_horizontal_padding"}
-                                                       onBlur={onBlur}
-                                                       error={emailSettingError.view_product_btn_horizontal_padding}
                                             />
                                             <TextField label="Border Radius"
                                                        type="number"
@@ -554,9 +541,6 @@ const RestockAlertEmail = () => {
                                                        suffix="PX"
                                                        min={0}
                                                        name={"view_product_btn_border_radius"}
-                                                       onBlur={onBlur}
-                                                       error={emailSettingError.view_product_btn_border_radius}
-
                                             />
                                         </InlineGrid>
                                     </BlockStack>

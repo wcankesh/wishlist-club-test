@@ -449,8 +449,6 @@ const ThankYouNotification = () => {
                                                    max={10}
                                                    min={0}
                                                    name={"btn_border_size"}
-                                                   onBlur={onBlur}
-                                                   error={backInStockEmailError.btn_border_size}
                                         />
                                         <TextField label="Top & Bottom padding"
                                                    type="number"
@@ -465,8 +463,6 @@ const ThankYouNotification = () => {
                                                    max={25}
                                                    min={0}
                                                    name={"btn_vertical_padding"}
-                                                   onBlur={onBlur}
-                                                   error={backInStockEmailError.btn_vertical_padding}
                                         />
                                         <TextField label="Left & Right padding"
                                                    type="number"
@@ -481,8 +477,6 @@ const ThankYouNotification = () => {
                                                    max={25}
                                                    min={0}
                                                    name={"btn_horizontal_padding"}
-                                                   onBlur={onBlur}
-                                                   error={backInStockEmailError.btn_horizontal_padding}
                                         />
                                         <TextField label="Border radius"
                                                    type="number"
@@ -497,8 +491,6 @@ const ThankYouNotification = () => {
                                                    max={100}
                                                    min={0}
                                                    name={"btn_border_radius"}
-                                                   onBlur={onBlur}
-                                                   error={backInStockEmailError.btn_border_radius}
                                         />
                                     </InlineGrid>
                                 </BlockStack>

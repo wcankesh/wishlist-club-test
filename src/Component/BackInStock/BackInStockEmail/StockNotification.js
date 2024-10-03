@@ -506,8 +506,6 @@ const StockNotification = () => {
                                                        }}
                                                        min={0}
                                                        name={"add_to_cart_btn_border_size"}
-                                                       onBlur={onBlur}
-                                                       error={backInStockEmailError.add_to_cart_btn_border_size}
                                             />
                                             <TextField label="Top & Bottom padding"
                                                        type="number"
@@ -522,8 +520,6 @@ const StockNotification = () => {
                                                        max={25}
                                                        min={0}
                                                        name={"add_to_cart_btn_vertical_padding"}
-                                                       onBlur={onBlur}
-                                                       error={backInStockEmailError.add_to_cart_btn_vertical_padding}
                                             />
                                             <TextField label="Left & Right padding"
                                                        type="number"
@@ -538,8 +534,6 @@ const StockNotification = () => {
                                                        max={25}
                                                        min={0}
                                                        name={"add_to_cart_btn_horizontal_padding"}
-                                                       onBlur={onBlur}
-                                                       error={backInStockEmailError.add_to_cart_btn_horizontal_padding}
                                             />
                                             <TextField label="Border Radius"
                                                        type="number"
@@ -554,8 +548,6 @@ const StockNotification = () => {
                                                        suffix="PX"
                                                        min={0}
                                                        name={"add_to_cart_btn_border_radius"}
-                                                       onBlur={onBlur}
-                                                       error={backInStockEmailError.add_to_cart_btn_border_radius}
                                             />
                                         </InlineGrid>
                                     </BlockStack>
@@ -592,8 +584,6 @@ const StockNotification = () => {
                                                        max={10}
                                                        min={0}
                                                        name={"view_product_btn_border_size"}
-                                                       onBlur={onBlur}
-                                                       error={backInStockEmailError.view_product_btn_border_size}
                                             />
                                             <TextField label="Top & Bottom padding"
                                                        type="number"
@@ -608,8 +598,6 @@ const StockNotification = () => {
                                                        max={25}
                                                        min={0}
                                                        name={"view_product_btn_vertical_padding"}
-                                                       onBlur={onBlur}
-                                                       error={backInStockEmailError.view_product_btn_vertical_padding}
                                             />
                                             <TextField label="Left & Right padding"
                                                        type="number"
@@ -624,8 +612,6 @@ const StockNotification = () => {
                                                        max={25}
                                                        min={0}
                                                        name={"view_product_btn_horizontal_padding"}
-                                                       onBlur={onBlur}
-                                                       error={backInStockEmailError.view_product_btn_horizontal_padding}
                                             />
                                             <TextField label="Border Radius"
                                                        type="number"
@@ -641,8 +627,6 @@ const StockNotification = () => {
                                                        max={100}
                                                        min={0}
                                                        name={"view_product_btn_border_radius"}
-                                                       onBlur={onBlur}
-                                                       error={backInStockEmailError.view_product_btn_border_radius}
                                             />
                                         </InlineGrid>
                                     </BlockStack>
