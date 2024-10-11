@@ -235,13 +235,14 @@ const General = () => {
                                 <Box padding={"500"}>
                                     <BlockStack gap={"200"}>
                                         <Text fontWeight='semibold' as={"span"}>Redirect Type{'  '}
-                                            {shopDetails.plan_type < '7' && <div className={'planText'}>Pro</div>}
+                                            {shopDetails.plan_type < '6' && <div className={'planText'}>Pro</div>}
                                         </Text>
+                                        <Text as={"span"}>User will be directed to the selected page after clicking on the <strong>'Add to card'</strong> button.</Text>
                                         <ButtonGroup variant="segmented">
                                             {Array.from(Array(3)).map((_, i) => {
                                                 return (
                                                     <Button
-                                                        disabled={shopDetails.plan_type < '7'}
+                                                        disabled={shopDetails.plan_type < '6'}
                                                         pressed={setting?.redirect_type === i}
                                                         onClick={() => handleChange({
                                                             target: {name: "redirect_type", value: i}
@@ -250,6 +251,9 @@ const General = () => {
                                                 )
                                             })}
                                         </ButtonGroup>
+                                        {setting?.redirect_type === 2 ?
+                                            <CopyCode value={`<script>window.$wc_item_added_to_cart = function(){ }</script>`}/>
+                                            : ""}
                                     </BlockStack>
                                 </Box>
                                 <Divider/>
