@@ -219,6 +219,14 @@ const Plan = () => {
             enterprise: true,
         },
         {
+            title: 'ATC Redirection Options',
+            free: false,
+            basic: false,
+            pro: true,
+            advance: true,
+            enterprise: true,
+        },
+        {
             title: 'Wishlist Auto-Remove',
             free: false,
             basic: false,

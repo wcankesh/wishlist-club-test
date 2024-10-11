@@ -234,10 +234,10 @@ const General = () => {
                                 <Divider/>
                                 <Box padding={"500"}>
                                     <BlockStack gap={"200"}>
-                                        <Text fontWeight='semibold' as={"span"}>Redirect Type{'  '}
+                                        <Text fontWeight='semibold' as={"span"}>Add to Cart Redirection Options{'  '}
                                             {shopDetails.plan_type < '6' && <div className={'planText'}>Pro</div>}
                                         </Text>
-                                        <Text as={"span"}>User will be directed to the selected page after clicking on the <strong>'Add to card'</strong> button.</Text>
+                                        <Text as={"span"}>Select the next step the user will be directed to after <strong>'Add to cart'</strong></Text>
                                         <ButtonGroup variant="segmented">
                                             {Array.from(Array(3)).map((_, i) => {
                                                 return (
