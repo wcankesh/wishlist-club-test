@@ -235,14 +235,16 @@ const General = () => {
                                 <Box padding={"500"}>
                                     <BlockStack gap={"200"}>
                                         <Text fontWeight='semibold' as={"span"}>Add to Cart Redirection Options{'  '}
-                                            {shopDetails.plan_type < '6' && <div className={'planText'}>Pro</div>}
+                                            {shopDetails.shop !== 'french-beauty-co.myshopify.com' && shopDetails.plan_type < '7' ? <div className={'planText'}>Pro</div>
+                                            : ''
+                                            }
                                         </Text>
                                         <Text as={"span"}>Select the next step the user will be directed to after <strong>'Add to cart'</strong></Text>
                                         <ButtonGroup variant="segmented">
                                             {Array.from(Array(3)).map((_, i) => {
                                                 return (
                                                     <Button
-                                                        disabled={shopDetails.plan_type < '6'}
+                                                        disabled={shopDetails.shop !== 'french-beauty-co.myshopify.com' && shopDetails.plan_type < '7'}
                                                         pressed={setting?.redirect_type === i}
                                                         onClick={() => handleChange({
                                                             target: {name: "redirect_type", value: i}

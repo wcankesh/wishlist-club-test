@@ -222,7 +222,7 @@ const Plan = () => {
             title: 'ATC Redirection Options',
             free: false,
             basic: false,
-            pro: true,
+            pro: false,
             advance: true,
             enterprise: true,
         },
