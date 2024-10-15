@@ -235,7 +235,7 @@ const General = () => {
                                 <Box padding={"500"}>
                                     <BlockStack gap={"200"}>
                                         <Text fontWeight='semibold' as={"span"}>Add to Cart Redirection Options{'  '}
-                                            {shopDetails.shop !== 'french-beauty-co.myshopify.com' && shopDetails.plan_type < '7' ? <div className={'planText'}>Pro</div>
+                                            {shopDetails.shop !== 'french-beauty-co.myshopify.com' && shopDetails.plan_type < '7' ? <div className={'planText'}>Advance</div>
                                             : ''
                                             }
                                         </Text>
