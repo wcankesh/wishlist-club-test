@@ -15,7 +15,7 @@ import {
     Text
 } from '@shopify/polaris'
 import {useNavigate} from "react-router-dom";
-import {apiService, baseUrl, capitalizeMessage} from "../../../utils/Constant";
+import {apiService, baseUrl, capitalizeMessage, isChecked, toggleFlag} from "../../../utils/Constant";
 import ToastMessage from "../../Comman/ToastMessage"
 import CopyCode from "../../Comman/CopyCode"
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
@@ -35,6 +35,7 @@ const General = () => {
         is_variant_wishlist: 0,
         redirect_type: 0,
         remove_wishlist_type: 2,
+        is_clear_cart:'0',
     })
     const [isLoading, setIsLoading] = useState(false)
     const [activeGuestModal, setActiveGuestModal] = useState(false);
@@ -51,37 +52,31 @@ const General = () => {
             title: "App enable",
             description: "Switch setting to enable or disable app functionality.",
             name: "app_enable",
-            checked: setting.app_enable === 1
         },
         {
             title: "Guest wishlist",
             description: "Allow your customers to add their favorite items to wishlist without login. All items will be migrated to your account, once they log in.",
             name: "guest_wishlist",
-            checked: setting.guest_wishlist === 1
         },
         {
             title: "Multiple wishlists",
             description: "Let your customers make wishlists in multiple categories and give them more flexibility to manage",
             name: "multiple_wishlist",
-            checked: setting.multiple_wishlist === 1
         },
         {
             title: "Share wishlist",
             description: "Share your full wishlist on social media or provide a separate public link.",
             name: "share_wishlist",
-            checked: setting.share_wishlist === 1
         },
         {
             title: "Add to cart all the products",
             description: "Allow your customer to add all the wishlist products in the cart.",
             name: "is_dispaly_add_to_cart_all",
-            checked: setting.is_dispaly_add_to_cart_all === 1,
             input:[
                 {
                     title: "Keep or Clear Cart on Add All",
                     description: "Allow your customers the flexibility to decide whether to keep existing items in their cart or clear it before adding all products from a wishlist, enhancing their shopping experience.",
                     name: "is_clear_cart",
-                    checked: setting.is_clear_cart === 1,
                 },
             ],
         },
@@ -111,6 +106,9 @@ const General = () => {
         if (name === "guest_wishlist" && value == 0) {
             setActiveGuestModal(true)
         } else {
+         if (name === 'is_dispaly_add_to_cart_all' && !isChecked(value)) {
+             setting.is_clear_cart = toggleFlag(setting.is_clear_cart, true);
+         }
             setSetting({...setting, [name]: value})
             let payload = {...setting, [name]: value}
             delete payload.is_bis_email_enable;
@@ -176,15 +174,15 @@ const General = () => {
                                             <InlineStack key={i} blockAlign={"start"}>
                                                 <Box padding={"500"}>
                                                     <InlineStack gap={400} wrap={false}>
-                                                        <Checkbox checked={x.checked} disabled={isLoading}
+                                                        <Checkbox checked={isChecked(setting?.[x.name])} disabled={isLoading}
                                                                   onChange={(checked) => handleChange({
                                                                       target: {
                                                                           name: x.name,
-                                                                          value: x.checked ? 0 : 1
+                                                                          value: toggleFlag(setting?.[x.name])
                                                                       }
                                                                   })}/>
                                                         <div className={"cursor-pointer"} onClick={() => handleChange({
-                                                            target: {name: x.name, value: x.checked ? 0 : 1}
+                                                            target: {name: x.name, value: toggleFlag(setting?.[x.name])}
                                                         })}>
                                                             <BlockStack gap={"150"}>
                                                                 <Text as={"span"} fontWeight='semibold'>{x.title}</Text>
@@ -192,20 +190,20 @@ const General = () => {
                                                             </BlockStack>
                                                         </div>
                                                     </InlineStack>
-                                                    {setting.is_dispaly_add_to_cart_all === 1 ?
+                                                    {isChecked(setting?.[x.name]) ?
                                                         x.input && (x.input || []).map((y,subIndex) => {
                                                             return (
                                                                 <Box padding={"500"}  key={subIndex} paddingInlineStart={'1000'}>
                                                                     <InlineStack gap={400} wrap={false}>
-                                                                        <Checkbox checked={y.checked} disabled={isLoading}
+                                                                        <Checkbox checked={isChecked(setting?.[y.name])} disabled={isLoading}
                                                                                   onChange={(checked) => handleChange({
                                                                                       target: {
                                                                                           name: y.name,
-                                                                                          value: y.checked ? 0 : 1
+                                                                                          value: toggleFlag(setting?.[y.name])
                                                                                       }
                                                                                   })}/>
                                                                         <div className={"cursor-pointer"} onClick={() => handleChange({
-                                                                            target: {name: y.name, value: y.checked ? 0 : 1}
+                                                                            target: {name: y.name, value: toggleFlag(setting?.[y.name])}
                                                                         })}>
                                                                             <BlockStack gap={"150"}>
                                                                                 <Text as={"span"} fontWeight='semibold'>{y.title}</Text>
