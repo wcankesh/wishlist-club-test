@@ -22,6 +22,7 @@ const initialState = {
     wishlist_page_Register_text: "sign up",
     wishlist_page_description: "To save your wishlist please",
     all_product_add_to_cart_button_text: "Add to cart all",
+    clear_cart_message:'Do you want to remove all existing items from your cart and add all wishlist products?',
     all_product_add_to_cart_button_bg_color: "#00000",
     all_product_add_to_cart_button_text_color: "#FFFFFF",
     wishlist_model_title: "Create Wishlist List",
@@ -195,6 +196,7 @@ const Language = () => {
                     label: "All product Add to cart button", filed: "text",
                     name: "all_product_add_to_cart_button_text", value: labelData.all_product_add_to_cart_button_text
                 },
+                {label: "Clear Cart Message", filed: "text", name: "clear_cart_message", value: labelData.clear_cart_message,},
                 {
                     label: "All product Add to cart button background color",
                     filed: "color",

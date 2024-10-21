@@ -75,7 +75,15 @@ const General = () => {
             title: "Add to cart all the products",
             description: "Allow your customer to add all the wishlist products in the cart.",
             name: "is_dispaly_add_to_cart_all",
-            checked: setting.is_dispaly_add_to_cart_all === 1
+            checked: setting.is_dispaly_add_to_cart_all === 1,
+            input:[
+                {
+                    title: "Keep or Clear Cart on Add All",
+                    description: "Allow your customers the flexibility to decide whether to keep existing items in their cart or clear it before adding all products from a wishlist, enhancing their shopping experience.",
+                    name: "is_clear_cart",
+                    checked: setting.is_clear_cart === 1,
+                },
+            ],
         },
     ]
 
@@ -184,6 +192,30 @@ const General = () => {
                                                             </BlockStack>
                                                         </div>
                                                     </InlineStack>
+                                                    {setting.is_dispaly_add_to_cart_all === 1 ?
+                                                        x.input && (x.input || []).map((y,subIndex) => {
+                                                            return (
+                                                                <Box padding={"500"}  key={subIndex} paddingInlineStart={'1000'}>
+                                                                    <InlineStack gap={400} wrap={false}>
+                                                                        <Checkbox checked={y.checked} disabled={isLoading}
+                                                                                  onChange={(checked) => handleChange({
+                                                                                      target: {
+                                                                                          name: y.name,
+                                                                                          value: y.checked ? 0 : 1
+                                                                                      }
+                                                                                  })}/>
+                                                                        <div className={"cursor-pointer"} onClick={() => handleChange({
+                                                                            target: {name: y.name, value: y.checked ? 0 : 1}
+                                                                        })}>
+                                                                            <BlockStack gap={"150"}>
+                                                                                <Text as={"span"} fontWeight='semibold'>{y.title}</Text>
+                                                                                <Text as={"span"}>{y.description}</Text>
+                                                                            </BlockStack>
+                                                                        </div>
+                                                                    </InlineStack>
+                                                                </Box>
+                                                            )
+                                                        }) : ''}
                                                 </Box>
                                             </InlineStack>
                                             <Divider/>
