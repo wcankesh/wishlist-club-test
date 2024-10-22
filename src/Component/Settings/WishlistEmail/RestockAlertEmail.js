@@ -299,6 +299,14 @@ const RestockAlertEmail = () => {
         }
     }
 
+    const msgArray = [
+        "{product_name} : To show product title",
+        "{shop_name} : To show the shop name",
+        "{customer_name} : To show customer name",
+        "{product_html} : To show restock alert product (required)",
+        '{{unsubscribe}}: Use this tag to display the unsubscribe link',
+    ];
+
     return (
         <Fragment>
             <Page title={"Restock Alerts"} backAction={{content: 'Settings', onAction: onBack}}
@@ -552,7 +560,7 @@ const RestockAlertEmail = () => {
                                         {
                                             emailSetting.new_restock_template == 1 ?
                                                 <BlockStack gap={"100"}>
-                                                    <EmailTemplateMsg msgArray={["{product_name} : To show product title","{shop_name} : To show the shop name","{customer_name} : To show customer name","{product_html} : To show restock alert product (required)"]}/>
+                                                    <EmailTemplateMsg msgArray={msgArray}/>
                                                     <EmailEditorComponent
                                                         ref={editorRef}
                                                         exportHtml={exportHtml}

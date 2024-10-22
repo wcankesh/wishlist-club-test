@@ -345,6 +345,12 @@ const StockNotification = () => {
         setActive(!active);
     }
 
+    const msgArray = [
+        "{shop_name}: To show the shop name",
+        "{product_name}: To show product title",
+        "{product_html}: To show product (required)",
+        "{{unsubscribe}}: Use this tag to display the unsubscribe link",
+    ];
 
     return (
         <Fragment>
@@ -639,7 +645,7 @@ const StockNotification = () => {
                                             backInStockEmail?.new_bis_template == 1 ?
                                                 <div className={"email-editor-wrap"}>
                                                     <BlockStack gap={100}>
-                                                        <EmailTemplateMsg msgArray={["{shop_name} : To show the shop name","{product_name}: To show product title","{product_html}: To show product (required)"]}/>
+                                                        <EmailTemplateMsg msgArray={msgArray}/>
                                                         <EmailEditorComponent
                                                             ref={editorRef}
                                                             exportHtml={exportHtml}

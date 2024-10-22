@@ -343,6 +343,13 @@ const ThankYouNotification = () => {
         setActive(!active)
     }
 
+    const msgArray = [
+        '{shop_name} : To show the shop name',
+        '{product_name}: To show product title',
+        '{product_html}: To show continue shopping button (required)',
+        '{{unsubscribe}}: Use this tag to display the unsubscribe link',
+    ];
+
     return (
         <Fragment>
             <Page title={"Thank You Message"} backAction={{content: 'Settings', onAction: onBack}}
@@ -502,7 +509,7 @@ const ThankYouNotification = () => {
                                     {
                                         backInStockEmail?.new_thankyou_template == 1 ?
                                             <BlockStack gap={100}>
-                                                <EmailTemplateMsg msgArray={['{shop_name} : To show the shop name','{product_name}: To show product title','{product_html}: To show continue shopping button (required)']}/>
+                                                <EmailTemplateMsg msgArray={msgArray}/>
 
                                                 <EmailEditorComponent
                                                     ref={editorRef}

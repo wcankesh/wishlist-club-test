@@ -298,6 +298,14 @@ const PriceDropAlertEmail = () => {
         }
     }
 
+    const msgArray = [
+        "{product_name} : To show product title",
+        "{shop_name} : To show the shop name",
+        "{customer_name} : To show customer name",
+        "{product_html} : To show price drop product (required)",
+        '{{unsubscribe}}: Use this tag to display the unsubscribe link',
+    ];
+
 
     return (
         <Fragment>
@@ -571,7 +579,7 @@ const PriceDropAlertEmail = () => {
                                         {
                                             emailSetting?.new_price_drop_template == 1 ?
                                                 <BlockStack gap={"100"}>
-                                                    <EmailTemplateMsg msgArray={["{product_name} : To show product title","{shop_name} : To show the shop name","{customer_name} : To show customer name ","{product_html} : To show price drop product (required)"]}/>
+                                                    <EmailTemplateMsg msgArray={msgArray}/>
                                                     <EmailEditorComponent
                                                         ref={editorRef}
                                                         exportHtml={exportHtml}

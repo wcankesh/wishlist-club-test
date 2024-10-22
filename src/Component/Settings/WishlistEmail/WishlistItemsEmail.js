@@ -321,6 +321,13 @@ const WishlistItemsEmail = () => {
         }
     }
 
+    const msgArray = [
+        "{shop_name} : To show the shop name",
+        "{customer_name} : To show customer name ",
+        "{product_html} : To show wishlist product (required)",
+        '{{unsubscribe}}: Use this tag to display the unsubscribe link',
+    ];
+
     return (
         <Fragment>
             <Page title={"Wishlist Items"} backAction={{content: 'Settings', onAction: onBack}}
@@ -596,7 +603,7 @@ const WishlistItemsEmail = () => {
                                         {
                                             emailSetting?.new_wishlist_template == 1 ?
                                                 <BlockStack gap={"100"}>
-                                                    <EmailTemplateMsg msgArray={["{shop_name} : To show the shop name","{customer_name} : To show customer name ","{product_html} : To show wishlist product (required)"]}/>
+                                                    <EmailTemplateMsg msgArray={msgArray}/>
                                                     <EmailEditorComponent
                                                         ref={editorRef}
                                                         exportHtml={exportHtml}
