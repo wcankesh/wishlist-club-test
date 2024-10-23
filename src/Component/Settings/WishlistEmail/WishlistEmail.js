@@ -146,7 +146,7 @@ const WishlistEmail = () => {
     };
 
     const WishlistNotifications = [
-        {label:'Notification mail',name:'is_notification_mail',help:''},
+        {label:'Notification mail',name:'is_notification_mail',help:'Enabling this setting allows store owners to stay updated through email notifications when users add products to their wishlist.'},
         {label:'Multiple Restock Notification',name:'is_multiple_restock_mail',help:'If you disabled this feature, restock notifications will be sent only once per item. Enable to notify customers each time the item is restocked.'},
     ]
 
@@ -251,10 +251,7 @@ const WishlistEmail = () => {
                             <BlockStack gap={"400"}>
                                 <BlockStack gap={"100"}>
                                     <Text as={"span"} variant={"headingMd"}>Wishlist Notifications</Text>
-                                    <Text as={"span"} tone={"subdued"}>
-                                        Enabling this setting allows store owners to stay updated through email
-                                        notifications when users add products to their wishlist.
-                                    </Text>
+                                    {/*<Text as={"span"} tone={"subdued"}>Enabling this setting allows store owners to stay updated through email notifications when users add products to their wishlist.</Text>*/}
                                 </BlockStack>
                                 {/* <Checkbox label={"Notification mail"} onChange={(checked) => notificationUpdate({
                                 target: {name: "is_notification_mail", value: checked ? 1 : 0}

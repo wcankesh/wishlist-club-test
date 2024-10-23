@@ -19,6 +19,7 @@ import {Icons} from "../../../utils/Icons";
 
 import {Helmet} from "react-helmet";
 import ColorInput from "../../Comman/ColorInput";
+import {Product1} from "../../../utils/AppImages";
 
 const CollectionDesign = ({wishlistSetting, setWishlistSetting, file, setFile, isSVGLoading, updateIcon, deleteIcon}) => {
     const [selected, setSelected] = useState(0);
@@ -307,7 +308,7 @@ const CollectionDesign = ({wishlistSetting, setWishlistSetting, file, setFile, i
                                    return(
                                        <div className={"preview-collection"}>
                                            <figure>
-                                               <img src={`https://wishlist.thimatic-apps.com/assets/images/product${i + 1}.jpg`}/>
+                                               <img src={Product1}/>
                                            </figure>
                                            <div className="btn-collection">
                                                <div className="d-flex wl_collection_btn_position">
@@ -330,7 +331,7 @@ const CollectionDesign = ({wishlistSetting, setWishlistSetting, file, setFile, i
                                     return(
                                         <div className={"preview-collection"}>
                                             <figure>
-                                                <img src={`https://wishlist.thimatic-apps.com/assets/images/product${i + 1}.jpg`}/>
+                                                <img src={Product1}/>
                                             </figure>
                                             <div className="btn-collection">
                                                 <div className="d-flex wl_collection_btn_position">
