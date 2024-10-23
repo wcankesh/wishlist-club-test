@@ -55,7 +55,7 @@ const General = () => {
         },
         {
             title: "Guest wishlist",
-            description: "Allow your customers to add their favorite items to wishlist without login. All items will be migrated to your account, once they log in.",
+            description: "The Guest Wishlist lets customers add items easily without logging in, allowing anyone on the same network to see them. Once they sign up and log in, all items will be saved to their account.",
             name: "guest_wishlist",
         },
         {
