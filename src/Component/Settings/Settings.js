@@ -2,7 +2,7 @@ import React, {Fragment} from 'react';
 import {Page, Layout} from "@shopify/polaris";
 import {
     LanguageMinor, DomainNewMajor, ThemesMajor, SettingsMajor, EmailMajor,
-    BillingStatementDollarMajor, InstallMinor, DnsSettingsMajor
+    BillingStatementDollarMajor, InstallMinor, DnsSettingsMajor, CircleInformationMajor
 } from "@shopify/polaris-icons";
 import {useNavigate} from "react-router-dom";
 import {baseUrl} from "../../utils/Constant";
@@ -59,6 +59,12 @@ const Settings = () => {
             name: "Integrations",
             text: "Connect your other applications to the Wishlist Club.",
             link: "settings/integration"
+        },
+        {
+            icon: CircleInformationMajor,
+            name: 'What’s New',
+            text: 'Stay informed with all the app updates and submit feature requests to help us improve.',
+            link: 'settings/feedback',
         },
     ];
 

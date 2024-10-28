@@ -209,6 +209,7 @@ const Language = () => {
                     name: "all_product_add_to_cart_button_text_color",
                     value: labelData.all_product_add_to_cart_button_text_color
                 },
+                {label: "Sold out text", filed: "text", name: "sold_out", value: labelData.sold_out},
             ],
         },
         {
@@ -375,7 +376,7 @@ const Language = () => {
                                         {'Customers receive an email verification upon subscribing. Please compose the email verification note below.'}
                                     </Text>
                                 </BlockStack>
-                                <Grid gap="4" columns={{xs: 1, sm: 1, md: 2, lg: 2, xl: 2}} alignItems="end">
+                                <Grid gap="4" columns={{xs: 1, sm: 1, md: 1, lg: 1, xl: 1}} alignItems="end">
                                     <TextField label={'Email Verification Message'}
                                                value={emailVeriMsg?.email_verify_message}
                                                onChange={(value) => setEmailVeriMsg({
