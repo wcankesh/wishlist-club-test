@@ -23,6 +23,7 @@ import OnBoardingApp from "../Component/OnBoardingApp/OnBoardingApp";
 import Integration from "../Component/Settings/Integration/Integration";
 import IntegrationDetails from "../Component/Settings/Integration/IntegrationDetails/IntegrationDetails";
 import WhatSNew from "../Component/Settings/WhatSNew/WhatSNew";
+import RequestAFeature from "../Component/Settings/WhatSNew/RequestAFeature/RequestAFeature";
 
 export const routes = [
     {path: `${baseUrl}/dashboard`, component: <Dashboard/>},
@@ -47,6 +48,7 @@ export const routes = [
     {path: `${baseUrl}/settings/integration`, component: <Integration/>},
     {path: `${baseUrl}/settings/integration/:type`, component: <IntegrationDetails/>},
     {path: `${baseUrl}/settings/feedback`, component: <WhatSNew/>},
+    {path: `${baseUrl}/settings/request-feature`, component: <RequestAFeature/>},
     {path: `${baseUrl}/email-history`, component: <EmailHistory/>},
     {path: `${baseUrl}/onboarding`, component: <OnBoardingApp/>},
 ]
