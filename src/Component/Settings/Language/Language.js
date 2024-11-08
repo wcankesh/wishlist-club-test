@@ -8,6 +8,7 @@ import ColorInput from "../../Comman/ColorInput"
 import ToastMessage from "../../Comman/ToastMessage"
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
 import {AppDocsLinks} from "../../../utils/AppDocsLinks";
+import {useSelector} from "react-redux";
 
 const initialState = {
     default_wishlist_title: "My Wishlist",
@@ -48,7 +49,8 @@ const initialState = {
 };
 
 const Language = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const shopDetails = useSelector(state => state.shopDetails);
     const [labelData, setLabelData] = useState(initialState)
     const [isLoading, setIsLoading] = useState(false)
     const [message, setMessage] = useState("")
@@ -57,7 +59,9 @@ const Language = () => {
     const [selectedOption, setSelectedOption] = useState("1");
     const [emailVeriMsg, setEmailVeriMsg] = useState({
         id: 0,
-        email_verify_message: 'We have sent verification mail to your email. Please verify your email.'
+        email_verify_message: 'We have sent verification mail to your email. Please verify your email.',
+        email_body_text: "You have subscribed to the product to notify you whenever it's in stock. Please verify your email using the below button to get notified.",
+        email_button_text: 'Verify Email',
     })
 
     const Label = async () => {
@@ -81,7 +85,9 @@ const Language = () => {
             setEmailVeriMsg((state) => ({
                 ...state,
                 id: response.data.id,
-                email_verify_message: response.data.email_verify_message
+                email_verify_message: response.data.email_verify_message,
+                email_body_text: response.data.email_body_text,
+                email_button_text: response.data.email_button_text,
             }))
         } else if (response.status === 500) {
             setMessage(capitalizeMessage(response.message))
@@ -308,6 +314,33 @@ const Language = () => {
         }
     ];
 
+    const EmailVerificationFields = [
+        {
+            label: "Email Verification Message",
+            field: "text",
+            name: "email_verify_message",
+            value: emailVeriMsg?.email_verify_message,
+            disabled : false,
+            helpText : <Text as={'span'}><strong>Note:</strong> This message will be displayed to the user on the website immediately after they signup for Back In Stock.</Text>,
+        },
+        {
+            label: "Email Body",
+            field: "text",
+            name: "email_body_text",
+            value: emailVeriMsg?.email_body_text,
+            disabled : shopDetails.plan_type < '5',
+            helpText: '',
+        },
+        {
+            label: "Verify Button Title",
+            field: "text",
+            name: "email_button_text",
+            value: emailVeriMsg?.email_button_text,
+            disabled : shopDetails.plan_type < '5',
+            helpText: '',
+        },
+    ];
+
     const onBack = () => {
         navigate(`${baseUrl}/settings`)
     };
@@ -377,12 +410,21 @@ const Language = () => {
                                     </Text>
                                 </BlockStack>
                                 <Grid gap="4" columns={{xs: 1, sm: 1, md: 1, lg: 1, xl: 1}} alignItems="end">
-                                    <TextField label={'Email Verification Message'}
-                                               value={emailVeriMsg?.email_verify_message}
-                                               onChange={(value) => setEmailVeriMsg({
-                                                   ...emailVeriMsg,
-                                                   email_verify_message: value
-                                               })}/>
+                                    {(EmailVerificationFields || []).map((x,i) => {
+                                        return(
+                                            <React.Fragment key={i}>
+                                                {x.field === 'text' ?
+                                                    <TextField
+                                                        label={x.label}
+                                                        value={x.value}
+                                                        onChange={(value) => setEmailVeriMsg({...emailVeriMsg, [x.name]: value})}
+                                                        disabled={x.disabled}
+                                                        helpText={x.helpText}
+                                                    />
+                                                : ''}
+                                            </React.Fragment>
+                                        )
+                                    })}
                                 </Grid>
                             </BlockStack>
                         </Card>
