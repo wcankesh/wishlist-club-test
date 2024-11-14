@@ -154,7 +154,13 @@ const General = () => {
         {label: 'When added to cart', value: 1},
         {label: 'When an order is placed', value: 2},
         {label: 'Never', value: 3},
-    ]
+    ];
+
+    const ProductVariantList = [
+        {label: 'First variant', value: 0},
+        {label: 'Specific variant', value: 1},
+        {label: 'All variant', value: 2},
+    ];
 
     return (
         <Fragment>
@@ -220,7 +226,45 @@ const General = () => {
                                         </Fragment>
                                     )
                                 })}
+                                <Divider/>
                                 <Box padding={"500"}>
+                                    <BlockStack gap={"200"}>
+                                        <Text fontWeight='semibold' as={"span"}>Product variant wishlists</Text>
+                                        <ButtonGroup variant="segmented">
+                                            {(ProductVariantList || []).map((x, i) => {
+                                                return (
+                                                    <Button
+                                                        disabled={isLoading}
+                                                        pressed={setting?.is_variant_wishlist === x.value}
+                                                        onClick={() => handleChange({
+                                                            target: {name: "is_variant_wishlist", value: x.value}
+                                                        })}
+                                                    > {x.label}</Button>
+                                                )
+                                            })}
+                                        </ButtonGroup>
+                                        <Text tone="caution" as={"span"}>
+                                            {`Please note: If you wish to see the wishlist for a specific product variant, you will need to add this shortcode.`}
+                                        </Text>
+                                        <Text tone="caution" as={"span"}>
+                                            {`If you choose variant wishlist, make sure to add the below shortcode. Otherwise, the wishlist will not be shown.`}</Text>
+                                        <FormLayout>
+                                            <FormLayout.Group>
+                                                <BlockStack gap={"150"}>
+                                                    <Text as={"span"}>Product page shortcode</Text>
+                                                    <CopyCode
+                                                        value={`<div class="th_prd_wl_btn" data-product_id="{{product.id}}" data-variant_id="{{product.selected_or_first_available_variant.id}}"></div>`}/>
+                                                </BlockStack>
+                                                <BlockStack gap={"150"}>
+                                                    <Text as={"span"}>Collection page shortcode</Text>
+                                                    <CopyCode
+                                                        value={`<div class="th_wl_col_btn" data-product_id="{{product.id}}" data-variant_id="{{product.selected_or_first_available_variant.id}}"></div>`}/>
+                                                </BlockStack>
+                                            </FormLayout.Group>
+                                        </FormLayout>
+                                    </BlockStack>
+                                </Box>
+                                {/*<Box padding={"500"}>
                                     <InlineStack gap={"400"} blockAlign={"start"} wrap={false}>
                                         <Checkbox checked={setting.is_variant_wishlist == "1"} disabled={isLoading}
                                                   onChange={(checked) => handleChange({
@@ -260,7 +304,7 @@ const General = () => {
                                             </FormLayout>
                                         </BlockStack>
                                     </InlineStack>
-                                </Box>
+                                </Box>*/}
                                 <Divider/>
                                 <Box padding={"500"}>
                                     <BlockStack gap={"200"}>
