@@ -5,7 +5,7 @@ import {baseUrl} from "../../utils/Constant"
 import {useSelector} from 'react-redux';
 import {Provider, RoutePropagator, NavigationMenu} from "@shopify/app-bridge-react";
 
-const apiKey = '65909e95fac4682299cfdae29dcd6a1a';
+const apiKey = '448a82ccbac456ee4aff58dab7c1086e';
 
 const DefaultLayout = () => {
     const location = useLocation();

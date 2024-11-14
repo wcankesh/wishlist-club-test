@@ -10,7 +10,7 @@ const apiBaseUrl = "https://stagingapp.webcontrive.com/wishlist/api/public";
 const urlParams = new URLSearchParams(window.location.search);
 const host = urlParams.get('host');
 
-const appKey = "65909e95fac4682299cfdae29dcd6a1a"
+const appKey = "448a82ccbac456ee4aff58dab7c1086e"
 if(isMobile()){
     const app = createApp({
         apiKey: appKey,
