@@ -157,9 +157,8 @@ const General = () => {
     ];
 
     const ProductVariantList = [
-        {label: 'First variant', value: 0},
+        {label: 'All variant', value: 0},
         {label: 'Specific variant', value: 1},
-        {label: 'All variant', value: 2},
     ];
 
     return (
