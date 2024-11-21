@@ -277,6 +277,10 @@ export class ApiService {
         return await this.postData(`${apiBaseUrl}/api/bis/import`, payload, isFormData);
     }
 
+    async onBisMailResend(payload, id) {
+        return await this.postData(`${apiBaseUrl}/api/bis/bis-mail/${id}`, payload);
+    }
+
     async enableBackInStock(payload) {
         return await this.postData(`${apiBaseUrl}/api/enable-bis`, payload)
     }

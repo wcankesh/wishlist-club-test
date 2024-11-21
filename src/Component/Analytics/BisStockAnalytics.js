@@ -18,6 +18,7 @@ const BisStockAnalytics = () => {
     const [selected, setSelected] = useState(0);
     const [bisAnalytics, setBisAnalytics] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [isMailLoading, setIsMailLoading] = useState('');
     const [state, setState] = useState({startDate: moment().subtract(29, 'days'), endDate: moment(),});
     const [PageNo, setPageNo] = useState(1)
     const [totalAnalytics, setTotalAnalytics] = useState(1)
@@ -145,6 +146,26 @@ const BisStockAnalytics = () => {
         setFile("");
     };
 
+    const onBisMailResend = async (id) => {
+        setMessage("")
+        setIsError(false)
+        setIsMailLoading(`mail-resend-${id}`)
+        const response = await apiService.onBisMailResend({}, id)
+        if (response.status === 200) {
+            setMessage(capitalizeMessage(response.message))
+            setActive(false);
+        } else if (response.status === 500) {
+            setMessage(capitalizeMessage(response.message))
+            setIsErrorServer(true);
+        } else {
+            setMessage(capitalizeMessage(response.message))
+            setIsError(true)
+            setActive(false);
+            setIsErrorServer(true);
+        }
+        setIsMailLoading('')
+    };
+
     const rowMarkup = (bisAnalytics || []).map((x, i) => {
         return (
             <IndexTable.Row key={i} id={i}>
@@ -167,13 +188,18 @@ const BisStockAnalytics = () => {
                 <IndexTable.Cell>
                     <Text as={"span"}>{moment(x.created_at).format('L')}</Text>
                 </IndexTable.Cell>
+                <IndexTable.Cell>
+                        <Button onClick={() => onBisMailResend(x.id)} loading={isMailLoading === `mail-resend-${x.id}`}>
+                            Resend
+                        </Button>
+                </IndexTable.Cell>
             </IndexTable.Row>
         )
     })
 
     return (
         <Fragment>
-            {message !== "" && isError === true ?
+            {message !== "" ?
                 <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
                               setIsErrorServer={setIsErrorServer}/> : ""}
 
@@ -227,9 +253,11 @@ const BisStockAnalytics = () => {
                             {title: 'Email'},
                             {title: 'Request Status'},
                             {title: 'Request Time'},
+                            {title: 'Action'},
                         ]}
-                        selectable={false}>
-                        {isLoading ? tableLoading(limit, 4) : rowMarkup}
+                        selectable={false}
+                    >
+                        {isLoading ? tableLoading(limit, 5) : rowMarkup}
                     </IndexTable>
                     <Box padding={'300'} borderBlockStartWidth={'025'} borderColor={'border-secondary'}>
                         <InlineStack align={'end'} blockAlign={'center'}>
