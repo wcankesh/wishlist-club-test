@@ -169,7 +169,7 @@ const BisStockAnalytics = () => {
     const rowMarkup = (bisAnalytics || []).map((x, i) => {
         return (
             <IndexTable.Row key={i} id={i}>
-                <IndexTable.Cell>
+                <IndexTable.Cell className={'text-truncted'}>
                     <InlineStack blockAlign={"center"} gap="200" wrap={false}>
                         <Thumbnail size={"small"} source={x.image}/>
                         <BlockStack>
@@ -178,7 +178,7 @@ const BisStockAnalytics = () => {
                         </BlockStack>
                     </InlineStack>
                 </IndexTable.Cell>
-                <IndexTable.Cell>
+                <IndexTable.Cell className={'text-truncted'}>
                     <Text as={"span"}>{x.email}</Text>
                 </IndexTable.Cell>
                 <IndexTable.Cell>
