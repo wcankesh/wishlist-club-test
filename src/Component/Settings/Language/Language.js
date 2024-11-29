@@ -216,6 +216,19 @@ const Language = () => {
                     value: labelData.all_product_add_to_cart_button_text_color
                 },
                 {label: "Sold out text", filed: "text", name: "sold_out", value: labelData.sold_out},
+                {label: "Load more button text", filed: "text", name: "load_more_button_text", value: labelData.load_more_button_text},
+                {
+                    label: "Load more button background color",
+                    filed: "color",
+                    name: "load_more_button_bg_color",
+                    value: labelData.load_more_button_bg_color
+                },
+                {
+                    label: "Load more button text color",
+                    filed: "color",
+                    name: "load_more_button_text_color",
+                    value: labelData.load_more_button_text_color
+                },
             ],
         },
         {
