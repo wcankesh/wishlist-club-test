@@ -70,15 +70,15 @@ const Chart = ({setState, wishlistAddDateWise, wishlistPageViewDateWise}) => {
     return (
         <Layout.Section>
             <Card sectioned>
-                <BlockStack>
-                    <InlineStack>
-                    </InlineStack>
-                    <InlineStack align={"end"}>
-                        <div className="datepicker-contain">
-                            <DateRangePicker onChange={handleCallback}/>
-                        </div>
-                    </InlineStack>
-                </BlockStack>
+                {/*<BlockStack>*/}
+                {/*    <InlineStack>*/}
+                {/*    </InlineStack>*/}
+                {/*    <InlineStack align={"end"}>*/}
+                {/*        <div className="datepicker-contain">*/}
+                {/*            <DateRangePicker onChange={handleCallback}/>*/}
+                {/*        </div>*/}
+                {/*    </InlineStack>*/}
+                {/*</BlockStack>*/}
                 <HighchartsReact highcharts={Highcharts} options={renderOption()}/>
             </Card>
         </Layout.Section>

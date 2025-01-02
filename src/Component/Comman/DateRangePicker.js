@@ -2,13 +2,16 @@ import React,{useState, useEffect, useRef, } from "react";
 import {useBreakpoints, Button, Popover, InlineGrid, Box, OptionList, Select, BlockStack, InlineStack, DatePicker, TextField, Icon} from "@shopify/polaris";
 import {CalendarMinor, ArrowRightMinor} from "@shopify/polaris-icons";
 import moment from "moment";
+import {useSelector} from "react-redux";
 
-const DateRangePicker = ({ onChange, fullWidth }) =>  {
+const DateRangePicker = ({ onChange, fullWidth, variant }) =>  {
+    const shopDetails = useSelector((state) => state.shopDetails)
     const { mdDown, lgUp } = useBreakpoints();
     const shouldShowMultiMonth = lgUp;
     const today = new Date(new Date().setHours(0, 0, 0, 0));
     const yesterday = new Date(new Date(new Date().setDate(today.getDate() - 1)).setHours(0, 0, 0, 0));
     const last30days = new Date(new Date(new Date().setDate(today.getDate() - 29)).setHours(0, 0, 0, 0));
+    const lifetimeSince = shopDetails?.created_at ? new Date(shopDetails?.created_at) : today;
     const ranges = [
         {
             title: "Today",
@@ -56,6 +59,14 @@ const DateRangePicker = ({ onChange, fullWidth }) =>  {
             period: {
                 since: moment().subtract(1, "month").startOf("month").toDate(),
                 until: moment().subtract(1, "month").endOf("month").toDate(),
+            },
+        },
+        {
+            title: "Lifetime",
+            alias: "lifetime",
+            period: {
+                since: lifetimeSince,
+                until: today,
             },
         },
     ];
@@ -236,6 +247,7 @@ const DateRangePicker = ({ onChange, fullWidth }) =>  {
             zIndexOverride={"1050"}
             activator={
                 <Button
+                    variant={variant}
                     icon={CalendarMinor}
                     size={"large"}
                     fullWidth={fullWidth}

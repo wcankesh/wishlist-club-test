@@ -6,6 +6,7 @@ import Chart from './Chart';
 import TopProducts from "../Dashboard/TopProducts/TopProducts";
 import moment from "moment";
 import {apiService} from "../../utils/Constant";
+import DateRangePicker from "../Comman/DateRangePicker";
 
 const initialState = {
     wishlistOrderAmount: 0,
@@ -66,9 +67,13 @@ const Analytics = () => {
         getAnalytics();
     }, [state]);
 
+    const handleCallback = (range) => {
+        setState(range)
+    };
+
 
     return (
-        <Page title={"Analytics"}>
+        <Page title={"Analytics"} primaryAction={<DateRangePicker onChange={handleCallback} variant={'primary'}/>}>
             <Layout>
                 <CountAnalytics analytics={analytics} currency={currency}/>
                 <Chart setState={setState} wishlistAddDateWise={wishlistAddDateWise}
