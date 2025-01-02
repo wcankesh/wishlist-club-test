@@ -244,8 +244,11 @@ const WishlistItems = () => {
         return (
             <IndexTable.Row key={i} id={i}>
                 <IndexTable.Cell>
-                    <Text
-                        as={"span"}>{(y.first_name || y.last_name) ? `${y.first_name} ${y.last_name}` : "Guest"}</Text>
+                    <Text as={"span"}>
+                        {y.first_name && y.last_name ? `${y.first_name} ${y.last_name}` :
+                            y.first_name ? y.first_name :
+                                y.last_name ? y.last_name : "Guest"}
+                    </Text>
                 </IndexTable.Cell>
                 <IndexTable.Cell>
                     <Text as={"span"}>{y.email ? y.email : " - "}</Text>
