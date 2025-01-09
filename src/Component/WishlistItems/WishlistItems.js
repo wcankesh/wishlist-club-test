@@ -2,7 +2,7 @@ import React, {Fragment, useState, useCallback, useEffect} from 'react';
 import {
     Page, Layout, BlockStack, InlineStack, Card, Pagination, Badge, Link, Thumbnail, Text,
     Popover, Button, ResourceList, Modal, DropZone, IndexTable, EmptySearchResult, OptionList,
-    Box,
+    Box,Divider
 } from "@shopify/polaris"
 import moment from "moment";
 import {apiService, capitalizeMessage, currencySymbol} from "../../utils/Constant";
@@ -191,7 +191,36 @@ const WishlistItems = () => {
     const renderPopoverContent = (products) => {
         return (
             <div className={"remove-cursor"}>
-                <ResourceList items={products} renderItem={(item) => {
+                {(products || []).map((item,i) => {
+                    const {title, quantity, created_at, variant_title} = item;
+                    return(
+                        <React.Fragment key={i}>
+                            <Box padding={"200"} background={item.is_active === 0 ? "bg-surface-active" : ''} >
+                                <InlineStack gap={"400"} wrap={false} blockAlign={"start"}>
+                                    <Thumbnail size={"small"} source={item.image}/>
+                                    <BlockStack gap={"100"}>
+                                        <Text as={"span"}>{title}</Text>
+                                        <InlineStack gap={"100"}>
+                                            <Text as={"span"} fontWeight={"semibold"}>Variant :</Text>
+                                            <Text as={"span"}>{variant_title}</Text>
+
+                                        </InlineStack>
+                                        <InlineStack gap={"100"}>
+                                            <Text as={"span"} fontWeight={"semibold"}>Quantity :</Text>
+                                            <Text as={"span"}>{quantity}</Text>
+                                        </InlineStack>
+                                        <InlineStack gap={"100"}>
+                                            <Text as={"span"} fontWeight={"semibold"}>Created Date :</Text>
+                                            <Text as={"span"}>{moment(created_at).format("DD-MM-YYYY")}</Text>
+                                        </InlineStack>
+                                    </BlockStack>
+                                </InlineStack>
+                            </Box>
+                            {i !== (products.length - 1) && <Divider />}
+                        </React.Fragment>
+                    )
+                })}
+                {/*<ResourceList items={products} renderItem={(item) => {
                     const {title, quantity, created_at, variant_title} = item;
                     return (
                         <ResourceList.Item>
@@ -215,9 +244,9 @@ const WishlistItems = () => {
                             </InlineStack>
                         </ResourceList.Item>
                     );
-                }}/>
+                }}/>*/}
             </div>
-        );
+        )
     };
 
     const rowMarkupWishlistProduct = (wlProduct || []).map((x, i) => {
@@ -239,15 +268,21 @@ const WishlistItems = () => {
             </IndexTable.Row>
         )
     })
+    const truncateName = (name) => (name && name.length > 10 ? name.substring(0, 10) + "..." : name);
 
     const rowMarkupWishlistUser = (wlUser || []).map((y, i) => {
         return (
             <IndexTable.Row key={i} id={i}>
                 <IndexTable.Cell>
                     <Text as={"span"}>
-                        {y.first_name && y.last_name ? `${y.first_name} ${y.last_name}` :
-                            y.first_name ? y.first_name :
-                                y.last_name ? y.last_name : "Guest"}
+                        {y.first_name && y.last_name
+                            ? truncateName(`${y.first_name} ${y.last_name}`)
+                            : y.first_name
+                                ? truncateName(y.first_name)
+                                : y.last_name
+                                    ? truncateName(y.last_name)
+                                    : "Guest"
+                        }
                     </Text>
                 </IndexTable.Cell>
                 <IndexTable.Cell>
