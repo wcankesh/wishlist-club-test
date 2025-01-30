@@ -349,6 +349,7 @@ const StockNotification = () => {
         "{shop_name}: To show the shop name",
         "{product_name}: To show product title",
         "{product_html}: To show product (required)",
+        "{discount_code}: To show discount description",
         "{{unsubscribe}}: Use this tag to display the unsubscribe link",
     ];
 
