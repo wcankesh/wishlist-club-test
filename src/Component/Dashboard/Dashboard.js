@@ -1,5 +1,5 @@
 import React, {Fragment, useState} from 'react';
-import {Banner, Layout, Page, Text, Link, Button, BlockStack, Modal, List} from "@shopify/polaris";
+import {Banner, Layout, Page, Text, Link, Button, BlockStack, Modal, List, InlineStack} from "@shopify/polaris";
 import HelpDesk from "./HelpDesk/HelpDesk"
 import {useDispatch, useSelector} from "react-redux";
 import Feedback from "./Feedback/Feedback";
@@ -8,6 +8,7 @@ import {apiService, baseUrl, openUrlInNewWindow} from "../../utils/Constant";
 import {useNavigate} from "react-router-dom";
 import {AppDocsLinks} from "../../utils/AppDocsLinks";
 import ConformationModal from "../Comman/ConformationModal";
+import {Icons} from "../../utils/Icons";
 
 const Dashboard = () => {
     const [active,setActive] = useState(false);
@@ -67,7 +68,19 @@ const Dashboard = () => {
         <Fragment>
             <Page
                 title={`Good ${hours < 12 ? "Morning" : hours >= 12 && hours <= 17 ? "Afternoon" : hours >= 17 && hours <= 24 ? "Evening" : ""} , ${shopDetails.store_name}`}
-                subtitle={`Happy ${dayName} from the WebContrive team`}>
+                subtitle={`Happy ${dayName} from the WebContrive team`}
+                primaryAction={
+                    <InlineStack>
+                        <button
+                            data-featurebase-feedback-portal
+                            onClick={() => {window.Featurebase('manually_open_changelog_popup');}}
+                            className="Polaris-Button Polaris-Button--primary"
+                        >
+                            {Icons.announcement}
+                        </button>
+                    </InlineStack>
+                }
+            >
 
                 <ConformationModal
                     active={active}

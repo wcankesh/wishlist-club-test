@@ -15,6 +15,7 @@ const WhatSNew = () => {
             <Layout>
                 <Layout.Section variant={'fullWidth'}>
                     <Card>
+                        <iframe src={"https://wishlistclub.featurebase.app/changelog?hideMenu=true"}/>
                         <iframe src="https://wishlist.quickhunt.app/widget/ideas?widget=187" style={{border: '0px', outline: '0px', width: '100%', height: '100vh'}}/>
                     </Card>
                 </Layout.Section>

@@ -69,7 +69,11 @@ const Settings = () => {
     ];
 
     const onRedirect = (link) => {
-        navigate(`${baseUrl}/${link}`);
+        if (link === 'settings/feedback'){
+            window.Featurebase('manually_open_changelog_popup');
+        }else {
+            navigate(`${baseUrl}/${link}`);
+        }
     }
 
     return (

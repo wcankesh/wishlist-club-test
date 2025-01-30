@@ -10,7 +10,9 @@ const WishlistCardMenu = ({data, onRedirect, shopDetails, column = "two"}) => {
             <InlineGrid gap={"400"} columns={column === "two" ? twoColumns : threeColumns}>
                 {data.map((x, index) => {
                     return (
-                        <div className={"cursor-pointer"} onClick={() => onRedirect(x.link)} key={index}>
+                        <button data-featurebase-feedback-portal className={"cursor-pointer"} onClick={() => onRedirect(x.link)} key={index}
+                        style={{display: 'block', border: 'none', background:'transparent', textAlign: 'start'}}
+                        >
                             <InlineStack gap={"200"} align={"space-between"} blockAlign={"start"} wrap={false}>
                                 <InlineStack gap={"400"} wrap={false}>
                                     <div className="sgi_icon">
@@ -26,7 +28,7 @@ const WishlistCardMenu = ({data, onRedirect, shopDetails, column = "two"}) => {
                                 {/*{shopDetails && shopDetails.client_plan < x.isPlan ?*/}
                                 {/*    <CrownTooltip x={x} onRedirect={onRedirect}/> : ""}*/}
                             </InlineStack>
-                        </div>
+                        </button>
                     );
                 })}
             </InlineGrid>
