@@ -219,6 +219,22 @@ const Plan = () => {
             enterprise: true,
         },
         {
+            title: 'Custom Design',
+            free: false,
+            basic: false,
+            pro: false,
+            advance: false,
+            enterprise: true,
+        },
+        {
+            title: 'Custom Feature build',
+            free: false,
+            basic: false,
+            pro: false,
+            advance: false,
+            enterprise: true,
+        },
+        {
             title: 'ATC Redirection Options',
             free: false,
             basic: false,
