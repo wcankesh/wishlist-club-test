@@ -24,6 +24,7 @@ import Integration from "../Component/Settings/Integration/Integration";
 import IntegrationDetails from "../Component/Settings/Integration/IntegrationDetails/IntegrationDetails";
 import WhatSNew from "../Component/Settings/WhatSNew/WhatSNew";
 import RequestAFeature from "../Component/Settings/WhatSNew/RequestAFeature/RequestAFeature";
+import WishlistEmailCustomization from "../Component/Settings/WishlistEmail/WishlistEmailCustomization";
 
 export const routes = [
     {path: `${baseUrl}/dashboard`, component: <Dashboard/>},
@@ -38,9 +39,10 @@ export const routes = [
     {path: `${baseUrl}/settings/general`, component: <General/>},
     {path: `${baseUrl}/settings/wishlist-design`, component: <WishlistDesign/>},
     {path: `${baseUrl}/settings/email`, component: <WishlistEmail/>},
-    {path: `${baseUrl}/settings/email/wishlist-items`, component: <WishlistItemsEmail/>},
-    {path: `${baseUrl}/settings/email/price-drop-alert`, component: <PriceDropAlertEmail/>},
-    {path: `${baseUrl}/settings/email/restock-alert`, component: <RestockAlertEmail/>},
+    {path: `${baseUrl}/settings/email/email-customization`, component: <WishlistEmailCustomization/>},
+    // {path: `${baseUrl}/settings/email/wishlist-items`, component: <WishlistItemsEmail/>},
+    // {path: `${baseUrl}/settings/email/price-drop-alert`, component: <PriceDropAlertEmail/>},
+    // {path: `${baseUrl}/settings/email/restock-alert`, component: <RestockAlertEmail/>},
     {path: `${baseUrl}/settings/language`, component: <Language/>},
     {path: `${baseUrl}/settings/headless`, component: <Headless/>},
     {path: `${baseUrl}/settings/plan`, component: <Plan/>},

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Frame, FooterHelp, Link, Text, Modal} from '@shopify/polaris';
-import {Outlet, useLocation, useNavigate} from 'react-router-dom';
+import {Outlet, useLocation, useMatch, useNavigate} from 'react-router-dom';
 import {baseUrl} from "../../utils/Constant"
 import {useSelector} from 'react-redux';
 import {Provider, RoutePropagator, NavigationMenu} from "@shopify/app-bridge-react";
@@ -15,6 +15,12 @@ const DefaultLayout = () => {
     const host = urlParams.get('host');
     const shopDetails = useSelector(state => state.shopDetails);
     const config = {apiKey: apiKey, host: host, forceRedirect: process.env.NODE_ENV === 'development' ? false : true};
+
+    const excludedRoutes = [
+        `${baseUrl}/settings/email/email-customization`,
+    ];
+
+    const isExcluded = excludedRoutes.includes(location.pathname);
 
     useEffect(() => {
         if (shopDetails?.upgrade == "0") {
@@ -65,6 +71,7 @@ const DefaultLayout = () => {
                             </Text>
                         </Modal.Section>
                     </Modal>
+                    {!isExcluded ? (
                     <FooterHelp>
                         <div className="FooterHelp__Content">
                             if you need any help, please &nbsp;
@@ -73,6 +80,7 @@ const DefaultLayout = () => {
                             </Link>
                         </div>
                     </FooterHelp>
+                        ) : "" }
                 </Frame>
             </Provider>
         </div>

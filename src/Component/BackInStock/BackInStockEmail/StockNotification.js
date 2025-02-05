@@ -460,13 +460,15 @@ const StockNotification = () => {
                                                            onBlur={onBlur}
                                                            error={backInStockEmailError.view_product_button_text}
                                                 />
+                                            <InlineStack align={'start'}>
                                                 <Checkbox
                                                     label="Discount code"
                                                     checked={checkDiscount}
                                                     onChange={() => setCheckDiscount(!checkDiscount)}
                                                 />
-                                                {checkDiscount &&
+                                            </InlineStack>
 
+                                                {checkDiscount &&
                                                 <TextField label={"Discount description"}
                                                            value={backInStockEmail.bis_content.discount_code}
                                                            onChange={(value) => {

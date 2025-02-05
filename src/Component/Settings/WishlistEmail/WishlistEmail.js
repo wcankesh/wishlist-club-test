@@ -8,8 +8,8 @@ import {useNavigate} from "react-router-dom"
 import ToastMessage from "../../Comman/ToastMessage";
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
 import {AppDocsLinks} from "../../../utils/AppDocsLinks";
-import {formValidate} from "../../Comman/formValidate";
 import {RenderLoading} from "../../../utils/RenderLoading";
+import {initialKeys} from "./Common";
 
 const initialState = {
     subject: "",
@@ -23,6 +23,7 @@ const initialState = {
     weekly_reminder: 0,
     is_notification_mail: 0,
     is_multiple_restock_mail: 0,
+    reply_to_mail: '',
 };
 const initialStateError = {from_email: ""};
 
@@ -44,6 +45,7 @@ const WishlistEmail = () => {
             name: "is_email_reminder_on_off",
             value: emailSetting.is_email_reminder_on_off,
             checked: emailSetting.is_email_reminder_on_off == 0,
+            key: initialKeys?.wishlistItems,
         },
         {
             title: "Price Drop Alerts",
@@ -52,6 +54,7 @@ const WishlistEmail = () => {
             name: "is_email_reminder_on_off_price",
             value: emailSetting.is_email_reminder_on_off_price,
             checked: emailSetting.is_email_reminder_on_off_price == 0,
+            key: initialKeys?.priceDropAlert,
         },
         {
             title: "Restock Alerts",
@@ -60,10 +63,66 @@ const WishlistEmail = () => {
             name: "is_email_reminder_on_off_restock",
             value: emailSetting.is_email_reminder_on_off_restock,
             checked: emailSetting.is_email_reminder_on_off_restock == 0,
-        }
-    ]
+            key: initialKeys?.restockAlert,
+        },
+    ];
 
-        const EmailSetting = async () => {
+    const CustomizationEmailSettings = [
+        {
+            title: 'Acknowledgements',
+            inputs: [
+                {
+                    title: "Added to Wishlist",
+                    description: "Great choice! This item has been successfully added to your wishlist. You can easily find it later and purchase when you're ready. Don't wait too long—popular items sell out fast!",
+                    path: "settings/email/restock-alert",
+                    name: "is_email_reminder_on_off_restock",
+                    value: emailSetting?.add_wishlist_setting?.is_enable,
+                    checked: emailSetting?.add_wishlist_setting?.is_enable == 1,
+                    key: initialKeys?.addedWishlist,
+                },
+                {
+                    title: "Removed from Wishlist",
+                    description: "This item has been removed from your wishlist. Changed your mind? No worries! You can always add it back to keep track of your favorite products.",
+                    path: "settings/email/restock-alert",
+                    name: "is_email_reminder_on_off_restock",
+                    value: emailSetting?.remove_wishlist_setting?.is_enable,
+                    checked: emailSetting?.remove_wishlist_setting?.is_enable == 1,
+                    key: initialKeys?.removeWishlist,
+                },
+            ]
+        },
+        {
+            title: 'Reminders',
+            inputs: [
+                {
+                    title: "Abandonment Reminder",
+                    description: "Still thinking it over? The items in your wishlist are waiting for you, but they might not be available for long. Complete your purchase now before they sell out!",
+                    path: "settings/email/restock-alert",
+                    name: "is_email_reminder_on_off_restock",
+                    value: emailSetting?.abandonment_reminder_setting?.is_enable,
+                    checked: emailSetting?.abandonment_reminder_setting?.is_enable == 1,
+                    key: initialKeys?.abandonmentReminder,
+                },
+            ]
+        },
+        {
+            title: 'Alerts',
+            inputs: [
+
+                {
+                    title: "Low Stock Alert",
+                    description: "Only a few left! This item is in high demand and stock is running low. Secure yours now before it's gone for good!",
+                    path: "settings/email/restock-alert",
+                    name: "is_email_reminder_on_off_restock",
+                    value: emailSetting?.low_stock_setting?.is_enable,
+                    checked: emailSetting?.low_stock_setting?.is_enable == 1,
+                    key: initialKeys?.lowStockAlert,
+                },
+            ]
+        },
+    ];
+
+    const EmailSetting = async () => {
             const response = await apiService.emailSetting();
             if (response.status === 200) {
                 setIsError(false)
@@ -84,9 +143,29 @@ const WishlistEmail = () => {
         EmailSetting()
     }, []);
 
+    const formValidate = (name, value) => {
+        const validEmailRegex =
+            /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+        switch (name) {
+            case "from_email":
+                if (!value || value.trim() === "") {
+                return "Email is required";
+                } else if (!value?.match(validEmailRegex)) {
+                    return "Enter a valid email address";
+                } else {
+                    return "";
+                }
+            default: {
+                return "";
+            }
+        }
+    };
 
     const saveEmailSetting = async () => {
-        if (validateForm(emailSetting, setEmailSettingError,formValidate)) {
+        const isValidForm = validateForm(emailSetting, setEmailSettingError,formValidate)
+        console.log("isValidForm",isValidForm)
+        if (isValidForm) {
             return;
         }
         setIsSave(true);
@@ -150,6 +229,30 @@ const WishlistEmail = () => {
         {label:'Multiple Restock Notification',name:'is_multiple_restock_mail',help:'If you disabled this feature, restock notifications will be sent only once per item. Enable to notify customers each time the item is restocked.'},
     ]
 
+    const onRedirect = (link) => {
+        navigate(`${baseUrl}/settings/email/email-customization?active_email_tab=${link}`);
+    };
+
+    const RenderCardItem = ({item}) => {
+        return (
+            <Card>
+                <InlineStack align={"space-between"} blockAlign={"start"} wrap={false}
+                             gap={"200"}>
+                    <InlineStack gap={"400"} wrap={false}>
+                        <BlockStack gap={"100"}>
+                            <Text fontWeight='semibold' as={"span"}>{item.title}</Text>
+                            <Text tone={"subdued"} as={"span"}>{item.description}</Text>
+                        </BlockStack>
+                    </InlineStack>
+                    {isLoading ? <Badge>
+                        <div style={{width: 62}}>&nbsp;</div>
+                    </Badge> : <Badge
+                        tone={item.checked ? "success" : "critical"}>{item.checked ? "Enabled" : "Disabled"} </Badge>}
+                </InlineStack>
+            </Card>
+        )
+    }
+
     return (
         <Page title={"Wishlist Email"} backAction={{content: 'Settings', onAction: onBack}}>
             <Layout>
@@ -197,6 +300,11 @@ const WishlistEmail = () => {
                                                onChange={(value) => handleChange({
                                                    target: {name: "from_email", value}
                                                })}/>
+                                    <TextField type="email" label="Reply to email" value={emailSetting.reply_to_mail}
+                                               name={"reply_to_mail"}
+                                               onChange={(value) => handleChange({
+                                                   target: {name: "reply_to_mail", value}
+                                               })}/>
                                     <InlineStack align={"end"}>
                                         <Button variant={"primary"} loading={isSave}
                                                 onClick={saveEmailSetting}>Save</Button>
@@ -206,7 +314,8 @@ const WishlistEmail = () => {
                         </Card>}
 
                         {selectedOption === "2" &&
-                        <Card padding={"0"}>
+                            <BlockStack gap={'300'}>
+                                <Card padding={"0"}>
                             <Box padding={"400"}>
                                 <BlockStack gap={"100"}>
                                     <Text as={"span"} variant={"headingMd"}>Email Customization</Text>
@@ -223,7 +332,7 @@ const WishlistEmail = () => {
                             {
                                 (Customization_Email || []).map((x, i) => {
                                     return (
-                                        <div onClick={() => navigate(`${baseUrl}/${x.path}`)}
+                                        <div onClick={() => onRedirect(x.key)}
                                              className={"cursor-pointer"} key={i}>
                                             <Box padding={"400"}>
                                                 <InlineStack align={"space-between"} blockAlign={"start"} wrap={false}
@@ -244,7 +353,31 @@ const WishlistEmail = () => {
                                         </div>
                                     )
                                 })}
-                        </Card>}
+                        </Card>
+
+                                <Card>
+                                    <BlockStack inlineAlign={'start'} gap={'300'}>
+                                    {(CustomizationEmailSettings || []).map((x,i) => {
+                                        return(
+                                            <BlockStack inlineAlign={'start'} gap={'200'}>
+                                                <Text as={'span'} variant={'headingMd'}>{x.title}</Text>
+                                                <BlockStack inlineAlign={'start'} gap={'200'}>
+                                                {(x.inputs && x.inputs || []).map((item, inputIndex) => {
+                                                    return(
+                                                        <div key={inputIndex} onClick={() => onRedirect(item.key)}
+                                                             className={"cursor-pointer"}>
+                                                            <RenderCardItem item={item}/>
+                                                        </div>
+                                                    )
+                                                })}
+                                                </BlockStack>
+                                            </BlockStack>
+                                        )
+                                    })}
+                                    </BlockStack>
+                                </Card>
+                            </BlockStack>
+                        }
 
                         {selectedOption === "3" &&
                         <Card>
@@ -281,6 +414,5 @@ const WishlistEmail = () => {
         </Page>
 
     );
-}
-export default WishlistEmail
-
+};
+export default WishlistEmail;

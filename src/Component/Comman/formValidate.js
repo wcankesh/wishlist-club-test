@@ -4,7 +4,9 @@ export const formValidate = (name, value) => {
 
     switch (name) {
         case "from_email":
-            if (value && !value?.match(validEmailRegex)) {
+            if (!value || value.trim() === "") {
+                return "Email is required";
+            } else if (!value?.match(validEmailRegex)) {
                 return "Enter a valid email address";
             } else {
                 return "";
