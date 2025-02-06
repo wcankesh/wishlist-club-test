@@ -1,5 +1,5 @@
 import React, {Fragment, useCallback, useEffect, useRef, useState} from 'react';
-import {BlockStack, Box, Button, Card, Checkbox, InlineGrid, Text, TextField} from "@shopify/polaris";
+import {BlockStack, Box, Button, Card, Checkbox, InlineGrid, Text, TextField, FullscreenBar, InlineStack} from "@shopify/polaris";
 import {useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {apiService, baseUrl, capitalizeMessage, isChecked, templateJson, toggleFlag} from "../../../utils/Constant";
@@ -204,18 +204,35 @@ const LowStockAlertEmail = () => {
             <CustomErrorBanner link={AppDocsLinks.article["425"]} message={message} setMessage={setMessage}
                                setIsError={setIsError} isError={isError}/>
 
-            <Modal open={true} onHide={onBack} variant={'max'}>
-                <TitleBar title={"Low Stock Alert Email"}>
-                    <button variant="primary" loading={isLoading && ''}
-                            onClick={() => saveEmailSetting("", "", true)}>{'Save'}</button>
-                </TitleBar>
-                <div className="fullContainerPage">
+            {/*<Modal open={true} onHide={onBack} variant={'max'}>*/}
+            {/*    <TitleBar title={"Low Stock Alert Email"}>*/}
+            {/*        <button variant="primary" loading={isLoading && ''}*/}
+            {/*                onClick={() => saveEmailSetting("", "", true)}>{'Save'}</button>*/}
+            {/*    </TitleBar>*/}
+                <div className="fullScreen fullContainerPage">
+                    <div className="fullContainerPage-header">
+                        <FullscreenBar onAction={onBack}>
+                            <div className={'FullscreenBar-main-div'}>
+                                <div className={'FullscreenBar-main-title-div'}>
+                                    <Text variant="headingLg" as="span">{"Remove Wishlist Email"}</Text>
+                                </div>
+                                <InlineStack gap={'150'}>
+                                    <Button variant="primary"
+                                            onClick={() => saveEmailSetting("", "", true)}
+                                            loading={isLoading}
+                                    >
+                                        Save
+                                    </Button>
+                                </InlineStack>
+                            </div>
+                        </FullscreenBar>
+                    </div>
                     <div className="fullContainerPage-inner">
-                        <div className="fullContainerPage-inner-left">
+                        <div className="fullScreen-fullContainerPage-inner-left fullContainerPage-inner-left">
                             {onDisplaySettings}
                         </div>
 
-                        <div className="fullContainerPage-inner-right">
+                        <div className="fullScreen-fullContainerPage-inner-right fullContainerPage-inner-right">
                             <div className={`fullContainerPage-inner-left-settings ${showSettings ? 'show' : 'hide'}`}>{onDisplaySettings}</div>
                             <div className={'fullContainerPage-inner-right-title'}>
                                 <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}> Email Template</Text>
@@ -244,7 +261,7 @@ const LowStockAlertEmail = () => {
                         </div>
                     </div>
                 </div>
-            </Modal>
+            {/*</Modal>*/}
         </Fragment>
     );
 };

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {
     Page, Layout, TextField, Text, Button, Card, BlockStack, InlineStack, Box, Divider, Badge,
-    Checkbox, OptionList
+    Checkbox, OptionList, Select
 } from "@shopify/polaris";
 import {apiService, baseUrl, capitalizeMessage, isChecked, toggleFlag, validateForm} from "../../../utils/Constant";
 import {useNavigate} from "react-router-dom"
@@ -10,6 +10,7 @@ import CustomErrorBanner from "../../Comman/CustomErrorBanner";
 import {AppDocsLinks} from "../../../utils/AppDocsLinks";
 import {RenderLoading} from "../../../utils/RenderLoading";
 import {initialKeys} from "./Common";
+import SwitchButton from "../../Comman/SwitchButton";
 
 const initialState = {
     subject: "",
@@ -123,21 +124,21 @@ const WishlistEmail = () => {
     ];
 
     const EmailSetting = async () => {
-            const response = await apiService.emailSetting();
-            if (response.status === 200) {
-                setIsError(false)
-                setEmailSetting(response.data)
-                setIsLoading(false)
-            } else if (response.status === 500) {
-                setMessage(capitalizeMessage(response.message))
-                setIsErrorServer(true);
-                setIsLoading(false)
-            } else {
-                setMessage(capitalizeMessage(response.message))
-                setIsError(true);
-                setIsLoading(false)
-            }
+        const response = await apiService.emailSetting();
+        if (response.status === 200) {
+            setIsError(false)
+            setEmailSetting(response.data)
+            setIsLoading(false)
+        } else if (response.status === 500) {
+            setMessage(capitalizeMessage(response.message))
+            setIsErrorServer(true);
+            setIsLoading(false)
+        } else {
+            setMessage(capitalizeMessage(response.message))
+            setIsError(true);
+            setIsLoading(false)
         }
+    }
 
     useEffect(() => {
         EmailSetting()
@@ -150,7 +151,7 @@ const WishlistEmail = () => {
         switch (name) {
             case "from_email":
                 if (!value || value.trim() === "") {
-                return "Email is required";
+                    return "Email is required";
                 } else if (!value?.match(validEmailRegex)) {
                     return "Enter a valid email address";
                 } else {
@@ -162,14 +163,21 @@ const WishlistEmail = () => {
         }
     };
 
-    const saveEmailSetting = async () => {
-        const isValidForm = validateForm(emailSetting, setEmailSettingError,formValidate)
-        console.log("isValidForm",isValidForm)
-        if (isValidForm) {
-            return;
+    const onChangeReportWishlist = async (name, value) => {
+        const payload = {...emailSetting, wishlist_report_setting : {...emailSetting?.wishlist_report_setting , [name]: value}};
+        setEmailSetting(payload);
+        await saveEmailSetting('wishlist_report_setting', payload);
+    }
+
+    const saveEmailSetting = async (field, FieldPayload) => {
+        if (field !== 'wishlist_report_setting') {
+            const isValidForm = validateForm(emailSetting, setEmailSettingError, formValidate)
+            if (isValidForm) {
+                return;
+            }
         }
         setIsSave(true);
-        const payload = {...emailSetting};
+        const payload = field === 'wishlist_report_setting' ? {...FieldPayload} : {...emailSetting};
         const formData = new FormData();
         formData.append("payload", JSON.stringify(payload))
         const response = await apiService.updateEmailSetting(formData, emailSetting.id);
@@ -225,8 +233,16 @@ const WishlistEmail = () => {
     };
 
     const WishlistNotifications = [
-        {label:'Notification mail',name:'is_notification_mail',help:'Enabling this setting allows store owners to stay updated through email notifications when users add products to their wishlist.'},
-        {label:'Multiple Restock Notification',name:'is_multiple_restock_mail',help:'If you disabled this feature, restock notifications will be sent only once per item. Enable to notify customers each time the item is restocked.'},
+        {
+            label: 'Notification mail',
+            name: 'is_notification_mail',
+            help: 'Enabling this setting allows store owners to stay updated through email notifications when users add products to their wishlist.'
+        },
+        {
+            label: 'Multiple Restock Notification',
+            name: 'is_multiple_restock_mail',
+            help: 'If you disabled this feature, restock notifications will be sent only once per item. Enable to notify customers each time the item is restocked.'
+        },
     ]
 
     const onRedirect = (link) => {
@@ -255,7 +271,8 @@ const WishlistEmail = () => {
 
     return (
         <Page title={"Wishlist Email"} backAction={{content: 'Settings', onAction: onBack}}>
-            <Layout>
+            <div className="sticky-component">
+                <Layout>
                 {message !== "" && isError === false ?
                     <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
                                   setIsErrorServer={setIsErrorServer}/> : ""}
@@ -265,14 +282,14 @@ const WishlistEmail = () => {
 
                 <Layout.Section variant="oneThird">
                     {isLoading ? <Card>{RenderLoading.commonParagraph}</Card> :
-                    <Card padding={"100"}>
-                        <OptionList onChange={(event) => setSelectedOption(event[0])} selected={selectedOption}
-                                    options={[
-                                        {value: "1", label: "From Email & Name"},
-                                        {value: "2", label: "Email Customization"},
-                                        {value: "3", label: "Wishlist Notifications"},
-                                    ]}/>
-                    </Card>
+                        <Card padding={"100"}>
+                            <OptionList onChange={(event) => setSelectedOption(event[0])} selected={selectedOption}
+                                        options={[
+                                            {value: "1", label: "From Email & Name"},
+                                            {value: "2", label: "Email Customization"},
+                                            {value: "3", label: "Wishlist Notifications"},
+                                        ]}/>
+                        </Card>
                     }
                 </Layout.Section>
 
@@ -314,69 +331,113 @@ const WishlistEmail = () => {
                         </Card>}
 
                         {selectedOption === "2" &&
-                            <BlockStack gap={'300'}>
-                                <Card padding={"0"}>
-                            <Box padding={"400"}>
-                                <BlockStack gap={"100"}>
-                                    <Text as={"span"} variant={"headingMd"}>Email Customization</Text>
-                                    <Text as={"span"} tone={"subdued"}>Send alerts when the products are on Wishlist.
-                                        Also, send price drop & restock alerts for the products in Wishlist.</Text>
-                                    <Text as={"span"} tone={"caution"}><b>Note: </b> These notifications (Wishlist
-                                        Items,
-                                        Price Drop Alerts, and Restock Alerts) are exclusively sent to registered users
-                                        and
-                                        not to guest users.</Text>
-                                </BlockStack>
-                            </Box>
-                            <Divider/>
-                            {
-                                (Customization_Email || []).map((x, i) => {
-                                    return (
-                                        <div onClick={() => onRedirect(x.key)}
-                                             className={"cursor-pointer"} key={i}>
-                                            <Box padding={"400"}>
+                        <BlockStack gap={'300'}>
+                            <Card padding={"0"}>
+                                <Box padding={"400"}>
+                                    <BlockStack gap={"100"}>
+                                        <Text as={"span"} variant={"headingMd"}>Email Customization</Text>
+                                        <Text as={"span"} tone={"subdued"}>Send alerts when the products are on
+                                            Wishlist.
+                                            Also, send price drop & restock alerts for the products in Wishlist.</Text>
+                                        <Text as={"span"} tone={"caution"}><b>Note: </b> These notifications (Wishlist
+                                            Items,
+                                            Price Drop Alerts, and Restock Alerts) are exclusively sent to registered
+                                            users
+                                            and
+                                            not to guest users.</Text>
+                                    </BlockStack>
+                                </Box>
+                                <Divider/>
+                                {
+                                    (Customization_Email || []).map((x, i) => {
+                                        return (
+                                            <div onClick={() => onRedirect(x.key)}
+                                                 className={"cursor-pointer"} key={i}>
+                                                <Box padding={"400"}>
+                                                    <InlineStack align={"space-between"} blockAlign={"start"}
+                                                                 wrap={false}
+                                                                 gap={"200"}>
+                                                        <InlineStack gap={"400"} wrap={false}>
+                                                            <BlockStack gap={"100"}>
+                                                                <Text fontWeight='semibold' as={"span"}>{x.title}</Text>
+                                                                <Text tone={"subdued"}
+                                                                      as={"span"}>{x.description}</Text>
+                                                            </BlockStack>
+                                                        </InlineStack>
+                                                        {isLoading ? <Badge>
+                                                            <div style={{width: 62}}>&nbsp;</div>
+                                                        </Badge> : <Badge
+                                                            tone={x.checked ? "success" : "critical"}>{x.checked ? "Enabled" : "Disabled"} </Badge>}
+                                                    </InlineStack>
+                                                </Box>
+                                                <Divider/>
+                                            </div>
+                                        )
+                                    })}
+                            </Card>
+
+                            <Card>
+                                <BlockStack inlineAlign={'start'} gap={'300'}>
+                                    {(CustomizationEmailSettings || []).map((x, i) => {
+                                        return (
+                                            <BlockStack inlineAlign={'start'} gap={'200'}>
+                                                <Text as={'span'} variant={'headingMd'}>{x.title}</Text>
+                                                <BlockStack inlineAlign={'start'} gap={'200'}>
+                                                    {(x.inputs && x.inputs || []).map((item, inputIndex) => {
+                                                        return (
+                                                            <div key={inputIndex} onClick={() => onRedirect(item.key)}
+                                                                 className={"cursor-pointer"}>
+                                                                <RenderCardItem item={item}/>
+                                                            </div>
+                                                        )
+                                                    })}
+                                                </BlockStack>
+                                            </BlockStack>
+                                        )
+                                    })}
+
+                                    <BlockStack inlineAlign={'start'} gap={'200'}>
+                                        <Text as={'span'} variant={'headingMd'}>{'Reports'}</Text>
+                                        <BlockStack inlineAlign={'start'} gap={'200'}>
+                                            <Card>
                                                 <InlineStack align={"space-between"} blockAlign={"start"} wrap={false}
                                                              gap={"200"}>
                                                     <InlineStack gap={"400"} wrap={false}>
                                                         <BlockStack gap={"100"}>
-                                                            <Text fontWeight='semibold' as={"span"}>{x.title}</Text>
-                                                            <Text tone={"subdued"} as={"span"}>{x.description}</Text>
+                                                            <InlineStack gap={'150'} align={'start'} blockAlign={'center'}>
+                                                                <Text fontWeight='semibold' as={"span"}>Wishlist Report Setting</Text>
+                                                                <SwitchButton
+                                                                    checked={emailSetting?.wishlist_report_setting?.is_enable == 1}
+                                                                    onChange={() => onChangeReportWishlist('is_enable', toggleFlag(emailSetting?.wishlist_report_setting?.is_enable))} name={"is_enable"}/>
+                                                                <Select
+                                                                    label="Type"
+                                                                    labelInline
+                                                                    options={[
+                                                                        {label: 'Weekly', value: '1'},
+                                                                        {label: 'Monthly', value: '2'},
+                                                                    ]}
+                                                                    name={'type'}
+                                                                    onChange={(value) => onChangeReportWishlist('type', value)}
+                                                                    value={emailSetting?.wishlist_report_setting?.type}
+                                                                />
+                                                            </InlineStack>
+                                                            <Text tone={"subdued"} as={"span"}>wishlist_report_setting Only a few left! This item is in high demand and stock is running low. Secure yours now before it's gone for good!</Text>
                                                         </BlockStack>
                                                     </InlineStack>
                                                     {isLoading ? <Badge>
                                                         <div style={{width: 62}}>&nbsp;</div>
                                                     </Badge> : <Badge
-                                                        tone={x.checked ? "success" : "critical"}>{x.checked ? "Enabled" : "Disabled"} </Badge>}
+                                                        tone={emailSetting?.wishlist_report_setting?.is_enable == 1? "success" : "critical"}>{emailSetting?.wishlist_report_setting?.is_enable == 1 ? "Enabled" : "Disabled"} </Badge>}
                                                 </InlineStack>
-                                            </Box>
-                                            <Divider/>
-                                        </div>
-                                    )
-                                })}
-                        </Card>
+                                            </Card>
 
-                                <Card>
-                                    <BlockStack inlineAlign={'start'} gap={'300'}>
-                                    {(CustomizationEmailSettings || []).map((x,i) => {
-                                        return(
-                                            <BlockStack inlineAlign={'start'} gap={'200'}>
-                                                <Text as={'span'} variant={'headingMd'}>{x.title}</Text>
-                                                <BlockStack inlineAlign={'start'} gap={'200'}>
-                                                {(x.inputs && x.inputs || []).map((item, inputIndex) => {
-                                                    return(
-                                                        <div key={inputIndex} onClick={() => onRedirect(item.key)}
-                                                             className={"cursor-pointer"}>
-                                                            <RenderCardItem item={item}/>
-                                                        </div>
-                                                    )
-                                                })}
-                                                </BlockStack>
-                                            </BlockStack>
-                                        )
-                                    })}
+
+
+                                        </BlockStack>
                                     </BlockStack>
-                                </Card>
-                            </BlockStack>
+                                </BlockStack>
+                            </Card>
+                        </BlockStack>
                         }
 
                         {selectedOption === "3" &&
@@ -411,6 +472,7 @@ const WishlistEmail = () => {
                     </Layout.Section>
                 }
             </Layout>
+            </div>
         </Page>
 
     );
