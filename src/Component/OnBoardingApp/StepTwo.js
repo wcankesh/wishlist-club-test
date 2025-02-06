@@ -1,14 +1,11 @@
-import React, {useEffect, useState, Fragment} from 'react';
-import {
-    BlockStack, Box, Card, InlineStack, Button, Text, InlineGrid, ButtonGroup, Select,
-    Icon, Modal, List
-} from "@shopify/polaris";
-import {apiService, baseUrl, openUrlInNewWindow, seconadryButton, secondaryButton} from "../../utils/Constant";
+import React, {Fragment, useEffect, useState} from 'react';
+import {BlockStack, Box, Button, ButtonGroup, Card, InlineGrid, InlineStack, Select, Text} from "@shopify/polaris";
+import {apiService, baseUrl, openUrlInNewWindow, secondaryButton} from "../../utils/Constant";
 import qs from "qs";
 import {useNavigate} from "react-router-dom";
-import {RefreshMajor, ExternalMinor} from '@shopify/polaris-icons';
-import {StepOneImage, StepTwoImage} from "../../utils/AppImages";
+import {StepTwoImage} from "../../utils/AppImages";
 import LazyLoadImage from "../Comman/LazyLoadImage";
+import {Icons} from "../../utils/Icons";
 
 const StepTwo = ({step, setStep, urlParams, shopDetails, extensionId, setExtensionId}) => {
     const navigate = useNavigate();
@@ -146,13 +143,13 @@ const StepTwo = ({step, setStep, urlParams, shopDetails, extensionId, setExtensi
                                                     options={themeList} value={selectedTheme}
                                                     onChange={(value) => onChangeTheme(value)}/>
                                         </div>
-                                        <Button size={"large"} icon={RefreshMajor} onClick={getTheme}
+                                        <Button size={"large"} icon={Icons.RefreshIcon} onClick={getTheme}
                                                 loading={getThemeLoading}/>
                                     </InlineStack>
                                 </BlockStack>
                                 {
                                     selectedTheme !== "" ? <div className={secondaryButton}>
-                                        <Button onClick={() => onActiveStep()} loading={isLoading} icon={ExternalMinor}
+                                        <Button onClick={() => onActiveStep()} loading={isLoading} icon={Icons.ExternalIcon}
                                                 disabled={extensionEnabled || selectedTheme === ""}>
                                             {extensionEnabled ? "Activated" : "Activate"}
                                         </Button></div> : ""
@@ -161,7 +158,7 @@ const StepTwo = ({step, setStep, urlParams, shopDetails, extensionId, setExtensi
                                 <BlockStack inlineAlign={"start"} gap={"400"}>
                                     <Text as={"span"}>{`Add wishlist icon to product page`}</Text>
                                     <div className={secondaryButton}>
-                                        <Button icon={ExternalMinor}
+                                        <Button icon={Icons.ExternalIcon}
                                                 onClick={() => openUrlInNewWindow(isWishlistUrl)}>{`Activate`}</Button>
                                     </div>
                                 </BlockStack>

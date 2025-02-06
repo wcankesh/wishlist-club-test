@@ -1,14 +1,14 @@
-import React, {useState, useEffect} from 'react';
-import {BlockStack, Box, Card, Button, Text, InlineGrid, InlineStack} from "@shopify/polaris";
+import React, {useEffect, useState} from 'react';
+import {BlockStack, Box, Button, Card, InlineGrid, InlineStack, Text} from "@shopify/polaris";
 import {baseUrl, openUrlInNewWindow, secondaryButton} from "../../utils/Constant";
 import qs from "qs";
 import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
-import {Confetti, StepFourImage, StepThreeImage} from "../../utils/AppImages";
+import {Confetti, StepFourImage} from "../../utils/AppImages";
 import {Shop_details} from "../../redux/action/action";
-import {ExternalMinor} from "@shopify/polaris-icons";
 import {AppDocsLinks} from "../../utils/AppDocsLinks";
 import LazyLoadImage from "../Comman/LazyLoadImage";
+import {Icons} from "../../utils/Icons";
 
 const StepFour = ({urlParams, shopDetails}) => {
     const [isConfetti, setIsConfetti] = useState(true);
@@ -54,13 +54,13 @@ const StepFour = ({urlParams, shopDetails}) => {
                                 </BlockStack>
                                 <BlockStack gap={"400"} inlineAlign={"start"}>
                                     <div className={secondaryButton}>
-                                        <Button icon={ExternalMinor}
+                                        <Button icon={Icons.ExternalIcon}
                                                 onClick={() => openUrlInNewWindow(AppDocsLinks.writeReviewModal)}>Share
                                             Feedback</Button>
                                     </div>
                                     <Text as={"span"} variant={"headingMd"}>{`Next Step?`}</Text>
                                     <div className={secondaryButton}>
-                                        <Button icon={ExternalMinor}
+                                        <Button icon={Icons.ExternalIcon}
                                                 onClick={() => onStepChange("settings/wishlist-design")}>
                                             Customize Wishlist Icon</Button>
                                     </div>

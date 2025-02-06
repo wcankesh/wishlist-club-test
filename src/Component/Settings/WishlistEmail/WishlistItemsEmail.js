@@ -354,13 +354,15 @@ const WishlistItemsEmail = () => {
                       </Fragment>
                   }
             >
-                <ConformationModal
-                    active={active}
-                    onClose={handleUpgradeNow}
-                    isLoading={isConfirmLoading}
-                    isEditor={true}
-                    handleConfirmation={handleConfirmation}
-                />
+                {active ? (
+                    <ConformationModal
+                        active={active}
+                        onClose={handleUpgradeNow}
+                        isLoading={isConfirmLoading}
+                        isEditor={true}
+                        handleConfirmation={handleConfirmation}
+                    />
+                ) : ""}
 
                 <Layout>
                     {message !== "" && isError === false ?

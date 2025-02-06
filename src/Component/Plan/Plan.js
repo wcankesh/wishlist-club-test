@@ -1,7 +1,7 @@
 import React, {Fragment, useEffect, useState} from 'react';
 import {
     Page, Layout, ProgressBar, Button, Banner, Text, BlockStack, InlineStack, Card, Icon,
-    Select, Grid, IndexTable, Box, Badge,Modal,
+    Select, Grid, IndexTable, Box, Badge,
 } from "@shopify/polaris";
 import {useDispatch, useSelector} from "react-redux";
 import moment from "moment";
@@ -9,10 +9,8 @@ import {Icons} from "../../utils/Icons";
 import {apiService, baseUrl, capitalizeMessage, openUrlInNewWindow} from "../../utils/Constant";
 import {Shop_details} from "../../redux/action/action";
 import {useNavigate} from "react-router-dom";
-import {MinusMinor} from "@shopify/polaris-icons";
 import ToastMessage from "../Comman/ToastMessage";
-
-const minusIcon = <Icon source={MinusMinor}/>;
+import {Modal, TitleBar} from "@shopify/app-bridge-react";
 
 const Plan = () => {
     const dispatch = useDispatch();
@@ -28,6 +26,8 @@ const Plan = () => {
     const [activeEmailPlan, setActiveEmailPlan] = useState({});
     const [isPlan, setIsPlan] = useState();
     const [downgradeModal, setDowngradeModal] = useState(false);
+
+    const minusIcon = <Icon source={Icons.MinusIcon}/>;
 
     const onCloseModel = () => {
         setIsPlan('')
@@ -394,24 +394,21 @@ const Plan = () => {
 
     return (
         <Fragment>
-            <Modal open={downgradeModal} titleHidden onClose={onCloseModel}>
-                <Modal.Section>
-                    <BlockStack gap={"500"}>
-                        <Text as={"span"} variant={"headingLg"} alignment={"center"}>
-                            {`Plan Downgrade Impact`}
-                        </Text>
-                        <Text as={"span"} variant={"bodyMd"} alignment={"center"}>
-                            {`By downgrading from the your current plan, you may lose access to certain features and integrations. Each plan has different email notification limits, and any active integrations may be deactivated. Please ensure you understand these changes before proceeding with the downgrade.`}
-                        </Text>
-                        <InlineStack align={"center"} gap={"200"}>
-                            <Button size={"large"} onClick={onCloseModel}>Cancel</Button>
-                            <Button size={"large"} loading={isLoading == isPlan} variant={"primary"}
-                                    onClick={() => onUpdatePlan(isPlan)}>Downgrade</Button>
-                        </InlineStack>
-                    </BlockStack>
-                </Modal.Section>
-            </Modal>
-
+            {downgradeModal ? (
+                <Modal open={downgradeModal} titleHidden onClose={onCloseModel}>
+                    <TitleBar title={"Plan Downgrade Impact"}>
+                        <button variant="primary" loading={(isLoading == isPlan) && ''} onClick={() => onUpdatePlan(isPlan)}>{'Downgrade'}</button>
+                        <button onClick={() => onCloseModel()}>Cancel</button>
+                    </TitleBar>
+                    <Box padding={'400'}>
+                        <BlockStack gap={"500"}>
+                            <Text as={"span"} variant={"bodyMd"} alignment={"center"}>
+                                {`By downgrading from the your current plan, you may lose access to certain features and integrations. Each plan has different email notification limits, and any active integrations may be deactivated. Please ensure you understand these changes before proceeding with the downgrade.`}
+                            </Text>
+                        </BlockStack>
+                    </Box>
+                </Modal>
+            ) : ''}
 
             <Page title={"Plan & Price"}
                   backAction={shopDetails.plan_type === "1" || shopDetails.is_older_shop == 1 ? "" : {

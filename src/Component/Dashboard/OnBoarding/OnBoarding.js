@@ -1,13 +1,10 @@
 import React, {Fragment, useEffect, useState} from 'react';
-import {
-  Text, Button, BlockStack, Card, InlineStack, Collapsible, Icon, Link,
-  Divider, Box, ButtonGroup
-} from "@shopify/polaris"
-import {CaretUpMinor, CaretDownMinor,TickMinor} from "@shopify/polaris-icons"
+import {BlockStack, Box, Button, ButtonGroup, Card, Collapsible, Divider, Icon, InlineStack, Link, Text} from "@shopify/polaris"
 import ToastMessage from "../../Comman/ToastMessage";
 import {apiService, baseUrl, openUrlInNewWindow} from "../../../utils/Constant";
 import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom"
+import {Icons} from "../../../utils/Icons";
 
 const OnBoarding = () => {
   const navigate = useNavigate()
@@ -55,7 +52,7 @@ const OnBoarding = () => {
               <InlineStack wrap={false} align={"space-between"}>
                 <Text variant="headingSm" as="span" fontWeight={"medium"}
                       breakWord={true}>{"Wishlist app setting is easy just follow 1 to 5 steps to set up and display wishlist icon on your store."}</Text>
-                <div onClick={handleToggle}><Icon source={open ? CaretUpMinor : CaretDownMinor}/>
+                <div onClick={handleToggle}><Icon source={open ? Icons.CaretUpIcon : Icons.CaretDownIcon}/>
                 </div>
               </InlineStack>
             </BlockStack>
@@ -80,7 +77,7 @@ const OnBoarding = () => {
                             <div
                               className={`boding-count ${selectedBoarding === x.selected ? "boding-count-active" : ""}`}>
                               {/*{i + 1}*/}
-                              {selectedBoarding === x.selected ? <Icon source={TickMinor} />:""}
+                              {selectedBoarding === x.selected ? <Icon source={Icons.CheckSmallIcon} />:""}
 
                             </div>
                             {selectedBoarding === x.selected ?

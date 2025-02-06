@@ -1,21 +1,21 @@
 import React, {Fragment} from 'react';
 import {Page, Layout} from "@shopify/polaris";
-import {EmailMajor, ThemesMajor} from "@shopify/polaris-icons";
 import {useNavigate} from "react-router-dom";
 import {baseUrl} from "../../utils/Constant";
 import WishlistCardMenu from "../Comman/WishlistCardMenu";
+import {Icons} from "../../utils/Icons";
 
 const BackInStock = () => {
     const navigate = useNavigate()
     const BackInStock = [
         {
-            icon: EmailMajor,
+            icon: Icons.ExportIcon,
             name: "Back In Stock Email",
             text: "Manage your preferences for back-in-stock notifications and thank-you notifications using this section.",
             link: "back-in-stock/email"
         },
         {
-            icon: ThemesMajor,
+            icon: Icons.ThemeIcon,
             name: "Back In Stock Design",
             text: "Customize the design of your back-in-stock notifications for the home & collection page, subscriber form, and subscriber message.",
             link: "back-in-stock/design"

@@ -1,8 +1,7 @@
-import React, {Fragment, useState, useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
-    Page, Layout, BlockStack, InlineStack, Card, Pagination, Badge, Link, Thumbnail, Text,
-    Popover, Button, ResourceList, Modal, DropZone, IndexTable, EmptySearchResult, OptionList,
-    Box,Divider
+    Badge, BlockStack, Box, Button, Card, Divider, DropZone, EmptySearchResult, IndexTable, InlineStack, Layout,
+    Link, OptionList, Page, Pagination, Popover, Text, Thumbnail
 } from "@shopify/polaris"
 import moment from "moment";
 import {apiService, capitalizeMessage, currencySymbol} from "../../utils/Constant";
@@ -11,8 +10,8 @@ import ToastMessage from "../Comman/ToastMessage";
 import CustomErrorBanner from "../Comman/CustomErrorBanner";
 import {AppDocsLinks} from "../../utils/AppDocsLinks";
 import {tableLoading} from "../../utils/RenderLoading";
-import {ExportMinor, ImportMinor} from "@shopify/polaris-icons";
-
+import {Icons} from "../../utils/Icons";
+import {Modal, TitleBar} from "@shopify/app-bridge-react";
 
 const WishlistItems = () => {
     const limit = 10;
@@ -333,8 +332,8 @@ const WishlistItems = () => {
 
     return (
         <Page title={"Wishlist Items"}
-              primaryAction={{content: 'Import', onAction: handleChange, icon: ImportMinor}}
-              secondaryActions={[{content: 'Export', onAction: Export, icon: ExportMinor}]}>
+              primaryAction={{content: 'Import', onAction: handleChange, icon: Icons.ImportIcon}}
+              secondaryActions={[{content: 'Export', onAction: Export, icon: Icons.ExportIcon}]}>
             <Layout>
                 {message !== "" && isError === false ?
                     <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
@@ -464,23 +463,28 @@ const WishlistItems = () => {
                     }
                 </Layout.Section>
             </Layout>
-            <Modal open={active} onClose={handleChange} title="Import your wishlist items"
-                   primaryAction={{content: 'Import', onAction: Import, loading: isImportLoading}}
-                   secondaryActions={[{content: 'Cancel', onAction: handleChange,},]}>
-                <Modal.Section>
-                    <BlockStack gap={"400"}>
-                        <Text as={"span"}>If you are not known to the CSV template, download a <Link
-                            url={AppDocsLinks.wishListClubData}
-                            removeUnderline download> Sample
-                            CSV </Link> template to
-                            get an idea about how to deal with CSV format to import wishlist products.</Text>
-                        <DropZone accept=".csv" type="file" onDrop={handleDropZoneDrop}>
-                            {uploadedFile}
-                            {fileUpload}
-                        </DropZone>
-                    </BlockStack>
-                </Modal.Section>
-            </Modal>
+            {active ? (
+                <Modal open={active}>
+                    <TitleBar title={"Import your wishlist items"}>
+                        <button variant="primary" loading={isImportLoading && ''} onClick={() => Import()}>{'Confirm'}</button>
+                        <button onClick={() => handleChange()}>CancelImport</button>
+                    </TitleBar>
+
+                    <Box padding={'400'}>
+                        <BlockStack gap={"400"}>
+                            <Text as={"span"}>If you are not known to the CSV template, download a <Link
+                                url={AppDocsLinks.wishListClubData}
+                                removeUnderline download> Sample
+                                CSV </Link> template to
+                                get an idea about how to deal with CSV format to import wishlist products.</Text>
+                            <DropZone accept=".csv" type="file" onDrop={handleDropZoneDrop}>
+                                {uploadedFile}
+                                {fileUpload}
+                            </DropZone>
+                        </BlockStack>
+                    </Box>
+                </Modal>
+            ) : ''}
         </Page>
     );
 };

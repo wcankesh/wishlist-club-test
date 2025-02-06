@@ -1,12 +1,11 @@
 import React, {Fragment, useState} from 'react';
-import {Banner, Layout, Page, Text, Link, Button, BlockStack, Modal, List, InlineStack} from "@shopify/polaris";
+import {Banner, BlockStack, InlineStack, Layout, Page, Text} from "@shopify/polaris";
 import HelpDesk from "./HelpDesk/HelpDesk"
 import {useDispatch, useSelector} from "react-redux";
 import Feedback from "./Feedback/Feedback";
 import {Shop_details} from "../../redux/action/action";
 import {apiService, baseUrl, openUrlInNewWindow} from "../../utils/Constant";
 import {useNavigate} from "react-router-dom";
-import {AppDocsLinks} from "../../utils/AppDocsLinks";
 import ConformationModal from "../Comman/ConformationModal";
 import {Icons} from "../../utils/Icons";
 
@@ -81,16 +80,17 @@ const Dashboard = () => {
                     </InlineStack>
                 }
             >
-
-                <ConformationModal
-                    active={active}
-                    onClose={handleUpgradeNow}
-                    isLoading={isLoading}
-                    setIsLoading={setIsLoading}
-                    setActive={setActive}
-                    isEditor={false}
-                    handleConfirmation={handleConfirmation}
-                />
+                {active ? (
+                    <ConformationModal
+                        active={active}
+                        onClose={handleUpgradeNow}
+                        isLoading={isLoading}
+                        setIsLoading={setIsLoading}
+                        setActive={setActive}
+                        isEditor={false}
+                        handleConfirmation={handleConfirmation}
+                    />
+                ) : ""}
 
                 <Layout>
                     {

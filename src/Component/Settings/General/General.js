@@ -10,7 +10,6 @@ import {
     FormLayout,
     InlineStack,
     Layout,
-    Modal,
     Page,
     Text
 } from '@shopify/polaris'
@@ -22,8 +21,10 @@ import CustomErrorBanner from "../../Comman/CustomErrorBanner";
 import {AppDocsLinks} from "../../../utils/AppDocsLinks";
 import {RenderLoading} from "../../../utils/RenderLoading";
 import {useSelector} from "react-redux";
+import {Modal, TitleBar, useAppBridge} from "@shopify/app-bridge-react";
 
 const General = () => {
+    const shopify = useAppBridge();
     const navigate = useNavigate();
     const shopDetails = useSelector(state => state.shopDetails);
     const [setting, setSetting] = useState({
@@ -363,19 +364,20 @@ const General = () => {
                 </Layout>
             </Page>
             {
-                activeGuestModal &&
-                <Modal open={activeGuestModal} onClose={handleChangeModal}
-                       title={"Really want to deactivate Guest Wishlist?"}
-                       primaryAction={{content: 'Yes', onAction: GuestWishlistConfirmation, loading: isLoading}}
-                       secondaryActions={[{content: 'No', onAction: handleChangeModal,}]}>
-                    <Modal.Section>
+                activeGuestModal ? (
+                <Modal open={activeGuestModal}>
+                    <TitleBar title={"Really want to deactivate Guest Wishlist?"}>
+                        <button variant="primary" loading={isLoading && ''} onClick={() => GuestWishlistConfirmation()}>Yes</button>
+                        <button onClick={() => handleChangeModal()}>No</button>
+                    </TitleBar>
+                    <Box padding={'400'}>
                         <Text as={"span"}>
                             <Text as={"span"} tone={"warning"} fontWeight={"semibold"}>WARNING! </Text>
                             {`All the Guest Customers Product Information will be removed from our server and there is no way back. Are you sure you want to do this?`}
                         </Text>
-                    </Modal.Section>
+                    </Box>
                 </Modal>
-            }
+            ) : ''}
         </Fragment>
     );
 }

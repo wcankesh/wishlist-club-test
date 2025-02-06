@@ -331,14 +331,15 @@ const RestockAlertEmail = () => {
                       </Fragment>
                   }
             >
-                <ConformationModal
-                    active={active}
-                    onClose={handleUpgradeNow}
-                    isLoading={isConfirmLoading}
-                    isEditor={false}
-                    handleConfirmation={handleConfirmation}
-                    isEditor={true}
-                />
+                {active ? (
+                    <ConformationModal
+                        active={active}
+                        onClose={handleUpgradeNow}
+                        isLoading={isConfirmLoading}
+                        handleConfirmation={handleConfirmation}
+                        isEditor={true}
+                    />
+                ) : ""}
                 <Layout>
                     {message !== "" && isError === false ? <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer}/> : ""}
                     <CustomErrorBanner link={AppDocsLinks.article["425"]} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError} />

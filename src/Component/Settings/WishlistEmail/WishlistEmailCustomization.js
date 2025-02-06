@@ -1,5 +1,5 @@
 import React from 'react';
-import {useLocation, useNavigate} from "react-router-dom";
+import {useLocation} from "react-router-dom";
 import {initialKeys} from "./Common";
 import WishlistItemsEmail from "./WishlistItemsEmail";
 import PriceDropAlertEmail from "./PriceDropAlertEmail";
@@ -10,7 +10,6 @@ import LowStockAlertEmail from "./LowStockAlertEmail";
 import AbandonmentReminderEmail from "./AbandonmentReminderEmail";
 
 const WishlistEmailCustomization = () => {
-    const navigate = useNavigate();
     let location = useLocation();
 
     const UrlParams = new URLSearchParams(location.search);

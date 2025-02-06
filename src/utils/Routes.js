@@ -10,9 +10,6 @@ import Settings from "../Component/Settings/Settings";
 import General from "../Component/Settings/General/General";
 import WishlistDesign from "../Component/Settings/WishlistDesign/WishlistDesign";
 import WishlistEmail from "../Component/Settings/WishlistEmail/WishlistEmail";
-import WishlistItemsEmail from "../Component/Settings/WishlistEmail/WishlistItemsEmail";
-import PriceDropAlertEmail from "../Component/Settings/WishlistEmail/PriceDropAlertEmail";
-import RestockAlertEmail from "../Component/Settings/WishlistEmail/RestockAlertEmail";
 import Language from "../Component/Settings/Language/Language";
 import Headless from "../Component/Settings/Headless/Headless";
 import Plan from "../Component/Plan/Plan";
@@ -40,9 +37,6 @@ export const routes = [
     {path: `${baseUrl}/settings/wishlist-design`, component: <WishlistDesign/>},
     {path: `${baseUrl}/settings/email`, component: <WishlistEmail/>},
     {path: `${baseUrl}/settings/email/email-customization`, component: <WishlistEmailCustomization/>},
-    // {path: `${baseUrl}/settings/email/wishlist-items`, component: <WishlistItemsEmail/>},
-    // {path: `${baseUrl}/settings/email/price-drop-alert`, component: <PriceDropAlertEmail/>},
-    // {path: `${baseUrl}/settings/email/restock-alert`, component: <RestockAlertEmail/>},
     {path: `${baseUrl}/settings/language`, component: <Language/>},
     {path: `${baseUrl}/settings/headless`, component: <Headless/>},
     {path: `${baseUrl}/settings/plan`, component: <Plan/>},

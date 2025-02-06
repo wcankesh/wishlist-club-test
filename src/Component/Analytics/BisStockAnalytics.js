@@ -1,7 +1,7 @@
 import React, {Fragment, useCallback, useEffect, useState} from 'react';
 import {
     Badge, BlockStack, Box, Button, Card, DropZone, EmptySearchResult, Grid, IndexTable,
-    InlineStack, Layout, Link, Modal, Pagination, Tabs, Text, TextField, Thumbnail,
+    InlineStack, Layout, Link, Pagination, Tabs, Text, TextField, Thumbnail,
 } from '@shopify/polaris';
 import {apiService, capitalizeMessage} from "../../utils/Constant";
 import moment from "moment";
@@ -10,7 +10,8 @@ import {useSelector} from "react-redux";
 import ToastMessage from "../Comman/ToastMessage";
 import {AppDocsLinks} from "../../utils/AppDocsLinks";
 import {tableLoading} from "../../utils/RenderLoading";
-import {ExportMinor, ImportMinor} from "@shopify/polaris-icons";
+import {Icons} from "../../utils/Icons";
+import {Modal, TitleBar} from "@shopify/app-bridge-react";
 
 const BisStockAnalytics = () => {
     const shopDetails = useSelector((state) => state.shopDetails)
@@ -44,7 +45,7 @@ const BisStockAnalytics = () => {
             page: record.PageNo ? record.PageNo : PageNo,
             limit: limit
         }
-        const response = await apiService.BisAnalytics(payload);
+        const response = await apiService. BisAnalytics(payload);
         if (response.status === 200) {
             setBisAnalytics(response.data)
             setTotalAnalytics(response.total)
@@ -211,11 +212,11 @@ const BisStockAnalytics = () => {
                             <InlineStack gap={"200"}>
                                 <div className="Polaris-ActionMenu-SecondaryAction">
                                     <Button
-                                        icon={ExportMinor}
+                                        icon={Icons.ExportIcon}
                                         disabled={shopDetails.plan_type !== "8" ? shopDetails.bis_import_export_btn === false : false}
                                         onClick={() => Export()}>Export</Button>
                                 </div>
-                                <Button variant={"primary"} icon={ImportMinor}
+                                <Button variant={"primary"} icon={Icons.ImportIcon}
                                         disabled={shopDetails.plan_type !== "8" ? shopDetails.bis_import_export_btn === false : false}
                                         onClick={() => handleImportChange()}>Import</Button>
 
@@ -275,25 +276,29 @@ const BisStockAnalytics = () => {
                 </Card>
             </Layout.Section>
 
-            <Modal
-                open={active}
-                onClose={handleImportChange}
-                title="Import your back in stock products"
-                primaryAction={{content: 'Import', onAction: Import, loading: isImportLoading}}
-                secondaryActions={[{content: 'Cancel', onAction: handleImportChange},]}
-            >
-                <Modal.Section>
-                    <BlockStack gap={"400"}>
-                        <Text as={"span"}> If you are not known to the CSV template, download a <Link
-                            url={AppDocsLinks.backInStockData} removeUnderline download> Sample CSV </Link> template to
-                            get an idea about how to deal with CSV format to import back in stock products.</Text>
-                        <DropZone accept=".csv" type="file" onDrop={handleDropZoneDrop}>
-                            {uploadedFile}
-                            {fileUpload}
-                        </DropZone>
-                    </BlockStack>
-                </Modal.Section>
-            </Modal>
+            {active ? (
+                <Modal open={active}>
+                    <TitleBar title={"Import your back in stock products"}>
+                        <button variant="primary" loading={isImportLoading && ''}
+                                onClick={() => Import()}>Import</button>
+                        <button onClick={() => handleImportChange()}>Cancel</button>
+
+                    </TitleBar>
+
+                    <Box padding={'400'}>
+                        <BlockStack gap={"400"}>
+                            <Text as={"span"}> If you are not known to the CSV template, download a <Link
+                                url={AppDocsLinks.backInStockData} removeUnderline download> Sample CSV </Link> template to
+                                get an idea about how to deal with CSV format to import back in stock products.</Text>
+                            <DropZone accept=".csv" type="file" onDrop={handleDropZoneDrop}>
+                                {uploadedFile}
+                                {fileUpload}
+                            </DropZone>
+                        </BlockStack>
+                    </Box>
+                </Modal>
+            ) : ''}
+
         </Fragment>
     );
 };

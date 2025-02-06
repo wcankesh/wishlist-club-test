@@ -363,13 +363,15 @@ const ThankYouNotification = () => {
                       </Fragment>
                   }
             >
-                <ConformationModal
-                    active={active}
-                    onClose={handleUpgrade}
-                    isLoading={isConfirmLoading}
-                    handleConfirmation={handleConfirmation}
-                    isEditor={true}
-                />
+                {active ? (
+                    <ConformationModal
+                        active={active}
+                        onClose={handleUpgrade}
+                        isLoading={isConfirmLoading}
+                        handleConfirmation={handleConfirmation}
+                        isEditor={true}
+                    />
+                ) : ''}
 
                 <Layout>
                     {message !== "" && isError === false ? <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer}/> : ""}

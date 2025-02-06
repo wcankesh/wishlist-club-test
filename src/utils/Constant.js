@@ -1,12 +1,14 @@
-import {ApiService} from "./ApiService"
 import {Facebook, Instagram, LinkedIn, Pinterest, Telegram, Twitter} from "./AppImages";
 import React from "react";
+import ApiService from "./ApiService";
 
 export const baseUrl = "/wishlist/admin"
 
-export const apiService = new ApiService();
+export const apiService = ApiService();
 
 export const secondaryButton = "Polaris-ActionMenu-SecondaryAction";
+
+export const apiKey = '448a82ccbac456ee4aff58dab7c1086e';
 
 export const openUrlInNewWindow = (url, target = "_blank") => {
     return url ? window.open(url, target) : console.error("URL is missing.");

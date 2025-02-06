@@ -4,8 +4,8 @@ import {
 } from '@shopify/polaris';
 import {apiService, baseUrl} from "../../../utils/Constant";
 import {useNavigate} from "react-router-dom"
-import {NotificationFilledMajor, NotificationMajor} from '@shopify/polaris-icons';
 import {RenderLoading} from "../../../utils/RenderLoading";
+import {Icons} from "../../../utils/Icons";
 
 
 const BackInStockEmail = () => {
@@ -19,7 +19,7 @@ const BackInStockEmail = () => {
             description: `If customers have subscribed to "Notify me" for sold-out products and if the "Back in stock notification" option is enabled, they will receive a mail notification when the product is available again.`,
             name: "is_bis_email_enable",
             path: "back-in-stock/email/stock-notification",
-            icon: NotificationFilledMajor,
+            icon: Icons.NotificationFilledIcon,
             checked: bisEmail.is_bis_email_enable == 1,
         },
         {
@@ -27,7 +27,7 @@ const BackInStockEmail = () => {
             description: `Customers will get Thank You Notification after subscribing to the "Notify me" alerts for the sold-out products and if this "Thank You Notification " option is enabled.`,
             name: "is_thankyou_email_enable",
             path: "back-in-stock/email/thank-you-notification",
-            icon: NotificationMajor,
+            icon: Icons.NotificationIcon,
             checked: bisEmail.is_thankyou_email_enable == 1,
 
         },

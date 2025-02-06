@@ -4,8 +4,8 @@ import {
 } from '@shopify/polaris';
 import {currencySymbol} from "../../../utils/Constant";
 import {useSelector} from "react-redux";
-import {ImageMajor} from '@shopify/polaris-icons';
 import {tableLoading} from "../../../utils/RenderLoading";
+import {Icons} from "../../../utils/Icons";
 
 const TopProducts = ({topProducts, isLoading}) => {
     const shopDetails = useSelector((state) => state.shopDetails)
@@ -18,7 +18,7 @@ const TopProducts = ({topProducts, isLoading}) => {
                 <IndexTable.Cell>
                     <InlineStack blockAlign={"center"} gap="200" wrap={false}>
                         <Thumbnail size={"small"}
-                                   source={x?.product?.image ? x?.product?.image : ImageMajor}/>
+                                   source={x?.product?.image ? x?.product?.image : Icons.ImageIcon}/>
                         <Text as={"span"}>{x?.product?.title || ""}</Text>
                     </InlineStack>
                 </IndexTable.Cell>

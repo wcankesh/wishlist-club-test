@@ -331,13 +331,15 @@ const PriceDropAlertEmail = () => {
                       </Fragment>
                   }
                 >
-                <ConformationModal
-                    active={active}
-                    onClose={handleUpgradeNow}
-                    isLoading={isConfirmLoading}
-                    isEditor={true}
-                    handleConfirmation={handleConfirmation}
-                />
+                {active ? (
+                    <ConformationModal
+                        active={active}
+                        onClose={handleUpgradeNow}
+                        isLoading={isConfirmLoading}
+                        isEditor={true}
+                        handleConfirmation={handleConfirmation}
+                    />
+                ) : ""}
 
 
                 {message !== "" && isError === false ? <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer}/> : ""}

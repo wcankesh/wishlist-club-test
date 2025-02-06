@@ -1,20 +1,16 @@
 import React, {useEffect, useState} from 'react';
-import {Frame, FooterHelp, Link, Text, Modal} from '@shopify/polaris';
-import {Outlet, useLocation, useMatch, useNavigate} from 'react-router-dom';
+import {Box, FooterHelp, Frame, Link, Text} from '@shopify/polaris';
+import {Outlet, useLocation, useNavigate} from 'react-router-dom';
 import {baseUrl} from "../../utils/Constant"
 import {useSelector} from 'react-redux';
-import {Provider, RoutePropagator, NavigationMenu} from "@shopify/app-bridge-react";
-
-const apiKey = '448a82ccbac456ee4aff58dab7c1086e';
+import {Modal, NavMenu, TitleBar} from "@shopify/app-bridge-react";
 
 const DefaultLayout = () => {
     const location = useLocation();
     const navigate = useNavigate();
+
     const [isUpdateLoading, setIsUpdateLoading,] = useState(false);
-    const urlParams = new URLSearchParams(location.search);
-    const host = urlParams.get('host');
     const shopDetails = useSelector(state => state.shopDetails);
-    const config = {apiKey: apiKey, host: host, forceRedirect: process.env.NODE_ENV === 'development' ? false : true};
 
     const excludedRoutes = [
         `${baseUrl}/settings/email/email-customization`,
@@ -48,18 +44,27 @@ const DefaultLayout = () => {
     ];
 
     return (
-        <div>
-            <Provider config={config}>
-                <NavigationMenu navigationLinks={shopDetails.onboarding == 0 ? [] : navigationLinks}
-                                matcher={(link, location) => link.destination === location.pathname}
-                />
-                <Frame>
-                    <RoutePropagator location={location}/>
-                    <Outlet/>
-                    <Modal onClose={() => {
-                    }} open={shopDetails?.upgrade == "0"} title="Authorize our latest app update"
-                           primaryAction={{content: "Authorize", onAction: onAuthorize, loading: isUpdateLoading}}>
-                        <Modal.Section>
+        <React.Fragment>
+            {shopDetails.onboarding == 0 ? "" : (
+                <NavMenu>
+                    {(navigationLinks || []).map((x, i) => (
+                        <a href={x.destination} rel={i === 0 ? "dashboard" : ''} key={i}>
+                            {x.label}
+                        </a>
+                    ))}
+                </NavMenu>
+            )}
+
+            <Frame>
+                <Outlet/>
+
+                {shopDetails?.upgrade == "0" ? (
+                    <Modal open={shopDetails?.upgrade == "0"}>
+                        <TitleBar title={"Authorize our latest app update"}>
+                            <button variant="primary" loading={isUpdateLoading && ''}
+                                    onClick={() => onAuthorize()}>{'Authorize'}</button>
+                        </TitleBar>
+                        <Box padding={'400'}>
                             <Text as={"span"}>Hey there,</Text>
                             <br/>
                             <Text as={"span"}>
@@ -69,9 +74,11 @@ const DefaultLayout = () => {
                                 onClick={() => window.Beacon('toggle')} removeUnderline>contact us</Link> if you face
                                 any difficulty.
                             </Text>
-                        </Modal.Section>
+                        </Box>
                     </Modal>
-                    {!isExcluded ? (
+                ) : ''}
+
+                {!isExcluded ? (
                     <FooterHelp>
                         <div className="FooterHelp__Content">
                             if you need any help, please &nbsp;
@@ -80,10 +87,9 @@ const DefaultLayout = () => {
                             </Link>
                         </div>
                     </FooterHelp>
-                        ) : "" }
-                </Frame>
-            </Provider>
-        </div>
+                ) : ""}
+            </Frame>
+        </React.Fragment>
     );
 };
 

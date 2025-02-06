@@ -4,9 +4,8 @@ import {baseUrl, openUrlInNewWindow} from "../../utils/Constant";
 import qs from "qs";
 import {useNavigate} from "react-router-dom";
 import {StepOneImage} from "../../utils/AppImages";
-import {CircleTickOutlineMinor} from "@shopify/polaris-icons";
-import {AppDocsLinks} from "../../utils/AppDocsLinks";
 import LazyLoadImage from "../Comman/LazyLoadImage";
+import {Icons} from "../../utils/Icons";
 
 const benefitsList = [
     {text: "Increase customer engagement"},
@@ -45,7 +44,7 @@ const StepOne = ({step, setStep, urlParams, shopDetails}) => {
                                         return (
                                             <InlineStack key={i} align={"start"} gap={"200"}>
                                                 <div>
-                                                    <Icon source={CircleTickOutlineMinor} tone={"success"}/>
+                                                    <Icon source={Icons.StatusActiveIcon} tone={"success"}/>
                                                 </div>
                                                 <Text as={"span"}>{x.text}</Text>
                                             </InlineStack>

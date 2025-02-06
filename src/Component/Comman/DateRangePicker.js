@@ -1,8 +1,8 @@
 import React,{useState, useEffect, useRef, } from "react";
 import {useBreakpoints, Button, Popover, InlineGrid, Box, OptionList, Select, BlockStack, InlineStack, DatePicker, TextField, Icon} from "@shopify/polaris";
-import {CalendarMinor, ArrowRightMinor} from "@shopify/polaris-icons";
 import moment from "moment";
 import {useSelector} from "react-redux";
+import {Icons} from "../../utils/Icons";
 
 const DateRangePicker = ({ onChange, fullWidth, variant }) =>  {
     const shopDetails = useSelector((state) => state.shopDetails)
@@ -248,7 +248,7 @@ const DateRangePicker = ({ onChange, fullWidth, variant }) =>  {
             activator={
                 <Button
                     variant={variant}
-                    icon={CalendarMinor}
+                    icon={Icons.CalendarIcon}
                     size={"large"}
                     fullWidth={fullWidth}
                     onClick={() => setPopoverActive(!popoverActive)}
@@ -312,20 +312,20 @@ const DateRangePicker = ({ onChange, fullWidth, variant }) =>  {
                                         role="combobox"
                                         label={"Since"}
                                         labelHidden
-                                        prefix={<Icon source={CalendarMinor} />}
+                                        prefix={<Icon source={Icons.CalendarIcon} />}
                                         value={inputValues.since}
                                         onChange={handleStartInputValueChange}
                                         onBlur={handleInputBlur}
                                         autoComplete="off"
                                     />
                                 </div>
-                                <Icon source={ArrowRightMinor} />
+                                <Icon source={Icons.ArrowRightIcon} />
                                 <div style={{ flexGrow: 1 }}>
                                     <TextField
                                         role="combobox"
                                         label={"Until"}
                                         labelHidden
-                                        prefix={<Icon source={CalendarMinor} />}
+                                        prefix={<Icon source={Icons.CalendarIcon} />}
                                         value={inputValues.until}
                                         onChange={handleEndInputValueChange}
                                         onBlur={handleInputBlur}
