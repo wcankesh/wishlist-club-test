@@ -1,8 +1,8 @@
 import {
-    ArrowRightIcon, CalendarIcon, CaretDownIcon, CaretUpIcon, CheckSmallIcon, DnsSettingsIcon, DomainNewIcon, EmailIcon,
-    ExportIcon, ExternalIcon, ExternalSmallIcon, ImageIcon, ImportIcon, InfoIcon, LanguageIcon, MinusIcon,
-    NotificationFilledIcon, NotificationIcon, ReceiptDollarFilledIcon, RefreshIcon, SettingsIcon, SmileyHappyIcon,
-    SmileySadIcon, StatusActiveIcon, ThemeIcon, XCircleIcon, XIcon, XSmallIcon
+    ArrowRightIcon, CalendarIcon, CaretDownIcon, CaretUpIcon, CheckSmallIcon, DeleteIcon, DnsSettingsIcon, DomainNewIcon,
+    EditIcon, EmailIcon, ExportIcon, ExternalIcon, ExternalSmallIcon, ImageIcon, ImportIcon, InfoIcon, LanguageIcon,
+    MinusIcon, NotificationFilledIcon, NotificationIcon, ReceiptDollarFilledIcon, RefreshIcon, SettingsIcon,
+    SmileyHappyIcon, SmileySadIcon, StatusActiveIcon, ThemeIcon, XCircleIcon, XIcon, XSmallIcon
 } from '@shopify/polaris-icons';
 
 export const Icons = {
@@ -34,6 +34,8 @@ export const Icons = {
     ReceiptDollarFilledIcon: ReceiptDollarFilledIcon,
     DnsSettingsIcon: DnsSettingsIcon,
     InfoIcon: InfoIcon,
+    EditIcon: EditIcon,
+    DeleteIcon: DeleteIcon,
     Crown: <svg viewBox="0 0 32 32"><path d="m27.488 23-.513 2.225c-.105.454-.509.775-.975.775h-20c-.466 0-.87-.321-.975-.775l-.513-2.225z"/><path d="m29.975 12.225-2.025 8.775h-23.9l-2.025-8.775c-.089-.387.059-.791.378-1.028.32-.237.749-.262 1.093-.065l6.189 3.537 5.482-8.223c.179-.268.475-.434.796-.446.324-.014.629.132.826.386l6.429 8.266 5.227-3.484c.341-.226.786-.224 1.123.009.338.233.498.649.407 1.048z"/></svg>,
     copyIcon: <svg viewBox="0 0 20 20" className="cc-copy-icon"><path fillRule="nonzero" d="M2.75 18.25H14a.75.75 0 1 1 0 1.5H2a.75.75 0 0 1-.75-.75V5a.75.75 0 0 1 1.5 0v13.25zM6 .25h12a.75.75 0 0 1 .75.75v14a.75.75 0 0 1-.75.75H6a.75.75 0 0 1-.75-.75V1A.75.75 0 0 1 6 .25zm.75 1.5v12.5h10.5V1.75H6.75z"/></svg>,
     copyIconTrue: <svg className="cc-true-icon" viewBox="0 0 20 20"><path fillRule="nonzero" d="M15.948 5.47a.75.75 0 1 1 1.06 1.06l-8.485 8.486a.75.75 0 0 1-1.06 0L3.22 10.773a.75.75 0 0 1 1.06-1.06l3.713 3.712 7.955-7.955z"/></svg>,

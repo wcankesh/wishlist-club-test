@@ -214,21 +214,21 @@ img {display: block;max-width: 100%;height: auto;}
 .email-editor-wrap .email-editor-contain {min-width: 600px;}
 
 .fullContainerPage { display: flex; flex-direction: column; height: 100vh; overflow-y: auto }
-.fullContainerPage-header { background-color: #f4f6f8; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); z-index: 10; }
 .fullContainerPage-inner { display: flex; flex: 1; background-color: #ffffff; height:100% }
-.fullContainerPage-inner-left, .fullContainerPage-inner-right {height: calc(100vh - 56px);overflow-y : auto;}
-.fullContainerPage-inner-left { flex: 1; background-color: #ffffff; max-width: 400px; width: 100%;border-right: 1px solid #dce3e9;box-shadow: 0 -2px 12px #00000014;}
-.fullContainerPage-inner-right { flex: 2; background-color: #ffffff;}
+.fullContainerPage-inner-left, .fullContainerPage-inner-right {overflow-y : auto; background-color: #ffffff;}
+.fullContainerPage-inner-left { flex: 1; max-width: 400px; width: 100%;border-right: 1px solid #dce3e9;box-shadow: 0 -2px 12px #00000014;}
+.fullContainerPage-inner-right { flex: 2;}
 .fullContainerPage-inner-left-title, .fullContainerPage-inner-right-title {
-    align-items: center;
-    background-color: #fff;
-    border-bottom: 1px solid #dce3e9;
-    display: flex;
-    flex-basis: 64px;
-    flex-shrink: 0;
-    justify-content: space-between;
-    padding: 0 8px;
-    position: relative;
+    align-items: center;background-color: #fff;border-bottom: 1px solid #dce3e9;display: flex;flex-basis: 64px;flex-shrink: 0;
+    justify-content: space-between;padding: 0 8px;position: relative;
 }
-.FullscreenBar-main-div {display: flex; flex: 1; overflow-y: auto; justify-content: space-between; align-items: center; padding-left: 1rem; padding-right: 1rem;}
-.FullscreenBar-main-title-div {margin-left: 0.5rem; /*flex-grow: 1;*/}
+.fullContainerPage-inner-left-settings {display:none ;transition: transform 0.3s ease-in-out, opacity 0.3s ease;}
+.fullContainerPage-inner-right .left-settings, .fullContainerPage-inner-left-title .left-settings{display: none}
+
+@media (min-width: 0px) and (max-width: 768px) {
+    .fullContainerPage-inner-left {display: none;}
+    .fullContainerPage-inner-right { flex: 2 1 100%;}
+    .fullContainerPage-inner-right .left-settings, .fullContainerPage-inner-left-title .left-settings{display: block}
+    .fullContainerPage-inner-left-settings.show {display:block; transform: translateX(0);opacity: 1;}
+    .fullContainerPage-inner-left-settings.hide {transform: translateX(-100%); opacity: 0;}
+}

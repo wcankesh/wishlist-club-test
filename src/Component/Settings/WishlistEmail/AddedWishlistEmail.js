@@ -1,14 +1,14 @@
 import React, {Fragment, useCallback, useEffect, useRef, useState} from 'react';
-import {BlockStack, Box, Button, FullscreenBar, InlineGrid, InlineStack, Text, TextField} from "@shopify/polaris";
+import {BlockStack, Box, Button, Checkbox, InlineGrid, Text, TextField} from "@shopify/polaris";
 import {useNavigate} from "react-router-dom";
-import {useSelector} from "react-redux";
-import {apiService, baseUrl, capitalizeMessage, isChecked, templateJson} from "../../../utils/Constant";
+import {apiService, baseUrl, capitalizeMessage, isChecked, templateJson, toggleFlag} from "../../../utils/Constant";
 import ToastMessage from "../../Comman/ToastMessage"
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
 import {AppDocsLinks} from "../../../utils/AppDocsLinks";
 import EmailTemplateMsg from "../../Comman/EmailTemplateMsg";
-import SwitchButton from "../../Comman/SwitchButton";
 import EmailEditorComponent from "../../Comman/EmailEditorComponent";
+import {Modal, TitleBar, useAppBridge} from "@shopify/app-bridge-react";
+import {Icons} from "../../../utils/Icons";
 
 const initialState = {
     time: '0',
@@ -16,8 +16,8 @@ const initialState = {
     subject: "",
 };
 
-
 const AddedWishlistEmail = () => {
+    const shopify = useAppBridge();
     const editorRef = useRef(null);
     const navigate = useNavigate();
     const [emailSetting, setEmailSetting] = useState(initialState);
@@ -27,7 +27,11 @@ const AddedWishlistEmail = () => {
     const [isErrorServer, setIsErrorServer] = useState(false)
     const [message, setMessage] = useState("")
     const [mailTemplateJson, setMailTemplateJson] = useState({});
-    const shopDetails = useSelector((state) => state.shopDetails);
+    const [showSettings, setShowSettings] = useState(false);
+
+    const onHandleShowSettings = () => {
+        setShowSettings(!showSettings);
+    }
 
     useEffect(() => {
         EmailSetting();
@@ -50,9 +54,11 @@ const AddedWishlistEmail = () => {
         } else if (response.status === 500) {
             setMessage(capitalizeMessage(response.message))
             setIsErrorServer(true);
+            shopify.toast.show(capitalizeMessage(response.message), {isError: true})
         } else {
             setMessage(capitalizeMessage(response.message))
             setIsError(true)
+            shopify.toast.show(capitalizeMessage(response.message), {isError: true})
         }
     }
 
@@ -79,17 +85,19 @@ const AddedWishlistEmail = () => {
             if (response.status === 200) {
                 setMessage(capitalizeMessage(response.message));
                 setIsLoading(false);
+                shopify.toast.show(capitalizeMessage(response.message))
             } else if (response.status === 500) {
                 setMessage(capitalizeMessage(response.message));
                 setIsErrorServer(true);
                 setIsLoading(false);
+                shopify.toast.show(capitalizeMessage(response.message), {isError: true})
             } else {
                 setMessage(capitalizeMessage(response.message));
                 setIsError(true);
                 setIsLoading(false);
+                shopify.toast.show(capitalizeMessage(response.message), {isError: true})
             }
         });
-        setIsLoading(false);
     }
 
     const handleChange = useCallback((name, value) => {
@@ -99,12 +107,6 @@ const AddedWishlistEmail = () => {
 
     const onBack = () => {
         navigate(`${baseUrl}/settings/email`)
-    }
-
-    const handleSwitch = async (e) => {
-        const {name, value, checked} = e.target;
-        setEmailSetting({...emailSetting, [name]: value})
-        saveEmailSetting('is_enable', value, false)
     }
 
     const exportHtml = () => {
@@ -148,6 +150,43 @@ const AddedWishlistEmail = () => {
         '{{unsubscribe}}: Use this tag to display the unsubscribe link',
     ];
 
+    const onDisplaySettings = (
+        <BlockStack gap={"200"}>
+            <div className={'fullContainerPage-inner-left-title'}>
+                <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}>Email Settings</Text>
+                {showSettings ? (
+                    <span className={'left-settings'}>
+                    <Button variant={'secondary'} icon={Icons.XSmallIcon} onClick={onHandleShowSettings}/>
+                </span>
+                ) : ''}
+            </div>
+            <Box padding={'400'}>
+                <InlineGrid columns={{xs: 1, sm: 1, md: 1, lg: 1, xl: 1}} gap={'300'}>
+                    <Checkbox
+                        label={<Text variant="headingSm" as="h6">Enable Email</Text>}
+                        checked={isChecked(emailSetting?.is_enable)}
+                        onChange={(value) => handleChange("is_enable", toggleFlag(emailSetting?.is_enable))}
+                        helpText={"Enable email notifications for added wishlist items"}
+                        name={"is_enable"}
+                    />
+
+                    <TextField label={<Text variant="headingSm" as="h6">Email subject</Text>}
+                               value={emailSetting?.subject}
+                               helpText={"Add this {shop_name} {customer_name} variable"}
+                               onChange={(value) => handleChange("subject", value)}
+                    />
+                    <TextField
+                        label={<Text variant="headingSm" as="h6">Time</Text>}
+                        value={emailSetting?.time}
+                        onChange={(value) => handleChange('time', value)}
+                        type={'number'}
+                        min={0}
+                    />
+                </InlineGrid>
+            </Box>
+        </BlockStack>
+    );
+
     return (
         <Fragment>
             {message !== "" && isError === false ?
@@ -157,76 +196,48 @@ const AddedWishlistEmail = () => {
             <CustomErrorBanner link={AppDocsLinks.article["425"]} message={message} setMessage={setMessage}
                                setIsError={setIsError} isError={isError}/>
 
-            <div className="fullContainerPage">
-                <div className="fullContainerPage-header">
-                    <FullscreenBar onAction={onBack}>
-                        <div className={'FullscreenBar-main-div'}>
-                            <div className={'FullscreenBar-main-title-div'}>
-                                <Text variant="headingLg" as="span">{"Added to Wishlist Email"}</Text>
-                            </div>
-                            <InlineStack gap={'150'}>
-                                <SwitchButton
-                                    checked={isChecked(emailSetting?.is_enable == 1)}
-                                    onChange={handleSwitch} name={"is_enable"}/>
-
-                                <Button variant="primary"
-                                        onClick={() => saveEmailSetting("", "", true)}
-                                        loading={isLoading}
-                                >
-                                    Save
-                                </Button>
-                            </InlineStack>
+            <Modal open={true} onHide={onBack} variant={'max'}>
+                <TitleBar title={"Added to Wishlist Email"}>
+                    <button variant="primary" loading={isLoading && ''}
+                            onClick={() => saveEmailSetting("", "", true)}>{'Save'}</button>
+                </TitleBar>
+                <div className="fullContainerPage">
+                    <div className="fullContainerPage-inner">
+                        <div className="fullContainerPage-inner-left">
+                            {onDisplaySettings}
                         </div>
-                    </FullscreenBar>
-                </div>
 
-                <div className="fullContainerPage-inner">
-                    <div className="fullContainerPage-inner-left">
-                        <BlockStack gap={"200"}>
-                            <div className={'fullContainerPage-inner-left-title'}>
-                                <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}>Email Settings</Text>
-                            </div>
-                            <Box padding={'400'}>
-                                <InlineGrid columns={{xs: 1, sm: 1, md: 1, lg: 1, xl: 1}} gap={'150'}>
-                                    <TextField label="Email subject"
-                                               value={emailSetting?.subject}
-                                               helpText={"Add this {shop_name} {customer_name} variable"}
-                                               onChange={(value) => handleChange("subject", value)}
-                                    />
-                                    <TextField
-                                        label="Time"
-                                        value={emailSetting?.time}
-                                        onChange={(value) => handleChange('time', value)}
-                                        type={'number'}
-                                        min={0}
-                                    />
-                                </InlineGrid>
-                            </Box>
-                        </BlockStack>
-                    </div>
-
-                    <div className="fullContainerPage-inner-right">
-                        <BlockStack gap={"200"}>
-                            <div className={'fullContainerPage-inner-right-title'}>
-                                <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}> Email Template</Text>
-                            </div>
-                            <Box padding={'400'}>
-                                <BlockStack gap={"100"}>
-                                    <EmailTemplateMsg msgArray={msgArray}/>
-                                    <EmailEditorComponent
-                                        ref={editorRef}
-                                        exportHtml={exportHtml}
-                                        onLoad={onLoad}
-                                        style={{height: 600}}
-                                        mailTemplate={mailTemplateJson}
-                                        onChange={onChange}
-                                    />
-                                </BlockStack>
-                            </Box>
-                        </BlockStack>
+                        <div className="fullContainerPage-inner-right">
+                            <div
+                                className={`fullContainerPage-inner-left-settings ${showSettings ? 'show' : 'hide'}`}>{onDisplaySettings}</div>
+                            <BlockStack gap={"200"}>
+                                <div className={'fullContainerPage-inner-right-title'}>
+                                    <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}> Email Template</Text>
+                                    {showSettings ? '' : (
+                                        <span className={'left-settings'}>
+                                        <Button variant={'secondary'} icon={Icons.EditIcon}
+                                                onClick={onHandleShowSettings}>Edit</Button>
+                                    </span>
+                                    )}
+                                </div>
+                                <Box padding={'400'}>
+                                    <BlockStack gap={"100"}>
+                                        <EmailTemplateMsg msgArray={msgArray}/>
+                                        <EmailEditorComponent
+                                            ref={editorRef}
+                                            exportHtml={exportHtml}
+                                            onLoad={onLoad}
+                                            style={{height: 600}}
+                                            mailTemplate={mailTemplateJson}
+                                            onChange={onChange}
+                                        />
+                                    </BlockStack>
+                                </Box>
+                            </BlockStack>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </Modal>
 
         </Fragment>
     );
