@@ -1,5 +1,5 @@
 import React, {Fragment, useCallback, useEffect, useRef, useState} from 'react';
-import {BlockStack, Box, Button, Checkbox, InlineGrid, Text, TextField} from "@shopify/polaris";
+import {BlockStack, Box, Button, Checkbox, InlineGrid, Text, TextField, Card} from "@shopify/polaris";
 import {useNavigate} from "react-router-dom";
 import {apiService, baseUrl, capitalizeMessage, isChecked, templateJson, toggleFlag} from "../../../utils/Constant";
 import ToastMessage from "../../Comman/ToastMessage"
@@ -151,7 +151,7 @@ const AddedWishlistEmail = () => {
     ];
 
     const onDisplaySettings = (
-        <BlockStack gap={"200"}>
+        <>
             <div className={'fullContainerPage-inner-left-title'}>
                 <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}>Email Settings</Text>
                 {showSettings ? (
@@ -184,7 +184,7 @@ const AddedWishlistEmail = () => {
                     />
                 </InlineGrid>
             </Box>
-        </BlockStack>
+        </>
     );
 
     return (
@@ -208,9 +208,7 @@ const AddedWishlistEmail = () => {
                         </div>
 
                         <div className="fullContainerPage-inner-right">
-                            <div
-                                className={`fullContainerPage-inner-left-settings ${showSettings ? 'show' : 'hide'}`}>{onDisplaySettings}</div>
-                            <BlockStack gap={"200"}>
+                            <div className={`fullContainerPage-inner-left-settings ${showSettings ? 'show' : 'hide'}`}>{onDisplaySettings}</div>
                                 <div className={'fullContainerPage-inner-right-title'}>
                                     <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}> Email Template</Text>
                                     {showSettings ? '' : (
@@ -221,19 +219,20 @@ const AddedWishlistEmail = () => {
                                     )}
                                 </div>
                                 <Box padding={'400'}>
-                                    <BlockStack gap={"100"}>
+                                    <BlockStack gap={"200"}>
                                         <EmailTemplateMsg msgArray={msgArray}/>
-                                        <EmailEditorComponent
-                                            ref={editorRef}
-                                            exportHtml={exportHtml}
-                                            onLoad={onLoad}
-                                            style={{height: 600}}
-                                            mailTemplate={mailTemplateJson}
-                                            onChange={onChange}
-                                        />
+                                        <Card padding={'0'}>
+                                            <EmailEditorComponent
+                                                ref={editorRef}
+                                                exportHtml={exportHtml}
+                                                onLoad={onLoad}
+                                                style={{height: 600}}
+                                                mailTemplate={mailTemplateJson}
+                                                onChange={onChange}
+                                            />
+                                        </Card>
                                     </BlockStack>
                                 </Box>
-                            </BlockStack>
                         </div>
                     </div>
                 </div>

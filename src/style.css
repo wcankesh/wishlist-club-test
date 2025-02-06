@@ -220,7 +220,7 @@ img {display: block;max-width: 100%;height: auto;}
 .fullContainerPage-inner-right { flex: 2;}
 .fullContainerPage-inner-left-title, .fullContainerPage-inner-right-title {
     align-items: center;background-color: #fff;border-bottom: 1px solid #dce3e9;display: flex;flex-basis: 64px;flex-shrink: 0;
-    justify-content: space-between;padding: 0 8px;position: relative;
+    justify-content: space-between; position: relative; padding: 15px;
 }
 .fullContainerPage-inner-left-settings {display:none ;transition: transform 0.3s ease-in-out, opacity 0.3s ease;}
 .fullContainerPage-inner-right .left-settings, .fullContainerPage-inner-left-title .left-settings{display: none}
