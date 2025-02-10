@@ -1,8 +1,8 @@
 import {
     ArrowRightIcon, CalendarIcon, CaretDownIcon, CaretUpIcon, CheckSmallIcon, DeleteIcon, DnsSettingsIcon, DomainNewIcon,
-    EditIcon, EmailIcon, ExportIcon, ExternalIcon, ExternalSmallIcon, ImageIcon, ImportIcon, InfoIcon, LanguageIcon,
+    EditIcon, EmailIcon, ExportIcon, ExternalIcon, ImageIcon, ImportIcon, InfoIcon, LanguageIcon,
     MinusIcon, NotificationFilledIcon, NotificationIcon, ReceiptDollarFilledIcon, RefreshIcon, SettingsIcon,
-    SmileyHappyIcon, SmileySadIcon, StatusActiveIcon, ThemeIcon, XCircleIcon, XIcon, XSmallIcon
+    SmileyHappyIcon, SmileySadIcon, StatusActiveIcon, ThemeIcon, XCircleIcon,
 } from '@shopify/polaris-icons';
 
 export const Icons = {
@@ -12,14 +12,11 @@ export const Icons = {
     ThemeIcon: ThemeIcon,
     RefreshIcon: RefreshIcon,
     ExternalIcon: ExternalIcon,
-    ExternalSmallIcon: ExternalSmallIcon,
     ImageIcon: ImageIcon,
     NotificationFilledIcon: NotificationFilledIcon,
     NotificationIcon: NotificationIcon,
     SmileyHappyIcon: SmileyHappyIcon,
     SmileySadIcon: SmileySadIcon,
-    XIcon: XIcon,
-    XSmallIcon: XSmallIcon,
     XCircleIcon: XCircleIcon,
     MinusIcon: MinusIcon,
     StatusActiveIcon: StatusActiveIcon,

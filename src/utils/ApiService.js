@@ -2,7 +2,7 @@ import axios from 'axios';
 import qs from 'qs';
 import {useAppBridge} from "@shopify/app-bridge-react";
 
-const apiBaseUrl = "https://stagingapp.webcontrive.com/wishlist/api/public";
+const apiBaseUrl = "https://stagingapp.webcontrive.com/wishlist/api/public/api";
 
 const instance = axios.create();
 
@@ -77,87 +77,89 @@ const ApiService = () => {
 
     return {
 
-        Install: async (payload) => await postData(`${apiBaseUrl}/api/install`, payload),
+        Install: async (payload) => await postData(`${apiBaseUrl}/install`, payload),
 
-        getAppEmbedded: async () => await getData(`${apiBaseUrl}/api/is-app-embedded`),
+        getAppEmbedded: async () => await getData(`${apiBaseUrl}/is-app-embedded`),
 
-        getThemes: async () => await getData(`${apiBaseUrl}/api/themes`),
+        getThemes: async () => await getData(`${apiBaseUrl}/themes`),
 
-        checkTheme: async (payload) => await postData(`${apiBaseUrl}/api/check-theme`, payload),
+        checkTheme: async (payload) => await postData(`${apiBaseUrl}/check-theme`, payload),
 
-        codeSetup: async (payload) => await postData(`${apiBaseUrl}/api/code-setup`, payload),
+        codeSetup: async (payload) => await postData(`${apiBaseUrl}/code-setup`, payload),
 
-        Analytics: async (payload) => await postData(`${apiBaseUrl}/api/analytics`, payload),
+        Analytics: async (payload) => await postData(`${apiBaseUrl}/analytics`, payload),
 
-        WishlistAnalytics: async (payload) => await postData(`${apiBaseUrl}/api/wishlist-analytic`, payload),
+        WishlistAnalytics: async (payload) => await postData(`${apiBaseUrl}/wishlist-analytic`, payload),
 
-        Email: async (payload) => await postData(`${apiBaseUrl}/api/emails`, payload),
+        Email: async (payload) => await postData(`${apiBaseUrl}/emails`, payload),
 
-        ImportWishlistHistory: async (payload) => await postData(`${apiBaseUrl}/api/histories`, payload),
+        ImportWishlistHistory: async (payload) => await postData(`${apiBaseUrl}/histories`, payload),
 
-        getExport: async (payload) => window.open(`${apiBaseUrl}/api/export?shop=${payload.shop}`, "_blank"),
+        getExport: async (payload) => window.open(`${apiBaseUrl}/export?shop=${payload.shop}`, "_blank"),
 
-        Import: async (payload, isFormData) => await postData(`${apiBaseUrl}/api/import`, payload, isFormData),
+        Import: async (payload, isFormData) => await postData(`${apiBaseUrl}/import`, payload, isFormData),
 
-        getSetting: async () => await getData(`${apiBaseUrl}/api/setting`),
+        getSetting: async () => await getData(`${apiBaseUrl}/setting`),
 
-        updateSetting: async (payload, id) => await putData(`${apiBaseUrl}/api/setting/${id}`, payload),
+        updateSetting: async (payload, id) => await putData(`${apiBaseUrl}/setting/${id}`, payload),
 
-        getLauncher: async () => await getData(`${apiBaseUrl}/api/launcher`),
+        getLauncher: async () => await getData(`${apiBaseUrl}/launcher`),
 
-        updateLauncher: async (payload, id) => await putData(`${apiBaseUrl}/api/launcher/${id}`, payload),
+        updateLauncher: async (payload, id) => await putData(`${apiBaseUrl}/launcher/${id}`, payload),
 
-        getLabel: async () => await getData(`${apiBaseUrl}/api/label`),
+        getLabel: async () => await getData(`${apiBaseUrl}/label`),
 
-        updateLabel: async (payload, id) => await postData(`${apiBaseUrl}/api/label/${id}`, payload),
+        updateLabel: async (payload, id) => await postData(`${apiBaseUrl}/label/${id}`, payload),
 
-        getEmailVerification: async () => await getData(`${apiBaseUrl}/api/bis/setting`),
+        getEmailVerification: async () => await getData(`${apiBaseUrl}/bis/setting`),
 
-        updateEmailVerification: async (payload) => await postData(`${apiBaseUrl}/api/bis/edit-message`, payload),
+        updateEmailVerification: async (payload) => await postData(`${apiBaseUrl}/bis/edit-message`, payload),
 
-        emailSetting: async () => await getData(`${apiBaseUrl}/api/email-setting`),
+        emailSetting: async () => await getData(`${apiBaseUrl}/email-setting`),
 
-        updateEmailSetting: async (payload, id) => await postData(`${apiBaseUrl}/api/email-setting/${id}`, payload, true),
+        updateEmailSetting: async (payload, id) => await postData(`${apiBaseUrl}/email-setting/${id}`, payload, true),
 
-        bisSetting: async () => await getData(`${apiBaseUrl}/api/bis/setting`),
+        onUpdateV2EmailSetting: async (payload, id) => await postData(`${apiBaseUrl}/v2/email-setting/${id}`, payload),
 
-        updateBisSetting: async (payload) => await postData(`${apiBaseUrl}/api/bis/setting`, payload, true),
+        bisSetting: async () => await getData(`${apiBaseUrl}/bis/setting`),
 
-        updateIcon: async (payload, isFormData) => await postData(`${apiBaseUrl}/api/icon`, payload, isFormData),
+        updateBisSetting: async (payload) => await postData(`${apiBaseUrl}/bis/setting`, payload, true),
 
-        deleteIcon: async () => await deleteData(`${apiBaseUrl}/api/icon`),
+        updateIcon: async (payload, isFormData) => await postData(`${apiBaseUrl}/icon`, payload, isFormData),
 
-        getHeadless: async () => await getData(`${apiBaseUrl}/api/headless`),
+        deleteIcon: async () => await deleteData(`${apiBaseUrl}/icon`),
 
-        getHeadlessToken: async () => await getData(`${apiBaseUrl}/api/headless-token`),
+        getHeadless: async () => await getData(`${apiBaseUrl}/headless`),
 
-        updateHeadless: async (payload) => await postData(`${apiBaseUrl}/api/headless`, payload),
+        getHeadlessToken: async () => await getData(`${apiBaseUrl}/headless-token`),
 
-        BisAnalytics: async (payload) => await postData(`${apiBaseUrl}/api/bis/analytics`, payload),
+        updateHeadless: async (payload) => await postData(`${apiBaseUrl}/headless`, payload),
 
-        upgradePlan: async (payload) => await postData(`${apiBaseUrl}/api/upgrade`, payload),
+        BisAnalytics: async (payload) => await postData(`${apiBaseUrl}/bis/analytics`, payload),
 
-        upgradeEmailPlan: async (payload) => await postData(`${apiBaseUrl}/api/usage-charge`, payload),
+        upgradePlan: async (payload) => await postData(`${apiBaseUrl}/upgrade`, payload),
 
-        getBilling: async () => await getData(`${apiBaseUrl}/api/billing`),
+        upgradeEmailPlan: async (payload) => await postData(`${apiBaseUrl}/usage-charge`, payload),
 
-        updateShopDisplayBanner: async (payload) => await postData(`${apiBaseUrl}/api/banner-setting`, payload),
+        getBilling: async () => await getData(`${apiBaseUrl}/billing`),
 
-        getBisExport: async (payload) => window.open(`${apiBaseUrl}/api/bis/export?shop=${payload.shop}`, "_blank"),
+        updateShopDisplayBanner: async (payload) => await postData(`${apiBaseUrl}/banner-setting`, payload),
 
-        bisImport: async (payload, isFormData) => await postData(`${apiBaseUrl}/api/bis/import`, payload, isFormData),
+        getBisExport: async (payload) => window.open(`${apiBaseUrl}/bis/export?shop=${payload.shop}`, "_blank"),
 
-        onBisMailResend: async (payload, id) => await postData(`${apiBaseUrl}/api/bis/bis-mail/${id}`, payload),
+        bisImport: async (payload, isFormData) => await postData(`${apiBaseUrl}/bis/import`, payload, isFormData),
 
-        enableBackInStock: async (payload) => await postData(`${apiBaseUrl}/api/enable-bis`, payload),
+        onBisMailResend: async (payload, id) => await postData(`${apiBaseUrl}/bis/bis-mail/${id}`, payload),
 
-        onBoarding: async (payload) => await postData(`${apiBaseUrl}/api/complete-onboarding`, payload),
+        enableBackInStock: async (payload) => await postData(`${apiBaseUrl}/enable-bis`, payload),
 
-        getIntegration: async (payload) => await getData(`${apiBaseUrl}/api/integration/get?${qs.stringify(payload)}`),
+        onBoarding: async (payload) => await postData(`${apiBaseUrl}/complete-onboarding`, payload),
 
-        createIntegration: async (payload) => await postData(`${apiBaseUrl}/api/integration/create`, payload),
+        getIntegration: async (payload) => await getData(`${apiBaseUrl}/integration/get?${qs.stringify(payload)}`),
 
-        templateConfirmation: async (payload) => await postData(`${apiBaseUrl}/api/template-notice`, payload)
+        createIntegration: async (payload) => await postData(`${apiBaseUrl}/integration/create`, payload),
+
+        templateConfirmation: async (payload) => await postData(`${apiBaseUrl}/template-notice`, payload)
 
     };
 }

@@ -63,26 +63,28 @@ const RemoveWishlistEmail = () => {
         }
     }
 
-    const saveEmailSetting = async (field, value, isLoad) => {
-        setIsLoading(isLoad);
-        const payload =
-            {
-                ...allEmailSetting,
-                remove_wishlist_setting: {
-                    is_enable: field === 'is_enable' ? value : emailSetting?.is_enable,
-                    time: emailSetting?.time,
-                    remove_wishlist_mail_subject: emailSetting?.subject,
-                },
-            }
-        let formData = new FormData();
-        formData.append("payload", JSON.stringify(payload));
+    const saveEmailSetting = async () => {
+        setIsLoading(true);
+
         editorRef.current.editor.exportHtml(async (data) => {
             const {design, html} = data;
             setMailTemplateJson(design);
-            formData.append("remove_wishlist_mail_json", JSON.stringify(design));
-            formData.append("remove_wishlist_mail_html", html);
+            const payload = {
+                type: 2,
+                "wishlist_report_setting": {
+                    "is_enable": allEmailSetting?.wishlist_report_setting?.is_enable,
+                    "type": allEmailSetting?.wishlist_report_setting?.type,
+                },
+                "remove_wishlist_setting": {
+                    "is_enable": emailSetting?.is_enable,
+                    "time": emailSetting?.time,
+                    "remove_wishlist_mail_subject": emailSetting?.subject,
+                },
+                "remove_wishlist_mail_json": JSON.stringify(design),
+                "remove_wishlist_mail_html": html,
+            };
 
-            const response = await apiService.updateEmailSetting(formData, emailSetting.id);
+            const response = await apiService.onUpdateV2EmailSetting(payload, emailSetting.id);
             if (response.status === 200) {
                 setMessage(capitalizeMessage(response.message));
                 setIsLoading(false);
@@ -108,12 +110,6 @@ const RemoveWishlistEmail = () => {
 
     const onBack = () => {
         navigate(`${baseUrl}/settings/email`)
-    }
-
-    const handleSwitch = async (e) => {
-        const {name, value, checked} = e.target;
-        setEmailSetting({...emailSetting, [name]: value})
-        saveEmailSetting('is_enable', value, false)
     }
 
     const exportHtml = () => {
@@ -196,17 +192,10 @@ const RemoveWishlistEmail = () => {
 
     return (
         <Fragment>
-            {message !== "" && isError === false ?
-                <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
-                              setIsErrorServer={setIsErrorServer}/>
-                : ""}
-            <CustomErrorBanner link={AppDocsLinks.article["425"]} message={message} setMessage={setMessage}
-                               setIsError={setIsError} isError={isError}/>
-
             <Modal open={true} onHide={onBack} variant={'max'}>
                 <TitleBar title={"Remove Wishlist Email"}>
                     <button variant="primary" loading={isLoading && ''}
-                            onClick={() => saveEmailSetting("", "", true)}>{'Save'}</button>
+                            onClick={() => saveEmailSetting()}>{'Save'}</button>
                 </TitleBar>
                 <div className="fullContainerPage">
                     <div className="fullContainerPage-inner">
@@ -226,7 +215,12 @@ const RemoveWishlistEmail = () => {
                                 )}
                             </div>
                             <Box padding={'400'}>
-                                <BlockStack gap={"200"}>
+                                <BlockStack gap={"300"}>
+                                    {message !== "" && isError === false ?
+                                        <CustomErrorBanner link={AppDocsLinks.article["425"]} message={message}
+                                                           setMessage={setMessage}
+                                                           setIsError={setIsError} isError={true} isCardBanner={true}/>
+                                        : ""}
                                     <EmailTemplateMsg msgArray={msgArray}/>
                                     <Card padding={'0'}>
                                         <EmailEditorComponent

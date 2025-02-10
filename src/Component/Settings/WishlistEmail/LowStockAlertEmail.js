@@ -25,7 +25,6 @@ const LowStockAlertEmail = () => {
     const [allEmailSetting, setAllEmailSetting] = useState({});
     const [isLoading, setIsLoading] = useState(false)
     const [isError, setIsError] = useState(false)
-    const [isErrorServer, setIsErrorServer] = useState(false)
     const [message, setMessage] = useState("")
     const [mailTemplateJson, setMailTemplateJson] = useState({});
     const [showSettings, setShowSettings] = useState(false);
@@ -54,7 +53,7 @@ const LowStockAlertEmail = () => {
 
         } else if (response.status === 500) {
             setMessage(capitalizeMessage(response.message))
-            setIsErrorServer(true);
+            setIsError(true)
             shopify.toast.show(capitalizeMessage(response.message), {isError: true})
         } else {
             setMessage(capitalizeMessage(response.message))
@@ -63,34 +62,33 @@ const LowStockAlertEmail = () => {
         }
     }
 
-    const saveEmailSetting = async (field, value, isLoad) => {
-        debugger
-        setIsLoading(isLoad);
-        const payload =
-            {
-                ...allEmailSetting,
-                low_stock_setting: {
-                    is_enable: field === 'is_enable' ? value : emailSetting?.is_enable,
-                    inventory: emailSetting?.time,
-                    low_stock_wishlist_mail_subject: emailSetting?.subject,
-                },
-            }
-        let formData = new FormData();
-        formData.append("payload", JSON.stringify(payload));
+    const saveEmailSetting = async () => {
+        setIsLoading(true);
+
         editorRef.current.editor.exportHtml(async (data) => {
             const {design, html} = data;
             setMailTemplateJson(design);
-            formData.append("low_stock_wishlist_mail_json", JSON.stringify(design));
-            formData.append("low_stock_wishlist_mail_html", html);
+            const payload = {
+                type: 3,
+                "wishlist_report_setting": {
+                    "is_enable": allEmailSetting?.wishlist_report_setting?.is_enable,
+                    "type": allEmailSetting?.wishlist_report_setting?.type,
+                },
+                "low_stock_setting": {
+                    "is_enable": emailSetting?.is_enable,
+                    "inventory": emailSetting?.time,
+                    "low_stock_wishlist_mail_subject": emailSetting?.subject,
+                },
+                "low_stock_wishlist_mail_json": JSON.stringify(design),
+                "low_stock_wishlist_mail_html": html,
+            };
 
-            const response = await apiService.updateEmailSetting(formData, emailSetting.id);
+            const response = await apiService.onUpdateV2EmailSetting(payload, emailSetting.id);
             if (response.status === 200) {
-                setMessage(capitalizeMessage(response.message));
                 setIsLoading(false);
                 shopify.toast.show(capitalizeMessage(response.message))
             } else if (response.status === 500) {
                 setMessage(capitalizeMessage(response.message));
-                setIsErrorServer(true);
                 setIsLoading(false);
                 shopify.toast.show(capitalizeMessage(response.message), {isError: true})
             } else {
@@ -197,42 +195,35 @@ const LowStockAlertEmail = () => {
 
     return (
         <Fragment>
-            {message !== "" && isError === false ?
-                <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
-                              setIsErrorServer={setIsErrorServer}/>
-                : ""}
-            <CustomErrorBanner link={AppDocsLinks.article["425"]} message={message} setMessage={setMessage}
-                               setIsError={setIsError} isError={isError}/>
-
-            {/*<Modal open={true} onHide={onBack} variant={'max'}>*/}
-            {/*    <TitleBar title={"Low Stock Alert Email"}>*/}
-            {/*        <button variant="primary" loading={isLoading && ''}*/}
-            {/*                onClick={() => saveEmailSetting("", "", true)}>{'Save'}</button>*/}
-            {/*    </TitleBar>*/}
+            <Modal open={true} onHide={onBack} variant={'max'}>
+                <TitleBar title={"Low Stock Alert Email"}>
+                    <button variant="primary" loading={isLoading && ''}
+                            onClick={() => saveEmailSetting()}>{'Save'}</button>
+                </TitleBar>
                 <div className="fullScreen fullContainerPage">
-                    <div className="fullContainerPage-header">
-                        <FullscreenBar onAction={onBack}>
-                            <div className={'FullscreenBar-main-div'}>
-                                <div className={'FullscreenBar-main-title-div'}>
-                                    <Text variant="headingLg" as="span">{"Remove Wishlist Email"}</Text>
-                                </div>
-                                <InlineStack gap={'150'}>
-                                    <Button variant="primary"
-                                            onClick={() => saveEmailSetting("", "", true)}
-                                            loading={isLoading}
-                                    >
-                                        Save
-                                    </Button>
-                                </InlineStack>
-                            </div>
-                        </FullscreenBar>
-                    </div>
+                    {/*<div className="fullContainerPage-header">*/}
+                    {/*    <FullscreenBar onAction={onBack}>*/}
+                    {/*        <div className={'FullscreenBar-main-div'}>*/}
+                    {/*            <div className={'FullscreenBar-main-title-div'}>*/}
+                    {/*                <Text variant="headingLg" as="span">{"Remove Wishlist Email"}</Text>*/}
+                    {/*            </div>*/}
+                    {/*            <InlineStack gap={'150'}>*/}
+                    {/*                <Button variant="primary"*/}
+                    {/*                        onClick={() => saveEmailSetting("", "", true)}*/}
+                    {/*                        loading={isLoading}*/}
+                    {/*                >*/}
+                    {/*                    Save*/}
+                    {/*                </Button>*/}
+                    {/*            </InlineStack>*/}
+                    {/*        </div>*/}
+                    {/*    </FullscreenBar>*/}
+                    {/*</div>*/}
                     <div className="fullContainerPage-inner">
-                        <div className="fullScreen-fullContainerPage-inner-left fullContainerPage-inner-left">
+                        <div className="fullContainerPage-inner-left">
                             {onDisplaySettings}
                         </div>
 
-                        <div className="fullScreen-fullContainerPage-inner-right fullContainerPage-inner-right">
+                        <div className="fullContainerPage-inner-right">
                             <div className={`fullContainerPage-inner-left-settings ${showSettings ? 'show' : 'hide'}`}>{onDisplaySettings}</div>
                             <div className={'fullContainerPage-inner-right-title'}>
                                 <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}> Email Template</Text>
@@ -243,8 +234,14 @@ const LowStockAlertEmail = () => {
                                     </span>
                                 )}
                             </div>
+
                             <Box padding={'400'}>
-                                <BlockStack gap={"200"}>
+                                <BlockStack gap={"300"}>
+                                    {message !== "" && isError === false ?
+                                        <CustomErrorBanner link={AppDocsLinks.article["425"]} message={message}
+                                                           setMessage={setMessage}
+                                                           setIsError={setIsError} isError={true} isCardBanner={true}/>
+                                        : ""}
                                     <EmailTemplateMsg msgArray={msgArray}/>
                                     <Card padding={'0'}>
                                         <EmailEditorComponent
@@ -261,7 +258,7 @@ const LowStockAlertEmail = () => {
                         </div>
                     </div>
                 </div>
-            {/*</Modal>*/}
+            </Modal>
         </Fragment>
     );
 };

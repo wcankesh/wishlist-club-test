@@ -2,7 +2,6 @@ import React, {Fragment, useCallback, useEffect, useRef, useState} from 'react';
 import {BlockStack, Box, Button, Checkbox, InlineGrid, Text, TextField, Card} from "@shopify/polaris";
 import {useNavigate} from "react-router-dom";
 import {apiService, baseUrl, capitalizeMessage, isChecked, templateJson, toggleFlag} from "../../../utils/Constant";
-import ToastMessage from "../../Comman/ToastMessage"
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
 import {AppDocsLinks} from "../../../utils/AppDocsLinks";
 import EmailTemplateMsg from "../../Comman/EmailTemplateMsg";
@@ -24,7 +23,6 @@ const AddedWishlistEmail = () => {
     const [allEmailSetting, setAllEmailSetting] = useState({});
     const [isLoading, setIsLoading] = useState(false)
     const [isError, setIsError] = useState(false)
-    const [isErrorServer, setIsErrorServer] = useState(false)
     const [message, setMessage] = useState("")
     const [mailTemplateJson, setMailTemplateJson] = useState({});
     const [showSettings, setShowSettings] = useState(false);
@@ -52,8 +50,6 @@ const AddedWishlistEmail = () => {
             setMailTemplateJson(JSON.parse(response.data && response.data.add_wishlist_mail_json) || templateJson);
 
         } else if (response.status === 500) {
-            setMessage(capitalizeMessage(response.message))
-            setIsErrorServer(true);
             shopify.toast.show(capitalizeMessage(response.message), {isError: true})
         } else {
             setMessage(capitalizeMessage(response.message))
@@ -64,31 +60,31 @@ const AddedWishlistEmail = () => {
 
     const saveEmailSetting = async (field, value, isLoad) => {
         setIsLoading(isLoad);
-        const payload =
-            {
-                ...allEmailSetting,
-                add_wishlist_setting: {
-                    is_enable: field === 'is_enable' ? value : emailSetting?.is_enable,
-                    time: emailSetting?.time,
-                    add_wishlist_mail_subject: emailSetting?.subject,
-                },
-            }
-        let formData = new FormData();
-        formData.append("payload", JSON.stringify(payload));
+
         editorRef.current.editor.exportHtml(async (data) => {
             const {design, html} = data;
             setMailTemplateJson(design);
-            formData.append("add_wishlist_mail_json", JSON.stringify(design));
-            formData.append("add_wishlist_mail_html", html);
+            const payload = {
+                type: 1,
+                "wishlist_report_setting": {
+                    "is_enable": allEmailSetting?.wishlist_report_setting?.is_enable,
+                    "type": allEmailSetting?.wishlist_report_setting?.type,
+                },
+                "add_wishlist_setting": {
+                    "is_enable": field === 'is_enable' ? value : emailSetting?.is_enable,
+                    "time": emailSetting?.time,
+                    "add_wishlist_mail_subject": emailSetting?.subject,
+                },
+                "add_wishlist_mail_json": JSON.stringify(design),
+                "add_wishlist_mail_html": html,
+            };
 
-            const response = await apiService.updateEmailSetting(formData, emailSetting.id);
+            const response = await apiService.onUpdateV2EmailSetting(payload, emailSetting.id);
             if (response.status === 200) {
-                setMessage(capitalizeMessage(response.message));
                 setIsLoading(false);
+                setIsError(false);
                 shopify.toast.show(capitalizeMessage(response.message))
             } else if (response.status === 500) {
-                setMessage(capitalizeMessage(response.message));
-                setIsErrorServer(true);
                 setIsLoading(false);
                 shopify.toast.show(capitalizeMessage(response.message), {isError: true})
             } else {
@@ -147,7 +143,7 @@ const AddedWishlistEmail = () => {
         "{shop_name} : To show the shop name",
         "{customer_name} : To show customer name ",
         "{product_html} : To show wishlist product (required)",
-        '{{unsubscribe}}: Use this tag to display the unsubscribe link',
+        '{unsubscribe}: Use this tag to display the unsubscribe link',
     ];
 
     const onDisplaySettings = (
@@ -176,7 +172,7 @@ const AddedWishlistEmail = () => {
                                onChange={(value) => handleChange("subject", value)}
                     />
                     <TextField
-                        label={<Text variant="headingSm" as="h6">Time</Text>}
+                        label={<Text variant="headingSm" as="h6">Time (in mins.)</Text>}
                         value={emailSetting?.time}
                         onChange={(value) => handleChange('time', value)}
                         type={'number'}
@@ -189,13 +185,6 @@ const AddedWishlistEmail = () => {
 
     return (
         <Fragment>
-            {message !== "" && isError === false ?
-                <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
-                              setIsErrorServer={setIsErrorServer}/>
-                : ""}
-            <CustomErrorBanner link={AppDocsLinks.article["425"]} message={message} setMessage={setMessage}
-                               setIsError={setIsError} isError={isError}/>
-
             <Modal open={true} onHide={onBack} variant={'max'}>
                 <TitleBar title={"Added to Wishlist Email"}>
                     <button variant="primary" loading={isLoading && ''}
@@ -208,31 +197,37 @@ const AddedWishlistEmail = () => {
                         </div>
 
                         <div className="fullContainerPage-inner-right">
-                            <div className={`fullContainerPage-inner-left-settings ${showSettings ? 'show' : 'hide'}`}>{onDisplaySettings}</div>
-                                <div className={'fullContainerPage-inner-right-title'}>
-                                    <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}> Email Template</Text>
-                                    {showSettings ? '' : (
-                                        <span className={'left-settings'}>
+                            <div
+                                className={`fullContainerPage-inner-left-settings ${showSettings ? 'show' : 'hide'}`}>{onDisplaySettings}</div>
+                            <div className={'fullContainerPage-inner-right-title'}>
+                                <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}> Email Template</Text>
+                                {showSettings ? '' : (
+                                    <span className={'left-settings'}>
                                         <Button variant={'secondary'} icon={Icons.EditIcon}
                                                 onClick={onHandleShowSettings}>Edit</Button>
                                     </span>
-                                    )}
-                                </div>
-                                <Box padding={'400'}>
-                                    <BlockStack gap={"200"}>
-                                        <EmailTemplateMsg msgArray={msgArray}/>
-                                        <Card padding={'0'}>
-                                            <EmailEditorComponent
-                                                ref={editorRef}
-                                                exportHtml={exportHtml}
-                                                onLoad={onLoad}
-                                                style={{height: 600}}
-                                                mailTemplate={mailTemplateJson}
-                                                onChange={onChange}
-                                            />
-                                        </Card>
-                                    </BlockStack>
-                                </Box>
+                                )}
+                            </div>
+                            <Box padding={'400'}>
+                                <BlockStack gap={"200"}>
+                                    {message !== "" && isError === false ?
+                                        <CustomErrorBanner link={AppDocsLinks.article["425"]} message={message}
+                                                           setMessage={setMessage}
+                                                           setIsError={setIsError} isError={true} isCardBanner={true}/>
+                                        : ""}
+                                    <EmailTemplateMsg msgArray={msgArray}/>
+                                    <Card padding={'0'}>
+                                        <EmailEditorComponent
+                                            ref={editorRef}
+                                            exportHtml={exportHtml}
+                                            onLoad={onLoad}
+                                            style={{height: 600}}
+                                            mailTemplate={mailTemplateJson}
+                                            onChange={onChange}
+                                        />
+                                    </Card>
+                                </BlockStack>
+                            </Box>
                         </div>
                     </div>
                 </div>
