@@ -215,6 +215,18 @@ img {display: block;max-width: 100%;height: auto;}
 .email-editor-wrap:hover::-webkit-scrollbar {background-color: #e7eaed;}
 .email-editor-wrap .email-editor-contain {min-width: 600px;}
 
+/*Color input*/
+.color-label {display: inline-block;margin-bottom: 5px;}
+.color_picker {display: flex;align-items: center;border: var(--p-border-width-0165) solid var(--p-color-input-border);border-top-color: #898f94;border-radius: var(--p-border-radius-200);height: 32px;}
+.color_picker input[type="color"] {width: 35px;min-width: 35px;padding: 3px 7px;background: #fff;border: 0;border-radius: var(--p-border-radius-200) 0 0 var(--p-border-radius-200);height: 100%;z-index: 2;}
+/*.color_picker input[type="color"]:focus ~ label::after {box-shadow: 0 0 0 2px var(--p-color-border-focus);}*/
+.color_picker input[type="color"]:disabled {background: #ebecef;}
+.color_picker input[type="color"]:disabled ~ .lbl-color {cursor: context-menu;color: #87909b;-webkit-text-fill-color: #87909b;background-color: #ebecef;border-color: #dde0e4;border-radius: 0 var(--p-border-radius-200) var(--p-border-radius-200) 0;}
+.color_picker input[type="color"]:disabled ~ .lbl-color::before {background-color: #ebecef;position: absolute;content: '';inset: -1px 0 0 -37px;width: calc(100% + 38px);height: calc(100% + 2px);border-radius: var(--p-border-radius-200);z-index: -1;}
+.color_picker .lbl-color {width: 100%;height: 100%;display: flex;align-items: center;cursor: pointer;position: relative;user-select: none;z-index: 1;    padding-left: 37px; border: 0; border-radius: var(--p-border-radius-200);}
+.color_picker .lbl-color::after {content: '';position: absolute;inset: -2px -2px -2px -37px;pointer-events: none;border-radius: var(--p-border-radius-200);width: calc(100% + 39px);}
+
+/*Max-Modal*/
 .fullContainerPage { display: flex; flex-direction: column; height: 100vh; overflow-y: auto }
 .fullContainerPage-inner { display: flex; flex: 1; background-color: #ffffff; height:100% }
 .fullContainerPage-inner-left, .fullContainerPage-inner-right {overflow-y : auto; background-color: #ffffff;}
