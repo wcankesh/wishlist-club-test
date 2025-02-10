@@ -253,26 +253,6 @@ const WishlistEmail = () => {
         navigate(`${baseUrl}/settings/email/email-customization?active_email_tab=${link}`);
     };
 
-    const RenderCardItem = ({item}) => {
-        return (
-            <Card>
-                <InlineStack align={"space-between"} blockAlign={"start"} wrap={false}
-                             gap={"200"}>
-                    <InlineStack gap={"400"} wrap={false}>
-                        <BlockStack gap={"100"}>
-                            <Text fontWeight='semibold' as={"span"}>{item.title}</Text>
-                            <Text tone={"subdued"} as={"span"}>{item.description}</Text>
-                        </BlockStack>
-                    </InlineStack>
-                    {isLoading ? <Badge>
-                        <div style={{width: 62}}>&nbsp;</div>
-                    </Badge> : <Badge
-                        tone={item.checked ? "success" : "critical"}>{item.checked ? "Enabled" : "Disabled"} </Badge>}
-                </InlineStack>
-            </Card>
-        )
-    }
-
     return (
         <Page title={"Wishlist Email"} backAction={{content: 'Settings', onAction: onBack}}>
             <div className="sticky-component">
