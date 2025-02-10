@@ -238,3 +238,5 @@ img {display: block;max-width: 100%;height: auto;}
 .fullContainerPage-header { background-color: #f4f6f8; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); z-index: 10; position: sticky; }
 .FullscreenBar-main-div {display: flex; flex: 1; overflow-y: auto; justify-content: space-between; align-items: center; padding-left: 1rem; padding-right: 1rem;}
 .FullscreenBar-main-title-div {margin-left: 0.5rem; /*flex-grow: 1;*/}
+
+.email-customise-list {border-radius: 0.75rem; border: 0.0625rem solid rgba(235, 235, 235, 1)}

@@ -11,6 +11,7 @@ import {AppDocsLinks} from "../../../utils/AppDocsLinks";
 import {RenderLoading} from "../../../utils/RenderLoading";
 import {initialKeys} from "./Common";
 import SwitchButton from "../../Comman/SwitchButton";
+import {Icons} from "../../../utils/Icons";
 
 const initialState = {
     subject: "",
@@ -384,53 +385,56 @@ const WishlistEmail = () => {
                                         })}
                                 </Card>
 
-                                <Card padding={'0'}>
-                                    <BlockStack inlineAlign={'start'} gap={'300'}>
+                                <Card padding={'400'}>
+                                    <BlockStack gap={'300'}>
+                                        <InlineStack align={'end'}>
+                                            <Button variant={'plain'} icon={Icons.ExternalIcon} onClick={() => onRedirect('5')} textAlign={'end'}>View Button Settings</Button>
+                                        </InlineStack>
                                         {(CustomizationEmailSettings || []).map((x, i) => {
                                             return (
                                                 <BlockStack inlineAlign={'start'} gap={'200'}>
-                                                    <Box paddingInline={'400'} paddingBlockEnd={'0'}
-                                                         paddingBlockStart={'400'}>
                                                         <Text as={'span'} variant={'headingMd'}>{x.title}</Text>
-                                                    </Box>
-                                                    <BlockStack inlineAlign={'start'} gap={'200'}>
-                                                        {(x.inputs && x.inputs || []).map((item, inputIndex) => {
-                                                            return (
-                                                                <div key={inputIndex}
-                                                                     onClick={() => onRedirect(item.key)}
-                                                                     className={"cursor-pointer"}>
-                                                                    <Box padding={"400"}>
-                                                                        <InlineStack align={"space-between"}
-                                                                                     blockAlign={"start"}
-                                                                                     wrap={false}
-                                                                                     gap={"200"}>
-                                                                            <InlineStack gap={"400"} wrap={false}>
-                                                                                <BlockStack gap={"100"}>
-                                                                                    <Text fontWeight='semibold'
-                                                                                          as={"span"}>{item.title}</Text>
-                                                                                    <Text tone={"subdued"}
-                                                                                          as={"span"}>{item.description}</Text>
-                                                                                </BlockStack>
+                                                    <div className={'email-customise-list'}>
+                                                        <BlockStack inlineAlign={'start'} gap={'200'}>
+                                                            {(x.inputs && x.inputs || []).map((item, inputIndex) => {
+                                                                return (
+                                                                    <div key={inputIndex}
+                                                                         onClick={() => onRedirect(item.key)}
+                                                                         className={"cursor-pointer"}>
+                                                                        <Box padding={"300"}>
+                                                                            <InlineStack align={"space-between"}
+                                                                                         blockAlign={"start"}
+                                                                                         wrap={false}
+                                                                                         gap={"200"}>
+                                                                                <InlineStack gap={"400"} wrap={false}>
+                                                                                    <BlockStack gap={"100"}>
+                                                                                        <Text fontWeight='semibold'
+                                                                                              as={"span"}>{item.title}</Text>
+                                                                                        <Text tone={"subdued"}
+                                                                                              as={"span"}>{item.description}</Text>
+                                                                                    </BlockStack>
+                                                                                </InlineStack>
+                                                                                {isLoading ? <Badge>
+                                                                                    <div style={{width: 62}}>&nbsp;</div>
+                                                                                </Badge> : <Badge
+                                                                                    tone={item.checked ? "success" : "critical"}>{item.checked ? "Enabled" : "Disabled"} </Badge>}
                                                                             </InlineStack>
-                                                                            {isLoading ? <Badge>
-                                                                                <div style={{width: 62}}>&nbsp;</div>
-                                                                            </Badge> : <Badge
-                                                                                tone={item.checked ? "success" : "critical"}>{item.checked ? "Enabled" : "Disabled"} </Badge>}
-                                                                        </InlineStack>
-                                                                    </Box>
-                                                                    <Divider/>
-                                                                </div>
-                                                            )
-                                                        })}
-                                                    </BlockStack>
+                                                                        </Box>
+                                                                        {x.inputs.length - 1 !== inputIndex ? <Divider/> : ''}
+                                                                    </div>
+                                                                )
+                                                            })}
+                                                        </BlockStack>
+                                                    </div>
                                                 </BlockStack>
                                             )
                                         })}
 
-                                        <Box padding={'400'}>
-                                            <BlockStack inlineAlign={'start'} gap={'200'}>
+                                        <BlockStack inlineAlign={'start'} gap={'200'}>
                                                 <Text as={'span'} variant={'headingMd'}>{'Reports'}</Text>
-                                                <BlockStack inlineAlign={'start'} gap={'200'}>
+                                            <div className={'email-customise-list'}>
+                                                <Box padding={"300"}>
+                                                    <BlockStack inlineAlign={'start'} gap={'200'}>
                                                     <InlineStack align={"space-between"} blockAlign={"start"}
                                                                  wrap={false}
                                                                  gap={"200"}>
@@ -468,8 +472,9 @@ const WishlistEmail = () => {
                                                             tone={emailSetting?.wishlist_report_setting?.is_enable == 1 ? "success" : "critical"}>{emailSetting?.wishlist_report_setting?.is_enable == 1 ? "Enabled" : "Disabled"} </Badge>}
                                                     </InlineStack>
                                                 </BlockStack>
+                                                </Box>
+                                            </div>
                                             </BlockStack>
-                                        </Box>
                                     </BlockStack>
                                 </Card>
                             </BlockStack>

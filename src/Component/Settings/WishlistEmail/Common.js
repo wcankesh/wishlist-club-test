@@ -6,4 +6,5 @@ export const initialKeys = {
     removeWishlist: 'remove-wishlist',
     lowStockAlert: 'low-stock-alert',
     abandonmentReminder: 'abandonment-reminder',
+    emailButtonSettings : '5'
 };

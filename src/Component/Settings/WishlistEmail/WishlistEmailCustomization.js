@@ -8,6 +8,7 @@ import AddedWishlistEmail from "./AddedWishlistEmail";
 import RemoveWishlistEmail from "./RemoveWishlistEmail";
 import LowStockAlertEmail from "./LowStockAlertEmail";
 import AbandonmentReminderEmail from "./AbandonmentReminderEmail";
+import EmailButtonSettings from "./EmailButtonSettings";
 
 const WishlistEmailCustomization = () => {
     let location = useLocation();
@@ -31,13 +32,12 @@ const WishlistEmailCustomization = () => {
                 return <LowStockAlertEmail/>;
             case initialKeys?.abandonmentReminder:
                 return <AbandonmentReminderEmail/>;
+            case initialKeys?.emailButtonSettings:
+                return <EmailButtonSettings />;
             default:
                 return null;
         }
     };
-
-
-    console.log("activeEmailTab",activeEmailTab)
 
     return (
         <React.Fragment>

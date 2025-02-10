@@ -147,7 +147,7 @@ const AbandonmentReminderEmail = () => {
         "{shop_name} : To show the shop name",
         "{customer_name} : To show customer name ",
         "{product_html} : To show wishlist product (required)",
-        '{{unsubscribe}}: Use this tag to display the unsubscribe link',
+        '{unsubscribe}: Use this tag to display the unsubscribe link',
     ];
 
     const onDisplaySettings = (
