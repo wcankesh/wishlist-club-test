@@ -1,5 +1,5 @@
 import React, {Fragment, useCallback, useEffect, useRef, useState} from 'react';
-import {BlockStack, Box, Button, Checkbox, InlineGrid, Text, TextField, Card} from "@shopify/polaris";
+import {BlockStack, Box, Button, Checkbox, InlineGrid, Text, TextField, Card, Select} from "@shopify/polaris";
 import {useNavigate} from "react-router-dom";
 import {apiService, baseUrl, capitalizeMessage, isChecked, templateJson, toggleFlag} from "../../../utils/Constant";
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
@@ -146,6 +146,19 @@ const AddedWishlistEmail = () => {
         '{unsubscribe}: Use this tag to display the unsubscribe link',
     ];
 
+    const TimeOptions = [
+        { label: "1 min", value: "1" },
+        { label: "5 min", value: "5" },
+        { label: "10 min", value: "10" },
+        { label: "20 min", value: "20" },
+        { label: "30 min", value: "30" },
+        { label: "45 min", value: "45" },
+        ...Array.from({ length: 12 }, (_, i) => ({
+            label: `${i + 1} Hour`,
+            value: `${(i + 1) * 60}`
+        }))
+    ];
+
     const onDisplaySettings = (
         <>
             <div className={'fullContainerPage-inner-left-title'}>
@@ -179,14 +192,23 @@ const AddedWishlistEmail = () => {
                         onChange={(value) => handleChange("subject", value)}
                     />
 
-                    <TextField
-                        label={<Text variant="headingSm" as="h6">Time (in mins.)</Text>}
-                        value={emailSetting?.time}
+                    {/*<TextField*/}
+                    {/*    label=*/}
+                    {/*    value={emailSetting?.time}*/}
+                    {/*    onChange={(value) => handleChange('time', value)}*/}
+                    {/*    type={'number'}*/}
+                    {/*    min={0}*/}
+                    {/*    helpText={'Set the delay in minutes to send the email after the item is added to wishlist.'}*/}
+                    {/*/>*/}
+
+                    <Select
+                        label={<Text variant="headingSm" as="h6">Time</Text>}
+                        options={TimeOptions}
                         onChange={(value) => handleChange('time', value)}
-                        type={'number'}
-                        min={0}
+                        value={emailSetting?.time}
                         helpText={'Set the delay in minutes to send the email after the item is added to wishlist.'}
                     />
+
                 </InlineGrid>
             </Box>
         </>

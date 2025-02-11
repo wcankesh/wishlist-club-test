@@ -1,5 +1,5 @@
 import React, {Fragment, useCallback, useEffect, useRef, useState} from 'react';
-import {BlockStack, Box, Button, Card, Checkbox, InlineGrid, Text, TextField} from "@shopify/polaris";
+import {BlockStack, Box, Button, Card, Checkbox, InlineGrid, Select, Text, TextField} from "@shopify/polaris";
 import {useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {apiService, baseUrl, capitalizeMessage, isChecked, templateJson, toggleFlag} from "../../../utils/Constant";
@@ -150,6 +150,10 @@ const AbandonmentReminderEmail = () => {
         '{unsubscribe}: Use this tag to display the unsubscribe link',
     ];
 
+    const DayOptions = [
+        ...Array.from({ length: 30 }, (_, i) => ({ label: `${i + 1} day`, value: `${i + 1}` })),
+    ];
+
     const onDisplaySettings = (
         <>
             <div className={'fullContainerPage-inner-left-title'}>
@@ -183,12 +187,20 @@ const AbandonmentReminderEmail = () => {
                         onChange={(value) => handleChange("subject", value)}
                     />
 
-                    <TextField
+                    {/*<TextField*/}
+                    {/*    label={<Text variant="headingSm" as="h6">Days</Text>}*/}
+                    {/*    value={emailSetting?.days}*/}
+                    {/*    onChange={(value) => handleChange('days', value)}*/}
+                    {/*    type={'number'}*/}
+                    {/*    min={0}*/}
+                    {/*    helpText={'Set the delay for sending the email after the wishlist item is abandoned for specific day(s).'}*/}
+                    {/*/>*/}
+
+                    <Select
                         label={<Text variant="headingSm" as="h6">Days</Text>}
-                        value={emailSetting?.days}
+                        options={DayOptions}
                         onChange={(value) => handleChange('days', value)}
-                        type={'number'}
-                        min={0}
+                        value={emailSetting?.days}
                         helpText={'Set the delay for sending the email after the wishlist item is abandoned for specific day(s).'}
                     />
                 </InlineGrid>

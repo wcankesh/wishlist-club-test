@@ -1,5 +1,5 @@
 import React, {Fragment, useCallback, useEffect, useRef, useState} from 'react';
-import {BlockStack, Box, Button, Card, Checkbox, InlineGrid, Text, TextField} from "@shopify/polaris";
+import {BlockStack, Box, Button, Card, Checkbox, InlineGrid, Select, Text, TextField} from "@shopify/polaris";
 import {useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {apiService, baseUrl, capitalizeMessage, isChecked, templateJson, toggleFlag} from "../../../utils/Constant";
@@ -86,7 +86,6 @@ const RemoveWishlistEmail = () => {
 
             const response = await apiService.onUpdateV2EmailSetting(payload, emailSetting.id);
             if (response.status === 200) {
-                setMessage(capitalizeMessage(response.message));
                 setIsLoading(false);
                 shopify.toast.show(capitalizeMessage(response.message))
             } else if (response.status === 500) {
@@ -153,6 +152,19 @@ const RemoveWishlistEmail = () => {
         '{unsubscribe}: Use this tag to display the unsubscribe link',
     ];
 
+    const TimeOptions = [
+        { label: "1 min", value: "1" },
+        { label: "5 min", value: "5" },
+        { label: "10 min", value: "10" },
+        { label: "20 min", value: "20" },
+        { label: "30 min", value: "30" },
+        { label: "45 min", value: "45" },
+        ...Array.from({ length: 12 }, (_, i) => ({
+            label: `${i + 1} Hour`,
+            value: `${(i + 1) * 60}`
+        }))
+    ];
+
     const onDisplaySettings = (
         <>
             <div className={'fullContainerPage-inner-left-title'}>
@@ -186,12 +198,20 @@ const RemoveWishlistEmail = () => {
                         onChange={(value) => handleChange("subject", value)}
                     />
 
-                    <TextField
-                        label={<Text variant="headingSm" as="h6">Time (in mins.)</Text>}
-                        value={emailSetting?.time}
+                    {/*<TextField*/}
+                    {/*    label={<Text variant="headingSm" as="h6">Time (in mins.)</Text>}*/}
+                    {/*    value={emailSetting?.time}*/}
+                    {/*    onChange={(value) => handleChange('time', value)}*/}
+                    {/*    type={'number'}*/}
+                    {/*    min={0}*/}
+                    {/*    helpText={'Set the delay in minutes for sending the email after the item is removed.'}*/}
+                    {/*/>*/}
+
+                    <Select
+                        label={<Text variant="headingSm" as="h6">Time</Text>}
+                        options={TimeOptions}
                         onChange={(value) => handleChange('time', value)}
-                        type={'number'}
-                        min={0}
+                        value={emailSetting?.time}
                         helpText={'Set the delay in minutes for sending the email after the item is removed.'}
                     />
                 </InlineGrid>

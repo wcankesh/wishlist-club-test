@@ -1,9 +1,7 @@
 import React, {Fragment, useCallback, useEffect, useRef, useState} from 'react';
 import {BlockStack, Box, Button, Card, Checkbox, InlineGrid, Text, TextField, FullscreenBar, InlineStack} from "@shopify/polaris";
 import {useNavigate} from "react-router-dom";
-import {useSelector} from "react-redux";
 import {apiService, baseUrl, capitalizeMessage, isChecked, templateJson, toggleFlag} from "../../../utils/Constant";
-import ToastMessage from "../../Comman/ToastMessage"
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
 import {AppDocsLinks} from "../../../utils/AppDocsLinks";
 import EmailTemplateMsg from "../../Comman/EmailTemplateMsg";
@@ -12,7 +10,7 @@ import {Modal, TitleBar, useAppBridge} from "@shopify/app-bridge-react";
 import {Icons} from "../../../utils/Icons";
 
 const initialState = {
-    inventory: '0',
+    inventory: '1',
     is_enable: 0,
     subject: "",
 };
