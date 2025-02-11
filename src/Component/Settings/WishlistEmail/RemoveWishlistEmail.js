@@ -109,7 +109,7 @@ const RemoveWishlistEmail = () => {
     }, [emailSetting]);
 
     const onBack = () => {
-        navigate(`${baseUrl}/settings/email`)
+        navigate(`${baseUrl}/settings/email?step=2`)
     }
 
     const exportHtml = () => {
@@ -203,6 +203,7 @@ const RemoveWishlistEmail = () => {
         <Fragment>
             <Modal open={true} onHide={onBack} variant={'max'}>
                 <TitleBar title={"Remove Wishlist Email"}>
+                    <button onClick={onBack}>{'Cancel'}</button>
                     <button variant="primary" loading={isLoading && ''}
                             onClick={() => saveEmailSetting()}>{'Save'}</button>
                 </TitleBar>

@@ -12,6 +12,7 @@ import {RenderLoading} from "../../../utils/RenderLoading";
 import {initialKeys} from "./Common";
 import SwitchButton from "../../Comman/SwitchButton";
 import {Icons} from "../../../utils/Icons";
+import qs from "qs";
 
 const initialState = {
     subject: "",
@@ -30,6 +31,8 @@ const initialState = {
 const initialStateError = {from_email: ""};
 
 const WishlistEmail = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlStep = urlParams.get("step") || '1';
     const navigate = useNavigate();
     const [emailSetting, setEmailSetting] = useState(initialState);
     const [emailSettingError, setEmailSettingError] = useState(initialStateError);
@@ -38,7 +41,7 @@ const WishlistEmail = () => {
     const [isError, setIsError] = useState(false);
     const [isErrorServer, setIsErrorServer] = useState(false);
     const [message, setMessage] = useState("");
-    const [selectedOption, setSelectedOption] = useState("1");
+    const [selectedOption, setSelectedOption] = useState(urlStep);
     const Customization_Email = [
         {
             title: "Wishlist Items",
@@ -253,6 +256,12 @@ const WishlistEmail = () => {
         navigate(`${baseUrl}/settings/email/email-customization?active_email_tab=${link}`);
     };
 
+    const onChangeTab = (event) => {
+        const params = Object.fromEntries(urlParams);
+        navigate({pathname: `${baseUrl}/settings/email`, search: qs.stringify({...params, step: event[0]})});
+        setSelectedOption(event[0]);
+    }
+
     return (
         <Page title={"Wishlist Email"} backAction={{content: 'Settings', onAction: onBack}}>
             <div className="sticky-component">
@@ -267,11 +276,11 @@ const WishlistEmail = () => {
                     <Layout.Section variant="oneThird">
                         {isLoading ? <Card>{RenderLoading.commonParagraph}</Card> :
                             <Card padding={"100"}>
-                                <OptionList onChange={(event) => setSelectedOption(event[0])} selected={selectedOption}
+                                <OptionList onChange={(event) => onChangeTab(event)} selected={selectedOption}
                                             options={[
-                                                {value: "1", label: "From Email & Name"},
-                                                {value: "2", label: "Email Customization"},
-                                                {value: "3", label: "Wishlist Notifications"},
+                                                {value: '1', label: "From Email & Name"},
+                                                {value: '2', label: "Email Customization"},
+                                                {value: '3', label: "Wishlist Notifications"},
                                             ]}/>
                             </Card>
                         }
@@ -279,7 +288,7 @@ const WishlistEmail = () => {
 
                     {isLoading ? <Layout.Section><Card>{RenderLoading.commonParagraph}</Card></Layout.Section> :
                         <Layout.Section>
-                            {selectedOption === "1" &&
+                            {selectedOption === '1' &&
                             <Card padding={"0"}>
                                 <Box padding={"400"}>
                                     <BlockStack gap={"100"}>
@@ -315,7 +324,7 @@ const WishlistEmail = () => {
                                 </Box>
                             </Card>}
 
-                            {selectedOption === "2" &&
+                            {selectedOption === '2' &&
                             <BlockStack gap={'300'}>
                                 <Card padding={"0"}>
                                     <Box padding={"400"}>
@@ -456,7 +465,7 @@ const WishlistEmail = () => {
                             </BlockStack>
                             }
 
-                            {selectedOption === "3" &&
+                            {selectedOption === '3' &&
                             <Card>
                                 <BlockStack gap={"400"}>
                                     <BlockStack gap={"100"}>

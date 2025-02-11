@@ -102,7 +102,7 @@ const AddedWishlistEmail = () => {
     }, [emailSetting]);
 
     const onBack = () => {
-        navigate(`${baseUrl}/settings/email`)
+        navigate(`${baseUrl}/settings/email?step=2`)
     }
 
     const exportHtml = () => {
@@ -196,6 +196,7 @@ const AddedWishlistEmail = () => {
         <Fragment>
             <Modal open={true} onHide={onBack} variant={'max'}>
                 <TitleBar title={"Added to Wishlist"}>
+                    <button onClick={onBack}>{'Cancel'}</button>
                     <button variant="primary" loading={isLoading && ''}
                             onClick={() => saveEmailSetting("", "", true)}>{'Save'}</button>
                 </TitleBar>

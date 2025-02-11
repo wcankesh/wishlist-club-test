@@ -160,6 +160,20 @@ ul.PlanPriceList li.ppl_item .pplContent .icons {align-items: center;display: fl
 .custom-badge.badge-type-5 {color: #c41d7f;background: #fff0f6;border-color: #ffadd2;}
 .custom-badge.badge-type-6 {color: #08979c;background: #e6fffb;border-color: #87e8de;}
 .custom-badge.badge-type-7 {color: #d4380d;background: #fff2e8;border-color: #ffbb96;min-width: 80px !important;}
+.custom-badge.badge-type-8 {color: #0050b3; background: #e6f7ff; border-color: #91d5ff;}
+.custom-badge.badge-type-9 {color: #7cb305; background: #fcffe6; border-color: #d3f261;}
+.custom-badge.badge-type-10 {color: #ad2102; background: #fff1f0; border-color: #ff7875;}
+.custom-badge.badge-type-11 {color: #722ed1; background: #f9f0ff; border-color: #d3adf7;}
+.custom-badge.badge-type-12 {color: #13c2c2; background: #e6fffb; border-color: #87e8de;}
+.custom-badge.badge-type-13 {color: #eb2f96; background: #fff0f6; border-color: #ffadd2;}
+.custom-badge.badge-type-14 {color: #fa541c; background: #fff7e6; border-color: #ffd591;}
+.custom-badge.badge-type-15 {color: #237804; background: #f6ffed; border-color: #b7eb8f;}
+.custom-badge.badge-type-16 {color: #5c0011; background: #fff1f0; border-color: #ffa39e;}
+.custom-badge.badge-type-17 {color: #002766; background: #e6f7ff; border-color: #91d5ff;}
+.custom-badge.badge-type-18 {color: #9e1068; background: #fff0f6; border-color: #ff85c0;}
+.custom-badge.badge-type-19 {color: #096dd9; background: #e6f7ff; border-color: #69c0ff;}
+.custom-badge.badge-type-20 {color: #391085; background: #f9f0ff; border-color: #d3adf7;}
+
 .Polaris-Page--narrowWidth {max-width: 47rem;}
 .Polaris-Label__Text:has(.Polaris-Label-full), .Polaris-Label:has(.Polaris-Label-full) { width: 100%; }
 .reb-card-heading-boding{cursor: pointer;}

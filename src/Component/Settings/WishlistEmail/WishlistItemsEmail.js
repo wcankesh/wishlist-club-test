@@ -228,7 +228,7 @@ const WishlistItemsEmail = () => {
     }
 
     const onBack = () => {
-        navigate(`${baseUrl}/settings/email`)
+        navigate(`${baseUrl}/settings/email?step=2`)
     }
 
     const onBlur = (e) => {

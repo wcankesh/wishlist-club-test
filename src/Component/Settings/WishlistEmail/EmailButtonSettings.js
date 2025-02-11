@@ -40,7 +40,7 @@ const EmailButtonSettings = () => {
     const [emailId, setEmailId] = useState(null)
 
     const onBack = () => {
-        navigate(`${baseUrl}/settings/email`)
+        navigate(`${baseUrl}/settings/email?step=2`)
     }
 
     useEffect(() => {

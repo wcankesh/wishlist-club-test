@@ -76,7 +76,7 @@ const LowStockAlertEmail = () => {
                 },
                 "low_stock_setting": {
                     "is_enable": emailSetting?.is_enable,
-                    "inventory": emailSetting?.time,
+                    "inventory": emailSetting?.inventory,
                     "low_stock_wishlist_mail_subject": emailSetting?.subject,
                 },
                 "low_stock_wishlist_mail_json": JSON.stringify(design),
@@ -106,13 +106,7 @@ const LowStockAlertEmail = () => {
     }, [emailSetting]);
 
     const onBack = () => {
-        navigate(`${baseUrl}/settings/email`)
-    }
-
-    const handleSwitch = async (e) => {
-        const {name, value, checked} = e.target;
-        setEmailSetting({...emailSetting, [name]: value})
-        saveEmailSetting('is_enable', value, false)
+        navigate(`${baseUrl}/settings/email?step=2`)
     }
 
     const exportHtml = () => {
@@ -191,10 +185,10 @@ const LowStockAlertEmail = () => {
 
                     <TextField
                         label={<Text variant="headingSm" as="h6">Stock Count(s)</Text>}
-                        vvalue={emailSetting?.inventory}
+                        value={emailSetting?.inventory}
                         onChange={(value) => handleChange('inventory', value)}
                         type={'number'}
-                        min={0}
+                        min={1}
                         helpText={'Send the email once the low stock threshold is met.'}
                     />
                 </InlineGrid>
@@ -207,27 +201,10 @@ const LowStockAlertEmail = () => {
         <Fragment>
             <Modal open={true} onHide={onBack} variant={'max'}>
                 <TitleBar title={"Low Stock Alert Email"}>
-                    <button variant="primary" loading={isLoading && ''}
-                            onClick={() => saveEmailSetting()}>{'Save'}</button>
+                    <button onClick={onBack}>{'Cancel'}</button>
+                    <button variant="primary" loading={isLoading && ''} onClick={() => saveEmailSetting()}>{'Save'}</button>
                 </TitleBar>
                 <div className="fullScreen fullContainerPage">
-                    {/*<div className="fullContainerPage-header">*/}
-                    {/*    <FullscreenBar onAction={onBack}>*/}
-                    {/*        <div className={'FullscreenBar-main-div'}>*/}
-                    {/*            <div className={'FullscreenBar-main-title-div'}>*/}
-                    {/*                <Text variant="headingLg" as="span">{"Remove Wishlist Email"}</Text>*/}
-                    {/*            </div>*/}
-                    {/*            <InlineStack gap={'150'}>*/}
-                    {/*                <Button variant="primary"*/}
-                    {/*                        onClick={() => saveEmailSetting("", "", true)}*/}
-                    {/*                        loading={isLoading}*/}
-                    {/*                >*/}
-                    {/*                    Save*/}
-                    {/*                </Button>*/}
-                    {/*            </InlineStack>*/}
-                    {/*        </div>*/}
-                    {/*    </FullscreenBar>*/}
-                    {/*</div>*/}
                     <div className="fullContainerPage-inner">
                         <div className="fullContainerPage-inner-left">
                             {onDisplaySettings}

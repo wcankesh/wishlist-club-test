@@ -95,7 +95,7 @@ const RestockAlertEmail = () => {
     const [isConfirmLoading,setIsConfirmLoading] = useState(false);
 
     const onBack = () => {
-        navigate(`${baseUrl}/settings/email`)
+        navigate(`${baseUrl}/settings/email?step=2`)
     }
 
     useEffect(() => {
