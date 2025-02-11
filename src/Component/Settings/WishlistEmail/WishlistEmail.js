@@ -75,7 +75,7 @@ const WishlistEmail = () => {
             inputs: [
                 {
                     title: "Added to Wishlist",
-                    description: "Great choice! This item has been successfully added to your wishlist. You can easily find it later and purchase when you're ready. Don't wait too long—popular items sell out fast!",
+                    description: "Customize email notifications sent to customers when they add products to their wishlist, keeping them engaged.",
                     path: "settings/email/restock-alert",
                     name: "is_email_reminder_on_off_restock",
                     value: emailSetting?.add_wishlist_setting?.is_enable,
@@ -84,7 +84,7 @@ const WishlistEmail = () => {
                 },
                 {
                     title: "Removed from Wishlist",
-                    description: "This item has been removed from your wishlist. Changed your mind? No worries! You can always add it back to keep track of your favorite products.",
+                    description: "Personalize emails to inform customers about items they’ve removed from their wishlist for a tailored experience.",
                     path: "settings/email/restock-alert",
                     name: "is_email_reminder_on_off_restock",
                     value: emailSetting?.remove_wishlist_setting?.is_enable,
@@ -98,7 +98,7 @@ const WishlistEmail = () => {
             inputs: [
                 {
                     title: "Abandonment Reminder",
-                    description: "Still thinking it over? The items in your wishlist are waiting for you, but they might not be available for long. Complete your purchase now before they sell out!",
+                    description: "Design automated email reminders to nudge customers about their wishlist items and boost conversions.",
                     path: "settings/email/restock-alert",
                     name: "is_email_reminder_on_off_restock",
                     value: emailSetting?.abandonment_reminder_setting?.is_enable,
@@ -113,7 +113,7 @@ const WishlistEmail = () => {
 
                 {
                     title: "Low Stock Alert",
-                    description: "Only a few left! This item is in high demand and stock is running low. Secure yours now before it's gone for good!",
+                    description: "Create custom email alerts to inform customers when their wishlist items are low in stock, driving urgency.",
                     path: "settings/email/restock-alert",
                     name: "is_email_reminder_on_off_restock",
                     value: emailSetting?.low_stock_setting?.is_enable,
@@ -422,8 +422,7 @@ const WishlistEmail = () => {
                                                             <BlockStack gap={"100"}>
                                                                 <InlineStack gap={'150'} align={'start'}
                                                                              blockAlign={'center'}>
-                                                                    <Text fontWeight='semibold' as={"span"}>Wishlist
-                                                                        Report Setting</Text>
+                                                                    <Text fontWeight='semibold' as={"span"}>Wishlist Report Setting</Text>
                                                                     <SwitchButton
                                                                         checked={emailSetting?.wishlist_report_setting?.is_enable == 1}
                                                                         onChange={() => onChangeReportWishlist('is_enable', toggleFlag(emailSetting?.wishlist_report_setting?.is_enable))}
@@ -440,10 +439,7 @@ const WishlistEmail = () => {
                                                                         value={emailSetting?.wishlist_report_setting?.type}
                                                                     />
                                                                 </InlineStack>
-                                                                <Text tone={"subdued"} as={"span"}>wishlist_report_setting
-                                                                    Only a few left! This item is in high demand and
-                                                                    stock is running low. Secure yours now before it's
-                                                                    gone for good!</Text>
+                                                                <Text tone={"subdued"} as={"span"}>Tailor email summaries with detailed wishlist insights to help you optimize customer engagement and sales.</Text>
                                                             </BlockStack>
                                                         </InlineStack>
                                                         {isLoading ? <Badge>

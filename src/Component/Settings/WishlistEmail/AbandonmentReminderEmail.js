@@ -166,21 +166,30 @@ const AbandonmentReminderEmail = () => {
                         label={<Text variant="headingSm" as="h6">Enable Email</Text>}
                         checked={isChecked(emailSetting?.is_enable)}
                         onChange={(value) => handleChange("is_enable", toggleFlag(emailSetting?.is_enable))}
-                        helpText={"Enable email notifications for added wishlist items"}
+                        helpText={"Notify customers about wishlist items they haven’t purchased yet."}
                         name={"is_enable"}
                     />
 
-                    <TextField label="Email subject"
-                               value={emailSetting?.subject}
-                               helpText={"Add this {shop_name} {customer_name} variable"}
-                               onChange={(value) => handleChange("subject", value)}
-                    />
                     <TextField
-                        label="Days"
+                        label={<Text variant="headingSm" as="h6">Email Subject</Text>}
+                        value={emailSetting?.subject}
+                        helpText={
+                            <>
+                                {"{customer_name}, don’t forget about your wishlist items!"}
+                                <br />
+                                {"You can include these variables in your subject: {shop_name}, {customer_name}."}
+                            </>
+                        }
+                        onChange={(value) => handleChange("subject", value)}
+                    />
+
+                    <TextField
+                        label={<Text variant="headingSm" as="h6">Days</Text>}
                         value={emailSetting?.days}
-                        onChange={(value) => handleChange('time', value)}
+                        onChange={(value) => handleChange('days', value)}
                         type={'number'}
                         min={0}
+                        helpText={'Set the delay for sending the email after the wishlist item is abandoned for specific day(s).'}
                     />
                 </InlineGrid>
             </Box>

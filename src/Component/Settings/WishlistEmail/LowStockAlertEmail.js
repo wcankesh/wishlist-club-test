@@ -172,23 +172,33 @@ const LowStockAlertEmail = () => {
                         label={<Text variant="headingSm" as="h6">Enable Email</Text>}
                         checked={isChecked(emailSetting?.is_enable)}
                         onChange={(value) => handleChange("is_enable", toggleFlag(emailSetting?.is_enable))}
-                        helpText={"Enable email notifications for added wishlist items"}
+                        helpText={"Notify customers about wishlist items they haven’t purchased yet."}
                         name={"is_enable"}
                     />
 
-                    <TextField label="Email subject"
-                               value={emailSetting?.subject}
-                               helpText={"Add this {shop_name} {customer_name} variable"}
-                               onChange={(value) => handleChange("subject", value)}
-                    />
                     <TextField
-                        label="Time"
-                        value={emailSetting?.inventory}
+                        label={<Text variant="headingSm" as="h6">Email Subject</Text>}
+                        value={emailSetting?.subject}
+                        onChange={(value) => handleChange("subject", value)}
+                        helpText={
+                            <>
+                                {"Hurry, {customer_name}! Your wishlist item is almost sold out."}
+                                <br />
+                                {"You can include these variables in your subject: {shop_name}, {customer_name}."}
+                            </>
+                        }
+                    />
+
+                    <TextField
+                        label={<Text variant="headingSm" as="h6">Stock Count(s)</Text>}
+                        vvalue={emailSetting?.inventory}
                         onChange={(value) => handleChange('inventory', value)}
                         type={'number'}
                         min={0}
+                        helpText={'Send the email once the low stock threshold is met.'}
                     />
                 </InlineGrid>
+
             </Box>
         </>
     );
@@ -248,7 +258,7 @@ const LowStockAlertEmail = () => {
                                             ref={editorRef}
                                             exportHtml={exportHtml}
                                             onLoad={onLoad}
-                                            style={{height: 600}}
+                                            style={{ height: 600 }}
                                             mailTemplate={mailTemplateJson}
                                             onChange={onChange}
                                         />

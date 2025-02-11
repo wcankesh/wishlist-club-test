@@ -21,49 +21,28 @@ const ColorInput = ({ name,value, onChange, label }) => {
     //     return () => document.removeEventListener("mousedown", handleClickOutside);
     // });
 
-    console.log("value", value)
+
+    const handleChange = (e) => {
+        const { value } = e.target;
+        const formattedValue = `#${value.replaceAll(' ', '').replace(/^#*/, '').toUpperCase()}`; // Ensures # is included and value is capitalized
+        onChange({
+            target: {name: name, value: formattedValue,},
+        });
+    };
 
 
     return (
         <div>
             <div className="Polaris-Labelled__LabelWrapper">
                 <div className="Polaris-Label">
-                    <label className="Polaris-Label__Text" htmlFor={`color${uniqId}picker`}>
-                        {label}
-                    </label>
+                    <label className="Polaris-Label__Text" htmlFor={`color${uniqId}picker`}>{label}</label>
                 </div>
             </div>
 
 
             <div className="color_picker">
-                <input
-                    type="color"
-                    name={name}
-                    id={`color${uniqId}picker`}
-                    value={value}
-                    onChange={(e) =>
-                        onChange({
-                            target: {
-                                name: e.target.name,
-                                value: `#${e.target.value.substring(1)}`, // Ensures # is included
-                            },
-                        })
-                    }
-                />
-                <input
-                    className="lbl-color"
-                    value={value}
-                    type="text"
-                    name={name}
-                    onChange={(e) =>
-                        onChange({
-                            target: {
-                                name: e.target.name,
-                                value: `#${e.target.value.replaceAll(' ', '').replace(/^#*/, '')}`, // Ensures # is included
-                            },
-                        })
-                    }
-                />
+                <input type="color" name={name} id={`color${uniqId}picker`} value={value.toUpperCase()} onChange={handleChange}/>
+                <input className="lbl-color" value={value.toUpperCase()} type="text" name={name} onChange={handleChange}/>
             </div>
 
             {/*<div className="color_picker" onClick={handleClickInside} ref={myRef}>*/}

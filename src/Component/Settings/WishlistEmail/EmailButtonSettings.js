@@ -129,8 +129,11 @@ const EmailButtonSettings = () => {
 
     return (
         <Fragment>
-            <Page title={"Button settings"} backAction={{content: 'Settings', onAction: onBack}}
-                  secondaryActions={
+            <Page
+                title={"Button settings"}
+                subtitle={'Manage View Button Settings specifically for Added to Wishlist, Removed from Wishlist, Abandonment Reminder, and Low Stock Alert.'}
+                backAction={{content: 'Settings', onAction: onBack}}
+                  primaryAction={
                       <Fragment>
                           <Button variant="primary" onClick={() => saveEmailSetting("", true)}
                                   loading={isLoading}> Save</Button>

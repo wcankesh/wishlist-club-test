@@ -169,21 +169,30 @@ const RemoveWishlistEmail = () => {
                         label={<Text variant="headingSm" as="h6">Enable Email</Text>}
                         checked={isChecked(emailSetting?.is_enable)}
                         onChange={(value) => handleChange("is_enable", toggleFlag(emailSetting?.is_enable))}
-                        helpText={"Enable email notifications for added wishlist items"}
+                        helpText={"Notify customers when they remove an item from their wishlist."}
                         name={"is_enable"}
                     />
 
-                    <TextField label="Email subject"
-                               value={emailSetting?.subject}
-                               helpText={"Add this {shop_name} {customer_name} variable"}
-                               onChange={(value) => handleChange("subject", value)}
-                    />
                     <TextField
-                        label="Time"
+                        label={<Text variant="headingSm" as="h6">Email Subject</Text>}
+                        value={emailSetting?.subject}
+                        helpText={
+                            <>
+                                {"{customer_name}, you removed an item from your wishlist."}
+                                <br />
+                                {"You can include these variables in your subject: {shop_name}, {customer_name}."}
+                            </>
+                        }
+                        onChange={(value) => handleChange("subject", value)}
+                    />
+
+                    <TextField
+                        label={<Text variant="headingSm" as="h6">Time (in mins.)</Text>}
                         value={emailSetting?.time}
                         onChange={(value) => handleChange('time', value)}
                         type={'number'}
                         min={0}
+                        helpText={'Set the delay in minutes for sending the email after the item is removed.'}
                     />
                 </InlineGrid>
             </Box>

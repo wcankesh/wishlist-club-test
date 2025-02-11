@@ -162,21 +162,30 @@ const AddedWishlistEmail = () => {
                         label={<Text variant="headingSm" as="h6">Enable Email</Text>}
                         checked={isChecked(emailSetting?.is_enable)}
                         onChange={(value) => handleChange("is_enable", toggleFlag(emailSetting?.is_enable))}
-                        helpText={"Enable email notifications for added wishlist items"}
+                        helpText={"Turn this on to notify customers when they add an item to their wishlist."}
                         name={"is_enable"}
                     />
 
-                    <TextField label={<Text variant="headingSm" as="h6">Email subject</Text>}
-                               value={emailSetting?.subject}
-                               helpText={"Add this {shop_name} {customer_name} variable"}
-                               onChange={(value) => handleChange("subject", value)}
+                    <TextField
+                        label={<Text variant="headingSm" as="h6">Email Subject</Text>}
+                        value={emailSetting?.subject}
+                        helpText={
+                            <>
+                                {"{customer_name}, thank you for adding to your wishlist!"}
+                                <br />
+                                {"You can include these variables in your subject: {shop_name}, {customer_name}."}
+                            </>
+                        }
+                        onChange={(value) => handleChange("subject", value)}
                     />
+
                     <TextField
                         label={<Text variant="headingSm" as="h6">Time (in mins.)</Text>}
                         value={emailSetting?.time}
                         onChange={(value) => handleChange('time', value)}
                         type={'number'}
                         min={0}
+                        helpText={'Set the delay in minutes to send the email after the item is added to wishlist.'}
                     />
                 </InlineGrid>
             </Box>
@@ -186,7 +195,7 @@ const AddedWishlistEmail = () => {
     return (
         <Fragment>
             <Modal open={true} onHide={onBack} variant={'max'}>
-                <TitleBar title={"Added to Wishlist Email"}>
+                <TitleBar title={"Added to Wishlist"}>
                     <button variant="primary" loading={isLoading && ''}
                             onClick={() => saveEmailSetting("", "", true)}>{'Save'}</button>
                 </TitleBar>
