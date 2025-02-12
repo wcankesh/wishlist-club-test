@@ -1,18 +1,17 @@
 import React, {Fragment, useCallback, useEffect, useRef, useState} from 'react';
 import {BlockStack, Box, Button, Card, Checkbox, InlineGrid, Select, Text, TextField} from "@shopify/polaris";
 import {useNavigate} from "react-router-dom";
-import {useSelector} from "react-redux";
 import {apiService, baseUrl, capitalizeMessage, isChecked, templateJson, toggleFlag} from "../../../utils/Constant";
-import ToastMessage from "../../Comman/ToastMessage"
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
 import {AppDocsLinks} from "../../../utils/AppDocsLinks";
 import EmailTemplateMsg from "../../Comman/EmailTemplateMsg";
 import EmailEditorComponent from "../../Comman/EmailEditorComponent";
 import {Modal, TitleBar, useAppBridge} from "@shopify/app-bridge-react";
 import {Icons} from "../../../utils/Icons";
+import {RenderLoading} from "../../../utils/RenderLoading";
 
 const initialState = {
-    days: '0',
+    days: '1',
     is_enable: 0,
     subject: "",
 };
@@ -23,7 +22,7 @@ const AbandonmentReminderEmail = () => {
     const navigate = useNavigate();
     const [emailSetting, setEmailSetting] = useState(initialState);
     const [allEmailSetting, setAllEmailSetting] = useState({});
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState('')
     const [isError, setIsError] = useState(false)
     const [message, setMessage] = useState("")
     const [mailTemplateJson, setMailTemplateJson] = useState({});
@@ -38,6 +37,7 @@ const AbandonmentReminderEmail = () => {
     }, []);
 
     const EmailSetting = async () => {
+        setIsLoading('details');
         const response = await apiService.emailSetting();
         if (response.status === 200) {
             setAllEmailSetting(response.data);
@@ -50,20 +50,22 @@ const AbandonmentReminderEmail = () => {
             }
             setEmailSetting((state) => ({...state, ...updateState}))
             setMailTemplateJson(JSON.parse(response.data && response.data.abandonment_reminder_mail_json) || templateJson);
-
+            setIsLoading('');
         } else if (response.status === 500) {
             setMessage(capitalizeMessage(response.message))
             setIsError(true)
             shopify.toast.show(capitalizeMessage(response.message), {isError: true})
+            setIsLoading('');
         } else {
             setMessage(capitalizeMessage(response.message))
             setIsError(true)
             shopify.toast.show(capitalizeMessage(response.message), {isError: true})
+            setIsLoading('');
         }
     }
 
     const saveEmailSetting = async () => {
-        setIsLoading(true);
+        setIsLoading('save');
 
         editorRef.current.editor.exportHtml(async (data) => {
             const {design, html} = data;
@@ -85,17 +87,17 @@ const AbandonmentReminderEmail = () => {
 
             const response = await apiService.onUpdateV2EmailSetting(payload, emailSetting.id);
             if (response.status === 200) {
-                setIsLoading(false);
                 shopify.toast.show(capitalizeMessage(response.message))
+                setIsLoading('');
             } else if (response.status === 500) {
                 setMessage(capitalizeMessage(response.message));
-                setIsLoading(false);
                 shopify.toast.show(capitalizeMessage(response.message), {isError: true})
+                setIsLoading('');
             } else {
                 setMessage(capitalizeMessage(response.message));
                 setIsError(true);
-                setIsLoading(false);
                 shopify.toast.show(capitalizeMessage(response.message), {isError: true})
+                setIsLoading('');
             }
         });
     }
@@ -165,45 +167,47 @@ const AbandonmentReminderEmail = () => {
                 ) : ''}
             </div>
             <Box padding={'400'}>
-                <InlineGrid columns={{xs: 1, sm: 1, md: 1, lg: 1, xl: 1}} gap={'300'}>
-                    <Checkbox
-                        label={<Text variant="headingSm" as="h6">Enable Email</Text>}
-                        checked={isChecked(emailSetting?.is_enable)}
-                        onChange={(value) => handleChange("is_enable", toggleFlag(emailSetting?.is_enable))}
-                        helpText={"Notify customers about wishlist items they haven’t purchased yet."}
-                        name={"is_enable"}
-                    />
+                {isLoading === 'details' ? RenderLoading.commonParagraph :
+                    <InlineGrid columns={{xs: 1, sm: 1, md: 1, lg: 1, xl: 1}} gap={'300'}>
+                        <Checkbox
+                            label={<Text variant="headingSm" as="h6">Enable Email</Text>}
+                            checked={isChecked(emailSetting?.is_enable)}
+                            onChange={(value) => handleChange("is_enable", toggleFlag(emailSetting?.is_enable))}
+                            helpText={"Notify customers about wishlist items they haven’t purchased yet."}
+                            name={"is_enable"}
+                        />
 
-                    <TextField
-                        label={<Text variant="headingSm" as="h6">Email Subject</Text>}
-                        value={emailSetting?.subject}
-                        helpText={
-                            <>
-                                {"{customer_name}, don’t forget about your wishlist items!"}
-                                <br />
-                                {"You can include these variables in your subject: {shop_name}, {customer_name}."}
-                            </>
-                        }
-                        onChange={(value) => handleChange("subject", value)}
-                    />
+                        <TextField
+                            label={<Text variant="headingSm" as="h6">Email Subject</Text>}
+                            value={emailSetting?.subject}
+                            helpText={
+                                <>
+                                    {"{customer_name}, don’t forget about your wishlist items!"}
+                                    <br/>
+                                    {"You can include these variables in your subject: {shop_name}, {customer_name}."}
+                                </>
+                            }
+                            onChange={(value) => handleChange("subject", value)}
+                        />
 
-                    {/*<TextField*/}
-                    {/*    label={<Text variant="headingSm" as="h6">Days</Text>}*/}
-                    {/*    value={emailSetting?.days}*/}
-                    {/*    onChange={(value) => handleChange('days', value)}*/}
-                    {/*    type={'number'}*/}
-                    {/*    min={0}*/}
-                    {/*    helpText={'Set the delay for sending the email after the wishlist item is abandoned for specific day(s).'}*/}
-                    {/*/>*/}
+                        {/*<TextField*/}
+                        {/*    label={<Text variant="headingSm" as="h6">Days</Text>}*/}
+                        {/*    value={emailSetting?.days}*/}
+                        {/*    onChange={(value) => handleChange('days', value)}*/}
+                        {/*    type={'number'}*/}
+                        {/*    min={0}*/}
+                        {/*    helpText={'Set the delay for sending the email after the wishlist item is abandoned for specific day(s).'}*/}
+                        {/*/>*/}
 
-                    <Select
-                        label={<Text variant="headingSm" as="h6">Days</Text>}
-                        options={DayOptions}
-                        onChange={(value) => handleChange('days', value)}
-                        value={emailSetting?.days}
-                        helpText={'Set the delay for sending the email after the wishlist item is abandoned for specific day(s).'}
-                    />
-                </InlineGrid>
+                        <Select
+                            label={<Text variant="headingSm" as="h6">Days</Text>}
+                            options={DayOptions}
+                            onChange={(value) => handleChange('days', value)}
+                            value={emailSetting?.days}
+                            helpText={'Set the delay for sending the email after the wishlist item is abandoned for specific day(s).'}
+                        />
+                    </InlineGrid>
+                }
             </Box>
         </>
     );
@@ -213,8 +217,8 @@ const AbandonmentReminderEmail = () => {
             <Modal open={true} onHide={onBack} variant={'max'}>
                 <TitleBar title={"Abandonment Reminder Email"}>
                     <button onClick={onBack}>{'Cancel'}</button>
-                    <button variant="primary" loading={isLoading && ''}
-                            onClick={() => saveEmailSetting("", "", true)}>{'Save'}</button>
+                    <button variant="primary" loading={isLoading === 'save' && ''}
+                            onClick={() => saveEmailSetting()}>{'Save'}</button>
                 </TitleBar>
                 <div className="fullContainerPage">
                     <div className="fullContainerPage-inner">

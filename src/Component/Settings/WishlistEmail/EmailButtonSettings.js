@@ -7,6 +7,7 @@ import {useNavigate} from "react-router-dom";
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
 import {AppDocsLinks} from "../../../utils/AppDocsLinks";
 import {useAppBridge} from "@shopify/app-bridge-react";
+import {RenderLoading} from "../../../utils/RenderLoading";
 
 const initialState = {
     "add_to_cart_button_text": "Add To Cart",
@@ -33,7 +34,7 @@ const EmailButtonSettings = () => {
     const navigate = useNavigate();
     const [emailSetting, setEmailSetting] = useState(initialState);
     const [allEmailSetting, setAllEmailSetting] = useState({});
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState('')
     const [isError, setIsError] = useState(false)
     const [isErrorServer, setIsErrorServer] = useState(false)
     const [message, setMessage] = useState("")
@@ -48,24 +49,27 @@ const EmailButtonSettings = () => {
     }, []);
 
     const EmailSetting = async () => {
+        setIsLoading('details');
         const response = await apiService.emailSetting();
         if (response.status === 200) {
             setAllEmailSetting(response.data);
             setEmailId(response.data?.id)
             const result = response.data && response.data.email_buttons;
             setEmailSetting((state) => ({...state, ...result}))
-
+            setIsLoading('');
         } else if (response.status === 500) {
             shopify.toast.show(capitalizeMessage(response.message), {isError: true})
+            setIsLoading('');
         } else {
             setMessage(capitalizeMessage(response.message))
             setIsError(true)
             shopify.toast.show(capitalizeMessage(response.message), {isError: true})
+            setIsLoading('');
         }
     }
 
     const saveEmailSetting = async () => {
-        setIsLoading(true);
+        setIsLoading('save');
 
         const payload = {
             type: 5,
@@ -78,17 +82,17 @@ const EmailButtonSettings = () => {
 
         const response = await apiService.onUpdateV2EmailSetting(payload, emailId);
         if (response.status === 200) {
-            setIsLoading(false);
             setIsError(false);
             shopify.toast.show(capitalizeMessage(response.message))
+            setIsLoading('');
         } else if (response.status === 500) {
-            setIsLoading(false);
             shopify.toast.show(capitalizeMessage(response.message), {isError: true})
+            setIsLoading('');
         } else {
             setMessage(capitalizeMessage(response.message));
             setIsError(true);
-            setIsLoading(false);
             shopify.toast.show(capitalizeMessage(response.message), {isError: true})
+            setIsLoading('');
         }
     }
 
@@ -135,8 +139,8 @@ const EmailButtonSettings = () => {
                 backAction={{content: 'Settings', onAction: onBack}}
                   primaryAction={
                       <Fragment>
-                          <Button variant="primary" onClick={() => saveEmailSetting("", true)}
-                                  loading={isLoading}> Save</Button>
+                          <Button variant="primary" onClick={() => saveEmailSetting()}
+                                  loading={isLoading === 'save'}> Save</Button>
                       </Fragment>
                   }
             >
@@ -149,68 +153,77 @@ const EmailButtonSettings = () => {
 
                     <Layout.Section variant={"fullWidth"}>
                         <Card padding={"0"}>
-                            <BlockStack gap="0">
-                                {(buttonConfigs || []).map((config, index) => {
-                                   return (
-                                       <React.Fragment key={index}>
-                                        <Box padding="400">
-                                            <BlockStack gap="200">
-                                                <Text as="span" variant="headingMd" fontWeight="medium">
-                                                    {config.title}
-                                                </Text>
-                                                <InlineGrid columns={{xs: 1, sm: 1, md: 1, lg: 2, xl: 3}} gap="150">
-                                                    {config.fields.map((field, fieldIndex) => {
-                                                        return (
-                                                            <React.Fragment key={fieldIndex}>
-                                                                {field.type === "color" ? (
-                                                                    <ColorInput
-                                                                        key={fieldIndex}
-                                                                        label={field.label}
-                                                                        name={field.name}
-                                                                        onChange={onChangeStyle}
-                                                                        value={emailSetting?.[field.name]}
-                                                                    />
-                                                                ) : field.type === "number" ? (
-                                                                    <TextField
-                                                                        key={fieldIndex}
-                                                                        label={field.label}
-                                                                        type="number"
-                                                                        name={field.name}
-                                                                        value={emailSetting?.[field.name]}
-                                                                        onChange={(value) =>
-                                                                            onChangeStyle({
-                                                                                target: {name: field.name, value},
-                                                                            })
-                                                                        }
-                                                                        suffix={field.suffix}
-                                                                        min={field.min}
-                                                                        max={field.max}
-                                                                    />
-                                                                ) : field.type === "text" ? (
-                                                                    <TextField
-                                                                        key={fieldIndex}
-                                                                        label={field.label}
-                                                                        type="text"
-                                                                        name={field.name}
-                                                                        value={emailSetting?.[field.name]}
-                                                                        onChange={(value) =>
-                                                                            onChangeStyle({
-                                                                                target: {name: field.name, value},
-                                                                            })
-                                                                        }
-                                                                    />
-                                                                ) : ''}
-                                                            </React.Fragment>
-                                                        )
-                                                    })}
-                                                </InlineGrid>
-                                            </BlockStack>
-                                        </Box>
-                                           {buttonConfigs.length - 1 !== index ? <Divider/> : ''}
-                                       </React.Fragment>
-                                    )
-                                })}
-                            </BlockStack>
+                            {isLoading === 'details' ? <Box padding={'400'}>{RenderLoading.commonParagraph}</Box> :
+                                <BlockStack gap="0">
+                                    {(buttonConfigs || []).map((config, index) => {
+                                        return (
+                                            <React.Fragment key={index}>
+                                                <Box padding="400">
+                                                    <BlockStack gap="200">
+                                                        <Text as="span" variant="headingMd" fontWeight="medium">
+                                                            {config.title}
+                                                        </Text>
+                                                        <InlineGrid columns={{xs: 1, sm: 1, md: 1, lg: 2, xl: 3}}
+                                                                    gap="150">
+                                                            {config.fields.map((field, fieldIndex) => {
+                                                                return (
+                                                                    <React.Fragment key={fieldIndex}>
+                                                                        {field.type === "color" ? (
+                                                                            <ColorInput
+                                                                                key={fieldIndex}
+                                                                                label={field.label}
+                                                                                name={field.name}
+                                                                                onChange={onChangeStyle}
+                                                                                value={emailSetting?.[field.name]}
+                                                                            />
+                                                                        ) : field.type === "number" ? (
+                                                                            <TextField
+                                                                                key={fieldIndex}
+                                                                                label={field.label}
+                                                                                type="number"
+                                                                                name={field.name}
+                                                                                value={emailSetting?.[field.name]}
+                                                                                onChange={(value) =>
+                                                                                    onChangeStyle({
+                                                                                        target: {
+                                                                                            name: field.name,
+                                                                                            value
+                                                                                        },
+                                                                                    })
+                                                                                }
+                                                                                suffix={field.suffix}
+                                                                                min={field.min}
+                                                                                max={field.max}
+                                                                            />
+                                                                        ) : field.type === "text" ? (
+                                                                            <TextField
+                                                                                key={fieldIndex}
+                                                                                label={field.label}
+                                                                                type="text"
+                                                                                name={field.name}
+                                                                                value={emailSetting?.[field.name]}
+                                                                                onChange={(value) =>
+                                                                                    onChangeStyle({
+                                                                                        target: {
+                                                                                            name: field.name,
+                                                                                            value
+                                                                                        },
+                                                                                    })
+                                                                                }
+                                                                            />
+                                                                        ) : ''}
+                                                                    </React.Fragment>
+                                                                )
+                                                            })}
+                                                        </InlineGrid>
+                                                    </BlockStack>
+                                                </Box>
+                                                {buttonConfigs.length - 1 !== index ? <Divider/> : ''}
+                                            </React.Fragment>
+                                        )
+                                    })}
+                                </BlockStack>
+                            }
                         </Card>
                     </Layout.Section>
                 </Layout>

@@ -8,6 +8,7 @@ import EmailTemplateMsg from "../../Comman/EmailTemplateMsg";
 import EmailEditorComponent from "../../Comman/EmailEditorComponent";
 import {Modal, TitleBar, useAppBridge} from "@shopify/app-bridge-react";
 import {Icons} from "../../../utils/Icons";
+import {RenderLoading} from "../../../utils/RenderLoading";
 
 const initialState = {
     inventory: '1',
@@ -21,7 +22,7 @@ const LowStockAlertEmail = () => {
     const navigate = useNavigate();
     const [emailSetting, setEmailSetting] = useState(initialState);
     const [allEmailSetting, setAllEmailSetting] = useState({});
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState('')
     const [isError, setIsError] = useState(false)
     const [message, setMessage] = useState("")
     const [mailTemplateJson, setMailTemplateJson] = useState({});
@@ -36,6 +37,7 @@ const LowStockAlertEmail = () => {
     }, []);
 
     const EmailSetting = async () => {
+        setIsLoading('details');
         const response = await apiService.emailSetting();
         if (response.status === 200) {
             setAllEmailSetting(response.data);
@@ -48,20 +50,22 @@ const LowStockAlertEmail = () => {
             }
             setEmailSetting((state) => ({...state, ...updateState}))
             setMailTemplateJson(JSON.parse(response.data && response.data.remove_wishlist_mail_json) || templateJson);
-
+            setIsLoading('');
         } else if (response.status === 500) {
             setMessage(capitalizeMessage(response.message))
             setIsError(true)
             shopify.toast.show(capitalizeMessage(response.message), {isError: true})
+            setIsLoading('');
         } else {
             setMessage(capitalizeMessage(response.message))
             setIsError(true)
             shopify.toast.show(capitalizeMessage(response.message), {isError: true})
+            setIsLoading('');
         }
     }
 
     const saveEmailSetting = async () => {
-        setIsLoading(true);
+        setIsLoading('save');
 
         editorRef.current.editor.exportHtml(async (data) => {
             const {design, html} = data;
@@ -83,17 +87,17 @@ const LowStockAlertEmail = () => {
 
             const response = await apiService.onUpdateV2EmailSetting(payload, emailSetting.id);
             if (response.status === 200) {
-                setIsLoading(false);
                 shopify.toast.show(capitalizeMessage(response.message))
+                setIsLoading('');
             } else if (response.status === 500) {
                 setMessage(capitalizeMessage(response.message));
-                setIsLoading(false);
                 shopify.toast.show(capitalizeMessage(response.message), {isError: true})
+                setIsLoading('');
             } else {
                 setMessage(capitalizeMessage(response.message));
                 setIsError(true);
-                setIsLoading(false);
                 shopify.toast.show(capitalizeMessage(response.message), {isError: true})
+                setIsLoading('');
             }
         });
     }
@@ -159,38 +163,39 @@ const LowStockAlertEmail = () => {
                 ) : ''}
             </div>
             <Box padding={'400'}>
-                <InlineGrid columns={{xs: 1, sm: 1, md: 1, lg: 1, xl: 1}} gap={'300'}>
-                    <Checkbox
-                        label={<Text variant="headingSm" as="h6">Enable Email</Text>}
-                        checked={isChecked(emailSetting?.is_enable)}
-                        onChange={(value) => handleChange("is_enable", toggleFlag(emailSetting?.is_enable))}
-                        helpText={"Notify customers about wishlist items they haven’t purchased yet."}
-                        name={"is_enable"}
-                    />
+                {isLoading === 'details' ? RenderLoading.commonParagraph :
+                    <InlineGrid columns={{xs: 1, sm: 1, md: 1, lg: 1, xl: 1}} gap={'300'}>
+                        <Checkbox
+                            label={<Text variant="headingSm" as="h6">Enable Email</Text>}
+                            checked={isChecked(emailSetting?.is_enable)}
+                            onChange={(value) => handleChange("is_enable", toggleFlag(emailSetting?.is_enable))}
+                            helpText={"Notify customers about wishlist items they haven’t purchased yet."}
+                            name={"is_enable"}
+                        />
 
-                    <TextField
-                        label={<Text variant="headingSm" as="h6">Email Subject</Text>}
-                        value={emailSetting?.subject}
-                        onChange={(value) => handleChange("subject", value)}
-                        helpText={
-                            <>
-                                {"Hurry, {customer_name}! Your wishlist item is almost sold out."}
-                                <br />
-                                {"You can include these variables in your subject: {shop_name}, {customer_name}."}
-                            </>
-                        }
-                    />
+                        <TextField
+                            label={<Text variant="headingSm" as="h6">Email Subject</Text>}
+                            value={emailSetting?.subject}
+                            onChange={(value) => handleChange("subject", value)}
+                            helpText={
+                                <>
+                                    {"Hurry, {customer_name}! Your wishlist item is almost sold out."}
+                                    <br/>
+                                    {"You can include these variables in your subject: {shop_name}, {customer_name}."}
+                                </>
+                            }
+                        />
 
-                    <TextField
-                        label={<Text variant="headingSm" as="h6">Stock Count(s)</Text>}
-                        value={emailSetting?.inventory}
-                        onChange={(value) => handleChange('inventory', value)}
-                        type={'number'}
-                        min={1}
-                        helpText={'Send the email once the low stock threshold is met.'}
-                    />
-                </InlineGrid>
-
+                        <TextField
+                            label={<Text variant="headingSm" as="h6">Stock Count(s)</Text>}
+                            value={emailSetting?.inventory}
+                            onChange={(value) => handleChange('inventory', value)}
+                            type={'number'}
+                            min={1}
+                            helpText={'Send the email once the low stock threshold is met.'}
+                        />
+                    </InlineGrid>
+                }
             </Box>
         </>
     );
@@ -200,7 +205,7 @@ const LowStockAlertEmail = () => {
             <Modal open={true} onHide={onBack} variant={'max'}>
                 <TitleBar title={"Low Stock Alert Email"}>
                     <button onClick={onBack}>{'Cancel'}</button>
-                    <button variant="primary" loading={isLoading && ''} onClick={() => saveEmailSetting()}>{'Save'}</button>
+                    <button variant="primary" loading={isLoading === 'save' && ''} onClick={() => saveEmailSetting()}>{'Save'}</button>
                 </TitleBar>
                 <div className="fullScreen fullContainerPage">
                     <div className="fullContainerPage-inner">
