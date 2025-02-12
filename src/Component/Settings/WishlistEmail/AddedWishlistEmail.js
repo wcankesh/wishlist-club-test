@@ -147,6 +147,7 @@ const AddedWishlistEmail = () => {
         "{shop_name} : To show the shop name",
         "{customer_name} : To show customer name ",
         "{product_html} : To show wishlist product (required)",
+        "{product_name} : To show product name ",
         '{unsubscribe}: Use this tag to display the unsubscribe link',
     ];
 
@@ -191,7 +192,7 @@ const AddedWishlistEmail = () => {
                                 <>
                                     {"{customer_name}, thank you for adding to your wishlist!"}
                                     <br/>
-                                    {"You can include these variables in your subject: {shop_name}, {customer_name}."}
+                                    {"You can include these variables in your subject: {shop_name}, {customer_name}, {product_name}."}
                                 </>
                             }
                             onChange={(value) => handleChange("subject", value)}

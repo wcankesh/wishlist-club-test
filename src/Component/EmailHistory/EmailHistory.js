@@ -1,18 +1,19 @@
 import React, {useState, useEffect} from 'react';
 import {
     Page, Layout, Pagination, Badge, Text, Card, IndexTable, EmptySearchResult, Button,
-    Popover, ResourceList, Thumbnail, InlineStack, Box,
+    Popover, ResourceList, Thumbnail, InlineStack, Box, Icon,
 } from "@shopify/polaris"
 import {apiService, capitalizeMessage,} from "../../utils/Constant";
 import ToastMessage from "../Comman/ToastMessage";
 import CustomErrorBanner from "../Comman/CustomErrorBanner";
 import {AppDocsLinks} from "../../utils/AppDocsLinks";
 import {tableLoading} from "../../utils/RenderLoading";
+import {Icons} from "../../utils/Icons";
 
 const EmailHistory = () => {
     const limit = 10;
     const [isLoading, setIsLoading] = useState(false);
-    const [email, setEmail] = useState({lists: []});
+    const [email, setEmail] = useState([]);
     const [EmailPageNo, setEmailPageNo] = useState(1);
     const [emailPage, setEmailPage] = useState(1);
     const [isError, setIsError] = useState(false);
@@ -33,7 +34,7 @@ const EmailHistory = () => {
         }
         const response = await apiService.Email(payload);
         if (response.status === 200) {
-            setEmail(response.data)
+            setEmail(response.data && response.data.lists)
             setEmailPage(response.data.total)
             setIsLoading(false);
             setIsError(false)
@@ -80,7 +81,7 @@ const EmailHistory = () => {
         13: "Weekly or monthly report email",
     };
 
-    const rowMarkup = (email.lists || []).map((z, i) => {
+    const rowMarkup = (email || []).map((z, i) => {
         return (
             <IndexTable.Row key={i} id={i}>
                 <IndexTable.Cell>
@@ -90,30 +91,33 @@ const EmailHistory = () => {
                     <span className={`custom-badge badge-type-${z.type}`}>{emailTypeLabel[z.type]}</span>
                 </IndexTable.Cell>
                 <IndexTable.Cell>
-                    <Popover
-                        active={selectedProductIndex === i}
-                        activator={<Button variant={"plain"} removeUnderline onClick={() => togglePopoverActive(i)}
-                                           disclosure={selectedProductIndex === i ? 'up' : 'down'}>{z.type == 1 || z.type == 2 || z.type == 3 || z.type == 4 || z.type == 7 ? `${z.wishlist_products.length} Products` : `${z.bis_products.length} Products`}</Button>}
-                        onClose={() => togglePopoverActive(i)}
-                    >
-                        <Popover.Pane>
-                            <div className={"remove-cursor"}>
-                                <ResourceList
-                                    items={((z.type == 1 || z.type == 2 || z.type == 3 || z.type == 4 || z.type == 7 ? z.wishlist_products : z.bis_products) || [])}
-                                    renderItem={(item) => {
-                                        const {title} = item
-                                        return (
-                                            <ResourceList.Item>
-                                                <InlineStack blockAlign={"center"} gap="200" wrap={false}>
-                                                    <Thumbnail size={"small"} source={item.image}/>
-                                                    <Text as={"span"}>{title}</Text>
-                                                </InlineStack>
-                                            </ResourceList.Item>
-                                        )
-                                    }}/>
-                            </div>
-                        </Popover.Pane>
-                    </Popover>
+                    <InlineStack align={'center'}>
+                    {z.type === 13 ? <span className="icons"><Icon source={Icons.MinusIcon}/></span>: (
+                        <Popover
+                            active={selectedProductIndex === i}
+                            activator={<Button variant={"plain"} removeUnderline onClick={() => togglePopoverActive(i)}
+                                               disclosure={selectedProductIndex === i ? 'up' : 'down'}>{`${z.products.length} Products`}</Button>}
+                            onClose={() => togglePopoverActive(i)}
+                        >
+                            <Popover.Pane>
+                                <div className={"remove-cursor"}>
+                                    <ResourceList
+                                        items={z.products || []}
+                                        renderItem={(item) => {
+                                            return (
+                                                <ResourceList.Item>
+                                                    <InlineStack blockAlign={"center"} gap="200" wrap={false}>
+                                                        <Thumbnail size={"small"} source={item.image}/>
+                                                        <Text as={"span"}>{item.title}</Text>
+                                                    </InlineStack>
+                                                </ResourceList.Item>
+                                            )
+                                        }}/>
+                                </div>
+                            </Popover.Pane>
+                        </Popover>
+                    )}
+                    </InlineStack>
                 </IndexTable.Cell>
                 <IndexTable.Cell>
                     <Text as={"span"}>{z.created_at}</Text>
@@ -138,14 +142,14 @@ const EmailHistory = () => {
                     <Card padding={"050"}>
                         <IndexTable
                             resourceName={resourceNameEmail}
-                            itemCount={isLoading ? limit : email.lists.length}
+                            itemCount={isLoading ? limit : email.length}
                             emptyState={<EmptySearchResult title={'No email history found'}
                                                            withIllustration={(!isLoading) || !isLoading}/>}
                             loading={isLoading}
                             headings={[
                                 {title: 'Email'},
                                 {title: 'Email Type'},
-                                {title: 'Products'},
+                                {title: 'Products', alignment:'center'},
                                 {title: 'Date'},
                                 {title: 'Email Status'},
                             ]}

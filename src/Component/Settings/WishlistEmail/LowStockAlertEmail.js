@@ -149,6 +149,7 @@ const LowStockAlertEmail = () => {
         "{shop_name} : To show the shop name",
         "{customer_name} : To show customer name ",
         "{product_html} : To show wishlist product (required)",
+        "{product_name} : To show product name ",
         '{unsubscribe}: Use this tag to display the unsubscribe link',
     ];
 
@@ -181,7 +182,7 @@ const LowStockAlertEmail = () => {
                                 <>
                                     {"Hurry, {customer_name}! Your wishlist item is almost sold out."}
                                     <br/>
-                                    {"You can include these variables in your subject: {shop_name}, {customer_name}."}
+                                    {"You can include these variables in your subject: {shop_name}, {customer_name}, {product_name}."}
                                 </>
                             }
                         />
