@@ -245,7 +245,6 @@ const AbandonmentReminderEmail = () => {
                                                            setIsError={setIsError} isError={true} isCardBanner={true}/>
                                         : ""}
                                     <EmailTemplateMsg msgArray={msgArray}/>
-                                    <Card padding={'0'}>
                                         <EmailEditorComponent
                                             ref={editorRef}
                                             exportHtml={exportHtml}
@@ -254,7 +253,6 @@ const AbandonmentReminderEmail = () => {
                                             mailTemplate={mailTemplateJson}
                                             onChange={onChange}
                                         />
-                                    </Card>
                                 </BlockStack>
                             </Box>
                         </div>

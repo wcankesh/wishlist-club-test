@@ -221,13 +221,7 @@ img {display: block;max-width: 100%;height: auto;}
 
 .planText{font-size: 10px;color: #fff;letter-spacing: 0.5px;text-transform: uppercase;cursor: context-menu; font-weight: 600;background-color: #bd8e3e;display: inline-block;padding: 3px 9px;line-height: 14px;border-radius: 4px;}
 
-.email-editor-wrap iframe {min-width: 800px !important;}
-.email-editor-wrap {width: 100%;display: inline-block;overflow: auto hidden;}
-.email-editor-wrap::-webkit-scrollbar {width: 6px;    background-color: transparent;height: 6px;}
-.email-editor-wrap::-webkit-scrollbar-thumb {background-color: transparent;}
-.email-editor-wrap:hover::-webkit-scrollbar-thumb {background-color: rgba(193, 193, 193, 0.7607843137);}
-.email-editor-wrap:hover::-webkit-scrollbar {background-color: #e7eaed;}
-.email-editor-wrap .email-editor-contain {min-width: 600px;}
+.email-editor-wrap {width: 100%;display: inline-block;overflow: auto hidden;border: 1px solid #e0e0e0;background: #fff;border-radius: 12px;/*box-shadow: 0 4px 5px rgba(0, 0, 0, 0.1);*/}
 
 /*Color input*/
 .color-label {display: inline-block;margin-bottom: 5px;}
