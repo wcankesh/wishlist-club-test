@@ -400,8 +400,7 @@ const Language = () => {
                                                                    onChange={(value) => handleChange({
                                                                        target: {name: y.name, value}
                                                                    })}/> :
-                                                        <ColorInput label={y.label} name={y.name}
-                                                                    onChange={handleChange} value={y.value}/>
+                                                        <ColorInput label={y.label} name={y.name} onChange={handleChange} value={y.value}/>
                                                     }
                                                 </Fragment>
                                             )

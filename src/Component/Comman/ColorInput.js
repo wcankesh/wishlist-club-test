@@ -1,4 +1,4 @@
-import React, { Fragment, useId} from 'react';
+import React, {Fragment, useId, useRef} from 'react';
 
 // import React, {useEffect, useRef, useState, Fragment} from 'react';
 // import { SketchPicker } from 'react-color'
@@ -21,6 +21,13 @@ const ColorInput = ({ name,value, onChange, label }) => {
     //     return () => document.removeEventListener("mousedown", handleClickOutside);
     // });
 
+    const colorInputRef = useRef(null);
+
+    const handleDivClick = () => {
+        if (colorInputRef.current) {
+            colorInputRef.current.click();
+        }
+    };
 
     const handleChange = (e) => {
         const { value } = e.target;
@@ -35,14 +42,14 @@ const ColorInput = ({ name,value, onChange, label }) => {
         <div>
             <div className="Polaris-Labelled__LabelWrapper">
                 <div className="Polaris-Label">
-                    <label className="Polaris-Label__Text" htmlFor={`color${uniqId}picker`}>{label}</label>
+                    <label className="Polaris-Label__Text">{label}</label>
                 </div>
             </div>
 
 
-            <div className="color_picker">
-                <input type="color" name={name} id={`color${uniqId}picker`} value={value.toUpperCase()} onChange={handleChange}/>
-                <input className="lbl-color" value={value.toUpperCase()} type="text" name={name} onChange={handleChange}/>
+            <div className="color_picker" onClick={handleDivClick} style={{ cursor: "pointer" }}>
+                <input ref={colorInputRef} type="color" name={name} id={`color${uniqId}picker`} value={value} onChange={handleChange}/>
+                <input className="lbl-color" value={value} type="text" name={name} onChange={handleChange}/>
             </div>
 
             {/*<div className="color_picker" onClick={handleClickInside} ref={myRef}>*/}

@@ -9,6 +9,7 @@ import EmailEditorComponent from "../../Comman/EmailEditorComponent";
 import {Modal, TitleBar, useAppBridge} from "@shopify/app-bridge-react";
 import {Icons} from "../../../utils/Icons";
 import {RenderLoading} from "../../../utils/RenderLoading";
+import ColorInput from "../../Comman/ColorInput";
 
 const initialState = {
     time: '1',
@@ -214,7 +215,6 @@ const AddedWishlistEmail = () => {
                             value={emailSetting?.time}
                             helpText={'Set the delay in minutes to send the email after the item is added to wishlist.'}
                         />
-
                     </InlineGrid>
                 }
             </Box>
@@ -236,8 +236,7 @@ const AddedWishlistEmail = () => {
                         </div>
 
                         <div className="fullContainerPage-inner-right">
-                            <div
-                                className={`fullContainerPage-inner-left-settings ${showSettings ? 'show' : 'hide'}`}>{onDisplaySettings}</div>
+                            <div className={`fullContainerPage-inner-left-settings ${showSettings ? 'show' : 'hide'}`}>{onDisplaySettings}</div>
                             <div className={'fullContainerPage-inner-right-title'}>
                                 <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}> Email Template</Text>
                                 {showSettings ? '' : (

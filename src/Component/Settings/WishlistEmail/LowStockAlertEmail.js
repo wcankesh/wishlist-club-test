@@ -49,7 +49,7 @@ const LowStockAlertEmail = () => {
                 subject: result?.low_stock_wishlist_mail_subject,
             }
             setEmailSetting((state) => ({...state, ...updateState}))
-            setMailTemplateJson(JSON.parse(response.data && response.data.remove_wishlist_mail_json) || templateJson);
+            setMailTemplateJson(JSON.parse(response.data && response.data.low_stock_wishlist_mail_json) || templateJson);
             setIsLoading('');
         } else if (response.status === 500) {
             setMessage(capitalizeMessage(response.message))

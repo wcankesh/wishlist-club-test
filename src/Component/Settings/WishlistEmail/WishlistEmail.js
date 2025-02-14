@@ -167,14 +167,37 @@ const WishlistEmail = () => {
         }
     };
 
+    const saveReportWishlistEmailSetting = async (field, FieldPayload) => {
+        const payload = {
+            type: 6,
+            "wishlist_report_setting": {
+                "is_enable": FieldPayload?.wishlist_report_setting?.is_enable,
+                "type": FieldPayload?.wishlist_report_setting?.type,
+            },
+        };
+        const response = await apiService.onUpdateV2EmailSetting(payload, emailSetting.id);
+        if (response.status === 200) {
+            setIsError(false)
+            setMessage(capitalizeMessage(response.message))
+        } else if (response.status === 500) {
+            setMessage(capitalizeMessage(response.message))
+            setIsErrorServer(true);
+        } else {
+            setMessage(capitalizeMessage(response.message))
+            setIsError(true)
+        }
+    }
+
+
     const onChangeReportWishlist = async (name, value) => {
         const payload = {
             ...emailSetting,
             wishlist_report_setting: {...emailSetting?.wishlist_report_setting, [name]: value}
         };
         setEmailSetting(payload);
-        await saveEmailSetting('wishlist_report_setting', payload);
+        await saveReportWishlistEmailSetting('wishlist_report_setting', payload);
     }
+
 
     const saveEmailSetting = async (field, FieldPayload) => {
         if (field !== 'wishlist_report_setting') {
