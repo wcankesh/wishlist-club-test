@@ -1,16 +1,14 @@
 import React, {Fragment, useCallback, useEffect, useRef, useState} from 'react';
-import {BlockStack, Box, Button, Card, Checkbox, InlineGrid, Select, Text, TextField} from "@shopify/polaris";
+import {BlockStack, Box, Button, Checkbox, InlineGrid, Select, Text, TextField} from "@shopify/polaris";
 import {useNavigate} from "react-router-dom";
-import {useSelector} from "react-redux";
 import {apiService, baseUrl, capitalizeMessage, isChecked, templateJson, toggleFlag} from "../../../utils/Constant";
-import ToastMessage from "../../Comman/ToastMessage"
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
 import {AppDocsLinks} from "../../../utils/AppDocsLinks";
 import EmailTemplateMsg from "../../Comman/EmailTemplateMsg";
-import EmailEditorComponent from "../../Comman/EmailEditorComponent";
 import {Modal, TitleBar, useAppBridge} from "@shopify/app-bridge-react";
 import {Icons} from "../../../utils/Icons";
 import {RenderLoading} from "../../../utils/RenderLoading";
+import {EmailEditor} from "react-email-editor";
 
 const initialState = {
     time: '1',
@@ -115,37 +113,57 @@ const RemoveWishlistEmail = () => {
         navigate(`${baseUrl}/settings/email?step=2`)
     }
 
+    useEffect(() => {
+        if (editorRef.current && editorRef.current.editor) {
+            editorRef.current.editor.exportHtml((data) => {
+                const {design: currentDesign} = data;
+                if (JSON.stringify(currentDesign) !== JSON.stringify(mailTemplateJson)) {
+                    editorRef.current.editor.loadDesign(mailTemplateJson);
+                }
+            });
+        }
+        return () => {
+            if (editorRef.current && editorRef.current.editor) {
+                editorRef.current.editor.removeEventListener('design:updated', onMailDesignChange);
+            }
+        };
+    }, [mailTemplateJson]);
+
+    const onMailDesignChange = () => {
+        editorRef.current.editor.exportHtml((data) => {
+            const {design} = data;
+        });
+    };
+
     const exportHtml = () => {
         editorRef.current.editor.exportHtml((data) => {
             const {design, html} = data;
         });
     };
 
-    const onChange = () => {
-        editorRef.current.editor.exportHtml((data) => {
-            const {design} = data;
-        });
-    };
-
     const onLoad = () => {
-        const tryInitializeEditor = () => {
-            if (editorRef.current && editorRef.current.editor) {
-                editorRef.current.editor.loadDesign(mailTemplateJson);
-                editorRef.current.editor.addEventListener('design:updated', onChange);
-            } else {
-                console.error("Email editor reference is not available yet.");
-            }
-        };
-
-        if (editorRef.current !== null) {
-            tryInitializeEditor();
-        } else {
-            const retryInterval = setInterval(() => {
-                if (editorRef.current !== null) {
-                    tryInitializeEditor();
-                    clearInterval(retryInterval);
+        if (editorRef.current && editorRef.current.editor) {
+            editorRef.current.editor.exportHtml((data) => {
+                const {design: currentDesign} = data;
+                if (JSON.stringify(currentDesign) !== JSON.stringify(mailTemplateJson)) {
+                    editorRef.current.editor.loadDesign(mailTemplateJson);
                 }
-            }, 100);
+                editorRef.current.editor.addEventListener('design:updated', onMailDesignChange);
+            });
+        } else {
+            const retryLoadDesign = setInterval(() => {
+                if (editorRef.current && editorRef.current.editor) {
+                    editorRef.current.editor.exportHtml((data) => {
+                        const {design: currentDesign} = data;
+
+                        if (JSON.stringify(currentDesign) !== JSON.stringify(mailTemplateJson)) {
+                            editorRef.current.editor.loadDesign(mailTemplateJson);
+                        }
+                        editorRef.current.editor.addEventListener('design:updated', onMailDesignChange);
+                        clearInterval(retryLoadDesign);
+                    });
+                }
+            }, 1000);
         }
     };
 
@@ -158,13 +176,13 @@ const RemoveWishlistEmail = () => {
     ];
 
     const TimeOptions = [
-        { label: "1 min", value: "1" },
-        { label: "5 min", value: "5" },
-        { label: "10 min", value: "10" },
-        { label: "20 min", value: "20" },
-        { label: "30 min", value: "30" },
-        { label: "45 min", value: "45" },
-        ...Array.from({ length: 12 }, (_, i) => ({
+        {label: "1 min", value: "1"},
+        {label: "5 min", value: "5"},
+        {label: "10 min", value: "10"},
+        {label: "20 min", value: "20"},
+        {label: "30 min", value: "30"},
+        {label: "45 min", value: "45"},
+        ...Array.from({length: 12}, (_, i) => ({
             label: `${i + 1} Hour`,
             value: `${(i + 1) * 60}`
         }))
@@ -241,7 +259,8 @@ const RemoveWishlistEmail = () => {
                         </div>
 
                         <div className="fullContainerPage-inner-right">
-                            <div className={`fullContainerPage-inner-left-settings ${showSettings ? 'show' : 'hide'}`}>{onDisplaySettings}</div>
+                            <div
+                                className={`fullContainerPage-inner-left-settings ${showSettings ? 'show' : 'hide'}`}>{onDisplaySettings}</div>
                             <div className={'fullContainerPage-inner-right-title'}>
                                 <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}> Email Template</Text>
                                 {showSettings ? '' : (
@@ -259,14 +278,14 @@ const RemoveWishlistEmail = () => {
                                                            setIsError={setIsError} isError={true} isCardBanner={true}/>
                                         : ""}
                                     <EmailTemplateMsg msgArray={msgArray}/>
-                                        <EmailEditorComponent
+                                    <div className="email-editor-wrap">
+                                        <EmailEditor
                                             ref={editorRef}
                                             exportHtml={exportHtml}
                                             onLoad={onLoad}
                                             style={{height: 600}}
-                                            mailTemplate={mailTemplateJson}
-                                            onChange={onChange}
                                         />
+                                    </div>
                                 </BlockStack>
                             </Box>
                         </div>

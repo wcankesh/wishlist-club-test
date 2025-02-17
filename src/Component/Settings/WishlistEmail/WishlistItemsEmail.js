@@ -25,9 +25,9 @@ import CustomErrorBanner from "../../Comman/CustomErrorBanner";
 import {AppDocsLinks} from "../../../utils/AppDocsLinks";
 import {ProductGroup1242, ProductGroup1249} from "../../../utils/AppImages";
 import {formValidate} from "../../Comman/formValidate";
-import EmailEditorComponent from "../../Comman/EmailEditorComponent";
 import EmailTemplateMsg from "../../Comman/EmailTemplateMsg";
 import ConformationModal from "../../Comman/ConformationModal";
+import {EmailEditor} from "react-email-editor";
 
 const initialSate = {
     subject: "Wishlist1 Club Products!!!",
@@ -93,7 +93,7 @@ const WishlistItemsEmail = () => {
     const [isErrorServer, setIsErrorServer] = useState(false)
     const [message, setMessage] = useState("")
     const [selectedWlLogo, setSelectedWlLogo] = useState("");
-    const [mailTemplate,setMailTemplate] = useState({});
+    const [mailTemplateJson,setMailTemplateJson] = useState({});
     const [active,setActive] = useState(false);
     const [isConfirmLoading,setIsConfirmLoading] = useState(false)
     const shopDetails = useSelector((state) => state.shopDetails);
@@ -117,7 +117,7 @@ const WishlistItemsEmail = () => {
         const response = await apiService.emailSetting();
         if (response.status === 200) {
             setEmailSetting(response.data)
-            setMailTemplate(JSON.parse(response.data && response.data.wishlist_json) || templateJson);
+            setMailTemplateJson(JSON.parse(response.data && response.data.wishlist_json) || templateJson);
         } else if (response.status === 500) {
             setMessage(capitalizeMessage(response.message))
             setIsErrorServer(true);
@@ -170,7 +170,7 @@ const WishlistItemsEmail = () => {
         if(emailSetting.new_wishlist_template == 1){
             editorRef.current.editor.exportHtml(async (data) => {
                 const {design, html} = data;
-                setMailTemplate(design);
+                setMailTemplateJson(design);
                 formData.append("wishlist_json", JSON.stringify(design));
                 formData.append("wishlist_html", html);
 
@@ -249,37 +249,57 @@ const WishlistItemsEmail = () => {
         handleUpgradeNow();
     }
 
+    useEffect(() => {
+        if (editorRef.current && editorRef.current.editor) {
+            editorRef.current.editor.exportHtml((data) => {
+                const {design: currentDesign} = data;
+                if (JSON.stringify(currentDesign) !== JSON.stringify(mailTemplateJson)) {
+                    editorRef.current.editor.loadDesign(mailTemplateJson);
+                }
+            });
+        }
+        return () => {
+            if (editorRef.current && editorRef.current.editor) {
+                editorRef.current.editor.removeEventListener('design:updated', onMailDesignChange);
+            }
+        };
+    }, [mailTemplateJson]);
+
+    const onMailDesignChange = () => {
+        editorRef.current.editor.exportHtml((data) => {
+            const {design} = data;
+        });
+    };
+
     const exportHtml = () => {
         editorRef.current.editor.exportHtml((data) => {
             const {design, html} = data;
         });
     };
 
-    const onChange = () => {
-        editorRef.current.editor.exportHtml((data) => {
-            const {design} = data;
-        });
-    };
-
     const onLoad = () => {
-        const tryInitializeEditor = () => {
-            if (editorRef.current && editorRef.current.editor) {
-                editorRef.current.editor.loadDesign(mailTemplate);
-                editorRef.current.editor.addEventListener('design:updated', onChange);
-            } else {
-                console.error("Email editor reference is not available yet.");
-            }
-        };
-
-        if (editorRef.current !== null) {
-            tryInitializeEditor();
-        } else {
-            const retryInterval = setInterval(() => {
-                if (editorRef.current !== null) {
-                    tryInitializeEditor();
-                    clearInterval(retryInterval);
+        if (editorRef.current && editorRef.current.editor) {
+            editorRef.current.editor.exportHtml((data) => {
+                const {design: currentDesign} = data;
+                if (JSON.stringify(currentDesign) !== JSON.stringify(mailTemplateJson)) {
+                    editorRef.current.editor.loadDesign(mailTemplateJson);
                 }
-            }, 100);
+                editorRef.current.editor.addEventListener('design:updated', onMailDesignChange);
+            });
+        } else {
+            const retryLoadDesign = setInterval(() => {
+                if (editorRef.current && editorRef.current.editor) {
+                    editorRef.current.editor.exportHtml((data) => {
+                        const {design: currentDesign} = data;
+
+                        if (JSON.stringify(currentDesign) !== JSON.stringify(mailTemplateJson)) {
+                            editorRef.current.editor.loadDesign(mailTemplateJson);
+                        }
+                        editorRef.current.editor.addEventListener('design:updated', onMailDesignChange);
+                        clearInterval(retryLoadDesign);
+                    });
+                }
+            }, 1000);
         }
     };
 
@@ -606,14 +626,14 @@ const WishlistItemsEmail = () => {
                                             emailSetting?.new_wishlist_template == 1 ?
                                                 <BlockStack gap={"100"}>
                                                     <EmailTemplateMsg msgArray={msgArray}/>
-                                                    <EmailEditorComponent
-                                                        ref={editorRef}
-                                                        exportHtml={exportHtml}
-                                                        onLoad={onLoad}
-                                                        style={{ height: 600 }}
-                                                        mailTemplate={mailTemplate}
-                                                        onChange={onChange}
-                                                    />
+                                                    <div className="email-editor-wrap">
+                                                        <EmailEditor
+                                                            ref={editorRef}
+                                                            exportHtml={exportHtml}
+                                                            onLoad={onLoad}
+                                                            style={{height: 600}}
+                                                        />
+                                                    </div>
                                                 </BlockStack>
                                                 : emailSetting?.new_wishlist_template == 0 ?
                                                 <BlockStack gap={"400"}>

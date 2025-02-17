@@ -24,9 +24,9 @@ import {AppDocsLinks} from "../../../utils/AppDocsLinks";
 import {formValidate} from "../../Comman/formValidate";
 import {Icons} from "../../../utils/Icons";
 import {Product3} from "../../../utils/AppImages";
-import EmailEditorComponent from "../../Comman/EmailEditorComponent";
 import EmailTemplateMsg from "../../Comman/EmailTemplateMsg";
 import ConformationModal from "../../Comman/ConformationModal";
+import {EmailEditor} from "react-email-editor";
 
 const initialState = {
     bis_from_mail: "",
@@ -99,7 +99,7 @@ const StockNotification = () => {
     const [isError, setIsError] = useState(false)
     const [isErrorServer, setIsErrorServer] = useState(false)
     const [message, setMessage] = useState("")
-    const [mailTemplate,setMailTemplate] = useState({});
+    const [mailTemplateJson,setMailTemplateJson] = useState({});
     const [active,setActive] = useState(false);
     const [isConfirmLoading,setIsConfirmLoading] = useState(false);
     const shopDetails = useSelector((state) => state.shopDetails)
@@ -113,7 +113,7 @@ const StockNotification = () => {
         if (response.status === 200) {
             setbackInStockEmail(response.data);
             setCheckDiscount(response.data.bis_content.discount_code ? true : false);
-            setMailTemplate(JSON.parse(response.data.bis_json) || templateJson);
+            setMailTemplateJson(JSON.parse(response.data.bis_json) || templateJson);
         } else if (response.status === 500) {
             setMessage(capitalizeMessage(response.message))
             setIsErrorServer(true);
@@ -160,6 +160,12 @@ const StockNotification = () => {
                 validationErrors[name] = error;
             }
         });
+        if (checkDiscount && (!backInStockEmail.bis_content.discount_code|| backInStockEmail.bis_content.discount_code.trim() === "")) {
+            validationErrors["discount_code"] = "Discount code is required.";
+        } else {
+            delete validationErrors["discount_code"]
+        }
+
         if (Object.keys(validationErrors).length > 0) {
             setBackInStockEmailError(validationErrors);
             return;
@@ -196,7 +202,7 @@ const StockNotification = () => {
         if(backInStockEmail?.new_bis_template == 1){
             editorRef.current.editor.exportHtml(async (data) => {
                 const {design, html} = data;
-                setMailTemplate(design);
+                setMailTemplateJson(design);
                 formData.append("bis_json", JSON.stringify(design));
                 formData.append("bis_html", html);
 
@@ -272,37 +278,57 @@ const StockNotification = () => {
         setBackInStockEmailError({...backInStockEmailError, [name]: formValidate(name, value)})
     }
 
+    useEffect(() => {
+        if (editorRef.current && editorRef.current.editor) {
+            editorRef.current.editor.exportHtml((data) => {
+                const {design: currentDesign} = data;
+                if (JSON.stringify(currentDesign) !== JSON.stringify(mailTemplateJson)) {
+                    editorRef.current.editor.loadDesign(mailTemplateJson);
+                }
+            });
+        }
+        return () => {
+            if (editorRef.current && editorRef.current.editor) {
+                editorRef.current.editor.removeEventListener('design:updated', onMailDesignChange);
+            }
+        };
+    }, [mailTemplateJson]);
+
+    const onMailDesignChange = () => {
+        editorRef.current.editor.exportHtml((data) => {
+            const {design} = data;
+        });
+    };
+
     const exportHtml = () => {
         editorRef.current.editor.exportHtml((data) => {
             const {design, html} = data;
         });
     };
 
-    const onChange = () => {
-        editorRef.current.editor.exportHtml((data) => {
-            const {design} = data;
-        });
-    };
-
     const onLoad = () => {
-        const tryInitializeEditor = () => {
-            if (editorRef.current && editorRef.current.editor) {
-                editorRef.current.editor.loadDesign(mailTemplate);
-                editorRef.current.editor.addEventListener('design:updated', onChange);
-            } else {
-                console.error("Email editor reference is not available yet.");
-            }
-        };
-
-        if (editorRef.current !== null) {
-            tryInitializeEditor();
-        } else {
-            const retryInterval = setInterval(() => {
-                if (editorRef.current !== null) {
-                    tryInitializeEditor();
-                    clearInterval(retryInterval);
+        if (editorRef.current && editorRef.current.editor) {
+            editorRef.current.editor.exportHtml((data) => {
+                const {design: currentDesign} = data;
+                if (JSON.stringify(currentDesign) !== JSON.stringify(mailTemplateJson)) {
+                    editorRef.current.editor.loadDesign(mailTemplateJson);
                 }
-            }, 100);
+                editorRef.current.editor.addEventListener('design:updated', onMailDesignChange);
+            });
+        } else {
+            const retryLoadDesign = setInterval(() => {
+                if (editorRef.current && editorRef.current.editor) {
+                    editorRef.current.editor.exportHtml((data) => {
+                        const {design: currentDesign} = data;
+
+                        if (JSON.stringify(currentDesign) !== JSON.stringify(mailTemplateJson)) {
+                            editorRef.current.editor.loadDesign(mailTemplateJson);
+                        }
+                        editorRef.current.editor.addEventListener('design:updated', onMailDesignChange);
+                        clearInterval(retryLoadDesign);
+                    });
+                }
+            }, 1000);
         }
     };
 
@@ -479,6 +505,7 @@ const StockNotification = () => {
                                                                    }
                                                                })
                                                            }}
+                                                           error={backInStockEmailError?.discount_code}
                                                 />}
                                         </InlineGrid>
                                     </BlockStack>
@@ -646,19 +673,17 @@ const StockNotification = () => {
                                         <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}>Email Template</Text>
                                         {
                                             backInStockEmail?.new_bis_template == 1 ?
-                                                <div className={"email-editor-wrap"}>
                                                     <BlockStack gap={100}>
                                                         <EmailTemplateMsg msgArray={msgArray}/>
-                                                        <EmailEditorComponent
-                                                            ref={editorRef}
-                                                            exportHtml={exportHtml}
-                                                            onLoad={onLoad}
-                                                            style={{ height: 600 }}
-                                                            mailTemplate={mailTemplate}
-                                                            onChange={onChange}
-                                                        />
+                                                        <div className="email-editor-wrap">
+                                                            <EmailEditor
+                                                                ref={editorRef}
+                                                                exportHtml={exportHtml}
+                                                                onLoad={onLoad}
+                                                                style={{height: 600}}
+                                                            />
+                                                        </div>
                                                     </BlockStack>
-                                                </div>
                                                 : backInStockEmail?.new_bis_template == 0 ?
                                                 <BlockStack gap={"400"}>
                                                         <Card padding={"0"}>
