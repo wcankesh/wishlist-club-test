@@ -32,6 +32,7 @@ const General = () => {
         guest_wishlist: 0,
         multiple_wishlist: 0,
         share_wishlist: 0,
+        is_same_wishlist: 0,
         is_dispaly_add_to_cart_all: 0,
         is_variant_wishlist: 0,
         redirect_type: 0,
@@ -68,6 +69,11 @@ const General = () => {
             title: "Share wishlist",
             description: "Share your full wishlist on social media or provide a separate public link.",
             name: "share_wishlist",
+        },
+        {
+            title: "Same Item to Multiple List",
+            description: "This option allow customers to add same item to multiple list which gives customer more access to their list.",
+            name: "is_same_wishlist",
         },
         {
             title: "Add to cart all the products",
