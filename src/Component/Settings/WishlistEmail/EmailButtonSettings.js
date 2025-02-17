@@ -1,5 +1,17 @@
 import React, {Fragment, useEffect, useState} from 'react';
-import {BlockStack, Box, Button, Card, Divider, InlineGrid, Layout, Page, Text, TextField} from "@shopify/polaris";
+import {
+    BlockStack,
+    Box,
+    Button,
+    Card,
+    Divider,
+    InlineGrid,
+    InlineStack,
+    Layout,
+    Page,
+    Text,
+    TextField
+} from "@shopify/polaris";
 import {apiService, baseUrl, capitalizeMessage} from "../../../utils/Constant";
 import ColorInput from "../../Comman/ColorInput"
 import ToastMessage from "../../Comman/ToastMessage"
@@ -8,6 +20,8 @@ import CustomErrorBanner from "../../Comman/CustomErrorBanner";
 import {AppDocsLinks} from "../../../utils/AppDocsLinks";
 import {useAppBridge} from "@shopify/app-bridge-react";
 import {RenderLoading} from "../../../utils/RenderLoading";
+import {Product3} from "../../../utils/AppImages";
+import {Icons} from "../../../utils/Icons";
 
 const initialState = {
     "add_to_cart_button_text": "Add To Cart",
@@ -151,7 +165,7 @@ const EmailButtonSettings = () => {
                     <CustomErrorBanner link={AppDocsLinks.article["425"]} message={message} setMessage={setMessage}
                                        setIsError={setIsError} isError={isError}/>
 
-                    <Layout.Section variant={"fullWidth"}>
+                    <Layout.Section>
                         <Card padding={"0"}>
                             {isLoading === 'details' ? <Box padding={'400'}>{RenderLoading.commonParagraph}</Box> :
                                 <BlockStack gap="0">
@@ -163,7 +177,7 @@ const EmailButtonSettings = () => {
                                                         <Text as="span" variant="headingMd" fontWeight="medium">
                                                             {config.title}
                                                         </Text>
-                                                        <InlineGrid columns={{xs: 1, sm: 1, md: 1, lg: 2, xl: 3}}
+                                                        <InlineGrid columns={{xs: 1, sm: 1, md: 1, lg: 2, xl: 2}}
                                                                     gap="150">
                                                             {config.fields.map((field, fieldIndex) => {
                                                                 return (
@@ -224,6 +238,46 @@ const EmailButtonSettings = () => {
                                     })}
                                 </BlockStack>
                             }
+                        </Card>
+                    </Layout.Section>
+
+                    <Layout.Section variant={"oneThird"}>
+                        <Card padding={"400"}>
+                            <BlockStack gap={"400"}>
+                                <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}>Preview</Text>
+                                <BlockStack gap={"400"}>
+                                    <InlineStack align={"center"}>
+                                        <img src={Product3} width={"140px"}/>
+                                    </InlineStack>
+                                    <BlockStack gap={"300"}>
+                                        <Text as='span' fontWeight={"bold"}>AKAMAI TOP // PALMS COLLIDE</Text>
+                                        <Text as={"span"}>Rs. 80.00</Text>
+                                        <button className="wl_btn_common wl_preview"
+                                                style={{
+                                                    backgroundColor:`${emailSetting?.add_to_cart_btn_bg_color}`,
+                                                    color:`${emailSetting?.add_to_cart_btn_text_color}`,
+                                                    border:`${emailSetting?.add_to_cart_btn_border_size}px solid ${emailSetting?.add_to_cart_btn_border_color}`,
+                                                    borderRadius:`${emailSetting?.add_to_cart_btn_border_radius}px`,
+                                                    padding:`${emailSetting?.add_to_cart_btn_vertical_padding}px ${emailSetting?.add_to_cart_btn_horizontal_padding}px`,
+                                        }}
+                                        >
+                                            {emailSetting?.add_to_cart_button_text}
+                                        </button>
+                                        <button className="wl_btn_common wl_preview"
+                                                style={{
+                                                    backgroundColor:`${emailSetting?.view_product_btn_bg_color}`,
+                                                    color:`${emailSetting?.view_product_btn_text_color}`,
+                                                    border:`${emailSetting?.view_product_btn_border_size}px solid ${emailSetting?.view_product_btn_border_color}`,
+                                                    borderRadius:`${emailSetting?.view_product_btn_border_radius}px`,
+                                                    padding:`${emailSetting?.view_product_btn_vertical_padding}px ${emailSetting?.view_product_btn_horizontal_padding}px`,
+                                                }}
+                                        >
+                                            {emailSetting?.view_product_button_text}
+                                        </button>
+                                    </BlockStack>
+
+                                </BlockStack>
+                            </BlockStack>
                         </Card>
                     </Layout.Section>
                 </Layout>

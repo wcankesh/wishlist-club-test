@@ -371,24 +371,20 @@ const WishlistEmail = () => {
                                     {
                                         (Customization_Email || []).map((x, i) => {
                                             return (
-                                                <div onClick={() => onRedirect(x.key)}
-                                                     className={"cursor-pointer"} key={i}>
+                                                <div className={""} key={i}>
                                                     <Box padding={"400"}>
-                                                        <InlineStack align={"space-between"} blockAlign={"start"}
-                                                                     wrap={false}
-                                                                     gap={"200"}>
-                                                            <InlineStack gap={"400"} wrap={false}>
+                                                        <InlineStack align={"space-between"} blockAlign={"start"} wrap={false} gap={"200"}>
                                                                 <BlockStack gap={"100"}>
-                                                                    <Text fontWeight='semibold'
-                                                                          as={"span"}>{x.title}</Text>
-                                                                    <Text tone={"subdued"}
-                                                                          as={"span"}>{x.description}</Text>
+                                                                    <InlineStack gap={"100"} wrap={false} align={'start'} blockAlign={'center'}>
+                                                                        <Text fontWeight='semibold' as={"span"}>{x.title}</Text>
+                                                                        {isLoading ?
+                                                                            <Badge><div style={{width: 62}}>&nbsp;</div></Badge> :
+                                                                            <Badge tone={x.checked ? "success" : "critical"}>{x.checked ? "Enabled" : "Disabled"} </Badge>
+                                                                        }
+                                                                    </InlineStack>
+                                                                    <Text tone={"subdued"} as={"span"}>{x.description}</Text>
                                                                 </BlockStack>
-                                                            </InlineStack>
-                                                            {isLoading ? <Badge>
-                                                                <div style={{width: 62}}>&nbsp;</div>
-                                                            </Badge> : <Badge
-                                                                tone={x.checked ? "success" : "critical"}>{x.checked ? "Enabled" : "Disabled"} </Badge>}
+                                                            <Button variant={'secondary'} icon={Icons.EditIcon} onClick={() => onRedirect(x.key)}>Edit</Button>
                                                         </InlineStack>
                                                     </Box>
                                                     <Divider/>
@@ -410,26 +406,20 @@ const WishlistEmail = () => {
                                                         <BlockStack inlineAlign={'start'} gap={'200'}>
                                                             {(x.inputs && x.inputs || []).map((item, inputIndex) => {
                                                                 return (
-                                                                    <div key={inputIndex}
-                                                                         onClick={() => onRedirect(item.key)}
-                                                                         className={"cursor-pointer"}>
+                                                                    <div key={inputIndex} className={""}>
                                                                         <Box padding={"300"}>
-                                                                            <InlineStack align={"space-between"}
-                                                                                         blockAlign={"start"}
-                                                                                         wrap={false}
-                                                                                         gap={"200"}>
-                                                                                <InlineStack gap={"400"} wrap={false}>
+                                                                            <InlineStack align={"space-between"} blockAlign={"start"} wrap={false} gap={"200"}>
                                                                                     <BlockStack gap={"100"}>
-                                                                                        <Text fontWeight='semibold'
-                                                                                              as={"span"}>{item.title}</Text>
-                                                                                        <Text tone={"subdued"}
-                                                                                              as={"span"}>{item.description}</Text>
+                                                                                        <InlineStack gap={"100"} wrap={false} align={'start'} blockAlign={'center'}>
+                                                                                            <Text fontWeight='semibold' as={"span"}>{item.title}</Text>
+                                                                                            {isLoading ?
+                                                                                                <Badge><div style={{width: 62}}>&nbsp;</div></Badge> :
+                                                                                                <Badge tone={item.checked ? "success" : "critical"}>{item.checked ? "Enabled" : "Disabled"} </Badge>
+                                                                                            }
+                                                                                        </InlineStack>
+                                                                                        <Text tone={"subdued"} as={"span"}>{item.description}</Text>
                                                                                     </BlockStack>
-                                                                                </InlineStack>
-                                                                                {isLoading ? <Badge>
-                                                                                    <div style={{width: 62}}>&nbsp;</div>
-                                                                                </Badge> : <Badge
-                                                                                    tone={item.checked ? "success" : "critical"}>{item.checked ? "Enabled" : "Disabled"} </Badge>}
+                                                                                <Button variant={'secondary'} icon={Icons.EditIcon} onClick={() => onRedirect(item.key)} size={'medium'}>Edit</Button>
                                                                             </InlineStack>
                                                                         </Box>
                                                                         {x.inputs.length - 1 !== inputIndex ? <Divider/> : ''}
@@ -447,14 +437,19 @@ const WishlistEmail = () => {
                                             <div className={'email-customise-list'}>
                                                 <Box padding={"300"}>
                                                     <BlockStack inlineAlign={'start'} gap={'200'}>
-                                                    <InlineStack align={"space-between"} blockAlign={"start"}
-                                                                 wrap={false}
-                                                                 gap={"200"}>
-                                                        <InlineStack gap={"400"} wrap={false}>
+                                                    <InlineStack align={"space-between"} blockAlign={"start"} wrap={false} gap={"200"}>
+                                                        <InlineStack gap={"400"} wrap={false} align={'start'} blockAlign={'center'}>
                                                             <BlockStack gap={"100"}>
-                                                                <InlineStack gap={'150'} align={'start'}
-                                                                             blockAlign={'center'}>
+                                                                <InlineStack gap={'150'} align={'start'} blockAlign={'center'}>
                                                                     <Text fontWeight='semibold' as={"span"}>Wishlist Report Setting</Text>
+                                                                    {isLoading ? <Badge>
+                                                                        <div style={{width: 62}}>&nbsp;</div>
+                                                                    </Badge> : <Badge
+                                                                        tone={emailSetting?.wishlist_report_setting?.is_enable == 1 ? "success" : "critical"}>{emailSetting?.wishlist_report_setting?.is_enable == 1 ? "Enabled" : "Disabled"} </Badge>}
+                                                                </InlineStack>
+                                                                <Text tone={"subdued"} as={"span"}>Tailor email summaries with detailed wishlist insights to help you optimize customer engagement and sales.</Text>
+                                                            </BlockStack>
+                                                            <InlineStack gap={'150'} align={'end'} blockAlign={'center'}>
                                                                     <SwitchButton
                                                                         checked={emailSetting?.wishlist_report_setting?.is_enable == 1}
                                                                         onChange={() => onChangeReportWishlist('is_enable', toggleFlag(emailSetting?.wishlist_report_setting?.is_enable))}
@@ -470,14 +465,8 @@ const WishlistEmail = () => {
                                                                         onChange={(value) => onChangeReportWishlist('type', value)}
                                                                         value={emailSetting?.wishlist_report_setting?.type}
                                                                     />
-                                                                </InlineStack>
-                                                                <Text tone={"subdued"} as={"span"}>Tailor email summaries with detailed wishlist insights to help you optimize customer engagement and sales.</Text>
-                                                            </BlockStack>
+                                                            </InlineStack>
                                                         </InlineStack>
-                                                        {isLoading ? <Badge>
-                                                            <div style={{width: 62}}>&nbsp;</div>
-                                                        </Badge> : <Badge
-                                                            tone={emailSetting?.wishlist_report_setting?.is_enable == 1 ? "success" : "critical"}>{emailSetting?.wishlist_report_setting?.is_enable == 1 ? "Enabled" : "Disabled"} </Badge>}
                                                     </InlineStack>
                                                 </BlockStack>
                                                 </Box>
