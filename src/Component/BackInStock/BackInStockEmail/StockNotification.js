@@ -112,7 +112,7 @@ const StockNotification = () => {
         const response = await apiService.bisSetting();
         if (response.status === 200) {
             setbackInStockEmail(response.data);
-            setCheckDiscount(response.data.bis_content.discount_code ? true : false);
+            setCheckDiscount(!!response.data.bis_content.discount_code);
             setMailTemplateJson(JSON.parse(response.data.bis_json) || templateJson);
         } else if (response.status === 500) {
             setMessage(capitalizeMessage(response.message))
@@ -379,6 +379,13 @@ const StockNotification = () => {
         "{{unsubscribe}}: Use this tag to display the unsubscribe link",
     ];
 
+    const onUpdateCheckDiscount = (value) => {
+        if (!value){
+            bisOnChangeContent({target: {name: "discount_code", value : ''}})
+        }
+        setCheckDiscount(value)
+    };
+
     return (
         <Fragment>
             <Page title={"Back In Stock Notification"} backAction={{content: 'Settings', onAction: onBack}}
@@ -490,7 +497,7 @@ const StockNotification = () => {
                                                 <Checkbox
                                                     label="Discount code"
                                                     checked={checkDiscount}
-                                                    onChange={() => setCheckDiscount(!checkDiscount)}
+                                                    onChange={() => onUpdateCheckDiscount(!checkDiscount)}
                                                 />
                                             </InlineStack>
 
