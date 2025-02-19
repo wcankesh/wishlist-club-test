@@ -64,16 +64,18 @@ const General = () => {
             title: "Multiple wishlists",
             description: "Let your customers make wishlists in multiple categories and give them more flexibility to manage",
             name: "multiple_wishlist",
+            input:[
+                {
+                    title: "Same Item to Multiple List",
+                    description: "This option allow customers to add same item to multiple list which gives customer more access to their list.",
+                    name: "is_same_wishlist",
+                },
+            ],
         },
         {
             title: "Share wishlist",
             description: "Share your full wishlist on social media or provide a separate public link.",
             name: "share_wishlist",
-        },
-        {
-            title: "Same Item to Multiple List",
-            description: "This option allow customers to add same item to multiple list which gives customer more access to their list.",
-            name: "is_same_wishlist",
         },
         {
             title: "Add to cart all the products",

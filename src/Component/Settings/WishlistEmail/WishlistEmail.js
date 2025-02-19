@@ -394,10 +394,14 @@ const WishlistEmail = () => {
                                 </Card>
 
                                 <Card padding={'400'}>
-                                    <BlockStack gap={'300'}>
-                                        <InlineStack align={'end'}>
+                                    <BlockStack gap={'400'}>
+                                        <InlineStack align={'space-between'}>
+                                            <InlineStack align={'start'}>
+                                                <div className="pcTag">New</div>
+                                            </InlineStack>
                                             <Button variant={'plain'} icon={Icons.ExternalIcon} onClick={() => onRedirect('5')} textAlign={'end'}>View Button Settings</Button>
                                         </InlineStack>
+
                                         {(CustomizationEmailSettings || []).map((x, i) => {
                                             return (
                                                 <BlockStack inlineAlign={'start'} gap={'200'}>

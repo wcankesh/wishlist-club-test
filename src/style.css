@@ -260,3 +260,4 @@ img {display: block;max-width: 100%;height: auto;}
 .FullscreenBar-main-title-div {margin-left: 0.5rem; /*flex-grow: 1;*/}
 
 .email-customise-list {border-radius: 0.75rem; border: 0.0625rem solid rgba(235, 235, 235, 1)}
+.pcTag {background-color: #6236ff;color: #FFFFFF;font-size: 10px;font-weight: 600;letter-spacing: .5px;margin: 0 auto;position: absolute;left: -35px;text-transform: uppercase;top: 15px;width: 115px;z-index: 32;text-align: center;transform: rotate(-45deg);}
