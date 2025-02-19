@@ -9,7 +9,7 @@ const BackInStock = () => {
     const navigate = useNavigate()
     const BackInStock = [
         {
-            icon: Icons.ExportIcon,
+            icon: Icons.EmailIcon,
             name: "Back In Stock Email",
             text: "Manage your preferences for back-in-stock notifications and thank-you notifications using this section.",
             link: "back-in-stock/email"

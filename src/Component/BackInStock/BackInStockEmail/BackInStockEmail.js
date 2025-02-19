@@ -1,7 +1,5 @@
-import React, {Fragment, useState, useEffect} from 'react';
-import {
-    Page, Layout, Text, Card, InlineStack, BlockStack, Divider, Box, Icon, Badge,
-} from '@shopify/polaris';
+import React, {Fragment, useEffect, useState} from 'react';
+import {Badge, BlockStack, Box, Button, Card, Divider, Icon, InlineStack, Layout, Page, Text} from '@shopify/polaris';
 import {apiService, baseUrl} from "../../../utils/Constant";
 import {useNavigate} from "react-router-dom"
 import {RenderLoading} from "../../../utils/RenderLoading";
@@ -55,21 +53,26 @@ const BackInStockEmail = () => {
                         <Card padding={"0"}>
                             {(BisEmail || []).map((x, i) => {
                                 return (
-                                    <div className={"cursor-pointer"} onClick={() => navigate(`${baseUrl}/${x.path}`)}>
+                                    <>
                                         <Box padding={"500"}>
-                                            <InlineStack wrap={false} gap={"400"} blockAlign={"start"}>
-                                                <div className={"sgi_icon"}><Icon source={x.icon} tone={"subdued"}/>
+                                            <InlineStack wrap={false} gap={"400"} blockAlign={"start"} align={'space-evenly'}>
+                                                <div className={"sgi_icon"}>
+                                                    <Icon source={x.icon} tone={"subdued"}/>
                                                 </div>
-                                                <BlockStack>
-                                                    <Text as={"span"} fontWeight='medium'>{x.title}</Text>
+                                                <BlockStack gap={'150'}>
+                                                    <InlineStack gap={"100"} wrap={false} align={'start'} blockAlign={'center'}>
+                                                        <Text as={"span"} fontWeight='medium'>{x.title}</Text>
+                                                       {isLoading ? RenderLoading?.badge :
+                                                        <Badge tone={x.checked ? "success" : "critical"}>{x.checked ? "Enabled" : "Disabled"} </Badge>
+                                                       }
+                                                    </InlineStack>
                                                     <Text as={"span"} tone={"subdued"}>{x.description}</Text>
                                                 </BlockStack>
-                                                {isLoading ? RenderLoading?.badge : <Badge
-                                                    tone={x.checked ? "success" : "critical"}>{x.checked ? "Enabled" : "Disabled"} </Badge>}
+                                                <Button variant={'secondary'} icon={Icons.EditIcon} onClick={() => navigate(`${baseUrl}/${x.path}`)} size={'slim'}>Edit</Button>
                                             </InlineStack>
                                         </Box>
                                         {BisEmail.length - 1 === i ? "" : <Divider/>}
-                                    </div>
+                                    </>
                                 )
                             })}
                         </Card>
