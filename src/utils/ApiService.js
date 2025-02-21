@@ -79,6 +79,8 @@ const ApiService = () => {
 
         Install: async (payload) => await postData(`${apiBaseUrl}/install`, payload),
 
+        onCheckLCP: async (payload) => await postData(`${apiBaseUrl}/lcp`, payload),
+
         getAppEmbedded: async () => await getData(`${apiBaseUrl}/is-app-embedded`),
 
         getThemes: async () => await getData(`${apiBaseUrl}/themes`),

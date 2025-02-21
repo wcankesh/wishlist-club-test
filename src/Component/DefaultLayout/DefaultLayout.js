@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Box, FooterHelp, Frame, Link, Text} from '@shopify/polaris';
 import {Outlet, useLocation, useNavigate} from 'react-router-dom';
-import {baseUrl} from "../../utils/Constant"
+import {apiService, baseUrl} from "../../utils/Constant"
 import {useSelector} from 'react-redux';
 import {Modal, NavMenu, TitleBar} from "@shopify/app-bridge-react";
 
@@ -42,6 +42,47 @@ const DefaultLayout = () => {
         {label: 'Email History', destination: `${baseUrl}/email-history`},
         {label: 'Settings', destination: `${baseUrl}/settings`},
     ];
+
+    useEffect(() => {
+        const onCheckLCP = async (payload) => {
+            try {
+                const response = await apiService.onCheckLCP(payload);
+                console.log("response", response)
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        const observer = new PerformanceObserver((list) => {
+            const entries = list.getEntries();
+            entries.forEach((entry) => {
+                if (entry.entryType === "largest-contentful-paint") {
+                    const lcpMetric = entry;
+                    if (lcpMetric) {
+                        const pathname = window.location.pathname;
+                        const searchParams = new URLSearchParams(window.location.search);
+                        const excludeParams = new Set(["hmac", "id_token", "session", "timestamp", "locale", "shop", "embedded", "host"]);
+                        const filteredParams = new URLSearchParams();
+                        searchParams.forEach((value, key) => {
+                            if (!excludeParams.has(key)) {
+                                filteredParams.append(key, value);
+                            }
+                        });
+                        const filteredQueryString = filteredParams.toString();
+                        const fullPagePath = filteredQueryString ? `${pathname}?${filteredQueryString}` : pathname;
+                        const payload = {
+                            page: fullPagePath,
+                            lcp_count: lcpMetric.startTime,
+                        };
+                        onCheckLCP(payload);
+                    }
+                }
+            });
+        });
+        observer.observe({ type: "largest-contentful-paint", buffered: true });
+        return () => {
+            observer.disconnect();
+        };
+    }, []);
 
     return (
         <React.Fragment>
