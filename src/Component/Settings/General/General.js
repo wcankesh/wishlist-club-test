@@ -118,6 +118,9 @@ const General = () => {
          if (name === 'is_dispaly_add_to_cart_all' && !isChecked(value)) {
              setting.is_clear_cart = toggleFlag(setting.is_clear_cart, true);
          }
+            if (name === 'multiple_wishlist' && !isChecked(value)) {
+                setting.is_same_wishlist = toggleFlag(setting.is_same_wishlist, true);
+            }
             setSetting({...setting, [name]: value})
             let payload = {...setting, [name]: value}
             delete payload.is_bis_email_enable;
