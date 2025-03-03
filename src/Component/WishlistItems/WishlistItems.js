@@ -191,18 +191,17 @@ const WishlistItems = () => {
         return (
             <div className={"remove-cursor"}>
                 {(products || []).map((item,i) => {
-                    const {title, quantity, created_at, variant_title} = item;
+                    const {title, quantity, created_at, variant_title, is_active, image} = item;
                     return(
                         <React.Fragment key={i}>
-                            <Box padding={"200"} background={item.is_active === 0 ? "bg-surface-active" : ''} >
+                            <Box padding={"200"} background={is_active === 0 ? "bg-surface-active" : ''} >
                                 <InlineStack gap={"400"} wrap={false} blockAlign={"start"}>
-                                    <Thumbnail size={"small"} source={item.image}/>
+                                    <Thumbnail size={"small"} source={image}/>
                                     <BlockStack gap={"100"}>
                                         <Text as={"span"}>{title}</Text>
                                         <InlineStack gap={"100"}>
                                             <Text as={"span"} fontWeight={"semibold"}>Variant :</Text>
                                             <Text as={"span"}>{variant_title}</Text>
-
                                         </InlineStack>
                                         <InlineStack gap={"100"}>
                                             <Text as={"span"} fontWeight={"semibold"}>Quantity :</Text>
@@ -253,14 +252,14 @@ const WishlistItems = () => {
             <IndexTable.Row key={i} id={i} position={i}>
                 <IndexTable.Cell>
                     <InlineStack blockAlign={"center"} gap={"400"} wrap={false}>
-                        <Thumbnail size={"small"} source={x.product.image}/>
-                        <Text as={"span"}>{x.product.title}</Text>
+                        <Thumbnail size={"small"} source={x.image}/>
+                        <Text as={"span"}>{x.title}</Text>
                     </InlineStack>
                 </IndexTable.Cell>
-                <IndexTable.Cell>
-                    <Text
-                        alignment={"end"}>{currencySymbol[shopDetails.currency]}{x.product.price}</Text>
-                </IndexTable.Cell>
+                {/*<IndexTable.Cell>*/}
+                {/*    <Text*/}
+                {/*        alignment={"end"}>{currencySymbol[shopDetails.currency]}{x.product.price}</Text>*/}
+                {/*</IndexTable.Cell>*/}
                 <IndexTable.Cell>
                     <Text alignment={"end"}>{x.total}</Text>
                 </IndexTable.Cell>
@@ -362,7 +361,7 @@ const WishlistItems = () => {
                                 hasMoreItems={isLoading}
                                 headings={[
                                     {title: 'Product'},
-                                    {title: 'Price', alignment: 'end'},
+                                    // {title: 'Price', alignment: 'end'},
                                     {title: 'Item Count', alignment: 'end'},
                                 ]}
                                 selectable={false}>
