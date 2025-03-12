@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {Banner, BlockStack, Layout} from "@shopify/polaris";
-import {apiService, baseUrl, openUrlInNewWindow} from "../../utils/Constant";
+import {apiService, baseUrl, isChecked, openUrlInNewWindow} from "../../utils/Constant";
 import {Shop_details} from "../../redux/action/action";
 import {useNavigate} from "react-router-dom";
 import ConformationModal from "../Comman/ConformationModal";
@@ -98,7 +98,7 @@ const Notifications = () => {
             notification_title: `New Email Template Editor available!`,
             notification_description: `Switch to our enhanced email template editor for a more intuitive and feature-rich experience. Please note, when you upgrade, your previous template will be removed, and you’ll need to set up a new one. Check out the difference here <a href="https://webcontrive.helpscoutdocs.com/article/847-difference-between-old-and-new-email-template" target="_blank">Click here<a>`,
             is_close: true,
-            show: shopDetails && shopDetails.bannerDisplaySetting["email_editor_template"] !== "true",
+            show: shopDetails && !isChecked(shopDetails.new_price_drop_template) && shopDetails.bannerDisplaySetting["email_editor_template"] !== "true",
             keyName: 'email_editor_template',
         },
         {

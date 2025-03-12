@@ -48,7 +48,6 @@ const DefaultLayout = ({ isLoading, setIsLoading }) => {
         const onCheckLCP = async (payload) => {
             try {
                 const response = await apiService.onCheckLCP(payload);
-                console.log("response", response)
             } catch (error) {
                 console.error(error);
             }
