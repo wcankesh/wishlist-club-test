@@ -1,23 +1,23 @@
-import React, {useEffect, useState, Fragment} from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import TagsInput from 'react-tagsinput';
 import 'react-tagsinput/react-tagsinput.css';
 import {
     Page, Layout, Button, FormLayout, PageActions, Text, Card, BlockStack, InlineStack
 } from "@shopify/polaris";
-import {useNavigate} from "react-router-dom";
-import {apiService, baseUrl, capitalizeMessage, openUrlInNewWindow} from "../../../utils/Constant";
+import { useNavigate } from "react-router-dom";
+import { apiService, baseUrl, capitalizeMessage, openUrlInNewWindow } from "../../../utils/Constant";
 import ToastMessage from "../../Comman/ToastMessage";
 import CopyCode from "../../Comman/CopyCode";
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
-import {AppDocsLinks} from "../../../utils/AppDocsLinks";
+import { AppDocsLinks } from "../../../utils/AppDocsLinks";
 import PaidPlanBanner from "../../Comman/PaidPlanBanner";
-import {useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 
 const Headless = () => {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const [isTokenLoading, setIsTokenLoading] = useState(false);
-    const [headLess, setHeadLess] = useState({domain: []});
+    const [headLess, setHeadLess] = useState({ domain: [] });
     const [headLessToken, setHeadLessToken] = useState();
     const [message, setMessage] = useState("");
     const [isError, setIsError] = useState(false);
@@ -88,26 +88,26 @@ const Headless = () => {
     };
 
     const onChange = (e) => {
-        const {value, name} = e.target;
+        const { value, name } = e.target;
         let clone = value.filter((v, i, a) => a.indexOf(v) === i)
-        setHeadLess({...headLess, [name]: clone})
+        setHeadLess({ ...headLess, [name]: clone })
     };
 
     return (
         <Fragment>
-            <Page title={"Headless"} backAction={{content: 'Settings', onAction: () => navigate(`${baseUrl}/settings`)}}
-                  primaryAction={{
-                      content: "Save", onAction: updateHeadless, loading: isTokenLoading, disabled: planAccess
-                  }}>
+            <Page title={"Headless"} backAction={{ content: 'Settings', onAction: () => navigate(`${baseUrl}/settings`) }}
+                primaryAction={{
+                    content: "Save", onAction: updateHeadless, loading: isTokenLoading, disabled: planAccess
+                }}>
                 <Layout>
                     {message !== "" && isError === false ?
                         <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
-                                      setIsErrorServer={setIsErrorServer}/> : ""}
+                            setIsErrorServer={setIsErrorServer} /> : ""}
                     {planAccess && (shopDetails && shopDetails.shop_display_banner["app_plan_headless"] != "false") ?
                         <Layout.Section variant={"fullWidth"}>
-                            <PaidPlanBanner planTitle="Enterprise" type={"app_plan_headless"}/></Layout.Section> : ""}
+                            <PaidPlanBanner planTitle="Enterprise" type={"app_plan_headless"} /></Layout.Section> : ""}
                     <CustomErrorBanner link={AppDocsLinks.collection["416"]} message={message} setMessage={setMessage}
-                                       setIsError={setIsError} isError={isError}/>
+                        setIsError={setIsError} isError={isError} />
 
                     <Layout.Section>
                         <Card>
@@ -116,10 +116,10 @@ const Headless = () => {
                                     <Text as={"span"} variant={"headingMd"}>{"Headless Settings"}</Text>
                                     <InlineStack align={"end"} gap={"200"}>
                                         <Button onClick={() => openUrlInNewWindow(AppDocsLinks.getPostman)}
-                                                variant={"plain"} disabled={planAccess}> API Document </Button>
+                                            variant={"plain"} disabled={planAccess}> API Document </Button>
                                         <div className="Polaris-ActionMenu-SecondaryAction">
                                             <Button onClick={getHeadlessToken} loading={isLoading}
-                                                    disabled={planAccess}>
+                                                disabled={planAccess}>
                                                 Generate Token </Button>
                                         </div>
                                     </InlineStack>
@@ -135,12 +135,12 @@ const Headless = () => {
                                     <BlockStack gap={"100"}>
                                         <label>Domain</label>
                                         <TagsInput className={`react-tagsinput`} value={headLess.domain || []}
-                                                   onChange={(value) => onChange({target: {name: "domain", value}})}
-                                                   pasteSplit={defaultPasteSplit} addOnPaste={true} onlyUnique={true}
-                                                   inputProps={{placeholder: 'Enter domain'}} disabled={planAccess}/>
+                                            onChange={(value) => onChange({ target: { name: "domain", value } })}
+                                            pasteSplit={defaultPasteSplit} addOnPaste={true} onlyUnique={true}
+                                            inputProps={{ placeholder: 'Enter domain' }} disabled={planAccess} />
                                     </BlockStack>
 
-                                    <CopyCode label={"Access Token"} value={headLess.token}/>
+                                    <CopyCode label={"Access Token"} value={headLess.token} />
                                     <Text as={"span"} tone={"caution"}>
                                         <Text as={"span"} fontWeight={"bold"}> Please Note:{" "}</Text>
                                         {`Reach out to our dedicated support team and provide them with the domain you want to use with the API. They will guide you through the whitelisting process and ensure that the API is enabled for your specified domain. Without whitelisting the domain API will not work.`}
@@ -152,7 +152,7 @@ const Headless = () => {
                 </Layout>
                 <PageActions primaryAction={{
                     content: 'Save', onAction: updateHeadless, loading: isTokenLoading, disabled: planAccess
-                }}/>
+                }} />
             </Page>
         </Fragment>
     );

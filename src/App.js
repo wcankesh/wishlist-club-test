@@ -1,13 +1,13 @@
-import React, {useEffect, useState} from 'react';
-import {Route, Routes, Navigate, BrowserRouter} from "react-router-dom";
+import React, { useEffect, useLayoutEffect, useState } from 'react';
+import { Route, Routes, Navigate, BrowserRouter } from "react-router-dom";
 import '@shopify/polaris/build/esm/styles.css';
 import "./style.css";
 import DefaultLayout from './Component/DefaultLayout/DefaultLayout';
-import {apiService, baseUrl} from './utils/Constant';
-import {routes} from './utils/Routes';
-import {useDispatch} from "react-redux";
-import {Shop_details} from "./redux/action/action";
-import {AppProvider, Spinner} from '@shopify/polaris';
+import { apiService, baseUrl } from './utils/Constant';
+import { routes } from './utils/Routes';
+import { useDispatch } from "react-redux";
+import { Shop_details } from "./redux/action/action";
+import { AppProvider, Spinner } from '@shopify/polaris';
 import enTranslations from '@shopify/polaris/locales/en.json';
 
 const App = () => {
@@ -16,9 +16,9 @@ const App = () => {
     const dispatch = useDispatch();
     const shop = urlParams.get("shop")
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const getInstall = async () => {
-            const response = await apiService.Install({shop: shop})
+            const response = await apiService.Install({ shop: shop })
             if (response.status === 200) {
                 dispatch(Shop_details({
                     ...response.data,
@@ -31,11 +31,11 @@ const App = () => {
                     onboarding: response.data.onboarding,
                     addon_email_notification: response.data.addon_email_notification,
                 }))
-                setIsLoading(false)
+                setIsLoading(!isLoading)
             } else if (response.status === 201 && response.data.is_install === false) {
                 window.top.location.href = response.data.install_url;
             } else {
-                setIsLoading(false);
+                setIsLoading(!isLoading)
             }
         };
         getInstall();
@@ -43,21 +43,27 @@ const App = () => {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path={`${baseUrl}/`} element={<AppProvider i18n={enTranslations}>
-                    {isLoading ?
-                        <div className="main_spinner">
-                            <Spinner accessibilityLabel="Spinner example" size="large" color="teal"/>
-                        </div> :
-                        <DefaultLayout isLoading={isLoading}/>}
-                </AppProvider>}>
+                <Route path={`${baseUrl}/`} element={
+
+                    <AppProvider i18n={enTranslations}>
+                        {isLoading
+                            ?
+                            <div className="main_spinner">
+                                <Spinner accessibilityLabel="Spinner example" size="large" color="teal" />
+                            </div>
+                            :
+                            <DefaultLayout isLoading={isLoading} setIsLoading={setIsLoading} />
+                        }
+                    </AppProvider>
+                }>
                     {
                         routes.map((x, i) => {
                             return (
-                                <Route exact={true} key={i} path={x.path} element={x.component}/>
+                                <Route exact={true} key={i} path={x.path} element={x.component} />
                             )
                         })
                     }
-                    <Route path={`${baseUrl}/`} element={<Navigate to={`${baseUrl}/dashboard`} replace/>}/>
+                    <Route path={`${baseUrl}/`} element={<Navigate to={`${baseUrl}/dashboard`} replace />} />
                 </Route>
             </Routes>
         </BrowserRouter>

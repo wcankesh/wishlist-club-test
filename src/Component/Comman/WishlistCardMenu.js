@@ -1,22 +1,22 @@
 import React from "react";
-import {BlockStack, Card, Icon, InlineGrid, InlineStack, Text} from "@shopify/polaris";
+import { BlockStack, Card, Icon, InlineGrid, InlineStack, Text } from "@shopify/polaris";
 
-const twoColumns = {xs: 1, sm: 1, md: 2, lg: 2, xl: 2};
-const threeColumns = {xs: 1, sm: 1, md: 2, lg: 3, xl: 3};
+const twoColumns = { xs: 1, sm: 1, md: 2, lg: 2, xl: 2 };
+const threeColumns = { xs: 1, sm: 1, md: 2, lg: 3, xl: 3 };
 
-const WishlistCardMenu = ({data, onRedirect, shopDetails, column = "two"}) => {
+const WishlistCardMenu = ({ data, onRedirect, shopDetails, column = "two" }) => {
     return (
         <Card>
             <InlineGrid gap={"400"} columns={column === "two" ? twoColumns : threeColumns}>
                 {data.map((x, index) => {
                     return (
-                        <button data-featurebase-feedback-portal className={"cursor-pointer"} onClick={() => onRedirect(x.link)} key={index}
-                        style={{display: 'block', border: 'none', background:'transparent', textAlign: 'start'}}
+                        <button data-featurebase-feedback-portal className={"cursor-pointer flex "} onClick={() => onRedirect(x.link)} key={index}
+                            style={{ border: 'none', background: 'transparent', textAlign: 'start', display: "flex", justifyContent: 'flex-start', alignItems: 'flex-start' }}
                         >
                             <InlineStack gap={"200"} align={"space-between"} blockAlign={"start"} wrap={false}>
                                 <InlineStack gap={"400"} wrap={false}>
                                     <div className="sgi_icon">
-                                        <Icon source={x.icon} tone="subdued"/>
+                                        <Icon source={x.icon} tone="subdued" />
                                     </div>
                                     <BlockStack gap={"100"}>
                                         <Text as="span" variant="headingMd" breakWord fontWeight={"medium"}>

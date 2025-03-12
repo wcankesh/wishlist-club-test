@@ -14,17 +14,17 @@ const Settings = () => {
             text: "Unlock a range of options to customize your wishlist's General settings.",
             link: "settings/general"
         },
-        {
-            icon: Icons.ThemeIcon,
-            name: "Wishlist Design",
-            text: "Manage the design settings of your wishlist specifically for the product and collection pages.",
-            link: "settings/wishlist-design"
-        },
+        // {
+        //     icon: Icons.ThemeIcon,
+        //     name: "Wishlist Design",
+        //     text: "Manage the design settings of your wishlist specifically for the product and collection pages.",
+        //     link: "settings/wishlist-design"
+        // },
         {
             icon: Icons.EmailIcon,
             name: "Wishlist Email",
             text: "Adjust your email preferences for wishlist items, price-drop alerts, and restock notifications for products in your wishlist.",
-            link: "settings/email"
+            link: "settings/email?step=0"
 
         },
         {
@@ -35,16 +35,16 @@ const Settings = () => {
         },
         {
             icon: Icons.DomainNewIcon,
-            name: "Headless",
+            name: "APIs",
             text: "Utilize this API to personalize your wishlist according to your unique needs.",
             link: "settings/headless"
         },
-        {
-            icon: Icons.ReceiptDollarFilledIcon,
-            name: "Plan & Price",
-            text: "This option displays the pricing plans that are available.",
-            link: "settings/plan"
-        },
+        // {
+        //     icon: Icons.ReceiptDollarFilledIcon,
+        //     name: "Plan & Price",
+        //     text: "This option displays the pricing plans that are available.",
+        //     link: "settings/plan"
+        // },
         {
             icon: Icons.ImportIcon,
             name: "Installation",

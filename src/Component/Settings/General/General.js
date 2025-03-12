@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect, useState} from 'react';
+import React, { Fragment, useEffect, useCallback, useState } from 'react';
 import {
     BlockStack,
     Box,
@@ -11,7 +11,7 @@ import {
     InlineStack,
     Layout,
     Page,
-    Text
+    Text, Popover, ActionList
 } from '@shopify/polaris'
 import {useNavigate} from "react-router-dom";
 import {apiService, baseUrl, capitalizeMessage, isChecked, toggleFlag} from "../../../utils/Constant";
@@ -172,7 +172,19 @@ const General = () => {
         {label: 'All variant', value: 0},
         {label: 'Specific variant', value: 1},
     ];
+    const CustomPopover = ({ options, selectedValue, onSelect, isDisabled, label }) => {
+        const [popoverActive, setPopoverActive] = useState(false);
 
+        const togglePopover = useCallback(() => setPopoverActive((active) => !active), []);
+
+        const selectedLabel = options.find((x) => x.value === selectedValue)?.label || label || "Select Option";
+
+        return (
+            <Popover active={popoverActive} activator={<Button onClick={togglePopover} disabled={isDisabled} disclosure>{selectedLabel}</Button>} onClose={togglePopover}>
+                <ActionList items={options.map((x) => ({ content: x.label, onAction: () => { onSelect(x.value); setPopoverActive(false); } }))} />
+            </Popover>
+        );
+    };
     return (
         <Fragment>
             <Page title={"General"} backAction={{content: 'Settings', onAction: () => navigate(`${baseUrl}/settings`)}}>
@@ -241,132 +253,82 @@ const General = () => {
                                 <Box padding={"500"}>
                                     <BlockStack gap={"200"}>
                                         <Text fontWeight='semibold' as={"span"}>Product variant wishlists</Text>
-                                        <ButtonGroup variant="segmented">
-                                            {(ProductVariantList || []).map((x, i) => {
-                                                return (
-                                                    <Button
-                                                        disabled={isLoading}
-                                                        pressed={setting?.is_variant_wishlist === x.value}
-                                                        onClick={() => handleChange({
-                                                            target: {name: "is_variant_wishlist", value: x.value}
-                                                        })}
-                                                    > {x.label}</Button>
-                                                )
-                                            })}
-                                        </ButtonGroup>
+                                        <CustomPopover
+                                            options={ProductVariantList}
+                                            selectedValue={setting?.is_variant_wishlist}
+                                            onSelect={(value) => handleChange({ target: { name: "is_variant_wishlist", value } })}
+                                            isDisabled={isLoading}
+                                            label="Select Variant"
+                                        />
+                                    </BlockStack>
+                                    <Box paddingBlock={"200"}>
                                         <Text tone="caution" as={"span"}>
                                             {`Please note: If you wish to see the wishlist for a specific product variant, you will need to add this shortcode.`}
                                         </Text>
                                         <Text tone="caution" as={"span"}>
                                             {`If you choose variant wishlist, make sure to add the below shortcode. Otherwise, the wishlist will not be shown.`}</Text>
-                                        <FormLayout>
-                                            <FormLayout.Group>
-                                                <BlockStack gap={"150"}>
-                                                    <Text as={"span"}>Product page shortcode</Text>
-                                                    <CopyCode
-                                                        value={`<div class="th_prd_wl_btn" data-product_id="{{product.id}}" data-variant_id="{{product.selected_or_first_available_variant.id}}"></div>`}/>
-                                                </BlockStack>
-                                                <BlockStack gap={"150"}>
-                                                    <Text as={"span"}>Collection page shortcode</Text>
-                                                    <CopyCode
-                                                        value={`<div class="th_wl_col_btn" data-product_id="{{product.id}}" data-variant_id="{{product.selected_or_first_available_variant.id}}"></div>`}/>
-                                                </BlockStack>
-                                            </FormLayout.Group>
-                                        </FormLayout>
-                                    </BlockStack>
+                                    </Box>
+                                    <FormLayout>
+                                        <FormLayout.Group>
+                                            <BlockStack gap={"150"}>
+                                                <Text as={"span"}>Product page shortcode</Text>
+                                                <CopyCode
+                                                    value={`<div class="th_prd_wl_btn" data-product_id="{{product.id}}" data-variant_id="{{product.selected_or_first_available_variant.id}}"></div>`} />
+                                            </BlockStack>
+                                            <BlockStack gap={"150"}>
+                                                <Text as={"span"}>Collection page shortcode</Text>
+                                                <CopyCode
+                                                    value={`<div class="th_wl_col_btn" data-product_id="{{product.id}}" data-variant_id="{{product.selected_or_first_available_variant.id}}"></div>`} />
+                                            </BlockStack>
+                                        </FormLayout.Group>
+                                    </FormLayout>
                                 </Box>
-                                {/*<Box padding={"500"}>
-                                    <InlineStack gap={"400"} blockAlign={"start"} wrap={false}>
-                                        <Checkbox checked={setting.is_variant_wishlist == "1"} disabled={isLoading}
-                                                  onChange={(checked) => handleChange({
-                                                      target: {name: "is_variant_wishlist", value: checked ? "1" : "0"}
-                                                  })}/>
-                                        <BlockStack gap={"100"}>
-                                            <div className={"cursor-pointer"} onClick={() => handleChange({
-                                                target: {
-                                                    name: "is_variant_wishlist",
-                                                    value: setting.is_variant_wishlist == "1" ? "0" : "1"
-                                                }
-                                            })}>
-                                                <Text fontWeight='semibold' as={"span"}>Product variant
-                                                    wishlists </Text>
-                                                <Text as={"span"}>
-                                                    {`If enabled, wishlists will be shown based on the product variant, whereas disabling it will result in wishlists being displayed solely based on products.`}
-                                                </Text>
-                                            </div>
-                                            <Text tone="caution" as={"span"}>
-                                                {`Please note: If you wish to see the wishlist for a specific product variant, you will need to add this shortcode.`}
-                                            </Text>
-                                            <Text tone="caution" as={"span"}>
-                                                {`If you choose variant wishlist, make sure to add the below shortcode. Otherwise, the wishlist will not be shown.`}</Text>
-                                            <FormLayout>
-                                                <FormLayout.Group>
-                                                    <BlockStack gap={"150"}>
-                                                        <Text as={"span"}>Product page shortcode</Text>
-                                                        <CopyCode
-                                                            value={`<div class="th_prd_wl_btn" data-product_id="{{product.id}}" data-variant_id="{{product.selected_or_first_available_variant.id}}"></div>`}/>
-                                                    </BlockStack>
-                                                    <BlockStack gap={"150"}>
-                                                        <Text as={"span"}>Collection page shortcode</Text>
-                                                        <CopyCode
-                                                            value={`<div class="th_wl_col_btn" data-product_id="{{product.id}}" data-variant_id="{{product.selected_or_first_available_variant.id}}"></div>`}/>
-                                                    </BlockStack>
-                                                </FormLayout.Group>
-                                            </FormLayout>
-                                        </BlockStack>
-                                    </InlineStack>
-                                </Box>*/}
-                                <Divider/>
+                                <Divider />
                                 <Box padding={"500"}>
                                     <BlockStack gap={"200"}>
                                         <Text fontWeight='semibold' as={"span"}>Add to Cart Redirection Options{'  '}
                                             {shopDetails.shop !== 'french-beauty-co.myshopify.com' && shopDetails.plan_type < '7' ? <div className={'planText'}>Advance</div>
-                                            : ''
+                                                : ''
                                             }
                                         </Text>
                                         <Text as={"span"}>Select the next step the user will be directed to after <strong>'Add to cart'</strong></Text>
-                                        <ButtonGroup variant="segmented">
-                                            {Array.from(Array(3)).map((_, i) => {
-                                                return (
-                                                    <Button
-                                                        disabled={shopDetails.shop !== 'french-beauty-co.myshopify.com' && shopDetails.plan_type < '7'}
-                                                        pressed={setting?.redirect_type === i}
-                                                        onClick={() => handleChange({
-                                                            target: {name: "redirect_type", value: i}
-                                                        })}
-                                                    > {i === 0 ? "Cart" : i === 1 ? "Checkout" : "Callback"}</Button>
-                                                )
-                                            })}
-                                        </ButtonGroup>
-                                        {setting?.redirect_type === 2 ?
-                                            <CopyCode value={`<script>window.$wc_item_added_to_cart = function(){ }</script>`}/>
-                                            : ""}
+                                        <CustomPopover
+                                            options={[
+                                                { label: "Cart", value: 0 },
+                                                { label: "Checkout", value: 1 },
+                                                { label: "Callback", value: 2 },
+                                            ]}
+                                            selectedValue={setting?.redirect_type}
+                                            onSelect={(value) => handleChange({ target: { name: "redirect_type", value } })}
+                                            isDisabled={shopDetails.shop !== 'french-beauty-co.myshopify.com' && shopDetails.plan_type < '7'}
+                                            label="Select Redirect Type"
+                                        />
+                                        <Box paddingBlock={"200"}>
+                                            {setting?.redirect_type === 2 ?
+                                                <CopyCode value={`<script>window.$wc_item_added_to_cart = function(){ }</script>`} />
+                                                : ""}
+                                        </Box>
                                     </BlockStack>
                                 </Box>
-                                <Divider/>
+                                <Divider />
                                 <Box padding={"500"}>
                                     <BlockStack gap={"200"}>
                                         <Text fontWeight='semibold' as={"span"}>Wishlist Auto-Remove{'  '}
                                             {shopDetails.plan_type < '6' && <div className={'planText'}>Pro</div>}
                                         </Text>
-                                        <ButtonGroup variant="segmented">
-                                            {(removeProduct || []).map((x, i) => {
-                                                return (
-                                                    <Button key={i}
-                                                            disabled={shopDetails.plan_type < '6'}
-                                                            pressed={setting?.remove_wishlist_type === x.value}
-                                                            onClick={() => handleChange({
-                                                                target: {
-                                                                    name: "remove_wishlist_type",
-                                                                    value: x.value
-                                                                }
-                                                            })}>{x.label}</Button>
-                                                )
-                                            })}
-                                        </ButtonGroup>
-                                        <Text as={'span'} variant={'bodyMd'}>
-                                            {`Choose when to remove products from the wishlist: upon adding to cart, placing an order, or not at all. By default, wishlist items will be removed when the customer purchases the product.`}
-                                        </Text>
+                                        <CustomPopover
+                                            options={removeProduct}
+                                            selectedValue={setting?.remove_wishlist_type}
+                                            onSelect={(value) => handleChange({ target: { name: "remove_wishlist_type", value } })}
+                                            isDisabled={shopDetails.plan_type < 6}
+                                            label="Select Remove Wishlist Type"
+                                        />
+                                    
+                                        <Box paddingBlock={"200"}>
+                                            <Text as={'span'} variant={'bodyMd'}>
+                                                {`Choose when to remove products from the wishlist: upon adding to cart, placing an order, or not at all. By default, wishlist items will be removed when the customer purchases the product.`}
+                                            </Text>
+                                        </Box>
                                     </BlockStack>
                                 </Box>
                             </Card>
@@ -376,20 +338,21 @@ const General = () => {
             </Page>
             {
                 activeGuestModal ? (
-                <Modal open={activeGuestModal}>
-                    <TitleBar title={"Really want to deactivate Guest Wishlist?"}>
-                        <button variant="primary" loading={isLoading && ''} onClick={() => GuestWishlistConfirmation()}>Yes</button>
-                        <button onClick={() => handleChangeModal()}>No</button>
-                    </TitleBar>
-                    <Box padding={'400'}>
-                        <Text as={"span"}>
-                            <Text as={"span"} tone={"warning"} fontWeight={"semibold"}>WARNING! </Text>
-                            {`All the Guest Customers Product Information will be removed from our server and there is no way back. Are you sure you want to do this?`}
-                        </Text>
-                    </Box>
-                </Modal>
-            ) : ''}
-        </Fragment>
+                    <Modal open={activeGuestModal}>
+                        <TitleBar title={"Really want to deactivate Guest Wishlist?"}>
+                            <button variant="primary" loading={isLoading && ''} onClick={() => GuestWishlistConfirmation()}>Yes</button>
+                            <button onClick={() => handleChangeModal()}>No</button>
+                        </TitleBar>
+                        <Box padding={'400'}>
+                            <Text as={"span"}>
+                                <Text as={"span"} tone={"warning"} fontWeight={"semibold"}>WARNING! </Text>
+                                {`All the Guest Customers Product Information will be removed from our server and there is no way back. Are you sure you want to do this?`}
+                            </Text>
+                        </Box>
+                    </Modal>
+                ) : ''
+            }
+        </Fragment >
     );
 }
 export default General;
