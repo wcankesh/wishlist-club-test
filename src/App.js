@@ -22,12 +22,10 @@ const App = () => {
             if (response.status === 200) {
                 dispatch(Shop_details({
                     ...response.data,
-                    notification: response.notification,
-                    bannerDisplaySetting: JSON.parse(response.banner_display_setting),
+                    bannerDisplaySetting: JSON.parse(response?.data?.banner_display_setting),
                     extension_status: response.extension_status,
                     on_boardig: response?.on_boardig,
                     install_url: response?.install_url,
-                    bis_import_export_btn: response?.bis_import_export_btn,
                     onboarding: response.data.onboarding,
                     addon_email_notification: response.data.addon_email_notification,
                 }))

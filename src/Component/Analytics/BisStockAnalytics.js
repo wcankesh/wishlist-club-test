@@ -30,6 +30,7 @@ const BisStockAnalytics = () => {
     const [isImportLoading, setIsImportLoading] = useState(false);
     const [isError, setIsError] = useState(false)
     const [isErrorServer, setIsErrorServer] = useState(false);
+    const [isBisImportExportBtn, setIsBisImportExportBtn] = useState(false);
 
     useEffect(() => {
         BisAnalytics({selected: selected});
@@ -47,6 +48,7 @@ const BisStockAnalytics = () => {
         }
         const response = await apiService. BisAnalytics(payload);
         if (response.status === 200) {
+            setIsBisImportExportBtn(response?.bis_import_export_btn)
             setBisAnalytics(response.data)
             setTotalAnalytics(response.total)
             setIsLoading(false)
@@ -213,11 +215,11 @@ const BisStockAnalytics = () => {
                                 <div className="Polaris-ActionMenu-SecondaryAction">
                                     <Button
                                         icon={Icons.ExportIcon}
-                                        disabled={shopDetails.plan_type !== "8" ? shopDetails.bis_import_export_btn === false : false}
+                                        disabled={shopDetails.plan_type !== "8" ? isBisImportExportBtn === false : false}
                                         onClick={() => Export()}>Export</Button>
                                 </div>
                                 <Button variant={"primary"} icon={Icons.ImportIcon}
-                                        disabled={shopDetails.plan_type !== "8" ? shopDetails.bis_import_export_btn === false : false}
+                                        disabled={shopDetails.plan_type !== "8" ? isBisImportExportBtn === false : false}
                                         onClick={() => handleImportChange()}>Import</Button>
 
                             </InlineStack>
