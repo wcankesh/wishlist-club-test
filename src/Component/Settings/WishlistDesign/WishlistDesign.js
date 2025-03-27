@@ -79,7 +79,7 @@ const WishlistDesign = () => {
         }
         delete payload.icon
         const response = await apiService.updateLauncher(payload, wishlistSetting.id)
-        if (response.status === 200) {
+        if (response.status === true) {
             setIsLoading(false)
             setIsError(false)
             setMessage(capitalizeMessage(response.message))
