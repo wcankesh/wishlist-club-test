@@ -136,7 +136,7 @@ const Mailchimp = ({ MailchimpProps, currentType }) => {
                     error={MailchimpError?.public_key}
                     helpText={
                         <Text>{`The Public API key can be found in Mailchimp -> Account -> Settings -> API Keys > Public API Key / site ID.`}{' '}
-                            <Link url={AppDocsLinks.MailchimpApiKey} external removeUnderline>
+                            <Link url={AppDocsLinks.MailchimpSettings} external removeUnderline>
                                 {`Click here`}
                             </Link></Text>
                     }

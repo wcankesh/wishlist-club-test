@@ -42,7 +42,7 @@ const Integration = () => {
                                                     : ""}
                                             </InlineStack>
                                             <Button fullWidth size={'large'} onClick={() => onRedirect(x.link)}
-                                            >{x.buttonText}</Button>
+                                                disabled={x.buttonDisable || shopDetails.plan_type !== '8'}>{x.buttonText}</Button>
                                         </BlockStack>
                                     </Card>
                                 );

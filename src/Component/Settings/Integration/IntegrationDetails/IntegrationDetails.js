@@ -93,39 +93,64 @@ const IntegrationDetails = () => {
     useEffect(() => {
         setIsPageLoading(true)
         getIntegration(type);
-        // eslint-disable-next-line
     }, [type]);
 
     const createIntegration = async () => {
-        setIsActionLoading('save')
+        try {
+            setIsActionLoading('save');
+            let payload = getPayload(type, isUpdated);
 
-        // const extResponse = await apiService.ExtensionStatus({});
-        // console.log("extResponse", extResponse);
+            if (!payload) {
+                console.error("Invalid integration type");
+                setIsActionLoading('');
+                return;
+            }
 
-        // let payload;
-        // if (type === "klaviyo") {
-        //     const basePayload = {
-        //         type: 1,
-        //         is_klaviyo_connect: klaviyo?.is_klaviyo_connect,
-        //         public_key: klaviyo?.public_key,
-        //         secret_key: klaviyo?.secret_key,
-        //     }
-        //     payload = isUpdated ? { ...basePayload, id: klaviyo?.id } : basePayload;
-        // }
+            const response = await apiService.createIntegration(payload);
 
-        // const response = await apiService.createIntegration(payload);
-        // if (response.status === 200) {
-        //     setMessage(capitalizeMessage(response.message));
-        //     setIsError(false);
-        //     setIsUpdated(true);
-        //     setIsActionLoading('');
-        //     getIntegration(type);
-        // } else {
-        //     setMessage(capitalizeMessage(response.message));
-        //     setIsErrorServer(true);
-        //     setIsActionLoading('');
-        // }
-    }
+            if (response.status === 200) {
+                setMessage(capitalizeMessage(response.message));
+                setIsError(false);
+                setIsUpdated(true);
+                getIntegration(type);
+            } else {
+                setMessage(capitalizeMessage(response.message));
+                setIsErrorServer(true);
+            }
+        } catch (error) {
+            console.error("Error creating integration:", error);
+            setMessage("Something went wrong. Please try again.");
+            setIsErrorServer(true);
+        } finally {
+            setIsActionLoading('');
+        }
+    };
+
+    const getPayload = (type, isUpdated) => {
+        switch (type) {
+            case "klaviyo":
+                return {
+                    type: 1,
+                    is_klaviyo_connect: klaviyo?.is_klaviyo_connect,
+                    public_key: klaviyo?.public_key,
+                    secret_key: klaviyo?.secret_key,
+                    ...(isUpdated && { id: klaviyo?.id })
+                };
+
+            case "mailchimp":
+                return {
+                    type: 2,
+                    mailchimp: {
+                        is_connect: mailchimp.is_Mailchimp_connect,
+                        list_id: mailchimp?.public_key,
+                        secret_key: mailchimp?.secret_key,
+                    },
+                };
+
+            default:
+                return null;
+        }
+    };
 
     const handlePrimaryAction = (value) => {
         if (value === 'next') {
