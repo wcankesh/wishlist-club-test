@@ -87,7 +87,7 @@ const Notifications = () => {
             notification_title: `Attention: 80% Notification Limit Exceeded of your current plan!`,
             notification_description: `You’re Nearing your email limit on the current plan. Ensure uninterrupted communication by purchasing AddOn Emails.`,
             is_close: true,
-            show: shopDetails && shopDetails.addon_email_notification,
+            show: shopDetails && shopDetails?.shop.addon_email_notification,
             keyName: 'addon_email_notification',
         },
         {
@@ -141,13 +141,13 @@ const Notifications = () => {
                                             onDismiss={x?.is_close ? () => onRemoveBanner(x?.keyName) : null}
                                             action={
                                                 x.button_text ? {
-                                                        content: x.button_text,
-                                                        onAction: x.is_custom_click ? () => x.button_link() : null
-                                                    }
+                                                    content: x.button_text,
+                                                    onAction: x.is_custom_click ? () => x.button_link() : null
+                                                }
                                                     : ""}
                                         >
                                             <BlockStack gap={"100"}>
-                                                <span dangerouslySetInnerHTML={{__html: x?.notification_description}}/>
+                                                <span dangerouslySetInnerHTML={{ __html: x?.notification_description }} />
                                             </BlockStack>
                                         </Banner>
                                     </Layout.Section>

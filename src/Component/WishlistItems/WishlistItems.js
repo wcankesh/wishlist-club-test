@@ -1,17 +1,19 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
     Badge, BlockStack, Box, Button, Card, Divider, DropZone, EmptySearchResult, IndexTable, InlineStack, Layout,
     Link, OptionList, Page, Pagination, Popover, Text, Thumbnail
 } from "@shopify/polaris"
 import moment from "moment";
-import {apiService, capitalizeMessage, currencySymbol} from "../../utils/Constant";
-import {useSelector} from "react-redux";
+import { apiService, capitalizeMessage, currencySymbol } from "../../utils/Constant";
+import { useSelector } from "react-redux";
 import ToastMessage from "../Comman/ToastMessage";
 import CustomErrorBanner from "../Comman/CustomErrorBanner";
-import {AppDocsLinks} from "../../utils/AppDocsLinks";
-import {tableLoading} from "../../utils/RenderLoading";
-import {Icons} from "../../utils/Icons";
-import {Modal, TitleBar} from "@shopify/app-bridge-react";
+import { AppDocsLinks } from "../../utils/AppDocsLinks";
+import { tableLoading } from "../../utils/RenderLoading";
+import { Icons } from "../../utils/Icons";
+import { Modal, TitleBar } from "@shopify/app-bridge-react";
+import { lazy } from 'react';
+const EmailHistory = lazy(() => import("../../Component/EmailHistory/EmailHistory"));
 
 const WishlistItems = () => {
     const limit = 10;
@@ -20,7 +22,7 @@ const WishlistItems = () => {
     const [isImportLoading, setIsImportLoading] = useState(false);
     const [wlProduct, setWlProduct] = useState([]);
     const [wlUser, setWlUser] = useState([]);
-    const [importHistory, setImportHistory] = useState({lists: []});
+    const [importHistory, setImportHistory] = useState({ lists: [] });
     const [PageNo, setPageNo] = useState(1)
     const [importHisPageNo, setImportHisPageNo] = useState(1)
     const [ProductPage, setProductPage] = useState(1)
@@ -49,7 +51,7 @@ const WishlistItems = () => {
 
     const WishlistAnalytics = async () => {
         setIsLoading(true);
-        const payload = {page_no: PageNo, limit: limit, product_page: ProductPage}
+        const payload = { page_no: PageNo, limit: limit, product_page: ProductPage }
         const response = await apiService.WishlistAnalytics(payload);
         if (response.status === 200) {
             setIsError(false)
@@ -71,7 +73,7 @@ const WishlistItems = () => {
 
     const ImportWishlistHistory = async () => {
         setIsLoading(true);
-        const payload = {page_no: importHisPageNo, limit: limit,}
+        const payload = { page_no: importHisPageNo, limit: limit, }
         const response = await apiService.ImportWishlistHistory(payload);
         if (response.status === 200) {
             setIsError(false)
@@ -90,7 +92,7 @@ const WishlistItems = () => {
     }
 
     const Export = async () => {
-        const payload = {shop: shopDetails.shop}
+        const payload = { shop: shopDetails }
         const response = await apiService.getExport(payload);
     }
 
@@ -134,10 +136,10 @@ const WishlistItems = () => {
         [],
     );
 
-    const fileUpload = !file && <DropZone.FileUpload/>;
+    const fileUpload = !file && <DropZone.FileUpload />;
     const uploadedFile = file && (
         <BlockStack align={"center"} inlineAlign={"center"} gap={"400"}>
-            <br/>
+            <br />
             <div>
                 {file.name}{' '}
                 <Text variant="bodySm" as="p">
@@ -178,25 +180,53 @@ const WishlistItems = () => {
     }
 
     const tabs = [
-        {value: "1", label: 'Product Wishlist'},
-        {value: "2", label: 'User Wishlist'},
-        {value: "3", label: 'Wishlist Import History'},
+        { value: "1", label: 'Product Wishlist' },
+        { value: "2", label: 'User Wishlist' },
+        { value: "3", label: 'Wishlist Import History' },
+        { value: "4", label: 'Email History' },
     ];
 
-    const resourceNameWishlistProduct = {singular: 'product wishlist', plural: 'product wishlists'};
-    const resourceNameWishlistUser = {singular: 'user wishlist', plural: 'user wishlists'};
-    const resourceNameImportHistory = {singular: 'wishlist import history', plural: 'wishlist import history'};
+    const resourceNameWishlistProduct = { singular: 'product wishlist', plural: 'product wishlists' };
+    const resourceNameWishlistUser = { singular: 'user wishlist', plural: 'user wishlists' };
+    const resourceNameImportHistory = { singular: 'wishlist import history', plural: 'wishlist import history' };
 
     const renderPopoverContent = (products) => {
         return (
             <div className={"remove-cursor"}>
-                {(products || []).map((item,i) => {
-                    const {title, quantity, created_at, variant_title, is_active, image} = item;
-                    return(
+                {(products || []).map((item, i) => {
+                    const { title, quantity, created_at, variant_title, is_active, image } = item;
+                    return (
                         <React.Fragment key={i}>
                             <Box padding={"200"} background={is_active === 0 ? "bg-surface-active" : ''} >
                                 <InlineStack gap={"400"} wrap={false} blockAlign={"start"}>
-                                    <Thumbnail size={"small"} source={image}/>
+                                    <Thumbnail size={"small"} source={image} />
+                                    <BlockStack gap={"100"}>
+                                        <Text as={"span"}>{title}</Text>
+                                        <InlineStack gap={"100"}>
+                                            <Text as={"span"} fontWeight={"semibold"}>Variant :</Text>
+                                            <Text as={"span"}>{variant_title}</Text>
+                                        </InlineStack>
+                                        <InlineStack gap={"100"}>
+                                            <Text as={"span"} fontWeight={"semibold"}>Quantity :</Text>
+                                            <Text as={"span"}>{quantity}</Text>
+                                        </InlineStack>
+                                        <InlineStack gap={"100"}>
+                                            <Text as={"span"} fontWeight={"semibold"}>Created Date :</Text>
+                                            <Text as={"span"}>{moment(created_at).format('ll')}</Text>
+                                        </InlineStack>
+                                    </BlockStack>
+                                </InlineStack>
+                            </Box>
+                            {i !== (products.length - 1) && <Divider />}
+                        </React.Fragment>
+                    )
+                })}
+                {/*<ResourceList items={products} renderItem={(item) => {
+                        const {title, quantity, created_at, variant_title} = item;
+                        return (
+                            <ResourceList.Item>
+                                <InlineStack gap={"400"} wrap={false}>
+                                    <Thumbnail size={"small"} source={item.image}/>
                                     <BlockStack gap={"100"}>
                                         <Text as={"span"}>{title}</Text>
                                         <InlineStack gap={"100"}>
@@ -213,36 +243,9 @@ const WishlistItems = () => {
                                         </InlineStack>
                                     </BlockStack>
                                 </InlineStack>
-                            </Box>
-                            {i !== (products.length - 1) && <Divider />}
-                        </React.Fragment>
-                    )
-                })}
-                {/*<ResourceList items={products} renderItem={(item) => {
-                    const {title, quantity, created_at, variant_title} = item;
-                    return (
-                        <ResourceList.Item>
-                            <InlineStack gap={"400"} wrap={false}>
-                                <Thumbnail size={"small"} source={item.image}/>
-                                <BlockStack gap={"100"}>
-                                    <Text as={"span"}>{title}</Text>
-                                    <InlineStack gap={"100"}>
-                                        <Text as={"span"} fontWeight={"semibold"}>Variant :</Text>
-                                        <Text as={"span"}>{variant_title}</Text>
-                                    </InlineStack>
-                                    <InlineStack gap={"100"}>
-                                        <Text as={"span"} fontWeight={"semibold"}>Quantity :</Text>
-                                        <Text as={"span"}>{quantity}</Text>
-                                    </InlineStack>
-                                    <InlineStack gap={"100"}>
-                                        <Text as={"span"} fontWeight={"semibold"}>Created Date :</Text>
-                                        <Text as={"span"}>{moment(created_at).format("DD-MM-YYYY")}</Text>
-                                    </InlineStack>
-                                </BlockStack>
-                            </InlineStack>
-                        </ResourceList.Item>
-                    );
-                }}/>*/}
+                            </ResourceList.Item>
+                        );
+                    }}/>*/}
             </div>
         )
     };
@@ -252,13 +255,13 @@ const WishlistItems = () => {
             <IndexTable.Row key={i} id={i} position={i}>
                 <IndexTable.Cell>
                     <InlineStack blockAlign={"center"} gap={"400"} wrap={false}>
-                        <Thumbnail size={"small"} source={x.image}/>
+                        <Thumbnail size={"small"} source={x.image} />
                         <Text as={"span"}>{x.title}</Text>
                     </InlineStack>
                 </IndexTable.Cell>
                 {/*<IndexTable.Cell>*/}
                 {/*    <Text*/}
-                {/*        alignment={"end"}>{currencySymbol[shopDetails.currency]}{x.product.price}</Text>*/}
+                {/*        alignment={"end"}>{currencySymbol[shopDetails?.shop.currency]}{x.product.price}</Text>*/}
                 {/*</IndexTable.Cell>*/}
                 <IndexTable.Cell>
                     <Text alignment={"end"}>{x.total}</Text>
@@ -288,18 +291,18 @@ const WishlistItems = () => {
                 </IndexTable.Cell>
                 <IndexTable.Cell>
                     <Popover sectioned active={popoverActive === i}
-                             activator={<Button variant={"plain"} textAlign={"end"}
-                                                disclosure={popoverActive === i ? 'up' : 'down'}
-                                                onClick={() => togglePopoverActive(i)}>{y.products.length} Products</Button>}
-                             onClose={() => togglePopoverActive(i)}
-                             ariaHaspopup={false}>
+                        activator={<Button variant={"plain"} textAlign={"end"}
+                            disclosure={popoverActive === i ? 'up' : 'down'}
+                            onClick={() => togglePopoverActive(i)}>{y.products.length} Products</Button>}
+                        onClose={() => togglePopoverActive(i)}
+                        ariaHaspopup={false}>
                         <Popover.Pane>
                             {renderPopoverContent(y.products)}
                         </Popover.Pane>
                     </Popover>
                 </IndexTable.Cell>
                 <IndexTable.Cell>
-                    <Text as={"span"}>{moment(y.updated_at).format("L")}</Text>
+                    <Text as={"span"}>{moment(y.updated_at).format('ll')}</Text>
                 </IndexTable.Cell>
             </IndexTable.Row>
         )
@@ -315,7 +318,7 @@ const WishlistItems = () => {
                                 <Badge tone="attention">In Progress</Badge> : null}</Text>
                 </IndexTable.Cell>
                 <IndexTable.Cell>
-                    <Text as={"span"}>{z?.created_at}</Text>
+                    <Text as={"span"}>{moment(z?.created_at).format('ll')}</Text>
                 </IndexTable.Cell>
                 <IndexTable.Cell>
                     <Text
@@ -330,18 +333,18 @@ const WishlistItems = () => {
 
 
     return (
-        <Page title={"Wishlist Items"}
-              primaryAction={{content: 'Import', onAction: handleChange, icon: Icons.ImportIcon}}
-              secondaryActions={[{content: 'Export', onAction: Export, icon: Icons.ExportIcon}]}>
+        <Page title={"Wishlist History"}
+            primaryAction={selected.includes("4") ? undefined : { content: 'Import', onAction: handleChange, icon: Icons.ImportIcon }}
+            secondaryActions={selected.includes("4") ? undefined : [{ content: 'Export', onAction: Export, icon: Icons.ExportIcon }]}>
             <Layout>
                 {message !== "" && isError === false ?
                     <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
-                                  setIsErrorServer={setIsErrorServer}/> : ""}
+                        setIsErrorServer={setIsErrorServer} /> : ""}
                 <CustomErrorBanner link={AppDocsLinks.article["422"]} message={message} setMessage={setMessage}
-                                   setIsError={setIsError} isError={isError}/>
+                    setIsError={setIsError} isError={isError} />
                 <Layout.Section variant="oneThird">
                     <Card padding={"100"}>
-                        <OptionList selected={selected} onChange={setSelected} options={tabs}/>
+                        <OptionList selected={selected} onChange={setSelected} options={tabs} />
                     </Card>
                 </Layout.Section>
 
@@ -357,12 +360,12 @@ const WishlistItems = () => {
                                 itemCount={isLoading ? limit : wlProduct.length}
                                 loading={isLoading}
                                 emptyState={<EmptySearchResult title={'No product wishlist found'}
-                                                               withIllustration={(!isLoading) || !isLoading}/>}
+                                    withIllustration={(!isLoading) || !isLoading} />}
                                 hasMoreItems={isLoading}
                                 headings={[
-                                    {title: 'Product'},
+                                    { title: 'Product' },
                                     // {title: 'Price', alignment: 'end'},
-                                    {title: 'Item Count', alignment: 'end'},
+                                    { title: 'Item Count', alignment: 'end' },
                                 ]}
                                 selectable={false}>
                                 {isLoading ? tableLoading(limit, 3) : rowMarkupWishlistProduct}
@@ -370,8 +373,8 @@ const WishlistItems = () => {
                             <Box padding={'300'} borderBlockStartWidth={'025'} borderColor={'border-secondary'}>
                                 <InlineStack align={'space-between'} blockAlign={'center'}>
                                     <Text as={"span"}
-                                          fontWeight={"semibold"}> Total: {totalProduct || 0} item(s) </Text>
-                                    <div className={"d-flex"} style={{justifyContent: "end"}}>
+                                        fontWeight={"semibold"}> Total: {totalProduct || 0} item(s) </Text>
+                                    <div className={"d-flex"} style={{ justifyContent: "end" }}>
                                         <Pagination
                                             label={`${ProductPage} / ${totalPageCountProduct}`}
                                             hasPrevious={ProductPage > 1}
@@ -394,13 +397,13 @@ const WishlistItems = () => {
                                 resourceName={resourceNameWishlistUser}
                                 itemCount={isLoading ? limit : wlUser.length}
                                 emptyState={<EmptySearchResult title={'No user wishlist found'}
-                                                               withIllustration={(!isLoading) || !isLoading}/>}
+                                    withIllustration={(!isLoading) || !isLoading} />}
                                 loading={isLoading}
                                 headings={[
-                                    {title: 'Name'},
-                                    {title: 'Email'},
-                                    {title: 'Item Count'},
-                                    {title: 'Last Update'},
+                                    { title: 'Name' },
+                                    { title: 'Email' },
+                                    { title: 'Item Count' },
+                                    { title: 'Last Update' },
                                 ]}
                                 selectable={false}>
                                 {isLoading ? tableLoading(limit, 4) : rowMarkupWishlistUser}
@@ -409,7 +412,7 @@ const WishlistItems = () => {
                                 <InlineStack align={'space-between'} blockAlign={'center'}>
                                     <Text as={"span"} fontWeight={"semibold"}> Total
                                         : {userPage || 0} item(s) </Text>
-                                    <div className={"d-flex"} style={{justifyContent: "end"}}>
+                                    <div className={"d-flex"} style={{ justifyContent: "end" }}>
                                         <Pagination
                                             label={`${PageNo} / ${totalPageCountUser}`}
                                             hasPrevious={PageNo > 1}
@@ -432,13 +435,13 @@ const WishlistItems = () => {
                                 resourceName={resourceNameImportHistory}
                                 itemCount={isLoading ? limit : importHistory.lists.length}
                                 emptyState={<EmptySearchResult title={'No wishlist import history found'}
-                                                               withIllustration={(!isLoading) || !isLoading}/>}
+                                    withIllustration={(!isLoading) || !isLoading} />}
                                 loading={isLoading}
                                 headings={[
-                                    {title: 'Status'},
-                                    {title: 'Created At'},
-                                    {title: 'Excute Time'},
-                                    {title: 'Total'},
+                                    { title: 'Status' },
+                                    { title: 'Created At' },
+                                    { title: 'Excute Time' },
+                                    { title: 'Total' },
                                 ]}
                                 selectable={false}>
                                 {isLoading ? tableLoading(limit, 4) : rowMarkupImportHistory}
@@ -447,7 +450,7 @@ const WishlistItems = () => {
                                 <InlineStack align={'space-between'} blockAlign={'center'}>
                                     <Text as={"span"} fontWeight={"semibold"}> Total
                                         : {importHisPage || 0} item(s) </Text>
-                                    <div className={"d-flex"} style={{justifyContent: "end"}}>
+                                    <div className={"d-flex"} style={{ justifyContent: "end" }}>
                                         <Pagination
                                             label={`${importHisPageNo} / ${totalPageCountImport}`}
                                             hasPrevious={importHisPageNo > 1}
@@ -459,6 +462,9 @@ const WishlistItems = () => {
                                 </InlineStack>
                             </Box>
                         </Card>
+                    } {
+                        selected.includes("4") &&
+                        <EmailHistory />
                     }
                 </Layout.Section>
             </Layout>

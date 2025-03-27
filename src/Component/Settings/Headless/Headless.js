@@ -23,7 +23,7 @@ const Headless = () => {
     const [isError, setIsError] = useState(false);
     const [isErrorServer, setIsErrorServer] = useState(false);
     const shopDetails = useSelector((state) => state.shopDetails);
-    const planAccess = shopDetails.plan_type !== "8";
+    const planAccess = shopDetails.shop.plan_type !== "8";
 
     useEffect(() => {
         const getHeadless = async () => {

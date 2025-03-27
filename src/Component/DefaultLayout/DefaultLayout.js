@@ -1,10 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Box, FooterHelp, Frame, Link, Text } from '@shopify/polaris';
+/* eslint-disable eqeqeq */
+import React, { useEffect, useState } from 'react';
+import { Box, FooterHelp, Frame, Text } from '@shopify/polaris';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { apiService, baseUrl } from "../../utils/Constant"
 import { useSelector } from 'react-redux';
 import { Modal, NavMenu, TitleBar } from "@shopify/app-bridge-react";
-
+import { Link } from "react-router-dom";
 const DefaultLayout = ({ isLoading, setIsLoading }) => {
     const location = useLocation();
     const navigate = useNavigate();
@@ -15,14 +16,15 @@ const DefaultLayout = ({ isLoading, setIsLoading }) => {
     const excludedRoutes = [
         `${baseUrl}/settings/email/email-customization`,
     ];
+    console.log("shopDetails", shopDetails);
 
     const isExcluded = excludedRoutes.includes(location.pathname);
 
     useEffect(() => {
-        if (shopDetails?.upgrade == "0") {
+        if (shopDetails?.shop.upgrade == "0") {
             document.body.classList.add('hide-popup-close-icon');
         }
-        if (shopDetails.plan_type == "0" || shopDetails.is_older_shop == 1) {
+        if (shopDetails.plan_type == "0" || shopDetails?.shopis_older_shop == 1) {
             navigate(`${baseUrl}/settings/plan`)
         } else if (shopDetails.onboarding == 0) {
             navigate(`${baseUrl}/onboarding`)
@@ -36,18 +38,21 @@ const DefaultLayout = ({ isLoading, setIsLoading }) => {
     };
 
     const navigationLinks = [
-        { label: 'Wishlist', destination: `${baseUrl}/wishlist-items` },
-        { label: 'Back In Stock', destination: `${baseUrl}/back-in-stock` },
-        { label: 'Design', destination: `${baseUrl}/wishlist-design` },
+        { label: 'Wishlist Design', destination: `${baseUrl}/wishlist-design` },
+        { label: 'Back In Stock', destination: `${baseUrl}/back-in-stock/design` },
+        { label: 'Wishlist & Email History', destination: `${baseUrl}/wishlist-items` },
         { label: 'Analytics', destination: `${baseUrl}/analytics` },
         { label: 'Plan & Price', destination: `${baseUrl}/settings/plan` },
         { label: 'Settings', destination: `${baseUrl}/settings` },
     ];
 
+
     useEffect(() => {
         const onCheckLCP = async (payload) => {
             try {
                 const response = await apiService.onCheckLCP(payload);
+                console.log("LCP", response);
+
             } catch (error) {
                 console.error(error);
             }
@@ -89,13 +94,9 @@ const DefaultLayout = ({ isLoading, setIsLoading }) => {
             {shopDetails.onboarding == 0 ? "" : (
                 <NavMenu>
                     {(navigationLinks || []).map((x, i) => (
-                        <a href={x.destination} rel={i === 0 ? "dashboard" : ''} key={i}
-                            onClick={() => {
-                                setIsLoading(!isLoading)
-                            }}
-                        >
+                        <Link to={x.destination} rel={i === 0 ? "dashboard" : ''} key={i} >
                             {x.label}
-                        </a>
+                        </Link>
                     ))}
                 </NavMenu>
             )}
@@ -103,8 +104,8 @@ const DefaultLayout = ({ isLoading, setIsLoading }) => {
             <Frame>
                 <Outlet />
 
-                {shopDetails?.upgrade == "0" ? (
-                    <Modal open={shopDetails?.upgrade == "0"}>
+                {shopDetails?.shop.upgrade == "0" ? (
+                    <Modal open={shopDetails?.shop.upgrade == "0"}>
                         <TitleBar title={"Authorize our latest app update"}>
                             <button variant="primary" loading={isUpdateLoading && ''}
                                 onClick={() => onAuthorize()}>{'Authorize'}</button>

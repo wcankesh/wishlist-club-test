@@ -1,8 +1,9 @@
 import axios from 'axios';
 import qs from 'qs';
-import {useAppBridge} from "@shopify/app-bridge-react";
+import { useAppBridge } from "@shopify/app-bridge-react";
 
-const apiBaseUrl = "https://stagingapp.webcontrive.com/wishlist/api/public/api";
+const apiBaseUrl = "https://subscriptionstaging.webcontrive.com/wishlist-club/public/api";
+const mailchimpBaseUrl = "https://us1.api.mailchimp.com/3.0";
 
 const instance = axios.create();
 
@@ -40,12 +41,12 @@ const ApiService = () => {
         try {
             const res = await instance[method](url, data, config);
             if (res.status === 200) {
-                result = {...res.data, apiStatus: res.status};
+                result = { ...res.data, apiStatus: res.status };
             } else {
-                result = {...res.data, apiStatus: res.status};
+                result = { ...res.data, apiStatus: res.status };
             }
         } catch (e) {
-            result = {...e.response.data, apiStatus: e.status};
+            result = { ...e.response.data, apiStatus: e.status };
         }
 
         return result;
@@ -77,7 +78,10 @@ const ApiService = () => {
 
     return {
 
-        Install: async (payload) => await postData(`${apiBaseUrl}/install`, payload),
+        Install: async () => await getData(`${apiBaseUrl}/shop-details`),
+        // Install: async (payload) => await postData(`${apiBaseUrl}/install`, payload),
+
+        ExtensionStatus: async () => await getData(`${apiBaseUrl}/check-extension-status`),
 
         onCheckLCP: async (payload) => await postData(`${apiBaseUrl}/lcp`, payload),
 
@@ -107,7 +111,7 @@ const ApiService = () => {
 
         getLauncher: async () => await getData(`${apiBaseUrl}/launcher`),
 
-        updateLauncher: async (payload, id) => await putData(`${apiBaseUrl}/launcher/${id}`, payload),
+        updateLauncher: async (payload, id) => await postData(`${apiBaseUrl}/launcher`, payload),
 
         getLabel: async () => await getData(`${apiBaseUrl}/label`),
 

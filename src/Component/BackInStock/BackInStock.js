@@ -8,18 +8,18 @@ import { Icons } from "../../utils/Icons";
 const BackInStock = () => {
     const navigate = useNavigate()
     const BackInStock = [
-        {
-            icon: Icons.EmailIcon,
-            name: "Back In Stock Email",
-            text: "Manage your preferences for back-in-stock notifications and thank-you notifications using this section.",
-            link: "back-in-stock/email"
-        },
         // {
-        //     icon: Icons.ThemeIcon,
-        //     name: "Back In Stock Design",
-        //     text: "Customize the design of your back-in-stock notifications for the home & collection page, subscriber form, and subscriber message.",
-        //     link: "back-in-stock/design"
+        //     icon: Icons.EmailIcon,
+        //     name: "Back In Stock Email",
+        //     text: "Manage your preferences for back-in-stock notifications and thank-you notifications using this section.",
+        //     link: "back-in-stock/email"
         // },
+        {
+            icon: Icons.ThemeIcon,
+            name: "Back In Stock Design",
+            text: "Customize the design of your back-in-stock notifications for the home & collection page, subscriber form, and subscriber message.",
+            link: "back-in-stock/design"
+        },
     ];
 
     const onRedirect = (link) => {

@@ -1,17 +1,17 @@
-import React, {useEffect, useState} from 'react';
-import {useNavigate, useParams} from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from "react-router-dom";
 import Klaviyo from "../Klaviyo/Klaviyo";
 // import Omnisend from "../Omnisend/Omnisend";
-// import Mailchimp from "../Mailchimp/Mailchimp";
+import Mailchimp from "../Mailchimp/Mailchimp";
 // import PostScript from "../PostScript/PostScript";
-import {apiService, baseUrl, capitalizeMessage,isChecked} from "../../../../utils/Constant";
-import {initialConnected, initialKlaviyo, validateForm} from "../CommonUse/CommonUse";
-import {Badge, Card, Layout, OptionList, Page, PageActions,} from "@shopify/polaris";
+import { apiService, baseUrl, capitalizeMessage, isChecked } from "../../../../utils/Constant";
+import { initialConnected, initialKlaviyo, initialMailchimp, validateForm } from "../CommonUse/CommonUse";
+import { Badge, Card, Layout, OptionList, Page, PageActions, } from "@shopify/polaris";
 import ToastMessage from "../../../Comman/ToastMessage";
-import {RenderLoading} from "../../../../utils/RenderLoading";
+import { RenderLoading } from "../../../../utils/RenderLoading";
 
 const IntegrationDetails = () => {
-    const {type} = useParams();
+    const { type } = useParams();
     const navigate = useNavigate();
 
     const [message, setMessage] = useState("");
@@ -24,8 +24,10 @@ const IntegrationDetails = () => {
     const [isUpdated, setIsUpdated] = useState(true);
     const [isConnected, setIsConnected] = useState(initialConnected);
 
+    const [mailchimp, setMailchimp] = useState(initialMailchimp);
     const [klaviyo, setKlaviyo] = useState(initialKlaviyo);
-    const [klaviyoError, setKlaviyoError] = useState({public_key: '', secret_key: ''});
+    const [klaviyoError, setKlaviyoError] = useState({ public_key: '', secret_key: '' });
+    const [mailchimpError, setMailchimpError] = useState({ public_key: '', secret_key: '' });
 
     const currentType = {
         klaviyo: {
@@ -35,13 +37,13 @@ const IntegrationDetails = () => {
             isEnabled: isChecked(klaviyo?.is_klaviyo_connect)
         },
         omnisend: {
-            type: 2,
+            type: 3,
             title: 'Omnisend',
             isConnected: isChecked(isConnected?.is_omnisend_connect),
             isEnabled: false
         },
         mailchimp: {
-            type: 3,
+            type: 2,
             title: 'Mailchimp',
             isConnected: isChecked(isConnected?.is_mailchimp_connect),
             isEnabled: false
@@ -55,7 +57,7 @@ const IntegrationDetails = () => {
     }
 
     const getIntegration = async (type) => {
-        const payload = {type: currentType[type].type}
+        const payload = { type: currentType[type].type }
         const response = await apiService.getIntegration(payload);
         if (response.status === 200) {
             if (response.data !== null) {
@@ -96,29 +98,33 @@ const IntegrationDetails = () => {
 
     const createIntegration = async () => {
         setIsActionLoading('save')
-        let payload;
-        if (type === "klaviyo") {
-            const basePayload = {
-                type: 1,
-                is_klaviyo_connect: klaviyo?.is_klaviyo_connect,
-                public_key: klaviyo?.public_key,
-                secret_key: klaviyo?.secret_key,
-            }
-            payload = isUpdated ? {...basePayload, id: klaviyo?.id} : basePayload;
-        }
 
-        const response = await apiService.createIntegration(payload);
-        if (response.status === 200) {
-            setMessage(capitalizeMessage(response.message));
-            setIsError(false);
-            setIsUpdated(true);
-            setIsActionLoading('');
-            getIntegration(type);
-        } else {
-            setMessage(capitalizeMessage(response.message));
-            setIsErrorServer(true);
-            setIsActionLoading('');
-        }
+        // const extResponse = await apiService.ExtensionStatus({});
+        // console.log("extResponse", extResponse);
+
+        // let payload;
+        // if (type === "klaviyo") {
+        //     const basePayload = {
+        //         type: 1,
+        //         is_klaviyo_connect: klaviyo?.is_klaviyo_connect,
+        //         public_key: klaviyo?.public_key,
+        //         secret_key: klaviyo?.secret_key,
+        //     }
+        //     payload = isUpdated ? { ...basePayload, id: klaviyo?.id } : basePayload;
+        // }
+
+        // const response = await apiService.createIntegration(payload);
+        // if (response.status === 200) {
+        //     setMessage(capitalizeMessage(response.message));
+        //     setIsError(false);
+        //     setIsUpdated(true);
+        //     setIsActionLoading('');
+        //     getIntegration(type);
+        // } else {
+        //     setMessage(capitalizeMessage(response.message));
+        //     setIsErrorServer(true);
+        //     setIsActionLoading('');
+        // }
     }
 
     const handlePrimaryAction = (value) => {
@@ -135,36 +141,37 @@ const IntegrationDetails = () => {
         }
     }
 
-    const klaviyoProps = {selectedOption, klaviyo, setKlaviyo, klaviyoError, setKlaviyoError}
+    const klaviyoProps = { selectedOption, klaviyo, setKlaviyo, klaviyoError, setKlaviyoError }
 
+    const MailchimpProps = { selectedOption, mailchimp, setMailchimp, mailchimpError, setMailchimpError }
     return (
-        <Page backAction={{content: 'Settings', onAction: () => navigate(`${baseUrl}/settings/integration`)}}
-              title={`${currentType[type].title}`}
-              primaryAction={
-                  isPageLoading ? RenderLoading?.badge :
-                      <Badge size={'small'} tone={currentType[type].isConnected ? 'success' : 'critical'}>
-                          {currentType[type].isConnected ? 'Connected' : 'Not connected'}
-                      </Badge>
-              }>
+        <Page backAction={{ content: 'Settings', onAction: () => navigate(`${baseUrl}/settings/integration`) }}
+            title={`${currentType[type].title}`}
+            primaryAction={
+                isPageLoading ? RenderLoading?.badge :
+                    <Badge size={'small'} tone={currentType[type].isConnected ? 'success' : 'critical'}>
+                        {currentType[type].isConnected ? 'Connected' : 'Not connected'}
+                    </Badge>
+            }>
             <Layout>
                 {message !== "" && isError === false ?
                     <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
-                                  setIsErrorServer={setIsErrorServer}/> : ""}
+                        setIsErrorServer={setIsErrorServer} /> : ""}
                 <Layout.Section variant="oneThird">
                     <Card padding={"100"}>
                         <OptionList
                             onChange={(event) => setSelectedOption(event[0])}
                             options={[
-                                {value: "1", label: "Introduction"},
-                                {value: "2", label: "Setup"},
+                                { value: "1", label: "Introduction" },
+                                { value: "2", label: "Setup" },
                             ]}
-                            selected={selectedOption}/>
+                            selected={selectedOption} />
                     </Card>
                 </Layout.Section>
                 <Layout.Section>
-                    {type === "klaviyo" && <Klaviyo klaviyoProps={klaviyoProps} currentType={currentType[type]}/>}
+                    {type === "klaviyo" && <Klaviyo klaviyoProps={klaviyoProps} currentType={currentType[type]} />}
                     {/*{type === "omnisend" && <Omnisend/>}*/}
-                    {/*{type === "mailchimp" && <Mailchimp/>}*/}
+                    {type === "mailchimp" && <Mailchimp MailchimpProps={MailchimpProps} currentType={currentType[type]} />}
                     {/*{type === "postscript" && <PostScript/>}*/}
                     <PageActions
                         primaryAction={{

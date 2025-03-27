@@ -1,69 +1,84 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useState, Suspense, lazy, useEffect, useCallback } from 'react';
 import { Route, Routes, Navigate, BrowserRouter } from "react-router-dom";
 import '@shopify/polaris/build/esm/styles.css';
 import "./style.css";
-import DefaultLayout from './Component/DefaultLayout/DefaultLayout';
 import { apiService, baseUrl } from './utils/Constant';
 import { routes } from './utils/Routes';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Shop_details } from "./redux/action/action";
-import { AppProvider, Spinner } from '@shopify/polaris';
+import { AppProvider, InlineStack, Spinner } from '@shopify/polaris';
 import enTranslations from '@shopify/polaris/locales/en.json';
+const DefaultLayout = lazy(() => import('./Component/DefaultLayout/DefaultLayout'));
+const Loader = () => (
+    <div
+        style={{
+            height: "100vh", display: 'flex', justifyContent: 'center', alignItems: 'center'
+        }}
+    >
+        <InlineStack
+            align="center"
+            blockAlign="center"
+            height="100vh"
+            width="100%"
+        >
+            <Spinner accessibilityLabel="Loading" size="large" />
+        </InlineStack>
+    </div>
+)
 
 const App = () => {
     const urlParams = new URLSearchParams(window.location.search);
-    const [isLoading, setIsLoading,] = useState(true);
     const dispatch = useDispatch();
-    const shop = urlParams.get("shop")
+    const shop = urlParams.get("shop");
+    const shopDetails = useSelector(state => state.shopDetails);
+    const [isLoading, setIsLoading] = useState(true);
 
-    useLayoutEffect(() => {
-        const getInstall = async () => {
-            const response = await apiService.Install({ shop: shop })
-            if (response.status === 200) {
-                dispatch(Shop_details({
-                    ...response.data,
-                    bannerDisplaySetting: JSON.parse(response?.data?.banner_display_setting),
-                    extension_status: response.extension_status,
-                    on_boardig: response?.on_boardig,
-                    install_url: response?.install_url,
-                    onboarding: response.data.onboarding,
-                    addon_email_notification: response.data.addon_email_notification,
-                }))
-                setIsLoading(!isLoading)
-            } else if (response.status === 201 && response.data.is_install === false) {
-                window.top.location.href = response.data.install_url;
-            } else {
-                setIsLoading(!isLoading)
+    const fetchShopDetails = async () => {
+        try {
+            const response = await apiService.Install({ shop });
+            if (!response.status) {
+                setIsLoading(false);
+                return;
             }
-        };
-        getInstall();
-    }, [])
+            if (response.data.is_install === false) {
+                window.top.location.href = response.data.installUrl;
+                return; 
+            }
+            dispatch(Shop_details({
+                ...response.data.shop,
+                bannerDisplaySetting: JSON.parse(response.data.shop.banner_display_setting || "{}"),
+                on_boarding: response.data.shop.onboarding,
+                install_url: response.installUrl,
+                addon_email_notification: response.data.shop.addon_email_notification,
+            }));
+        } catch (error) {
+            console.error("Installation Error:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    }
+    useEffect(() => {
+        fetchShopDetails();
+    }, []);
+
     return (
         <BrowserRouter>
-            <Routes>
-                <Route path={`${baseUrl}/`} element={
-
-                    <AppProvider i18n={enTranslations}>
-                        {isLoading
-                            ?
-                            <div className="main_spinner">
-                                <Spinner accessibilityLabel="Spinner example" size="large" color="teal" />
-                            </div>
-                            :
-                            <DefaultLayout isLoading={isLoading} setIsLoading={setIsLoading} />
-                        }
-                    </AppProvider>
-                }>
-                    {
-                        routes.map((x, i) => {
-                            return (
-                                <Route exact={true} key={i} path={x.path} element={x.component} />
-                            )
-                        })
-                    }
-                    <Route path={`${baseUrl}/`} element={<Navigate to={`${baseUrl}/dashboard`} replace />} />
-                </Route>
-            </Routes>
+            <AppProvider i18n={enTranslations}>
+                {isLoading ? (
+                    <Loader />
+                ) : (
+                    <Suspense fallback={<Loader />}>
+                        <Routes>
+                            <Route path={`${baseUrl}/`} element={<DefaultLayout />} >
+                                {routes.map((x, i) => (
+                                    <Route key={i} path={x.path} element={x.component} />
+                                ))}
+                                <Route path={`${baseUrl}/`} element={<Navigate to={`${baseUrl}/dashboard`} replace />} />
+                            </Route>
+                        </Routes>
+                    </Suspense>
+                )}
+            </AppProvider>
         </BrowserRouter>
     );
 };

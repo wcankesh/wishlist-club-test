@@ -1,14 +1,14 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Page, Layout, Pagination, Badge, Text, Card, IndexTable, EmptySearchResult, Button,
     Popover, ResourceList, Thumbnail, InlineStack, Box, Icon,
 } from "@shopify/polaris"
-import {apiService, capitalizeMessage,} from "../../utils/Constant";
+import { apiService, capitalizeMessage, } from "../../utils/Constant";
 import ToastMessage from "../Comman/ToastMessage";
 import CustomErrorBanner from "../Comman/CustomErrorBanner";
-import {AppDocsLinks} from "../../utils/AppDocsLinks";
-import {tableLoading} from "../../utils/RenderLoading";
-import {Icons} from "../../utils/Icons";
+import { AppDocsLinks } from "../../utils/AppDocsLinks";
+import { tableLoading } from "../../utils/RenderLoading";
+import { Icons } from "../../utils/Icons";
 
 const EmailHistory = () => {
     const limit = 10;
@@ -63,7 +63,7 @@ const EmailHistory = () => {
         setEmailPageNo(pCount)
     }
 
-    const resourceNameEmail = {singular: 'email history', plural: 'email historys'};
+    const resourceNameEmail = { singular: 'email history', plural: 'email historys' };
 
     const emailTypeLabel = {
         1: "Wishlist reminder",
@@ -92,31 +92,31 @@ const EmailHistory = () => {
                 </IndexTable.Cell>
                 <IndexTable.Cell>
                     <InlineStack align={'center'}>
-                    {z.type === 13 ? <span className="icons"><Icon source={Icons.MinusIcon}/></span>: (
-                        <Popover
-                            active={selectedProductIndex === i}
-                            activator={<Button variant={"plain"} removeUnderline onClick={() => togglePopoverActive(i)}
-                                               disclosure={selectedProductIndex === i ? 'up' : 'down'}>{`${z.products.length} Products`}</Button>}
-                            onClose={() => togglePopoverActive(i)}
-                        >
-                            <Popover.Pane>
-                                <div className={"remove-cursor"}>
-                                    <ResourceList
-                                        items={z.products || []}
-                                        renderItem={(item) => {
-                                            return (
-                                                <ResourceList.Item>
-                                                    <InlineStack blockAlign={"center"} gap="200" wrap={false}>
-                                                        <Thumbnail size={"small"} source={item.image}/>
-                                                        <Text as={"span"}>{item.title}</Text>
-                                                    </InlineStack>
-                                                </ResourceList.Item>
-                                            )
-                                        }}/>
-                                </div>
-                            </Popover.Pane>
-                        </Popover>
-                    )}
+                        {z.type === 13 ? <span className="icons"><Icon source={Icons.MinusIcon} /></span> : (
+                            <Popover
+                                active={selectedProductIndex === i}
+                                activator={<Button variant={"plain"} removeUnderline onClick={() => togglePopoverActive(i)}
+                                    disclosure={selectedProductIndex === i ? 'up' : 'down'}>{`${z.products.length} Products`}</Button>}
+                                onClose={() => togglePopoverActive(i)}
+                            >
+                                <Popover.Pane>
+                                    <div className={"remove-cursor"}>
+                                        <ResourceList
+                                            items={z.products || []}
+                                            renderItem={(item) => {
+                                                return (
+                                                    <ResourceList.Item>
+                                                        <InlineStack blockAlign={"center"} gap="200" wrap={false}>
+                                                            <Thumbnail size={"small"} source={item.image} />
+                                                            <Text as={"span"}>{item.title}</Text>
+                                                        </InlineStack>
+                                                    </ResourceList.Item>
+                                                )
+                                            }} />
+                                    </div>
+                                </Popover.Pane>
+                            </Popover>
+                        )}
                     </InlineStack>
                 </IndexTable.Cell>
                 <IndexTable.Cell>
@@ -130,52 +130,54 @@ const EmailHistory = () => {
     })
 
     return (
-        <Page title={"Email History"}>
-            {message !== "" && isError === false ?
-                <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
-                              setIsErrorServer={setIsErrorServer}/> : ""}
-            <Layout>
-                <CustomErrorBanner link={AppDocsLinks.article["515"]} message={message} setMessage={setMessage}
-                                   setIsError={setIsError} isError={isError}
-                />
-                <Layout.Section>
-                    <Card padding={"050"}>
-                        <IndexTable
-                            resourceName={resourceNameEmail}
-                            itemCount={isLoading ? limit : email.length}
-                            emptyState={<EmptySearchResult title={'No email history found'}
-                                                           withIllustration={(!isLoading) || !isLoading}/>}
-                            loading={isLoading}
-                            headings={[
-                                {title: 'Email'},
-                                {title: 'Email Type'},
-                                {title: 'Products', alignment:'center'},
-                                {title: 'Date'},
-                                {title: 'Email Status'},
-                            ]}
-                            selectable={false}
-                        >
-                            {isLoading ? tableLoading(limit, 5) : rowMarkup}
-                        </IndexTable>
-
-                        <Box padding={'300'} borderBlockStartWidth={'025'} borderColor={'border-secondary'}>
-                            <InlineStack align={'space-between'} blockAlign={'center'}>
-                                <Text as={"span"} fontWeight={"semibold"}> Total : {emailPage || 0} item(s) </Text>
-                                <div className={"d-flex"} style={{justifyContent: "end"}}>
-                                    <Pagination
-                                        label={`${EmailPageNo} / ${totalPageCountEmail}`}
-                                        hasPrevious={EmailPageNo > 1}
-                                        onPrevious={() => onChangePaginationEmail('minus')}
-                                        hasNext={EmailPageNo < totalPageCountEmail}
-                                        onNext={() => onChangePaginationEmail('plus')}
-                                    />
-                                </div>
-                            </InlineStack>
-                        </Box>
-                    </Card>
-                </Layout.Section>
-            </Layout>
-        </Page>
+        // <Page>
+        //     {message !== "" && isError === false ?
+        //         <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
+        //                       setIsErrorServer={setIsErrorServer}/> : ""}
+        //     <Layout>
+        //         <CustomErrorBanner link={AppDocsLinks.article["515"]} message={message} setMessage={setMessage}
+        //                            setIsError={setIsError} isError={isError}
+        //         />
+        //         <Layout.Section>
+        <Card padding={"050"}>
+            <Box padding={"300"}>
+                <Text as={"span"} variant={"headingMd"}>{`Email History`}</Text>
+            </Box>
+            <IndexTable
+                resourceName={resourceNameEmail}
+                itemCount={isLoading ? limit : email.length}
+                emptyState={<EmptySearchResult title={'No email history found'}
+                    withIllustration={(!isLoading) || !isLoading} />}
+                loading={isLoading}
+                headings={[
+                    { title: 'Email' },
+                    { title: 'Email Type' },
+                    { title: 'Products', alignment: 'center' },
+                    { title: 'Date' },
+                    { title: 'Email Status' },
+                ]}
+                selectable={false}
+            >
+                {isLoading ? tableLoading(limit, 5) : rowMarkup}
+            </IndexTable>
+            <Box padding={'300'} borderBlockStartWidth={'025'} borderColor={'border-secondary'}>
+                <InlineStack align={'space-between'} blockAlign={'center'}>
+                    <Text as={"span"} fontWeight={"semibold"}> Total : {emailPage || 0} item(s) </Text>
+                    <div className={"d-flex"} style={{ justifyContent: "end" }}>
+                        <Pagination
+                            label={`${EmailPageNo} / ${totalPageCountEmail}`}
+                            hasPrevious={EmailPageNo > 1}
+                            onPrevious={() => onChangePaginationEmail('minus')}
+                            hasNext={EmailPageNo < totalPageCountEmail}
+                            onNext={() => onChangePaginationEmail('plus')}
+                        />
+                    </div>
+                </InlineStack>
+            </Box>
+        </Card>
+        //         </Layout.Section>
+        //     </Layout>
+        // </Page>
     );
 };
 

@@ -1,5 +1,5 @@
-import React, {Fragment, useEffect, useState} from 'react';
-import {BlockStack, Box, Button, ButtonGroup, Card, Collapsible, Divider, Icon, InlineStack, Link, Text} from "@shopify/polaris"
+import React, { Fragment, useEffect, useState } from 'react';
+import { BlockStack, Box, Button, ButtonGroup, Card, Collapsible, Divider, Icon, InlineStack, Link, Text } from "@shopify/polaris"
 import ToastMessage from "../../Comman/ToastMessage";
 import {apiService, baseUrl, openUrlInNewWindow} from "../../../utils/Constant";
 import {useSelector} from "react-redux";
@@ -51,8 +51,8 @@ const OnBoarding = () => {
             <BlockStack>
               <InlineStack wrap={false} align={"space-between"}>
                 <Text variant="headingSm" as="span" fontWeight={"medium"}
-                      breakWord={true}>{"Wishlist app setting is easy just follow 1 to 5 steps to set up and display wishlist icon on your store."}</Text>
-                <div onClick={handleToggle}><Icon source={open ? Icons.CaretUpIcon : Icons.CaretDownIcon}/>
+                  breakWord={true}>{"Wishlist app setting is easy just follow 1 to 5 steps to set up and display wishlist icon on your store."}</Text>
+                <div onClick={handleToggle}><Icon source={open ? Icons.CaretUpIcon : Icons.CaretDownIcon} />
                 </div>
               </InlineStack>
             </BlockStack>
@@ -60,9 +60,9 @@ const OnBoarding = () => {
         </Box>
 
         <Collapsible open={open} id="basic-collapsible" expandOnPrint
-          transition={{duration: "500ms", timingFunction: "ease-in-out"}}>
+          transition={{ duration: "500ms", timingFunction: "ease-in-out" }}>
 
-          <Divider/>
+          <Divider />
 
           <Box padding={"200"}>
             {
@@ -71,39 +71,39 @@ const OnBoarding = () => {
                   <Fragment key={i}>
                     <div onClick={() => setSelectedBoarding(x.selected)}>
                       <div className={"reb-card-analytics"}
-                           style={{background: selectedBoarding === x.selected ? 'var(--p-color-bg-surface-secondary)' : ""}}>
+                        style={{ background: selectedBoarding === x.selected ? 'var(--p-color-bg-surface-secondary)' : "" }}>
                         <BlockStack gap={"0"}>
                           <InlineStack gap="300" wrap={false}>
                             <div
                               className={`boding-count ${selectedBoarding === x.selected ? "boding-count-active" : ""}`}>
                               {/*{i + 1}*/}
-                              {selectedBoarding === x.selected ? <Icon source={Icons.CheckSmallIcon} />:""}
+                              {selectedBoarding === x.selected ? <Icon source={Icons.CheckSmallIcon} /> : ""}
 
                             </div>
                             {selectedBoarding === x.selected ?
                               <Text variant="headingSm" as="span"
-                                    fontWeight={"medium"}>{x.title}</Text> :
+                                fontWeight={"medium"}>{x.title}</Text> :
                               <Text variant="headingSm" as="span"
-                                    fontWeight={"regular"}>{x.title}</Text>}
+                                fontWeight={"regular"}>{x.title}</Text>}
                           </InlineStack>
 
                           <InlineStack>
                             {selectedBoarding === x.selected && x.selected === 0 && (
-                              <div style={{paddingLeft: 32}}>
+                              <div style={{ paddingLeft: 32 }}>
                                 <Box paddingBlockStart={"200"} paddingInlineEnd={"200"}>
                                   <BlockStack gap="300">
                                     <Text as="span">Click on the Activate button to enable the Wishlist Club embed. Make
                                       sure to save your adjustments to make them active.</Text>
                                     <InlineStack>
                                       <Button variant="primary"
-                                              onClick={() => openUrlInNewWindow(shopDetails?.on_boardig?.extension)}>Activate</Button>
+                                        onClick={() => openUrlInNewWindow(shopDetails?.on_boardig?.extension)}>Activate</Button>
                                     </InlineStack>
                                   </BlockStack>
                                 </Box>
                               </div>
                             )}
                             {selectedBoarding === x.selected && x.selected === 1 && (
-                              <div style={{paddingLeft: 32}}>
+                              <div style={{ paddingLeft: 32 }}>
                                 <Box paddingBlockStart={"200"} paddingInlineEnd={"200"}>
                                   <BlockStack gap={"300"}>
                                     <Text as="span">Elevate your customers' shopping journey by incorporating the Wishlist
@@ -113,9 +113,9 @@ const OnBoarding = () => {
                                       to activate the Wishlist Block.</Text>
                                     <ButtonGroup>
                                       <Button variant="primary"
-                                               onClick={() => openUrlInNewWindow(shopDetails?.on_boardig?.collection)}>Add Collection Block</Button>
+                                        onClick={() => openUrlInNewWindow(shopDetails?.on_boardig?.collection)}>Add Collection Block</Button>
                                       <Button variant="primary"
-                                              onClick={() => openUrlInNewWindow(shopDetails?.on_boardig?.wishlist)}>Add
+                                        onClick={() => openUrlInNewWindow(shopDetails?.on_boardig?.wishlist)}>Add
                                         Product Block</Button>
                                     </ButtonGroup>
                                   </BlockStack>
@@ -123,7 +123,7 @@ const OnBoarding = () => {
                               </div>
                             )}
                             {selectedBoarding === x.selected && x.selected === 2 && (
-                              <div style={{paddingLeft: 32}}>
+                              <div style={{ paddingLeft: 32 }}>
                                 <Box paddingBlockStart={"200"} paddingInlineEnd={"200"}>
                                   <BlockStack gap={"400"}>
                                     <BlockStack gap={"200"}>
@@ -133,7 +133,7 @@ const OnBoarding = () => {
                                         Icon" button.</Text>
                                       <InlineStack>
                                         <Button variant="primary"
-                                                onClick={() => openUrlInNewWindow(shopDetails?.on_boardig?.head)}>Add
+                                          onClick={() => openUrlInNewWindow(shopDetails?.on_boardig?.head)}>Add
                                           Wishlist Icon</Button>
                                       </InlineStack>
                                     </BlockStack>
@@ -143,14 +143,14 @@ const OnBoarding = () => {
                                       <Text variant="headingSm" as="span" fontWeight={"medium"}>Follow the steps below to
                                         include the Wishlist Menu in the header.</Text>
                                       <Text as={"span"}>1. Open your Shopify store main navigation<Link
-                                        url={`https://${shopDetails.shop}/admin/themes`}
+                                        url={`https://${shopDetails}/admin/themes`}
                                         removeUnderline external> open</Link></Text>
                                       <Text as={"span"}>2. Add the wishlist icon to your header by clicking on the "Add Wishlist
                                         Icon" button.</Text>
                                       <Text as={"span"}>3. Choose menu name.</Text>
                                       <Text as={"span"}>4. Paste the following link into the Link
                                         text box: <Text as={"span"}
-                                                        fontWeight={"bold"}>/apps/wishlist/</Text></Text>
+                                          fontWeight={"bold"}>/apps/wishlist/</Text></Text>
                                       <Text as={"span"}>5. Click on Save Menu</Text>
                                     </BlockStack>
                                   </BlockStack>
@@ -158,7 +158,7 @@ const OnBoarding = () => {
                               </div>
                             )}
                             {selectedBoarding === x.selected && x.selected === 3 && (
-                              <div style={{paddingLeft: 32}}>
+                              <div style={{ paddingLeft: 32 }}>
                                 <Box paddingBlockStart={"200"} paddingInlineEnd={"200"}>
                                   <BlockStack gap="300">
                                     <Text as="span">Keep your customers in the loop and boost their shopping experience by
@@ -169,10 +169,10 @@ const OnBoarding = () => {
                                       Block.</Text>
                                     <ButtonGroup>
                                       <Button variant="primary"
-                                              onClick={() => openUrlInNewWindow(shopDetails?.on_boardig?.bis_collection)}>Add
+                                        onClick={() => openUrlInNewWindow(shopDetails?.on_boardig?.bis_collection)}>Add
                                         Back in Stock to Collection Page</Button>
                                       <Button variant="primary"
-                                              onClick={() => openUrlInNewWindow(shopDetails?.on_boardig?.bis)}>Add
+                                        onClick={() => openUrlInNewWindow(shopDetails?.on_boardig?.bis)}>Add
                                         Back in Stock to Product Page</Button>
                                     </ButtonGroup>
                                   </BlockStack>
@@ -180,7 +180,7 @@ const OnBoarding = () => {
                               </div>
                             )}
                             {selectedBoarding === x.selected && x.selected === 4 && (
-                              <div style={{paddingLeft: 32}}>
+                              <div style={{ paddingLeft: 32 }}>
                                 <Box paddingBlockStart={"200"} paddingInlineEnd={"200"}>
                                   <BlockStack gap="300">
                                     <Text as="span">Customize the layout of Wishlist and Back in Stock effortlessly. Click
@@ -189,9 +189,9 @@ const OnBoarding = () => {
                                     </Text>
                                     <ButtonGroup>
                                       <Button variant="primary"
-                                              onClick={() =>navigate(`${baseUrl}/settings/wishlist-design`)}>Customize
+                                        onClick={() => navigate(`${baseUrl}/settings/wishlist-design`)}>Customize
                                         Wishlist</Button>
-                                      <Button variant="primary" onClick={() =>navigate(`${baseUrl}/back-in-stock/design`)}>Customize
+                                      <Button variant="primary" onClick={() => navigate(`${baseUrl}/back-in-stock/design`)}>Customize
                                         Back in Stock</Button>
                                     </ButtonGroup>
                                   </BlockStack>

@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect, useState} from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import {
     Page, Layout, ProgressBar, Button, Banner, Text, BlockStack, InlineStack, Card, Icon,
     Select, Grid, IndexTable, Box, Badge,
@@ -48,11 +48,18 @@ const Plan = () => {
     useEffect(() => {
         const getBilling = async () => {
             const response = await apiService.getBilling();
-            if (response.status === 200) {
+            if (response.status === true) {
+                console.log("response.data", response.data.emailCount);
+                console.log("response.data", response.data.emailCount);
+                console.log("response.data", response.data.usageCharges);
+                dispatch(Shop_details({
+                    ...shopDetails,
+                    emailCount: response.data.emailCount,
+                }));
                 setIsError(false);
-                const activeObject = response.data.find((x) => x.is_active === 1);
+                const activeObject = response.data.usageCharges.find((x) => x.is_active === 1);
                 setActiveEmailPlan(activeObject);
-                setBillingData(response.data);
+                setBillingData(response.data.usageCharges);
             } else if (response.status === 500) {
                 setMessage(capitalizeMessage(response.message))
                 setIsErrorServer(true);
@@ -60,13 +67,14 @@ const Plan = () => {
         }
         getBilling();
     }, []);
+    console.log("shopDetails", shopDetails['emailCount']);
 
     const onUpdatePlan = async (planType) => {
         setIsLoading(planType)
-        const response = await apiService.upgradePlan({planType: planType, plan_interval: "0"})
+        const response = await apiService.upgradePlan({ planType: planType, plan_interval: "0" })
         if (response.status === 200) {
             if (planType === "1") {
-                dispatch(Shop_details({...shopDetails, plan_type: planType}));
+                dispatch(Shop_details({ ...shopDetails, plan_type: planType }));
                 setIsLoading("")
             }
             if (response && response.data && response.data.confirmation_url) {
@@ -79,30 +87,30 @@ const Plan = () => {
 
     let productPercent = 0;
     if (shopDetails.plan_type === "0" || shopDetails.plan_type === "1") {
-        productPercent = (shopDetails.sent_email * 100 / 50)
+        productPercent = (shopDetails.emailCount * 100 / 50)
     } else if (shopDetails.plan_type === "5") {
-        productPercent = (shopDetails.sent_email * 100 / 500)
+        productPercent = (shopDetails.emailCount * 100 / 500)
     } else if (shopDetails.plan_type === "6") {
-        productPercent = (shopDetails.sent_email * 100 / 2000)
+        productPercent = (shopDetails.emailCount * 100 / 2000)
     } else if (shopDetails.plan_type === "7") {
-        productPercent = (shopDetails.sent_email * 100 / 5000)
+        productPercent = (shopDetails.emailCount * 100 / 5000)
     } else if (shopDetails.plan_type === "8") {
-        productPercent = (shopDetails.sent_email * 100 / 10000)
+        productPercent = (shopDetails.emailCount * 100 / 10000)
     } else if (shopDetails.plan_type === "9") {
-        productPercent = (shopDetails.sent_email * 100 / 100)
+        productPercent = (shopDetails.emailCount * 100 / 100)
     }
     const plan = [
-        (shopDetails.plan_type === "1") ?  {
+        (shopDetails.plan_type === "1") ? {
             plan: "Free",
             planType: "1",
             price: "0",
             btn_text: "Downgrade"
 
         } : "",
-        {plan: "Basic", planType: "5", price: "4.99", btn_text: "Activated"},
-        {plan: "Pro", planType: "6", price: "9.99", btn_text: "Upgrade"},
-        {plan: "Advance", planType: "7", price: "14.99", btn_text: "Upgrade"},
-        {plan: "Enterprise", planType: "8", price: "24.99", btn_text: "Upgrade"},
+        { plan: "Basic", planType: "5", price: "4.99", btn_text: "Activated" },
+        { plan: "Pro", planType: "6", price: "9.99", btn_text: "Upgrade" },
+        { plan: "Advance", planType: "7", price: "14.99", btn_text: "Upgrade" },
+        { plan: "Enterprise", planType: "8", price: "24.99", btn_text: "Upgrade" },
     ]
 
     const planTable = [
@@ -253,17 +261,17 @@ const Plan = () => {
     ];
 
     const emailPlan = [
-        {label: "Buy 1000 Emails at $2", value: "1000"},
-        {label: "Buy 2000 Emails at $4", value: "2000"},
-        {label: "Buy 3000 Emails at $6", value: "3000"},
-        {label: "Buy 4000 Emails at $8", value: "4000"},
-        {label: "Buy 5000 Emails at $10", value: "5000"},
+        { label: "Buy 1000 Emails at $2", value: "1000" },
+        { label: "Buy 2000 Emails at $4", value: "2000" },
+        { label: "Buy 3000 Emails at $6", value: "3000" },
+        { label: "Buy 4000 Emails at $8", value: "4000" },
+        { label: "Buy 5000 Emails at $10", value: "5000" },
     ];
-    const emailPrice = {"1000": "2", "2000": "4", "3000": "6", "4000": "8", "5000": "10"};
+    const emailPrice = { "1000": "2", "2000": "4", "3000": "6", "4000": "8", "5000": "10" };
 
     const onUpdateEmailPlan = async (emails, price) => {
         setIsEmailLoading(true);
-        const payload = {emails: emails, price: price}
+        const payload = { emails: emails, price: price }
         const response = await apiService.upgradeEmailPlan(payload);
         if (response.status === 200) {
             if (response && response.data && response.data.confirmation_url) {
@@ -273,34 +281,34 @@ const Plan = () => {
         setIsEmailLoading(false);
     }
 
-    const resourceNameBillingData = {singular: 'billing', plural: 'billing'};
+    const resourceNameBillingData = { singular: 'billing', plural: 'billing' };
 
     const rowMarkupBillingData = (billingData || []).map((x, i) => (
-            <IndexTable.Row key={i}>
-                <IndexTable.Cell>
-                    <Text as="span">{moment(x.created_at).format('YY-MM-DD')}</Text>
-                </IndexTable.Cell>
-                <IndexTable.Cell>
-                    <Text as="span">${x.price}</Text>
-                </IndexTable.Cell>
-                <IndexTable.Cell>
-                    <Text as="span">{x.emails}</Text>
-                </IndexTable.Cell>
-                <IndexTable.Cell>
-                    <Text as="span">{x.recurring_emails}</Text>
-                </IndexTable.Cell>
-                <IndexTable.Cell>
-                    <Text as="span">{x.total_emails}</Text>
-                </IndexTable.Cell>
-                <IndexTable.Cell>
-                    <Text as="span">{x.used_emails}</Text>
-                </IndexTable.Cell>
-                <IndexTable.Cell>
-                    <Badge
-                        tone={x.is_active === 1 ? "success" : "attention"}>{x.is_active === 1 ? "Active" : "Inactive"}</Badge>
-                </IndexTable.Cell>
-            </IndexTable.Row>
-        ),
+        <IndexTable.Row key={i}>
+            <IndexTable.Cell>
+                <Text as="span">{moment(x.created_at).format('YY-MM-DD')}</Text>
+            </IndexTable.Cell>
+            <IndexTable.Cell>
+                <Text as="span">${x.price}</Text>
+            </IndexTable.Cell>
+            <IndexTable.Cell>
+                <Text as="span">{x.emails}</Text>
+            </IndexTable.Cell>
+            <IndexTable.Cell>
+                <Text as="span">{x.recurring_emails}</Text>
+            </IndexTable.Cell>
+            <IndexTable.Cell>
+                <Text as="span">{x.total_emails}</Text>
+            </IndexTable.Cell>
+            <IndexTable.Cell>
+                <Text as="span">{x.used_emails}</Text>
+            </IndexTable.Cell>
+            <IndexTable.Cell>
+                <Badge
+                    tone={x.is_active === 1 ? "success" : "attention"}>{x.is_active === 1 ? "Active" : "Inactive"}</Badge>
+            </IndexTable.Cell>
+        </IndexTable.Row>
+    ),
     );
 
     const newBackInStockPlan = () => {
@@ -315,9 +323,9 @@ const Plan = () => {
                     {/*    <Text variant="headingLg" as="span">Current Plan*/}
                     {/*        : {(shopDetails.plan_type === "0" || shopDetails.plan_type === "1") ? "Free" : shopDetails.plan_type === "5" ? "Basic" : shopDetails.plan_type === "6" ? "Pro" : shopDetails.plan_type === "7" ? "Advance" : shopDetails.plan_type === "8" ? "Enterprise" : shopDetails.plan_type === "9" ? "Starter" : ""}</Text>*/}
                     {/*    <Text*/}
-                    {/*        as={"span"}>{moment(shopDetails?.billing_schedule?.billing_start_date).format("MMMM DD")} - {moment(shopDetails?.billing_schedule?.billing_end_date).format("MMMM DD")}</Text>*/}
+                    {/*        as={"span"}>{moment(shopDetails?.shop.billing_schedule?.billing_start_date).format("MMMM DD")} - {moment(shopDetails?.shop.billing_schedule?.billing_end_date).format("MMMM DD")}</Text>*/}
                     {/*    <Text as={"span"}>Mail*/}
-                    {/*        sent {`${shopDetails.sent_email}/${(shopDetails.plan_type === "0" || shopDetails.plan_type === "1") ? "50" : shopDetails.plan_type === "5" ? "500" : shopDetails.plan_type === "6" ? "2000" : shopDetails.plan_type === "7" ? "5000" : shopDetails.plan_type === "8" ? "10000" : shopDetails.plan_type === "9" ? "100" : ""}`}</Text>*/}
+                    {/*        sent {`${shopDetails.emailCount}/${(shopDetails.plan_type === "0" || shopDetails.plan_type === "1") ? "50" : shopDetails.plan_type === "5" ? "500" : shopDetails.plan_type === "6" ? "2000" : shopDetails.plan_type === "7" ? "5000" : shopDetails.plan_type === "8" ? "10000" : shopDetails.plan_type === "9" ? "100" : ""}`}</Text>*/}
                     {/*    <ProgressBar progress={productPercent} size="small" tone="primary"/>*/}
                     {/*</BlockStack>*/}
                     {/*    </div>*/}
@@ -362,8 +370,8 @@ const Plan = () => {
                                             {
                                                 shopDetails.plan_type == "1" ? <div
                                                     className={col}>{(y.free === true || y.free === false) ?
-                                                    <span
-                                                        className="icons">{y.free === true ? Icons.verifiedIcon : minusIcon}</span> : y.free}
+                                                        <span
+                                                            className="icons">{y.free === true ? Icons.verifiedIcon : minusIcon}</span> : y.free}
                                                 </div> : ""
                                             }
 
@@ -375,12 +383,12 @@ const Plan = () => {
                                                     className="icons">{y.pro === true ? Icons.verifiedIcon : minusIcon}</span> : `${y.pro}/Month`}</div>
                                             <div
                                                 className={col}>{(y.advance === true || y.advance === false) ?
-                                                <span
-                                                    className="icons">{y.advance === true ? Icons.verifiedIcon : minusIcon}</span> : `${y.advance}/Month`}</div>
+                                                    <span
+                                                        className="icons">{y.advance === true ? Icons.verifiedIcon : minusIcon}</span> : `${y.advance}/Month`}</div>
                                             <div
                                                 className={col}>{(y.enterprise === true || y.enterprise === false) ?
-                                                <span
-                                                    className="icons">{y.enterprise === true ? Icons.verifiedIcon : minusIcon}</span> : `${y.enterprise}/Month`}</div>
+                                                    <span
+                                                        className="icons">{y.enterprise === true ? Icons.verifiedIcon : minusIcon}</span> : `${y.enterprise}/Month`}</div>
                                         </div>
                                     </div>
                                 </li>
@@ -411,13 +419,13 @@ const Plan = () => {
             ) : ''}
 
             <Page title={"Plan & Price"}
-                  backAction={shopDetails.plan_type === "1" || shopDetails.is_older_shop == 1 ? "" : {
-                      content: 'BAckInStock', onAction: () => navigate(`${baseUrl}/settings`)
-                  }}>
+                backAction={shopDetails.plan_type === "1" || shopDetails.is_older_shop == 1 ? "" : {
+                    content: 'BAckInStock', onAction: () => navigate(`${baseUrl}/settings`)
+                }}>
                 <Layout>
                     {message !== "" && isError === false ?
                         <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
-                                      setIsErrorServer={setIsErrorServer}/> : ""}
+                            setIsErrorServer={setIsErrorServer} /> : ""}
                     {shopDetails.is_older_shop == 1 ? <Layout.Section><Banner title="Update your plan" tone="warning">
                         <p>
                             Please revise your plan by or before September 30th 2023. Failure to do so will result in
@@ -436,13 +444,13 @@ const Plan = () => {
                                                         : {shopDetails.plan_type === "1" ? "Free" : shopDetails.plan_type === "5" ? "Basic" : shopDetails.plan_type === "6" ? "Pro" : shopDetails.plan_type === "7" ? "Advance" : shopDetails.plan_type === "8" ? "Enterprise" : shopDetails.plan_type === "9" ? "Starter" : ""}
                                                     </Text>
                                                     <Text
-                                                        as={"span"}>{moment(shopDetails?.billing_schedule?.billing_start_date).format("MMMM DD")} - {moment(shopDetails?.billing_schedule?.billing_end_date).format("MMMM DD")}</Text>
+                                                        as={"span"}>{moment(shopDetails?.shop.billing_schedule?.billing_start_date).format("MMMM DD")} - {moment(shopDetails?.shop.billing_schedule?.billing_end_date).format("MMMM DD")}</Text>
                                                     <Text as={"span"}>Mail
-                                                        sent {`${shopDetails.sent_email}/${shopDetails.plan_type === "1" ? "50" : shopDetails.plan_type === "5" ? "500" : shopDetails.plan_type === "6" ? "2000" : shopDetails.plan_type === "7" ? "5000" : shopDetails.plan_type === "8" ? "10000" : shopDetails.plan_type === "9" ? "100" : ""}`}</Text>
-                                                    <ProgressBar progress={productPercent} size="small" tone="primary"/>
+                                                        sent {`${shopDetails.emailCount}/${shopDetails.plan_type === "1" ? "50" : shopDetails.plan_type === "5" ? "500" : shopDetails.plan_type === "6" ? "2000" : shopDetails.plan_type === "7" ? "5000" : shopDetails.plan_type === "8" ? "10000" : shopDetails.plan_type === "9" ? "100" : ""}`}</Text>
+                                                    <ProgressBar progress={productPercent} size="small" tone="primary" />
                                                     {activeEmailPlan && activeEmailPlan.is_active === 1 &&
-                                                    <Text as={"span"}>Addon
-                                                        Mail {`${activeEmailPlan.used_emails}/${activeEmailPlan.total_emails}`}</Text>
+                                                        <Text as={"span"}>Addon
+                                                            Mail {`${activeEmailPlan.used_emails}/${activeEmailPlan.total_emails}`}</Text>
                                                     }
                                                 </BlockStack>
                                             </Card>
@@ -458,20 +466,20 @@ const Plan = () => {
                                                                 <BlockStack
                                                                     gap={activeEmailPlan && activeEmailPlan.is_active === 1 ? "800" : "500"}>
                                                                     <Text variant="headingLg" as="h5"
-                                                                          alignment={"center"}>{x.plan}</Text>
+                                                                        alignment={"center"}>{x.plan}</Text>
                                                                     <InlineStack blockAlign={"baseline"}
-                                                                                 align={"center"} wrap={false}>
+                                                                        align={"center"} wrap={false}>
                                                                         <Text as="span" tone="success"
-                                                                              variant="headingLg">${x.price}</Text>
+                                                                            variant="headingLg">${x.price}</Text>
                                                                         <Text variant="bodySm" as="span">
                                                                             /month
                                                                         </Text>
                                                                     </InlineStack>
                                                                     <InlineStack align={"center"}>
                                                                         <Button variant={"primary"}
-                                                                                onClick={() => onPlanClickButton(x.planType)}
-                                                                                loading={isLoading == x.planType}
-                                                                                disabled={shopDetails.plan_type == x.planType ? true : false}>
+                                                                            onClick={() => onPlanClickButton(x.planType)}
+                                                                            loading={isLoading == x.planType}
+                                                                            disabled={shopDetails.plan_type == x.planType ? true : false}>
                                                                             {shopDetails.plan_type == x.planType ? "Activated" : shopDetails.is_older_shop == 1 ? "Upgrade" : shopDetails.plan_type === "9" ? "Upgrade" : shopDetails.plan_type > x.planType ? "Downgrade" : x.planType === "9" ? "Downgrade" : "Upgrade"}
                                                                         </Button>
                                                                     </InlineStack>
@@ -499,19 +507,19 @@ const Plan = () => {
 
 
                                         <Grid>
-                                            <Grid.Cell columnSpan={{xs: 6, sm: 6, md: 6, lg: 9, xl: 9}}>
+                                            <Grid.Cell columnSpan={{ xs: 6, sm: 6, md: 6, lg: 9, xl: 9 }}>
                                                 <Select
                                                     label={<Text
                                                         variant={"headingSm"}>{"Here are the available AddOn options:"}</Text>}
                                                     placeholder={"Select plan"}
                                                     value={isEmailPlan} options={emailPlan}
-                                                    onChange={(value) => setIsEmailPlan(value)}/>
+                                                    onChange={(value) => setIsEmailPlan(value)} />
                                             </Grid.Cell>
-                                            <Grid.Cell columnSpan={{xs: 6, sm: 6, md: 6, lg: 3, xl: 3}}>
-                                                <div style={{paddingTop: "25px"}}>
+                                            <Grid.Cell columnSpan={{ xs: 6, sm: 6, md: 6, lg: 3, xl: 3 }}>
+                                                <div style={{ paddingTop: "25px" }}>
                                                     <Button variant={"primary"} loading={isEmailLoading}
-                                                            disabled={isEmailPlan === ""}
-                                                            onClick={() => onUpdateEmailPlan(isEmailPlan, emailPrice[isEmailPlan])}>{"Buy now"}</Button>
+                                                        disabled={isEmailPlan === ""}
+                                                        onClick={() => onUpdateEmailPlan(isEmailPlan, emailPrice[isEmailPlan])}>{"Buy now"}</Button>
                                                 </div>
                                             </Grid.Cell>
                                         </Grid>
@@ -519,21 +527,21 @@ const Plan = () => {
                                 </Box>
 
                                 {billingData && billingData?.length > 0 &&
-                                <IndexTable
-                                    resourceName={resourceNameBillingData}
-                                    itemCount={billingData.length}
-                                    headings={[
-                                        {title: 'Date'},
-                                        {title: 'Price'},
-                                        {title: 'Emails Limit'},
-                                        {title: 'Recurring Emails'},
-                                        {title: 'Total Emails'},
-                                        {title: 'Used Emails'},
-                                        {title: 'Status'},
-                                    ]}
-                                    selectable={false}>
-                                    {rowMarkupBillingData}
-                                </IndexTable>
+                                    <IndexTable
+                                        resourceName={resourceNameBillingData}
+                                        itemCount={billingData.length}
+                                        headings={[
+                                            { title: 'Date' },
+                                            { title: 'Price' },
+                                            { title: 'Emails Limit' },
+                                            { title: 'Recurring Emails' },
+                                            { title: 'Total Emails' },
+                                            { title: 'Used Emails' },
+                                            { title: 'Status' },
+                                        ]}
+                                        selectable={false}>
+                                        {rowMarkupBillingData}
+                                    </IndexTable>
                                 }
                             </Card>
                         </BlockStack>

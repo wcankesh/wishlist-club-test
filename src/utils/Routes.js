@@ -1,27 +1,29 @@
-import {baseUrl} from "./Constant";
-import Dashboard from "../Component/Dashboard/Dashboard";
-import Analytics from "../Component/Analytics/Analytics";
-import BackInStock from "../Component/BackInStock/BackInStock";
-import BackInStockEmail from "../Component/BackInStock/BackInStockEmail/BackInStockEmail";
-import StockNotification from "../Component/BackInStock/BackInStockEmail/StockNotification";
-import ThankYouNotification from "../Component/BackInStock/BackInStockEmail/ThankYouNotification";
-import WishlistItems from "../Component/WishlistItems/WishlistItems";
-import Settings from "../Component/Settings/Settings";
-import General from "../Component/Settings/General/General";
-import WishlistDesign from "../Component/Settings/WishlistDesign/WishlistDesign";
-import WishlistEmail from "../Component/Settings/WishlistEmail/WishlistEmail";
-import Language from "../Component/Settings/Language/Language";
-import Headless from "../Component/Settings/Headless/Headless";
-import Plan from "../Component/Plan/Plan";
-import Installation from "../Component/Installation/Installation";
-import BackInStockDesign from "../Component/BackInStock/BackInStockDesign/BackInStockDesign";
-import EmailHistory from "../Component/EmailHistory/EmailHistory";
-import OnBoardingApp from "../Component/OnBoardingApp/OnBoardingApp";
-import Integration from "../Component/Settings/Integration/Integration";
-import IntegrationDetails from "../Component/Settings/Integration/IntegrationDetails/IntegrationDetails";
-import WhatSNew from "../Component/Settings/WhatSNew/WhatSNew";
-import RequestAFeature from "../Component/Settings/WhatSNew/RequestAFeature/RequestAFeature";
-import WishlistEmailCustomization from "../Component/Settings/WishlistEmail/WishlistEmailCustomization";
+import { baseUrl } from "./Constant";
+import { lazy } from "react";
+
+const Dashboard = lazy(() => import("../Component/Dashboard/Dashboard"));
+const Analytics = lazy(() => import("../Component/Analytics/Analytics"));
+const BackInStock = lazy(() => import("../Component/BackInStock/BackInStock"));
+const BackInStockDesign = lazy(() => import("../Component/BackInStock/BackInStockDesign/BackInStockDesign"));
+const BackInStockEmail = lazy(() => import("../Component/BackInStock/BackInStockEmail/BackInStockEmail"));
+const StockNotification = lazy(() => import("../Component/BackInStock/BackInStockEmail/StockNotification"));
+const ThankYouNotification = lazy(() => import("../Component/BackInStock/BackInStockEmail/ThankYouNotification"));
+const WishlistItems = lazy(() => import("../Component/WishlistItems/WishlistItems"));
+const WishlistDesign = lazy(() => import("../Component/Settings/WishlistDesign/WishlistDesign"));
+const Settings = lazy(() => import("../Component/Settings/Settings"));
+const General = lazy(() => import("../Component/Settings/General/General"));
+const WishlistEmail = lazy(() => import("../Component/Settings/WishlistEmail/WishlistEmail"));
+const WishlistEmailCustomization = lazy(() => import("../Component/Settings/WishlistEmail/WishlistEmailCustomization"));
+const Language = lazy(() => import("../Component/Settings/Language/Language"));
+const Headless = lazy(() => import("../Component/Settings/Headless/Headless"));
+const Plan = lazy(() => import("../Component/Plan/Plan"));
+const Installation = lazy(() => import("../Component/Installation/Installation"));
+const Integration = lazy(() => import("../Component/Settings/Integration/Integration"));
+const IntegrationDetails = lazy(() => import("../Component/Settings/Integration/IntegrationDetails/IntegrationDetails"));
+const WhatSNew = lazy(() => import("../Component/Settings/WhatSNew/WhatSNew"));
+const RequestAFeature = lazy(() => import("../Component/Settings/WhatSNew/RequestAFeature/RequestAFeature"));
+const EmailHistory = lazy(() => import("../Component/EmailHistory/EmailHistory"));
+const OnBoardingApp = lazy(() => import("../Component/OnBoardingApp/OnBoardingApp"));
 
 export const routes = [
     { path: `${baseUrl}/dashboard`, component: <Dashboard /> },
@@ -29,8 +31,8 @@ export const routes = [
     { path: `${baseUrl}/back-in-stock`, component: <BackInStock /> },
     { path: `${baseUrl}/back-in-stock/design`, component: <BackInStockDesign /> },
     { path: `${baseUrl}/back-in-stock/email`, component: <BackInStockEmail /> },
-    { path: `${baseUrl}/back-in-stock/email/stock-notification`, component: <StockNotification /> },
-    { path: `${baseUrl}/back-in-stock/email/thank-you-notification`, component: <ThankYouNotification /> },
+    { path: `${baseUrl}/settings/back-in-stock/email/stock-notification`, component: <StockNotification /> },
+    { path: `${baseUrl}/settings/back-in-stock/email/thank-you-notification`, component: <ThankYouNotification /> },
     { path: `${baseUrl}/wishlist-items`, component: <WishlistItems /> },
     { path: `${baseUrl}/wishlist-design`, component: <WishlistDesign /> },
     { path: `${baseUrl}/settings`, component: <Settings /> },
@@ -48,4 +50,4 @@ export const routes = [
     { path: `${baseUrl}/settings/request-feature`, component: <RequestAFeature /> },
     { path: `${baseUrl}/email-history`, component: <EmailHistory /> },
     { path: `${baseUrl}/onboarding`, component: <OnBoardingApp /> },
-]
+];

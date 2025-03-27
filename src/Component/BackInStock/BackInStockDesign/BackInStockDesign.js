@@ -189,8 +189,7 @@ const BackInStockDesign = () => {
 
     return (
         <Fragment>
-            <Page title={"Back In Stock Design"} backAction={{content: 'BackInStock', onAction: onBack}}
-                  primaryAction={{content: "Save", onAction: updateBisSetting, loading: isLoading}}>
+            <Page title={"Back In Stock"} primaryAction={{ content: "Save", onAction: updateBisSetting, loading: isLoading }}>
 
                 <Layout>
                     {message !== "" && isError === false ?

@@ -189,7 +189,7 @@ const BisStockAnalytics = () => {
                         <Badge tone="success">Available stock</Badge>}</Fragment>
                 </IndexTable.Cell>
                 <IndexTable.Cell>
-                    <Text as={"span"}>{moment(x.created_at).format('L')}</Text>
+                    <Text as={"span"}>{moment(x.created_at).format('ll')}</Text>
                 </IndexTable.Cell>
                 <IndexTable.Cell>
                         <Button onClick={() => onBisMailResend(x.id)} loading={isMailLoading === `mail-resend-${x.id}`}>

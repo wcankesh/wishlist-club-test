@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, useEffect} from 'react';
 import {InlineStack, Layout, Page} from "@shopify/polaris";
 import HelpDesk from "./HelpDesk/HelpDesk"
 import {useDispatch, useSelector} from "react-redux";
@@ -17,15 +17,25 @@ const Dashboard = () => {
 
     const onRemoveBanner = async (name) => {
         const payload = {
-            banner_display_setting: {...shopDetails.bannerDisplaySetting, [name]: "true"},
+            banner_display_setting: { ...shopDetails.bannerDisplaySetting, [name]: "true" },
             id: shopDetails.id
         }
         dispatch(Shop_details({
             ...shopDetails,
-            bannerDisplaySetting: {...shopDetails.bannerDisplaySetting, [name]: "true"}
+            bannerDisplaySetting: { ...shopDetails.bannerDisplaySetting, [name]: "true" }
         }));
         const data = await apiService.updateShopDisplayBanner(payload)
     }
+    const fetchextensionStatus = async () => {
+        const extResponse = await apiService.ExtensionStatus({});
+        dispatch(Shop_details({
+            ...shopDetails,
+            extension_status: extResponse.data.isEnabledExtension,
+        }));
+    }
+    useEffect(() => {
+        fetchextensionStatus()
+    }, [])
 
     return (
         <Fragment>
@@ -48,12 +58,12 @@ const Dashboard = () => {
                     <Notifications />
 
                     <Layout.Section variant={"fullWidth"}>
-                        <HelpDesk/>
+                        <HelpDesk />
                     </Layout.Section>
                     {
                         shopDetails && shopDetails.bannerDisplaySetting["share_feedback"] != "true" ?
                             <Layout.Section>
-                                <Feedback onRemoveBanner={onRemoveBanner}/>
+                                <Feedback onRemoveBanner={onRemoveBanner} />
                             </Layout.Section> : ""
                     }
                 </Layout>

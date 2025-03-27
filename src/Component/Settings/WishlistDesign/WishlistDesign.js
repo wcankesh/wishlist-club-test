@@ -1,12 +1,12 @@
-import React, {Fragment, useState, useCallback, useEffect} from 'react';
-import {Tabs, Layout, Page, PageActions, Card} from "@shopify/polaris";
-import {useNavigate} from "react-router-dom";
-import {apiService, baseUrl, capitalizeMessage} from "../../../utils/Constant";
+import React, { Fragment, useState, useCallback, useEffect } from 'react';
+import { Tabs, Layout, Page, PageActions, Card } from "@shopify/polaris";
+import { useNavigate } from "react-router-dom";
+import { apiService, baseUrl, capitalizeMessage } from "../../../utils/Constant";
 import ToastMessage from "../../Comman/ToastMessage";
 import CollectionDesign from "./CollectionDesign"
 import ProductDesign from "./ProductDesign"
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
-import {AppDocsLinks} from "../../../utils/AppDocsLinks";
+import { AppDocsLinks } from "../../../utils/AppDocsLinks";
 
 const initialState = {
     button_type: "3",
@@ -43,7 +43,7 @@ const initialState = {
     product_collection_button_border_color_after: "#ffffff",
     icon: ""
 }
-const  WishlistDesign = () => {
+const WishlistDesign = () => {
     const navigate = useNavigate()
     const [selected, setSelected] = useState(0);
     const [wishlistSetting, setWishlistSetting] = useState(initialState)
@@ -60,7 +60,7 @@ const  WishlistDesign = () => {
 
     const getLauncher = async () => {
         const response = await apiService.getLauncher();
-        if (response.status === 200) {
+        if (response.status === true) {
             setIsError(false)
             setWishlistSetting(response.data)
         } else if (response.status === 500) {
@@ -162,38 +162,38 @@ const  WishlistDesign = () => {
     return (
         <Fragment>
 
-            <Page title={"Wishlist Design"} backAction={{content: 'Settings', onAction: onBack}}
-                  primaryAction={{content: "Save", onAction: updateLauncher, loading: isLoading}}>
+            <Page title={"Wishlist Design"}
+                primaryAction={{ content: "Save", onAction: updateLauncher, loading: isLoading }}>
                 <Layout>
-                    {message !== "" && isError === false ? <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer}/> : ""}
+                    {message !== "" && isError === false ? <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer} /> : ""}
                     <CustomErrorBanner link={AppDocsLinks.article["424"]} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError} />
                     <Layout.Section fullWidth>
                         <Card padding={"0"}>
-                            <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>
+                            <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange} />
                         </Card>
                     </Layout.Section>
                     {selected == 0 &&
-                    <ProductDesign
-                        wishlistSetting={wishlistSetting}
-                        setWishlistSetting={setWishlistSetting}
-                        file={file}
-                        setFile={setFile}
-                        updateIcon={updateIcon}
-                        deleteIcon={deleteIcon}
-                        isSVGLoading={isSVGLoading}
+                        <ProductDesign
+                            wishlistSetting={wishlistSetting}
+                            setWishlistSetting={setWishlistSetting}
+                            file={file}
+                            setFile={setFile}
+                            updateIcon={updateIcon}
+                            deleteIcon={deleteIcon}
+                            isSVGLoading={isSVGLoading}
 
-                    />
+                        />
                     }
                     {selected == 1 &&
-                    <CollectionDesign
-                        wishlistSetting={wishlistSetting}
-                        setWishlistSetting={setWishlistSetting}
-                        file={file}
-                        setFile={setFile}
-                        updateIcon={updateIcon}
-                        deleteIcon={deleteIcon}
-                        isSVGLoading={isSVGLoading}
-                    />
+                        <CollectionDesign
+                            wishlistSetting={wishlistSetting}
+                            setWishlistSetting={setWishlistSetting}
+                            file={file}
+                            setFile={setFile}
+                            updateIcon={updateIcon}
+                            deleteIcon={deleteIcon}
+                            isSVGLoading={isSVGLoading}
+                        />
                     }
                 </Layout>
                 <PageActions

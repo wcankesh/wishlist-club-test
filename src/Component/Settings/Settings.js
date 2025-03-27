@@ -22,7 +22,7 @@ const Settings = () => {
         // },
         {
             icon: Icons.EmailIcon,
-            name: "Wishlist Email",
+            name: "Email Customisation",
             text: "Adjust your email preferences for wishlist items, price-drop alerts, and restock notifications for products in your wishlist.",
             link: "settings/email?step=0"
 

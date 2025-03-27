@@ -13,15 +13,15 @@ import {
     Page,
     Text, Popover, ActionList
 } from '@shopify/polaris'
-import {useNavigate} from "react-router-dom";
-import {apiService, baseUrl, capitalizeMessage, isChecked, toggleFlag} from "../../../utils/Constant";
+import { useNavigate } from "react-router-dom";
+import { apiService, baseUrl, capitalizeMessage, isChecked, toggleFlag } from "../../../utils/Constant";
 import ToastMessage from "../../Comman/ToastMessage"
 import CopyCode from "../../Comman/CopyCode"
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
-import {AppDocsLinks} from "../../../utils/AppDocsLinks";
-import {RenderLoading} from "../../../utils/RenderLoading";
-import {useSelector} from "react-redux";
-import {Modal, TitleBar, useAppBridge} from "@shopify/app-bridge-react";
+import { AppDocsLinks } from "../../../utils/AppDocsLinks";
+import { RenderLoading } from "../../../utils/RenderLoading";
+import { useSelector } from "react-redux";
+import { Modal, TitleBar, useAppBridge } from "@shopify/app-bridge-react";
 
 const General = () => {
     const shopify = useAppBridge();
@@ -37,7 +37,7 @@ const General = () => {
         is_variant_wishlist: 0,
         redirect_type: 0,
         remove_wishlist_type: 2,
-        is_clear_cart:'0',
+        is_clear_cart: '0',
     })
     const [isLoading, setIsLoading] = useState(false)
     const [activeGuestModal, setActiveGuestModal] = useState(false);
@@ -64,7 +64,7 @@ const General = () => {
             title: "Multiple wishlists",
             description: "Let your customers make wishlists in multiple categories and give them more flexibility to manage",
             name: "multiple_wishlist",
-            input:[
+            input: [
                 {
                     title: "Same Item to Multiple List",
                     description: "This option allow customers to add same item to multiple list which gives customer more access to their list.",
@@ -81,7 +81,7 @@ const General = () => {
             title: "Add to cart all the products",
             description: "Allow your customer to add all the wishlist products in the cart.",
             name: "is_dispaly_add_to_cart_all",
-            input:[
+            input: [
                 {
                     title: "Keep or Clear Cart on Add All",
                     description: "Allow your customers the flexibility to decide whether to keep existing items in their cart or clear it before adding all products from a wishlist, enhancing their shopping experience.",
@@ -111,18 +111,18 @@ const General = () => {
     }, []);
 
     const handleChange = async (e) => {
-        const {name, value} = e.target;
+        const { name, value } = e.target;
         if (name === "guest_wishlist" && value == 0) {
             setActiveGuestModal(true)
         } else {
-         if (name === 'is_dispaly_add_to_cart_all' && !isChecked(value)) {
-             setting.is_clear_cart = toggleFlag(setting.is_clear_cart, true);
-         }
+            if (name === 'is_dispaly_add_to_cart_all' && !isChecked(value)) {
+                setting.is_clear_cart = toggleFlag(setting.is_clear_cart, true);
+            }
             if (name === 'multiple_wishlist' && !isChecked(value)) {
                 setting.is_same_wishlist = toggleFlag(setting.is_same_wishlist, true);
             }
-            setSetting({...setting, [name]: value})
-            let payload = {...setting, [name]: value}
+            setSetting({ ...setting, [name]: value })
+            let payload = { ...setting, [name]: value }
             delete payload.is_bis_email_enable;
             delete payload.bis_id;
             const response = await apiService.updateSetting(payload, setting.id)
@@ -141,8 +141,8 @@ const General = () => {
 
     const GuestWishlistConfirmation = async () => {
         setIsLoading(true)
-        setSetting({...setting, guest_wishlist: "0"})
-        let payload = {...setting, guest_wishlist: "0"}
+        setSetting({ ...setting, guest_wishlist: "0" })
+        let payload = { ...setting, guest_wishlist: "0" }
         delete payload.is_bis_email_enable;
         delete payload.bis_id;
         const response = await apiService.updateSetting(payload, setting.id)
@@ -163,14 +163,14 @@ const General = () => {
     }
 
     const removeProduct = [
-        {label: 'When added to cart', value: 1},
-        {label: 'When an order is placed', value: 2},
-        {label: 'Never', value: 3},
+        { label: 'When added to cart', value: 1 },
+        { label: 'When an order is placed', value: 2 },
+        { label: 'Never', value: 3 },
     ];
 
     const ProductVariantList = [
-        {label: 'All variant', value: 0},
-        {label: 'Specific variant', value: 1},
+        { label: 'All variant', value: 0 },
+        { label: 'Specific variant', value: 1 },
     ];
     const CustomPopover = ({ options, selectedValue, onSelect, isDisabled, label }) => {
         const [popoverActive, setPopoverActive] = useState(false);
@@ -187,13 +187,13 @@ const General = () => {
     };
     return (
         <Fragment>
-            <Page title={"General"} backAction={{content: 'Settings', onAction: () => navigate(`${baseUrl}/settings`)}}>
+            <Page title={"General"} backAction={{ content: 'Settings', onAction: () => navigate(`${baseUrl}/settings`) }}>
                 <Layout>
                     {message !== "" && isError === false ?
                         <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
-                                      setIsErrorServer={setIsErrorServer}/> : ""}
+                            setIsErrorServer={setIsErrorServer} /> : ""}
                     <CustomErrorBanner link={AppDocsLinks.article["423"]} message={message} setMessage={setMessage}
-                                       setIsError={setIsError} isError={isError}/>
+                        setIsError={setIsError} isError={isError} />
                     <Layout.Section>
                         {isLoading ? <Card> {RenderLoading.commonParagraph} </Card> :
                             <Card padding={"0"}>
@@ -204,14 +204,14 @@ const General = () => {
                                                 <Box padding={"500"}>
                                                     <InlineStack gap={400} wrap={false}>
                                                         <Checkbox checked={isChecked(setting?.[x.name])} disabled={isLoading}
-                                                                  onChange={(checked) => handleChange({
-                                                                      target: {
-                                                                          name: x.name,
-                                                                          value: toggleFlag(setting?.[x.name])
-                                                                      }
-                                                                  })}/>
+                                                            onChange={(checked) => handleChange({
+                                                                target: {
+                                                                    name: x.name,
+                                                                    value: toggleFlag(setting?.[x.name])
+                                                                }
+                                                            })} />
                                                         <div className={"cursor-pointer"} onClick={() => handleChange({
-                                                            target: {name: x.name, value: toggleFlag(setting?.[x.name])}
+                                                            target: { name: x.name, value: toggleFlag(setting?.[x.name]) }
                                                         })}>
                                                             <BlockStack gap={"150"}>
                                                                 <Text as={"span"} fontWeight='semibold'>{x.title}</Text>
@@ -220,19 +220,19 @@ const General = () => {
                                                         </div>
                                                     </InlineStack>
                                                     {isChecked(setting?.[x.name]) ?
-                                                        x.input && (x.input || []).map((y,subIndex) => {
+                                                        x.input && (x.input || []).map((y, subIndex) => {
                                                             return (
-                                                                <Box padding={"500"}  key={subIndex} paddingInlineStart={'1000'}>
+                                                                <Box padding={"500"} key={subIndex} paddingInlineStart={'1000'}>
                                                                     <InlineStack gap={400} wrap={false}>
                                                                         <Checkbox checked={isChecked(setting?.[y.name])} disabled={isLoading}
-                                                                                  onChange={(checked) => handleChange({
-                                                                                      target: {
-                                                                                          name: y.name,
-                                                                                          value: toggleFlag(setting?.[y.name])
-                                                                                      }
-                                                                                  })}/>
+                                                                            onChange={(checked) => handleChange({
+                                                                                target: {
+                                                                                    name: y.name,
+                                                                                    value: toggleFlag(setting?.[y.name])
+                                                                                }
+                                                                            })} />
                                                                         <div className={"cursor-pointer"} onClick={() => handleChange({
-                                                                            target: {name: y.name, value: toggleFlag(setting?.[y.name])}
+                                                                            target: { name: y.name, value: toggleFlag(setting?.[y.name]) }
                                                                         })}>
                                                                             <BlockStack gap={"150"}>
                                                                                 <Text as={"span"} fontWeight='semibold'>{y.title}</Text>
@@ -245,11 +245,11 @@ const General = () => {
                                                         }) : ''}
                                                 </Box>
                                             </InlineStack>
-                                            <Divider/>
+                                            <Divider />
                                         </Fragment>
                                     )
                                 })}
-                                <Divider/>
+                                <Divider />
                                 <Box padding={"500"}>
                                     <BlockStack gap={"200"}>
                                         <Text fontWeight='semibold' as={"span"}>Product variant wishlists</Text>
@@ -287,7 +287,7 @@ const General = () => {
                                 <Box padding={"500"}>
                                     <BlockStack gap={"200"}>
                                         <Text fontWeight='semibold' as={"span"}>Add to Cart Redirection Options{'  '}
-                                            {shopDetails.shop !== 'french-beauty-co.myshopify.com' && shopDetails.plan_type < '7' ? <div className={'planText'}>Advance</div>
+                                            {shopDetails !== 'french-beauty-co.myshopify.com' && shopDetails.plan_type < '7' ? <div className={'planText'}>Advance</div>
                                                 : ''
                                             }
                                         </Text>
@@ -300,7 +300,7 @@ const General = () => {
                                             ]}
                                             selectedValue={setting?.redirect_type}
                                             onSelect={(value) => handleChange({ target: { name: "redirect_type", value } })}
-                                            isDisabled={shopDetails.shop !== 'french-beauty-co.myshopify.com' && shopDetails.plan_type < '7'}
+                                            isDisabled={shopDetails !== 'french-beauty-co.myshopify.com' && shopDetails.plan_type < '7'}
                                             label="Select Redirect Type"
                                         />
                                         <Box paddingBlock={"200"}>
@@ -323,7 +323,7 @@ const General = () => {
                                             isDisabled={shopDetails.plan_type < 6}
                                             label="Select Remove Wishlist Type"
                                         />
-                                    
+
                                         <Box paddingBlock={"200"}>
                                             <Text as={'span'} variant={'bodyMd'}>
                                                 {`Choose when to remove products from the wishlist: upon adding to cart, placing an order, or not at all. By default, wishlist items will be removed when the customer purchases the product.`}

@@ -15,11 +15,7 @@ import { initialKeys } from "./Common";
 import SwitchButton from "../../Comman/SwitchButton";
 import { Icons } from "../../../utils/Icons";
 import qs from "qs";
-import ProductPage from '../../BackInStock/BackInStockDesign/ProductPage';
-import HomePage from '../../BackInStock/BackInStockDesign/HomePage';
-import CollectionPage from '../../BackInStock/BackInStockDesign/CollectionPage';
-import SubscriberForm from '../../BackInStock/BackInStockDesign/SubscriberForm';
-import SubscriberMsg from '../../BackInStock/BackInStockDesign/SubscriberMsg';
+import BackInStockEmail from '../../BackInStock/BackInStockEmail/BackInStockEmail';
 
 const initialState = {
     subject: "",
@@ -51,7 +47,7 @@ const WishlistEmail = () => {
     const [emailSetting, setEmailSetting] = useState(initialState);
     const [emailSettingError, setEmailSettingError] = useState(initialStateError);
     const [isSave, setIsSave] = useState(false);
-    const [selectedOption, setSelectedOption] = useState(0);
+    const [selectedOption, setSelectedOption] = useState(Number(urlStep));
     useEffect(() => {
         bisSetting()
     }, []);
@@ -375,27 +371,25 @@ const WishlistEmail = () => {
 
     const onChangeTab = (event) => {
         const params = Object.fromEntries(urlParams);
-        debugger
-        console.log("event", event);
         navigate({ pathname: `${baseUrl}/settings/email`, search: qs.stringify({ ...params, step: event }) });
         setSelectedOption(event);
     }
     const tabs = [
         {
             id: 0,
-            content: "Design",
+            content: "Email Option",
             panelID: "design-content",
             subTabs: [{ content: "From Email" }], // Default selected sub-tab
         },
         {
             id: 1,
-            content: "Customization",
+            content: "Wishlist Alerts",
             panelID: "customisation-content",
             subTabs: [{ content: "Email Template" }],
         },
         {
             id: 2,
-            content: "Back In Stock Design",
+            content: "Back In Stock Alerts",
             panelID: "back-in-stock-content",
             subTabs: [
                 { content: "Product Page" },
@@ -408,7 +402,7 @@ const WishlistEmail = () => {
     ];
 
     return (
-        <Page title={"Wishlist Email"} backAction={{ content: 'Settings', onAction: onBack }}>
+        <Page title={"Email Customisation"} backAction={{ content: 'Settings', onAction: onBack }}>
             <div className="sticky-component">
                 <Layout>
                     {message !== "" && isError === false ?
@@ -624,43 +618,7 @@ const WishlistEmail = () => {
                             }
                             {selectedOption == '2' &&
                                 <>
-                                    <Layout>
-                                        {message !== "" && isError === false ?
-                                            <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
-                                                setIsErrorServer={setIsErrorServer} /> : ""}
-                                        <CustomErrorBanner link={AppDocsLinks.article["525"]} message={message} setMessage={setMessage}
-                                            setIsError={setIsError} isError={isError} />
-                                        <Layout.Section fullWidth>
-                                            <Card padding={0} roundedAbove={"md"}>
-                                                <Tabs tabs={tabs1} selected={selected} onSelect={handleTabChange} />
-                                            </Card>
-                                        </Layout.Section>
-                                        {selected == 0 &&
-                                            <ProductPage backInStockDesign={backInStockDesign} setBackInStockDesign={setBackInStockDesign} />
-                                        }
-                                        {selected == 1 &&
-                                            <HomePage backInStockDesign={backInStockDesign} setBackInStockDesign={setBackInStockDesign} />
-                                        }
-                                        {selected == 2 &&
-                                            <CollectionPage backInStockDesign={backInStockDesign} setBackInStockDesign={setBackInStockDesign} />
-                                        }
-                                        {selected == 3 && <SubscriberForm
-                                            backInStockDesign={backInStockDesign}
-                                            setBackInStockDesign={setBackInStockDesign}
-                                            setBackInStockDesignError={setBackInStockDesignError}
-                                            backInStockDesignError={backInStockDesignError}
-                                            formValidate={formValidate}
-                                        />}
-                                        {selected == 4 &&
-                                            <SubscriberMsg
-                                                backInStockDesign={backInStockDesign}
-                                                setBackInStockDesign={setBackInStockDesign}
-                                                setBackInStockDesignError={setBackInStockDesignError}
-                                                backInStockDesignError={backInStockDesignError}
-                                                formValidate={formValidate}
-                                            />}
-                                    </Layout>
-                                    <PageActions primaryAction={{ content: 'Save', onAction: updateBisSetting, loading: isLoading }} />
+                                    <BackInStockEmail />
                                 </>
                             }
                         </Layout.Section>

@@ -5,13 +5,15 @@ import {
     PostScriptIntegration
 } from "../../../../utils/AppImages";
 
-export const twoColumns = {xs: 1, sm: 1, md: 2, lg: 2, xl: 2};
+export const twoColumns = { xs: 1, sm: 1, md: 2, lg: 2, xl: 2 };
 
-export const threeColumns = {xs: 1, sm: 1, md: 2, lg: 3, xl: 3};
+export const threeColumns = { xs: 1, sm: 1, md: 2, lg: 3, xl: 3 };
 
-export const initialKlaviyo = {id: '', public_key: '', secret_key: '', is_klaviyo_connect: 0};
+export const initialKlaviyo = { id: '', public_key: '', secret_key: '', is_klaviyo_connect: 0 };
 
-export const initialConnected = {is_klaviyo_connect: 0,is_omnisend_connect: 0,is_mailchimp_connect: 0,is_postscript_connect: 0,}
+export const initialMailchimp = { id: '', public_key: '', secret_key: '', is_Mailchimp_connect: 0 };
+
+export const initialConnected = { is_klaviyo_connect: 0, is_omnisend_connect: 0, is_mailchimp_connect: 0, is_postscript_connect: 0, }
 
 export const integrationOptions = [
     {
@@ -39,8 +41,8 @@ export const integrationOptions = [
         name: 'Mailchimp',
         text: 'Use email automation flows based on subscription events.',
         link: 'settings/integration/mailchimp',
-        buttonText: 'Upcoming',
-        buttonDisable: true,
+        buttonText: 'Manage',
+        buttonDisable: !true,
         isPlan: '8',
         tooltipPlan: `Enterprise`
     },
@@ -56,7 +58,7 @@ export const integrationOptions = [
     },
 ]
 
-export const formValidate = (name, value,currentType) => {
+export const formValidate = (name, value, currentType) => {
     switch (name) {
         case "public_key":
             if (currentType.isEnabled) {
@@ -87,7 +89,7 @@ export const formValidate = (name, value,currentType) => {
 export const validateForm = (formData, setFormError, currentType) => {
     const errors = {};
     Object.keys(formData).forEach((key) => {
-        const errorMessage = formValidate(key, formData[key],currentType);
+        const errorMessage = formValidate(key, formData[key], currentType);
         if (errorMessage) {
             errors[key] = errorMessage;
             console.log(`Error for ${key}: ${errorMessage}`);
