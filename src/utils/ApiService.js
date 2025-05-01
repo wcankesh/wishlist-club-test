@@ -97,6 +97,10 @@ const ApiService = () => {
 
         WishlistAnalytics: async (payload) => await postData(`${apiBaseUrl}/wishlist-analytic`, payload),
 
+        ProductWishlist: async (payload) => await postData(`${apiBaseUrl}/product-wishlist`, payload),
+
+        UserWishlist: async (payload) => await postData(`${apiBaseUrl}/user-wishlist`, payload),
+
         Email: async (payload) => await postData(`${apiBaseUrl}/emails`, payload),
 
         ImportWishlistHistory: async (payload) => await postData(`${apiBaseUrl}/histories`, payload),
@@ -107,7 +111,7 @@ const ApiService = () => {
 
         getSetting: async () => await getData(`${apiBaseUrl}/setting`),
 
-        updateSetting: async (payload, id) => await putData(`${apiBaseUrl}/setting/${id}`, payload),
+        updateSetting: async (payload, id) => await postData(`${apiBaseUrl}/update-setting`, payload),
 
         getLauncher: async () => await getData(`${apiBaseUrl}/launcher`),
 

@@ -4,7 +4,7 @@ import {BlockStack, Text,List} from "@shopify/polaris";
 const EmailTemplateMsg = ({msgArray}) => {
     return (
         <BlockStack>
-            <Text as={'span'} variant={'headingSm'}>Use the following variable</Text>
+            <Text as={'span'}>Use the following variable</Text>
             <List type="bullet">
                 {
                     (msgArray || []).map((x,i)=>{

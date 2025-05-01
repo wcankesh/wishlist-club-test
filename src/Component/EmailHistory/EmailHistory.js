@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import {
-    Page, Layout, Pagination, Badge, Text, Card, IndexTable, EmptySearchResult, Button,
+    Pagination, Badge, Text, Card, IndexTable, EmptySearchResult, Button,
     Popover, ResourceList, Thumbnail, InlineStack, Box, Icon,
+    TextField,
 } from "@shopify/polaris"
 import { apiService, capitalizeMessage, } from "../../utils/Constant";
-import ToastMessage from "../Comman/ToastMessage";
-import CustomErrorBanner from "../Comman/CustomErrorBanner";
-import { AppDocsLinks } from "../../utils/AppDocsLinks";
 import { tableLoading } from "../../utils/RenderLoading";
 import { Icons } from "../../utils/Icons";
 
@@ -15,12 +13,10 @@ const EmailHistory = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [email, setEmail] = useState([]);
     const [EmailPageNo, setEmailPageNo] = useState(1);
-    const [emailPage, setEmailPage] = useState(1);
-    const [isError, setIsError] = useState(false);
-    const [isErrorServer, setIsErrorServer] = useState(false);
+    const [emailPage, setEmailPage] = useState(null);
     const [message, setMessage] = useState("");
     const [selectedProductIndex, setSelectedProductIndex] = useState(null);
-    const totalPageCountEmail = Math.ceil(emailPage / limit);
+    const totalPageCountEmail = Math.ceil(emailPage / limit)
 
     useEffect(() => {
         Email();
@@ -33,18 +29,15 @@ const EmailHistory = () => {
             limit: limit,
         }
         const response = await apiService.Email(payload);
-        if (response.status === 200) {
-            setEmail(response.data && response.data.lists)
-            setEmailPage(response.data.total)
+        if (response.status === true) {
+            setEmail(response.data && response.data)
+            setEmailPage(response.total_records)
             setIsLoading(false);
-            setIsError(false)
-        } else if (response.status === 500) {
+        } else if (response.status !== true) {
             setMessage(capitalizeMessage(response.message))
-            setIsErrorServer(true);
             setIsLoading(false)
         } else {
             setMessage(capitalizeMessage(response.message))
-            setIsError(true)
             setIsLoading(false)
         }
     }
@@ -95,7 +88,7 @@ const EmailHistory = () => {
                         {z.type === 13 ? <span className="icons"><Icon source={Icons.MinusIcon} /></span> : (
                             <Popover
                                 active={selectedProductIndex === i}
-                                activator={<Button variant={"plain"} removeUnderline onClick={() => togglePopoverActive(i)}
+                                activator={<Button variant={"plain"} onClick={() => togglePopoverActive(i)}
                                     disclosure={selectedProductIndex === i ? 'up' : 'down'}>{`${z.products.length} Products`}</Button>}
                                 onClose={() => togglePopoverActive(i)}
                             >
@@ -140,9 +133,9 @@ const EmailHistory = () => {
         //         />
         //         <Layout.Section>
         <Card padding={"050"}>
-            <Box padding={"300"}>
+            {/* <Box padding={"300"}>
                 <Text as={"span"} variant={"headingMd"}>{`Email History`}</Text>
-            </Box>
+            </Box> */}
             <IndexTable
                 resourceName={resourceNameEmail}
                 itemCount={isLoading ? limit : email.length}
@@ -160,24 +153,51 @@ const EmailHistory = () => {
             >
                 {isLoading ? tableLoading(limit, 5) : rowMarkup}
             </IndexTable>
-            <Box padding={'300'} borderBlockStartWidth={'025'} borderColor={'border-secondary'}>
-                <InlineStack align={'space-between'} blockAlign={'center'}>
-                    <Text as={"span"} fontWeight={"semibold"}> Total : {emailPage || 0} item(s) </Text>
-                    <div className={"d-flex"} style={{ justifyContent: "end" }}>
-                        <Pagination
-                            label={`${EmailPageNo} / ${totalPageCountEmail}`}
-                            hasPrevious={EmailPageNo > 1}
-                            onPrevious={() => onChangePaginationEmail('minus')}
-                            hasNext={EmailPageNo < totalPageCountEmail}
-                            onNext={() => onChangePaginationEmail('plus')}
-                        />
-                    </div>
+            {!isLoading && <Box padding="300" paddingBlockStart="500">
+                <InlineStack align="space-between" blockAlign="center">
+                    <Text as="span" fontWeight="regular">
+                        {emailPage}   Email History
+                    </Text>
+                    <Box>
+                        <InlineStack align="space-between" blockAlign="center" gap="400">
+                            <Text as="span" fontWeight="medium" tone="text">
+                                {`Page ${EmailPageNo} of ${totalPageCountEmail}`}
+                            </Text>
+                            <InlineStack gap="200" blockAlign="center">
+                                <Pagination
+                                    hasPrevious={EmailPageNo > 1}
+                                    onPrevious={() => onChangePaginationEmail('minus')}
+                                    hasNext={EmailPageNo < totalPageCountEmail}
+                                    onNext={() => onChangePaginationEmail('plus')}
+                                />
+
+                                <InlineStack gap="100" blockAlign="center">
+                                    <Text as="span" fontWeight="medium" tone="text">Go to</Text>
+                                    <Box width="60px">
+                                        <TextField
+                                            value={EmailPageNo.toString()}
+                                            onChange={(value) => {
+                                                const num = parseInt(value);
+                                                if (!isNaN(num) && num >= 1 && num <= totalPageCountEmail) {
+                                                    setEmailPageNo(num);
+                                                }
+                                            }}
+                                            type="number"
+                                            labelHidden
+                                            autoComplete="off"
+                                            max={totalPageCountEmail}
+                                            size="small"
+                                            align="center"
+                                        />
+                                    </Box>
+                                    <Text as="span" fontWeight="medium" tone="text">Page</Text>
+                                </InlineStack>
+                            </InlineStack>
+                        </InlineStack>
+                    </Box>
                 </InlineStack>
-            </Box>
+            </Box>}
         </Card>
-        //         </Layout.Section>
-        //     </Layout>
-        // </Page>
     );
 };
 

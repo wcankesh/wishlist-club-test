@@ -1,16 +1,19 @@
-import React, { Fragment, useEffect, useState } from 'react';
-import { BlockStack, Box, Button, ButtonGroup, Card, InlineGrid, InlineStack, Select, Text } from "@shopify/polaris";
-import { apiService, baseUrl, openUrlInNewWindow, secondaryButton } from "../../utils/Constant";
+import React, {useEffect, useState, Fragment} from 'react';
+import {
+    BlockStack, Box, Card, InlineStack, Button, Text, InlineGrid, ButtonGroup, Select,
+    Icon, Modal, List
+} from "@shopify/polaris";
+import {apiService, baseUrl, openUrlInNewWindow, secondaryButton} from "../../utils/Constant";
 import qs from "qs";
-import { useNavigate } from "react-router-dom";
-import { StepTwoImage } from "../../utils/AppImages";
+import {useNavigate} from "react-router-dom";
+import {StepTwoImage} from "../../utils/AppImages";
 import LazyLoadImage from "../Comman/LazyLoadImage";
-import { Icons } from "../../utils/Icons";
+import {Icons} from "../../utils/Icons";
 
-const StepTwo = ({ step, setStep, urlParams, shopDetails, extensionId, setExtensionId }) => {
+const StepTwo = ({step, setStep, urlParams, shopDetails, extensionId, setExtensionId}) => {
     const navigate = useNavigate();
     const theme = urlParams.get("theme") || "";
-    const [themeList, setThemeList] = useState([{ label: "Select Theme", value: "" }]);
+    const [themeList, setThemeList] = useState([{label: "Select Theme", value: ""}]);
     const [selectedTheme, setSelectedTheme] = useState(theme);
     const [extensionEnabled, setExtensionEnabled] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -27,7 +30,7 @@ const StepTwo = ({ step, setStep, urlParams, shopDetails, extensionId, setExtens
 
     const getTheme = async () => {
         setGetThemeLoading(true);
-        const response = await apiService.getThemes({ shop: shopDetails });
+        const response = await apiService.getThemes({shop: shopDetails.shop});
         if (response.status === 200) {
             setExtensionId(response.data.extension_id)
             const themes = [];
@@ -62,13 +65,12 @@ const StepTwo = ({ step, setStep, urlParams, shopDetails, extensionId, setExtens
         setIsLoading(!isActivate);
         setSelectedTheme(value);
         let isBlockCapables = true;
-        const response = await apiService.checkTheme({ shop: shopDetails, theme_id: value });
+        const response = await apiService.checkTheme({shop: shopDetails.shop, theme_id: value});
         if (response.status === 200) {
             setExtensionEnabled(response.extension_status);
             if (response && response.on_boardig) {
                 setIsExtensionUrl(response.on_boardig?.extension);
                 setIsWishlistUrl(response.on_boardig?.wishlist);
-                console.log('Extension URL set to:', response.on_boardig.extension);
             } else {
                 console.error('on_boardig or extension URL is missing in response.');
             }
@@ -85,7 +87,7 @@ const StepTwo = ({ step, setStep, urlParams, shopDetails, extensionId, setExtens
         const params = Object.fromEntries(urlParams);
         navigate({
             pathname: `${baseUrl}/onboarding`,
-            search: qs.stringify({ ...params, theme: value, extension: extensionId, isBlockCapable: isBlockCapables })
+            search: qs.stringify({...params, theme: value, extension: extensionId, isBlockCapable: isBlockCapables})
         });
     }
 
@@ -110,7 +112,7 @@ const StepTwo = ({ step, setStep, urlParams, shopDetails, extensionId, setExtens
         const params = Object.fromEntries(urlParams);
         delete params["theme"]
         delete params["extension"]
-        navigate({ pathname: `${baseUrl}/onboarding`, search: qs.stringify({ ...params, step: steps }) });
+        navigate({pathname: `${baseUrl}/onboarding`, search: qs.stringify({...params, step: steps})});
     }
 
     const onActiveStep = () => {
@@ -122,7 +124,7 @@ const StepTwo = ({ step, setStep, urlParams, shopDetails, extensionId, setExtens
         <Fragment>
             <Card padding={"0"}>
                 <Box paddingBlockStart={"800"} paddingBlockEnd={"800"} paddingInlineEnd={"1000"}
-                    paddingInlineStart={"1000"}>
+                     paddingInlineStart={"1000"}>
                     <BlockStack gap={"800"}>
                         <InlineGrid columns={2} gap={"800"}>
                             <BlockStack gap={"600"}>
@@ -139,34 +141,34 @@ const StepTwo = ({ step, setStep, urlParams, shopDetails, extensionId, setExtens
                                     <InlineStack gap={"200"} blockAlign={"end"} wrap={false}>
                                         <div className={"w-100"}>
                                             <Select label={"Where would you like to install it?"}
-                                                placeholder={"Select Theme"} disabled={getThemeLoading}
-                                                options={themeList} value={selectedTheme}
-                                                onChange={(value) => onChangeTheme(value)} />
+                                                    placeholder={"Select Theme"} disabled={getThemeLoading}
+                                                    options={themeList} value={selectedTheme}
+                                                    onChange={(value) => onChangeTheme(value)}/>
                                         </div>
                                         <Button size={"large"} icon={Icons.RefreshIcon} onClick={getTheme}
-                                            loading={getThemeLoading} />
+                                                loading={getThemeLoading}/>
                                     </InlineStack>
                                 </BlockStack>
                                 {
                                     selectedTheme !== "" ? <div className={secondaryButton}>
                                         <Button onClick={() => onActiveStep()} loading={isLoading} icon={Icons.ExternalIcon}
-                                            disabled={extensionEnabled || selectedTheme === ""}>
+                                                disabled={extensionEnabled || selectedTheme === ""}>
                                             {extensionEnabled ? "Activated" : "Activate"}
                                         </Button></div> : ""
                                 }
                                 {isBlockCapable &&
-                                    <BlockStack inlineAlign={"start"} gap={"400"}>
-                                        <Text as={"span"}>{`Add wishlist icon to product page`}</Text>
-                                        <div className={secondaryButton}>
-                                            <Button icon={Icons.ExternalIcon}
-                                                onClick={() => openUrlInNewWindow(isWishlistUrl)}>{`Activate`}</Button>
-                                        </div>
-                                    </BlockStack>
+                                <BlockStack inlineAlign={"start"} gap={"400"}>
+                                    <Text as={"span"}>{`Add wishlist icon to product page`}</Text>
+                                    <div className={secondaryButton}>
+                                        <Button icon={Icons.ExternalIcon} onClick={() => openUrlInNewWindow(isWishlistUrl)}>
+                                            {`Activate`}</Button>
+                                    </div>
+                                </BlockStack>
                                 }
 
                             </BlockStack>
                             <div className={"onBoardingIcon"}>
-                                <LazyLoadImage src={StepTwoImage} alt="Image" />
+                                <LazyLoadImage src={StepTwoImage} alt={"Image"}/>
                             </div>
                         </InlineGrid>
                         <InlineStack align={"space-between"}>
@@ -177,7 +179,7 @@ const StepTwo = ({ step, setStep, urlParams, shopDetails, extensionId, setExtens
                                 </div>
                             </ButtonGroup>
                             <Button disabled={!extensionEnabled || selectedTheme === ""} variant={"primary"}
-                                onClick={() => onStepChange(step + 1)}>Next</Button>
+                                    onClick={() => onStepChange(step + 1)}>Next</Button>
                         </InlineStack>
                     </BlockStack>
                 </Box>

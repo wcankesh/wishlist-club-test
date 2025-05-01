@@ -1,7 +1,7 @@
-import React, {Fragment, useEffect, useState} from 'react';
-import {apiService, baseUrl, capitalizeMessage} from "../../../utils/Constant";
-import {useNavigate} from "react-router-dom";
-import {Tabs, Layout, Page, PageActions, Card,} from "@shopify/polaris";
+import React, { Fragment, useEffect, useState } from 'react';
+import { apiService, baseUrl, capitalizeMessage } from "../../../utils/Constant";
+import { useNavigate } from "react-router-dom";
+import { Tabs, Layout, Page, PageActions, Card, } from "@shopify/polaris";
 import CollectionPage from "./CollectionPage";
 import ProductPage from "./ProductPage";
 import HomePage from "./HomePage";
@@ -9,8 +9,8 @@ import SubscriberForm from "./SubscriberForm";
 import SubscriberMsg from "./SubscriberMsg";
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
 import ToastMessage from "../../Comman/ToastMessage";
-import {AppDocsLinks} from "../../../utils/AppDocsLinks";
-import {formValidate} from "../../Comman/formValidate";
+import { AppDocsLinks } from "../../../utils/AppDocsLinks";
+import { formValidate } from "../../Comman/formValidate";
 
 const initialState = {
     product_page_widget: {
@@ -139,8 +139,8 @@ const BackInStockDesign = () => {
         delete backInStockDesign.thankyou_logo
 
         const formData = new FormData();
-        const updatedObject = {...backInStockDesign, id: backInStockDesign.id ? backInStockDesign.id : ""};
-        const updatedInnerObject = {...updatedObject.product_page_widget};
+        const updatedObject = { ...backInStockDesign, id: backInStockDesign.id ? backInStockDesign.id : "" };
+        const updatedInnerObject = { ...updatedObject.product_page_widget };
         updatedInnerObject.button_type = "1";
         updatedObject.product_page_widget = updatedInnerObject;
 
@@ -180,11 +180,11 @@ const BackInStockDesign = () => {
     }
 
     const tabs = [
-        {id: 'all-customers-1', content: 'Product Page', panelID: 'all-customers-content-1'},
-        {id: 'accepts-marketing-1', content: 'Home Page', panelID: 'accepts-marketing-content-1'},
-        {id: 'repeat-customers-1', content: 'Collection Page', panelID: 'repeat-customers-content-1'},
-        {id: 'prospects-1', content: 'Subscriber Form', panelID: 'prospects-content-1'},
-        {id: 'subscriber-1', content: 'Subscriber Message', panelID: 'prospects-content-1'},
+        { id: 'all-customers-1', content: 'Product Page', panelID: 'all-customers-content-1' },
+        // {id: 'accepts-marketing-1', content: 'Home Page', panelID: 'accepts-marketing-content-1'},
+        { id: 'repeat-customers-1', content: 'Collection Page', panelID: 'repeat-customers-content-1' },
+        { id: 'prospects-1', content: 'Subscriber Form', panelID: 'prospects-content-1' },
+        { id: 'subscriber-1', content: 'Subscriber Message', panelID: 'prospects-content-1' },
     ];
 
     return (
@@ -194,40 +194,40 @@ const BackInStockDesign = () => {
                 <Layout>
                     {message !== "" && isError === false ?
                         <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
-                                      setIsErrorServer={setIsErrorServer}/> : ""}
+                            setIsErrorServer={setIsErrorServer} /> : ""}
                     <CustomErrorBanner link={AppDocsLinks.article["525"]} message={message} setMessage={setMessage}
-                                       setIsError={setIsError} isError={isError}/>
+                        setIsError={setIsError} isError={isError} />
                     <Layout.Section fullWidth>
                         <Card padding={0} roundedAbove={"md"}>
-                            <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}/>
+                            <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange} />
                         </Card>
                     </Layout.Section>
                     {selected == 0 &&
-                    <ProductPage backInStockDesign={backInStockDesign} setBackInStockDesign={setBackInStockDesign}/>
+                        <ProductPage backInStockDesign={backInStockDesign} setBackInStockDesign={setBackInStockDesign} />
                     }
+                    {/* {selected == 1 &&
+                        <HomePage backInStockDesign={backInStockDesign} setBackInStockDesign={setBackInStockDesign} />
+                    } */}
                     {selected == 1 &&
-                    <HomePage backInStockDesign={backInStockDesign} setBackInStockDesign={setBackInStockDesign}/>
+                        <CollectionPage backInStockDesign={backInStockDesign} setBackInStockDesign={setBackInStockDesign} />
                     }
-                    {selected == 2 &&
-                    <CollectionPage backInStockDesign={backInStockDesign} setBackInStockDesign={setBackInStockDesign}/>
-                    }
-                    {selected == 3 && <SubscriberForm
+                    {selected == 2 && <SubscriberForm
                         backInStockDesign={backInStockDesign}
                         setBackInStockDesign={setBackInStockDesign}
                         setBackInStockDesignError={setBackInStockDesignError}
                         backInStockDesignError={backInStockDesignError}
                         formValidate={formValidate}
                     />}
-                    {selected == 4 &&
-                    <SubscriberMsg
-                        backInStockDesign={backInStockDesign}
-                        setBackInStockDesign={setBackInStockDesign}
-                        setBackInStockDesignError={setBackInStockDesignError}
-                        backInStockDesignError={backInStockDesignError}
-                        formValidate={formValidate}
-                    />}
+                    {selected == 3 &&
+                        <SubscriberMsg
+                            backInStockDesign={backInStockDesign}
+                            setBackInStockDesign={setBackInStockDesign}
+                            setBackInStockDesignError={setBackInStockDesignError}
+                            backInStockDesignError={backInStockDesignError}
+                            formValidate={formValidate}
+                        />}
                 </Layout>
-                <PageActions primaryAction={{content: 'Save', onAction: updateBisSetting, loading: isLoading}}/>
+                <PageActions primaryAction={{ content: 'Save', onAction: updateBisSetting, loading: isLoading }} />
             </Page>
         </Fragment>
     );

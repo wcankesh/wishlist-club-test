@@ -3,14 +3,14 @@ import {
     Page, Layout, ProgressBar, Button, Banner, Text, BlockStack, InlineStack, Card, Icon,
     Select, Grid, IndexTable, Box, Badge,
 } from "@shopify/polaris";
-import {useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
-import {Icons} from "../../utils/Icons";
-import {apiService, baseUrl, capitalizeMessage, openUrlInNewWindow} from "../../utils/Constant";
-import {Shop_details} from "../../redux/action/action";
-import {useNavigate} from "react-router-dom";
+import { Icons } from "../../utils/Icons";
+import { apiService, baseUrl, capitalizeMessage, openUrlInNewWindow } from "../../utils/Constant";
+import { Shop_details } from "../../redux/action/action";
+import { useNavigate } from "react-router-dom";
 import ToastMessage from "../Comman/ToastMessage";
-import {Modal, TitleBar} from "@shopify/app-bridge-react";
+import { Modal, TitleBar } from "@shopify/app-bridge-react";
 
 const Plan = () => {
     const dispatch = useDispatch();
@@ -27,7 +27,7 @@ const Plan = () => {
     const [isPlan, setIsPlan] = useState();
     const [downgradeModal, setDowngradeModal] = useState(false);
 
-    const minusIcon = <Icon source={Icons.MinusIcon}/>;
+    const minusIcon = <Icon source={Icons.MinusIcon} />;
 
     const onCloseModel = () => {
         setIsPlan('')
@@ -49,9 +49,6 @@ const Plan = () => {
         const getBilling = async () => {
             const response = await apiService.getBilling();
             if (response.status === true) {
-                console.log("response.data", response.data.emailCount);
-                console.log("response.data", response.data.emailCount);
-                console.log("response.data", response.data.usageCharges);
                 dispatch(Shop_details({
                     ...shopDetails,
                     emailCount: response.data.emailCount,
@@ -67,7 +64,6 @@ const Plan = () => {
         }
         getBilling();
     }, []);
-    console.log("shopDetails", shopDetails['emailCount']);
 
     const onUpdatePlan = async (planType) => {
         setIsLoading(planType)
@@ -446,8 +442,8 @@ const Plan = () => {
                                                     <Text
                                                         as={"span"}>{moment(shopDetails?.shop.billing_schedule?.billing_start_date).format("MMMM DD")} - {moment(shopDetails?.shop.billing_schedule?.billing_end_date).format("MMMM DD")}</Text>
                                                     <Text as={"span"}>Mail
-                                                        sent {`${shopDetails.emailCount}/${shopDetails.plan_type === "1" ? "50" : shopDetails.plan_type === "5" ? "500" : shopDetails.plan_type === "6" ? "2000" : shopDetails.plan_type === "7" ? "5000" : shopDetails.plan_type === "8" ? "10000" : shopDetails.plan_type === "9" ? "100" : ""}`}</Text>
-                                                    <ProgressBar progress={productPercent} size="small" tone="primary" />
+                                                        sent {`${shopDetails.emailCount === undefined ? 0 : shopDetails.emailCount}/${shopDetails.plan_type === "1" ? "50" : shopDetails.plan_type === "5" ? "500" : shopDetails.plan_type === "6" ? "2000" : shopDetails.plan_type === "7" ? "5000" : shopDetails.plan_type === "8" ? "10000" : shopDetails.plan_type === "9" ? "100" : ""}`}</Text>
+                                                    <ProgressBar progress={Number(productPercent) == null ? 0 : productPercent} size="small" tone="primary" />
                                                     {activeEmailPlan && activeEmailPlan.is_active === 1 &&
                                                         <Text as={"span"}>Addon
                                                             Mail {`${activeEmailPlan.used_emails}/${activeEmailPlan.total_emails}`}</Text>

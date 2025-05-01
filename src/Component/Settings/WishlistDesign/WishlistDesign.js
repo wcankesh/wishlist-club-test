@@ -1,13 +1,15 @@
-import React, { Fragment, useState, useCallback, useEffect } from 'react';
+import React, { Fragment, useState, useCallback, useEffect, useRef, lazy, Suspense } from 'react';
 import { Tabs, Layout, Page, PageActions, Card } from "@shopify/polaris";
-import { useNavigate } from "react-router-dom";
 import { apiService, baseUrl, capitalizeMessage } from "../../../utils/Constant";
 import ToastMessage from "../../Comman/ToastMessage";
-import CollectionDesign from "./CollectionDesign"
-import ProductDesign from "./ProductDesign"
-import CustomErrorBanner from "../../Comman/CustomErrorBanner";
 import { AppDocsLinks } from "../../../utils/AppDocsLinks";
-
+import { useNavigate } from "react-router-dom"
+import qs from "qs";
+import CollectionDesign from "./CollectionDesign";
+import ProductDesign from "./ProductDesign";
+import CustomErrorBanner from "../../Comman/CustomErrorBanner";
+import GeneralNew from "../GeneralNew/GeneralNew";
+import LanguageNew from "../LanguageNew/LanguageNew";
 const initialState = {
     button_type: "3",
     total_count: "1",
@@ -44,8 +46,9 @@ const initialState = {
     icon: ""
 }
 const WishlistDesign = () => {
-    const navigate = useNavigate()
-    const [selected, setSelected] = useState(0);
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlStep = urlParams.get("step") || '0';
+    const [selected, setSelected] = useState(Number(urlStep));
     const [wishlistSetting, setWishlistSetting] = useState(initialState)
     const [isLoading, setIsLoading] = useState(false)
     const [isSVGLoading, setIsSVGLoading] = useState(false);
@@ -53,7 +56,13 @@ const WishlistDesign = () => {
     const [isErrorServer, setIsErrorServer] = useState(false)
     const [message, setMessage] = useState("")
     const [file, setFile] = useState("")
-
+    const childRef = useRef();
+    const handleButtonClick = () => {
+        if (childRef.current) {
+            childRef.current.triggerAlert();
+        }
+    };
+    const navigate = useNavigate();
     useEffect(() => {
         getLauncher()
     }, []);
@@ -142,67 +151,112 @@ const WishlistDesign = () => {
             content: 'Product Page',
             accessibilityLabel: 'All customers',
             panelID: 'all-customers-content-1',
+            link: "admin/wishlist-design?step=0"
         },
         {
             id: 'accepts-marketing-1',
             content: 'Collection Page',
             panelID: 'accepts-marketing-content-1',
+            link: "admin/wishlist-design?step=1"
+        },
+        {
+            id: 'accepts-setting-1',
+            content: 'General Settings',
+            panelID: 'accepts-setting-content-1',
+            link: "admin/wishlist-design?step=2"
+        },
+        {
+            id: 'accepts-Language-1',
+            content: 'Language',
+            panelID: 'accepts-Language-content-1',
+            link: "admin/wishlist-design?step=3"
         },
     ];
 
-    const onBack = () => {
-        navigate(`${baseUrl}/settings`)
-    }
+    const renderTabContent = () => {
+        switch (selected) {
+            case 0:
+                return (
+                    <ProductDesign
+                        wishlistSetting={wishlistSetting}
+                        setWishlistSetting={setWishlistSetting}
+                        file={file}
+                        setFile={setFile}
+                        updateIcon={updateIcon}
+                        deleteIcon={deleteIcon}
+                        isSVGLoading={isSVGLoading}
+                    />
+                );
+            case 1:
+                return (
+                    <CollectionDesign
+                        wishlistSetting={wishlistSetting}
+                        setWishlistSetting={setWishlistSetting}
+                        file={file}
+                        setFile={setFile}
+                        updateIcon={updateIcon}
+                        deleteIcon={deleteIcon}
+                        isSVGLoading={isSVGLoading}
+                    />
+                );
+            case 2:
+                return (
+                    <GeneralNew />
+                );
+            case 3:
+                return (
+                    <LanguageNew ref={childRef} isLoading={isLoading} setIsLoading={setIsLoading} />
+                );
+            default:
+                return null;
+        }
+    };
 
     const handleTabChange = useCallback(
-        (selectedTabIndex) => setSelected(selectedTabIndex),
+        (selectedTabIndex) => {
+            setSelected(selectedTabIndex)
+            const params = Object.fromEntries(urlParams);
+            navigate({ pathname: `${baseUrl}/wishlist-design`, search: qs.stringify({ ...params, step: selectedTabIndex }) });
+        },
         [],
     );
+    const onSave = () => {
+        if (Number(urlStep) === 3) {
+            handleButtonClick()
+        } else {
+            updateLauncher();
+        }
+    };
 
     return (
         <Fragment>
-
-            <Page title={"Wishlist Design"}
-                primaryAction={{ content: "Save", onAction: updateLauncher, loading: isLoading }}>
+            <Page
+                title="Wishlist Design"
+                primaryAction={
+                    selected !== 2
+                        ? { content: "Save", onAction: onSave, loading: isLoading }
+                        : undefined
+                }
+            >
                 <Layout>
                     {message !== "" && isError === false ? <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer} setIsErrorServer={setIsErrorServer} /> : ""}
-                    <CustomErrorBanner link={AppDocsLinks.article["424"]} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError} />
+                    <Suspense fallback={null}>
+                        <CustomErrorBanner link={AppDocsLinks.article["424"]} message={message} setMessage={setMessage} setIsError={setIsError} isError={isError} />
+                    </Suspense>
                     <Layout.Section fullWidth>
                         <Card padding={"0"}>
                             <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange} />
                         </Card>
                     </Layout.Section>
-                    {selected == 0 &&
-                        <ProductDesign
-                            wishlistSetting={wishlistSetting}
-                            setWishlistSetting={setWishlistSetting}
-                            file={file}
-                            setFile={setFile}
-                            updateIcon={updateIcon}
-                            deleteIcon={deleteIcon}
-                            isSVGLoading={isSVGLoading}
-
-                        />
-                    }
-                    {selected == 1 &&
-                        <CollectionDesign
-                            wishlistSetting={wishlistSetting}
-                            setWishlistSetting={setWishlistSetting}
-                            file={file}
-                            setFile={setFile}
-                            updateIcon={updateIcon}
-                            deleteIcon={deleteIcon}
-                            isSVGLoading={isSVGLoading}
-                        />
-                    }
+                    {renderTabContent()}
                 </Layout>
-                <PageActions
+                {selected !== 2 && <PageActions
                     primaryAction={{
                         content: 'Save',
                         onAction: updateLauncher,
                         loading: isLoading
                     }}
-                />
+                />}
             </Page>
         </Fragment>
     );

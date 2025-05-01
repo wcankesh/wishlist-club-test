@@ -108,7 +108,7 @@ const LowStockAlertEmail = () => {
     }, [emailSetting]);
 
     const onBack = () => {
-        navigate(`${baseUrl}/settings/email?step=2`)
+        navigate(`${baseUrl}/settings/email?step=1`)
     }
 
     useEffect(() => {

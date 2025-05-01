@@ -1,11 +1,11 @@
-import React, {Fragment} from 'react';
-import {Banner} from "@shopify/polaris";
-import {useLocation, useNavigate} from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
-import {Shop_details} from "../../redux/action/action";
-import {baseUrl} from "../../utils/Constant";
+import React, { Fragment } from 'react';
+import { Banner } from "@shopify/polaris";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Shop_details } from "../../redux/action/action";
+import { baseUrl } from "../../utils/Constant";
 
-const PaidPlanBanner = ({planTitle, type}) => {
+const PaidPlanBanner = ({ planTitle, type }) => {
     let location = useLocation();
     let navigate = useNavigate();
     const UrlParams = new URLSearchParams(location.search);
@@ -18,7 +18,7 @@ const PaidPlanBanner = ({planTitle, type}) => {
     const onRemoveBanner = async () => {
         dispatch(Shop_details({
             ...shopDetails,
-            shop_display_banner: {...shopDetails.shop_display_banner, [type]: "false"}
+            shop_display_banner: { ...shopDetails.shop_display_banner, [type]: "false" }
         }));
     }
 
@@ -34,8 +34,8 @@ const PaidPlanBanner = ({planTitle, type}) => {
     return (
         <Fragment>
             <Banner onDismiss={onRemoveBanner}
-                    title={`You're currently on the ${currentPlan[shopDetails.plan_type].replace("Current Plan: ", "")} Plan. To make use of this service, upgrading to the ${planTitle ?? ""} Plan is recommended.`}
-                    tone={"warning"} action={{content: 'Upgrade Plan', onAction: onRedirect}}
+                title={`You're currently on the ${currentPlan[shopDetails.plan_type]?.replace("Current Plan: ", "")} Plan. To make use of this service, upgrading to the ${planTitle ?? ""} Plan is recommended.`}
+                tone={"warning"} action={{ content: 'Upgrade Plan', onAction: onRedirect }}
             />
         </Fragment>
     );

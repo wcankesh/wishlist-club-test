@@ -589,7 +589,6 @@ const StockNotification = () => {
                                             })}
                                             min={0}
                                             suffix="PX"
-                                            min={0}
                                             name={"add_to_cart_btn_border_radius"}
                                         />
                                     </InlineGrid>

@@ -1,17 +1,17 @@
-import React, {Fragment, useCallback, useEffect, useState} from 'react';
+import React, { Fragment, useCallback, useEffect, useState } from 'react';
 import {
     Badge, BlockStack, Box, Button, Card, DropZone, EmptySearchResult, Grid, IndexTable,
     InlineStack, Layout, Link, Pagination, Tabs, Text, TextField, Thumbnail,
 } from '@shopify/polaris';
-import {apiService, capitalizeMessage} from "../../utils/Constant";
+import { apiService, capitalizeMessage } from "../../utils/Constant";
 import moment from "moment";
 import DateRangePicker from "../Comman/DateRangePicker";
-import {useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 import ToastMessage from "../Comman/ToastMessage";
-import {AppDocsLinks} from "../../utils/AppDocsLinks";
-import {tableLoading} from "../../utils/RenderLoading";
-import {Icons} from "../../utils/Icons";
-import {Modal, TitleBar} from "@shopify/app-bridge-react";
+import { AppDocsLinks } from "../../utils/AppDocsLinks";
+import { tableLoading } from "../../utils/RenderLoading";
+import { Icons } from "../../utils/Icons";
+import { Modal, TitleBar } from "@shopify/app-bridge-react";
 
 const BisStockAnalytics = () => {
     const shopDetails = useSelector((state) => state.shopDetails)
@@ -20,10 +20,10 @@ const BisStockAnalytics = () => {
     const [bisAnalytics, setBisAnalytics] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isMailLoading, setIsMailLoading] = useState('');
-    const [state, setState] = useState({startDate: moment().subtract(29, 'days'), endDate: moment(),});
+    const [state, setState] = useState({ startDate: moment().subtract(29, 'days'), endDate: moment(), });
     const [PageNo, setPageNo] = useState(1)
     const [totalAnalytics, setTotalAnalytics] = useState(1)
-    const [filter, setFilter] = useState({search: ""})
+    const [filter, setFilter] = useState({ search: "" })
     const [active, setActive] = useState(false);
     const [file, setFile] = useState("")
     const [message, setMessage] = useState("")
@@ -33,7 +33,7 @@ const BisStockAnalytics = () => {
     const [isBisImportExportBtn, setIsBisImportExportBtn] = useState(false);
 
     useEffect(() => {
-        BisAnalytics({selected: selected});
+        BisAnalytics({ selected: selected });
     }, [PageNo, state]);
 
     const BisAnalytics = async (record) => {
@@ -46,7 +46,7 @@ const BisStockAnalytics = () => {
             page: record.PageNo ? record.PageNo : PageNo,
             limit: limit
         }
-        const response = await apiService. BisAnalytics(payload);
+        const response = await apiService.BisAnalytics(payload);
         if (response.status === 200) {
             setIsBisImportExportBtn(response?.bis_import_export_btn)
             setBisAnalytics(response.data)
@@ -70,14 +70,14 @@ const BisStockAnalytics = () => {
 
     const handleTabChange = async (selectedTabIndex) => {
         setSelected(selectedTabIndex);
-        setState({startDate: moment().subtract(29, 'days'), endDate: moment(),})
+        setState({ startDate: moment().subtract(29, 'days'), endDate: moment(), })
         setPageNo(1)
-        BisAnalytics({selected: selectedTabIndex, search: ""})
+        BisAnalytics({ selected: selectedTabIndex, search: "" })
     }
 
     const handleChange = (e) => {
-        setFilter({...filter, [e.target.name]: e.target.value})
-        BisAnalytics({selected: selected, search: e.target.value})
+        setFilter({ ...filter, [e.target.name]: e.target.value })
+        BisAnalytics({ selected: selected, search: e.target.value })
     }
 
     const handleCallback = (range) => {
@@ -85,14 +85,14 @@ const BisStockAnalytics = () => {
     };
 
     const tabs = [
-        {id: 'all-customers-1', content: 'Request', panelID: 'all-customers-content-1'},
-        {id: 'accepts-marketing-1', content: 'Awaiting stock', panelID: 'accepts-marketing-content-1'},
-        {id: 'repeat-customers-1', content: 'Sent notifications', panelID: 'repeat-customers-content-1'},
+        { id: 'all-customers-1', content: 'Request', panelID: 'all-customers-content-1' },
+        { id: 'accepts-marketing-1', content: 'Awaiting stock', panelID: 'accepts-marketing-content-1' },
+        { id: 'repeat-customers-1', content: 'Sent notifications', panelID: 'repeat-customers-content-1' },
     ];
 
-    const resourceNameRequest = {singular: 'request', plural: 'request'};
-    const resourceNameAwaitingStock = {singular: 'awaiting stock', plural: 'awaiting stock'};
-    const resourceNameSentNotification = {singular: 'sent notification', plural: 'sent notification'};
+    const resourceNameRequest = { singular: 'request', plural: 'request' };
+    const resourceNameAwaitingStock = { singular: 'awaiting stock', plural: 'awaiting stock' };
+    const resourceNameSentNotification = { singular: 'sent notification', plural: 'sent notification' };
 
     const handleDropZoneDrop = useCallback(
         (_dropFiles, acceptedFiles, _rejectedFiles) =>
@@ -100,10 +100,10 @@ const BisStockAnalytics = () => {
         [],
     );
 
-    const fileUpload = !file && <DropZone.FileUpload/>;
+    const fileUpload = !file && <DropZone.FileUpload />;
     const uploadedFile = file && (
         <BlockStack align={"center"} inlineAlign={"center"} gap={"400"}>
-            <br/>
+            <br />
             <div>
                 {file.name}{' '}
                 <Text variant="bodySm" as="span"> {file.size} bytes </Text>
@@ -174,7 +174,7 @@ const BisStockAnalytics = () => {
             <IndexTable.Row key={i} id={i}>
                 <IndexTable.Cell className={'text-truncted'}>
                     <InlineStack blockAlign={"center"} gap="200" wrap={false}>
-                        <Thumbnail size={"small"} source={x.image}/>
+                        <Thumbnail size={"small"} source={x.image} />
                         <BlockStack>
                             <Text as={"span"}>{x.title}</Text>
                             {x?.variant?.title !== "Default Title" && <Text as={"span"}>Variant : {x?.variant?.title}</Text>}
@@ -192,9 +192,9 @@ const BisStockAnalytics = () => {
                     <Text as={"span"}>{moment(x.created_at).format('ll')}</Text>
                 </IndexTable.Cell>
                 <IndexTable.Cell>
-                        <Button onClick={() => onBisMailResend(x.id)} loading={isMailLoading === `mail-resend-${x.id}`}>
-                            Resend
-                        </Button>
+                    <Button onClick={() => onBisMailResend(x.id)} loading={isMailLoading === `mail-resend-${x.id}`}>
+                        Resend
+                    </Button>
                 </IndexTable.Cell>
             </IndexTable.Row>
         )
@@ -204,7 +204,7 @@ const BisStockAnalytics = () => {
         <Fragment>
             {message !== "" ?
                 <ToastMessage message={message} setMessage={setMessage} isErrorServer={isErrorServer}
-                              setIsErrorServer={setIsErrorServer}/> : ""}
+                    setIsErrorServer={setIsErrorServer} /> : ""}
 
             <Layout.Section>
                 <Card padding={"0"}>
@@ -219,26 +219,26 @@ const BisStockAnalytics = () => {
                                         onClick={() => Export()}>Export</Button>
                                 </div>
                                 <Button variant={"primary"} icon={Icons.ImportIcon}
-                                        disabled={shopDetails.plan_type !== "8" ? isBisImportExportBtn === false : false}
-                                        onClick={() => handleImportChange()}>Import</Button>
+                                    disabled={shopDetails.plan_type !== "8" ? isBisImportExportBtn === false : false}
+                                    onClick={() => handleImportChange()}>Import</Button>
 
                             </InlineStack>
                         </InlineStack>
                     </Box>
                     <Box paddingInlineStart={"100"} paddingInlineEnd={"100"}><Tabs tabs={tabs} selected={selected}
-                                                                                   onSelect={handleTabChange}/></Box>
+                        onSelect={handleTabChange} /></Box>
                     <Box paddingInlineStart={"400"} paddingBlockStart={"100"} paddingBlockEnd={"300"}
-                         paddingInlineEnd={"400"}>
+                        paddingInlineEnd={"400"}>
                         <Grid>
-                            <Grid.Cell columnSpan={{xs: 6, sm: 4, md: 5, lg: 10, xl: 10}}>
+                            <Grid.Cell columnSpan={{ xs: 6, sm: 4, md: 5, lg: 10, xl: 10 }}>
                                 <TextField name="search" value={filter.search}
-                                           placeholder="Filter by product"
-                                           onChange={(value) => {
-                                               handleChange({target: {name: "search", value}})
-                                           }}/>
+                                    placeholder="Filter by product"
+                                    onChange={(value) => {
+                                        handleChange({ target: { name: "search", value } })
+                                    }} />
                             </Grid.Cell>
-                            <Grid.Cell columnSpan={{xs: 6, sm: 2, md: 1, lg: 2, xl: 2}}>
-                                <DateRangePicker fullWidth onChange={handleCallback}/>
+                            <Grid.Cell columnSpan={{ xs: 6, sm: 2, md: 1, lg: 2, xl: 2 }}>
+                                <DateRangePicker fullWidth onChange={handleCallback} />
                             </Grid.Cell>
                         </Grid>
                     </Box>
@@ -249,14 +249,14 @@ const BisStockAnalytics = () => {
                         loading={isLoading}
                         emptyState={<EmptySearchResult
                             title={selected === 0 ? 'No Request found' : selected === 1 ? 'No Awaiting Stock found' : selected === 2 ? 'No Sent Notifications Found' : null}
-                            withIllustration={(!isLoading) || !isLoading}/>}
+                            withIllustration={(!isLoading) || !isLoading} />}
                         hasMoreItems={isLoading}
                         headings={[
-                            {title: 'Product'},
-                            {title: 'Email'},
-                            {title: 'Request Status'},
-                            {title: 'Request Time'},
-                            {title: 'Action'},
+                            { title: 'Product' },
+                            { title: 'Email' },
+                            { title: 'Request Status' },
+                            { title: 'Request Time' },
+                            { title: 'Action' },
                         ]}
                         selectable={false}
                     >
@@ -264,7 +264,7 @@ const BisStockAnalytics = () => {
                     </IndexTable>
                     <Box padding={'300'} borderBlockStartWidth={'025'} borderColor={'border-secondary'}>
                         <InlineStack align={'end'} blockAlign={'center'}>
-                            <div className={"d-flex"} style={{justifyContent: "end"}}>
+                            <div className={"d-flex"} style={{ justifyContent: "end" }}>
                                 <Pagination
                                     label={PageNo}
                                     hasPrevious={PageNo > 1}
@@ -282,7 +282,7 @@ const BisStockAnalytics = () => {
                 <Modal open={active}>
                     <TitleBar title={"Import your back in stock products"}>
                         <button variant="primary" loading={isImportLoading && ''}
-                                onClick={() => Import()}>Import</button>
+                            onClick={() => Import()}>Import</button>
                         <button onClick={() => handleImportChange()}>Cancel</button>
 
                     </TitleBar>

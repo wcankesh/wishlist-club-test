@@ -1,15 +1,15 @@
-import React, { useState, Fragment, useEffect } from 'react';
+import React, {useState, Fragment, useEffect} from 'react';
 import {
-    BlockStack, Box, Card, InlineStack, Button, Text, InlineGrid, ButtonGroup
+    BlockStack, Box, Card, InlineStack, Button, Text, InlineGrid, ButtonGroup,
 } from "@shopify/polaris";
-import { apiService, baseUrl } from "../../utils/Constant";
+import {apiService, baseUrl} from "../../utils/Constant";
 import qs from "qs";
-import { useNavigate } from "react-router-dom";
-import { StepThreeImage, StepTwoImage } from "../../utils/AppImages";
+import {useNavigate} from "react-router-dom";
+import {StepThreeImage} from "../../utils/AppImages";
 import SwitchButton from "../Comman/SwitchButton";
 import LazyLoadImage from "../Comman/LazyLoadImage";
 
-const StepThree = ({ step, setStep, urlParams, shopDetails }) => {
+const StepThree = ({step, setStep, urlParams, shopDetails}) => {
     const navigate = useNavigate();
     const theme = urlParams.get("theme") || "";
     const isBlockCapable = urlParams.get("isBlockCapable") || "true";
@@ -35,8 +35,8 @@ const StepThree = ({ step, setStep, urlParams, shopDetails }) => {
     }, []);
 
     const handleChange = async (e) => {
-        const { name, value } = e.target;
-        setSetting({ ...setting, [name]: value })
+        const {name, value} = e.target;
+        setSetting({...setting, [name]: value})
         let payload = {
             guest_wishlist: setting.guest_wishlist,
             multiple_wishlist: setting.multiple_wishlist,
@@ -49,22 +49,23 @@ const StepThree = ({ step, setStep, urlParams, shopDetails }) => {
     const onStepChange = async (steps, isBack) => {
         setIsLoading(true)
         if (isBack === false) {
-            const response = await apiService.onBoarding({ shop: shopDetails, onboarding: "1" });
+            const response = await apiService.onBoarding({shop: shopDetails.shop, onboarding: "1"});
             if (response.status === 200) {
                 const isSkip = urlParams.get("skip") || "1";
                 setIsLoading(false)
+
             }
         }
         setStep(Number(steps))
         const params = Object.fromEntries(urlParams);
-        navigate({ pathname: `${baseUrl}/onboarding`, search: qs.stringify({ ...params, step: steps }) });
+        navigate({pathname: `${baseUrl}/onboarding`, search: qs.stringify({...params, step: steps})});
         setIsLoading(false)
     };
 
     const handleBackInStockEmail = async (e) => {
-        const { name, value } = e.target;
-        setSetting({ ...setting, [name]: value });
-        let payload = { id: setting.bis_id, is_bis_email_enable: value };
+        const {name, value} = e.target;
+        setSetting({...setting, [name]: value});
+        let payload = {id: setting.bis_id, is_bis_email_enable: value};
         const response = await apiService.enableBackInStock(payload);
     }
 
@@ -87,9 +88,9 @@ const StepThree = ({ step, setStep, urlParams, shopDetails }) => {
         <Fragment>
             <Card padding={"0"}>
                 <Box paddingBlockStart={"800"} paddingBlockEnd={"800"} paddingInlineEnd={"1000"}
-                    paddingInlineStart={"1000"}>
+                     paddingInlineStart={"1000"}>
                     <BlockStack gap={"800"}>
-                        <InlineGrid columns={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2 }} gap={"800"}>
+                        <InlineGrid columns={{xs: 1, sm: 1, md: 2, lg: 2, xl: 2}} gap={"800"}>
                             <BlockStack gap={"1600"}>
                                 <BlockStack gap={"100"}>
                                     <Text variant="bodyLg" as="span">Step: 3</Text>
@@ -108,16 +109,14 @@ const StepThree = ({ step, setStep, urlParams, shopDetails }) => {
                                         return (
                                             <InlineStack gap={"200"} blockAlign={"center"} key={i} wrap={false}>
                                                 <SwitchButton checked={x.checked} name={x.name}
-                                                    onChange={handleChange} />
+                                                              onChange={handleChange}/>
                                                 <Text as={"span"}>{x.label}</Text>
                                             </InlineStack>
                                         )
                                     })}
                                 </BlockStack>
                             </BlockStack>
-                            <div className={"onBoardingIcon"}>
-                                <LazyLoadImage src={StepThreeImage} alt="Image" />
-                            </div>
+                            <div className={"onBoardingIcon"}><LazyLoadImage src={StepThreeImage} alt={"Image"}/></div>
                         </InlineGrid>
                         <InlineStack align={"space-between"}>
                             <ButtonGroup gap={"tight"}>
@@ -125,7 +124,7 @@ const StepThree = ({ step, setStep, urlParams, shopDetails }) => {
                                 {/*<Button variant={"plain"} onClick={() => onStepChange(step + 1, false)}>Skip</Button>*/}
                             </ButtonGroup>
                             <Button onClick={() => onStepChange(step + 1, false)} variant={"primary"}
-                                loading={isLoading}> Next </Button>
+                                    loading={isLoading}> Next </Button>
                         </InlineStack>
                     </BlockStack>
                 </Box>

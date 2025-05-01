@@ -48,18 +48,18 @@ const AbandonmentReminderEmail = () => {
                 is_enable: result?.is_enable,
                 subject: result?.abandonment_reminder_mail_subject,
             }
-            setEmailSetting((state) => ({...state, ...updateState}))
+            setEmailSetting((state) => ({ ...state, ...updateState }))
             setMailTemplateJson(JSON.parse(response.data && response.data.abandonment_reminder_mail_json) || templateJson);
             setIsLoading('');
         } else if (response.status === 500) {
             setMessage(capitalizeMessage(response.message))
             setIsError(true)
-            shopify.toast.show(capitalizeMessage(response.message), {isError: true})
+            shopify.toast.show(capitalizeMessage(response.message), { isError: true })
             setIsLoading('');
         } else {
             setMessage(capitalizeMessage(response.message))
             setIsError(true)
-            shopify.toast.show(capitalizeMessage(response.message), {isError: true})
+            shopify.toast.show(capitalizeMessage(response.message), { isError: true })
             setIsLoading('');
         }
     }
@@ -68,7 +68,7 @@ const AbandonmentReminderEmail = () => {
         setIsLoading('save');
 
         editorRef.current.editor.exportHtml(async (data) => {
-            const {design, html} = data;
+            const { design, html } = data;
             setMailTemplateJson(design);
             const payload = {
                 type: 4,
@@ -91,30 +91,30 @@ const AbandonmentReminderEmail = () => {
                 setIsLoading('');
             } else if (response.status === 500) {
                 setMessage(capitalizeMessage(response.message));
-                shopify.toast.show(capitalizeMessage(response.message), {isError: true})
+                shopify.toast.show(capitalizeMessage(response.message), { isError: true })
                 setIsLoading('');
             } else {
                 setMessage(capitalizeMessage(response.message));
                 setIsError(true);
-                shopify.toast.show(capitalizeMessage(response.message), {isError: true})
+                shopify.toast.show(capitalizeMessage(response.message), { isError: true })
                 setIsLoading('');
             }
         });
     }
 
     const handleChange = useCallback((name, value) => {
-        const update = {...emailSetting, [name]: value}
+        const update = { ...emailSetting, [name]: value }
         setEmailSetting(update);
     }, [emailSetting]);
 
     const onBack = () => {
-        navigate(`${baseUrl}/settings/email?step=2`)
+        navigate(`${baseUrl}/settings/email?step=1`)
     }
 
     useEffect(() => {
         if (editorRef.current && editorRef.current.editor) {
             editorRef.current.editor.exportHtml((data) => {
-                const {design: currentDesign} = data;
+                const { design: currentDesign } = data;
                 if (JSON.stringify(currentDesign) !== JSON.stringify(mailTemplateJson)) {
                     editorRef.current.editor.loadDesign(mailTemplateJson);
                 }
@@ -129,20 +129,20 @@ const AbandonmentReminderEmail = () => {
 
     const onMailDesignChange = () => {
         editorRef.current.editor.exportHtml((data) => {
-            const {design} = data;
+            const { design } = data;
         });
     };
 
     const exportHtml = () => {
         editorRef.current.editor.exportHtml((data) => {
-            const {design, html} = data;
+            const { design, html } = data;
         });
     };
 
     const onLoad = () => {
         if (editorRef.current && editorRef.current.editor) {
             editorRef.current.editor.exportHtml((data) => {
-                const {design: currentDesign} = data;
+                const { design: currentDesign } = data;
                 if (JSON.stringify(currentDesign) !== JSON.stringify(mailTemplateJson)) {
                     editorRef.current.editor.loadDesign(mailTemplateJson);
                 }
@@ -152,7 +152,7 @@ const AbandonmentReminderEmail = () => {
             const retryLoadDesign = setInterval(() => {
                 if (editorRef.current && editorRef.current.editor) {
                     editorRef.current.editor.exportHtml((data) => {
-                        const {design: currentDesign} = data;
+                        const { design: currentDesign } = data;
 
                         if (JSON.stringify(currentDesign) !== JSON.stringify(mailTemplateJson)) {
                             editorRef.current.editor.loadDesign(mailTemplateJson);
@@ -182,13 +182,13 @@ const AbandonmentReminderEmail = () => {
                 <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}>Email Settings</Text>
                 {showSettings ? (
                     <span className={'left-settings'}>
-                    <Button variant={'secondary'} icon={Icons.XSmallIcon} onClick={onHandleShowSettings}/>
-                </span>
+                        <Button variant={'secondary'} icon={Icons.XSmallIcon} onClick={onHandleShowSettings} />
+                    </span>
                 ) : ''}
             </div>
             <Box padding={'400'}>
                 {isLoading === 'details' ? RenderLoading.commonParagraph :
-                    <InlineGrid columns={{xs: 1, sm: 1, md: 1, lg: 1, xl: 1}} gap={'300'}>
+                    <InlineGrid columns={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 1 }} gap={'300'}>
                         <Checkbox
                             label={<Text variant="headingSm" as="h6">Enable Email</Text>}
                             checked={isChecked(emailSetting?.is_enable)}
@@ -203,7 +203,7 @@ const AbandonmentReminderEmail = () => {
                             helpText={
                                 <>
                                     {"{customer_name}, don’t forget about your wishlist items!"}
-                                    <br/>
+                                    <br />
                                     {"You can include these variables in your subject: {shop_name}, {customer_name}."}
                                 </>
                             }
@@ -238,7 +238,7 @@ const AbandonmentReminderEmail = () => {
                 <TitleBar title={"Abandonment Reminder Email"}>
                     <button onClick={onBack}>{'Cancel'}</button>
                     <button variant="primary" loading={isLoading === 'save' && ''}
-                            onClick={() => saveEmailSetting()}>{'Save'}</button>
+                        onClick={() => saveEmailSetting()}>{'Save'}</button>
                 </TitleBar>
                 <div className="fullContainerPage">
                     <div className="fullContainerPage-inner">
@@ -253,7 +253,7 @@ const AbandonmentReminderEmail = () => {
                                 {showSettings ? '' : (
                                     <span className={'left-settings'}>
                                         <Button variant={'secondary'} icon={Icons.EditIcon}
-                                                onClick={onHandleShowSettings}>Edit</Button>
+                                            onClick={onHandleShowSettings}>Edit</Button>
                                     </span>
                                 )}
                             </div>
@@ -261,16 +261,16 @@ const AbandonmentReminderEmail = () => {
                                 <BlockStack gap={"300"}>
                                     {message !== "" && isError === false ?
                                         <CustomErrorBanner link={AppDocsLinks.article["425"]} message={message}
-                                                           setMessage={setMessage}
-                                                           setIsError={setIsError} isError={true} isCardBanner={true}/>
+                                            setMessage={setMessage}
+                                            setIsError={setIsError} isError={true} isCardBanner={true} />
                                         : ""}
-                                    <EmailTemplateMsg msgArray={msgArray}/>
+                                    <EmailTemplateMsg msgArray={msgArray} />
                                     <div className="email-editor-wrap">
                                         <EmailEditor
                                             ref={editorRef}
                                             exportHtml={exportHtml}
                                             onLoad={onLoad}
-                                            style={{height: 600}}
+                                            style={{ height: 600 }}
                                         />
                                     </div>
                                 </BlockStack>

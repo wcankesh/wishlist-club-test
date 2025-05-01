@@ -1,19 +1,19 @@
-import React, {Fragment} from 'react';
-import {Layout, Page} from "@shopify/polaris";
-import {useNavigate} from "react-router-dom";
-import {baseUrl} from "../../utils/Constant";
+import React, { Fragment } from 'react';
+import { Layout, Page } from "@shopify/polaris";
+import { useNavigate } from "react-router-dom";
+import { baseUrl } from "../../utils/Constant";
 import WishlistCardMenu from "../Comman/WishlistCardMenu";
-import {Icons} from "../../utils/Icons";
+import { Icons } from "../../utils/Icons";
 
 const Settings = () => {
     const navigate = useNavigate()
     const setting = [
-        {
-            icon: Icons.SettingsIcon,
-            name: "General",
-            text: "Unlock a range of options to customize your wishlist's General settings.",
-            link: "settings/general"
-        },
+        // {
+        //     icon: Icons.SettingsIcon,
+        //     name: "General",
+        //     text: "Unlock a range of options to customize your wishlist's General settings.",
+        //     link: "settings/general"
+        // },
         // {
         //     icon: Icons.ThemeIcon,
         //     name: "Wishlist Design",
@@ -27,12 +27,12 @@ const Settings = () => {
             link: "settings/email?step=0"
 
         },
-        {
-            icon: Icons.LanguageIcon,
-            name: "Language",
-            text: "Customize the wishlist alert message, wishlist page, and popup label here.",
-            link: "settings/language"
-        },
+        // {
+        //     icon: Icons.LanguageIcon,
+        //     name: "Language",
+        //     text: "Customize the wishlist alert message, wishlist page, and popup label here.",
+        //     link: "settings/language"
+        // },
         {
             icon: Icons.DomainNewIcon,
             name: "APIs",
@@ -66,9 +66,9 @@ const Settings = () => {
     ];
 
     const onRedirect = (link) => {
-        if (link === 'settings/feedback'){
+        if (link === 'settings/feedback') {
             window.Featurebase('manually_open_changelog_popup');
-        }else {
+        } else {
             navigate(`${baseUrl}/${link}`);
         }
     }
@@ -78,7 +78,7 @@ const Settings = () => {
             <Page title={"Settings"}>
                 <Layout>
                     <Layout.Section>
-                        <WishlistCardMenu data={setting} onRedirect={(link) => onRedirect(link)} column="three"/>
+                        <WishlistCardMenu data={setting} onRedirect={(link) => onRedirect(link)} column="three" />
                     </Layout.Section>
                 </Layout>
             </Page>

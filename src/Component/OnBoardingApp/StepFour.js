@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {BlockStack, Box, Button, Card, InlineGrid, InlineStack, Text} from "@shopify/polaris";
+import React, {useState, useEffect} from 'react';
+import {BlockStack, Box, Card, Button, Text, InlineGrid, InlineStack} from "@shopify/polaris";
 import {baseUrl, openUrlInNewWindow, secondaryButton} from "../../utils/Constant";
 import qs from "qs";
 import {useNavigate} from "react-router-dom";
@@ -30,7 +30,6 @@ const StepFour = ({urlParams, shopDetails}) => {
         dispatch(Shop_details({...shopDetails, onboarding: "1"}));
         navigate({pathname: `${baseUrl}/${url}`, search: qs.stringify({...params})});
     }
-
     return (
         <div className="confetti-main">
             {isConfetti && <img src={Confetti} className="confetti" style={{transform: `scale(1.3)`}} alt={""}/>}
@@ -55,8 +54,8 @@ const StepFour = ({urlParams, shopDetails}) => {
                                 <BlockStack gap={"400"} inlineAlign={"start"}>
                                     <div className={secondaryButton}>
                                         <Button icon={Icons.ExternalIcon}
-                                                onClick={() => openUrlInNewWindow(AppDocsLinks.writeReviewModal)}>Share
-                                            Feedback</Button>
+                                                onClick={() => openUrlInNewWindow(AppDocsLinks.writeReviewModal)}>
+                                            Share Feedback</Button>
                                     </div>
                                     <Text as={"span"} variant={"headingMd"}>{`Next Step?`}</Text>
                                     <div className={secondaryButton}>
@@ -67,7 +66,7 @@ const StepFour = ({urlParams, shopDetails}) => {
                                 </BlockStack>
                             </BlockStack>
                             <div className={"onBoardingIcon"}>
-                                <LazyLoadImage src={StepFourImage} alt="Image"/>
+                                <LazyLoadImage src={StepFourImage} alt={"Image"}/>
                             </div>
                         </InlineGrid>
                         <InlineStack align={"end"}>

@@ -259,7 +259,7 @@ const EmailButtonSettings = () => {
                                                     border:`${emailSetting?.add_to_cart_btn_border_size}px solid ${emailSetting?.add_to_cart_btn_border_color}`,
                                                     borderRadius:`${emailSetting?.add_to_cart_btn_border_radius}px`,
                                                     padding:`${emailSetting?.add_to_cart_btn_vertical_padding}px ${emailSetting?.add_to_cart_btn_horizontal_padding}px`,
-                                        }}
+                                                }}
                                         >
                                             {emailSetting?.add_to_cart_button_text}
                                         </button>

@@ -1,16 +1,13 @@
 import React from 'react';
-import {BlockStack, Box, Link, List, Text} from "@shopify/polaris";
+import {Box, BlockStack, List, Text, Link} from "@shopify/polaris";
 import {Modal, TitleBar} from "@shopify/app-bridge-react";
-
-const ConformationModal = ({active, onClose, isLoading, isEditor = false, handleConfirmation}) => {
-
+const ConformationModal = ({active,onClose,isLoading,isEditor=false,handleConfirmation}) => {
     return (
         <Modal open={active}>
             <TitleBar title={"Confirm Upgrade to the New Email Template Editor?"}>
                 <button variant="primary" loading={isLoading && ''} onClick={() => handleConfirmation()}>{'Confirm'}</button>
                 <button onClick={() => onClose()}>Cancel</button>
             </TitleBar>
-
             <Box padding={'400'}>
                 <BlockStack gap={"100"}>
                     <Text as={'span'}>Please note the following before proceeding:</Text>
@@ -37,5 +34,4 @@ const ConformationModal = ({active, onClose, isLoading, isEditor = false, handle
         </Modal>
     );
 };
-
 export default ConformationModal;

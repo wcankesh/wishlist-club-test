@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
-import {useDispatch, useSelector} from "react-redux";
-import {Banner, BlockStack, Layout} from "@shopify/polaris";
-import {apiService, baseUrl, isChecked, openUrlInNewWindow} from "../../utils/Constant";
-import {Shop_details} from "../../redux/action/action";
-import {useNavigate} from "react-router-dom";
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { Banner, BlockStack, Layout } from "@shopify/polaris";
+import { apiService, baseUrl, isChecked, openUrlInNewWindow } from "../../utils/Constant";
+import { Shop_details } from "../../redux/action/action";
+import { useNavigate } from "react-router-dom";
 import ConformationModal from "../Comman/ConformationModal";
 
 const Notifications = () => {
@@ -43,15 +43,15 @@ const Notifications = () => {
 
     const onRemoveBanner = async (name) => {
         const payload = {
-            banner_display_setting: {...shopDetails.bannerDisplaySetting, [name]: "true"},
+            banner_display_setting: { ...shopDetails.bannerDisplaySetting, [name]: "true" },
             id: shopDetails.id
         }
         if (name === 'addon_email_notification') {
-            dispatch(Shop_details({...shopDetails, addon_email_notification: false}));
+            dispatch(Shop_details({ ...shopDetails, addon_email_notification: false }));
         }
         dispatch(Shop_details({
             ...shopDetails,
-            bannerDisplaySetting: {...shopDetails.bannerDisplaySetting, [name]: "true"}
+            bannerDisplaySetting: { ...shopDetails.bannerDisplaySetting, [name]: "true" }
         }));
         const data = await apiService.updateShopDisplayBanner(payload);
     }
@@ -87,9 +87,26 @@ const Notifications = () => {
             notification_title: `Attention: 80% Notification Limit Exceeded of your current plan!`,
             notification_description: `You’re Nearing your email limit on the current plan. Ensure uninterrupted communication by purchasing AddOn Emails.`,
             is_close: true,
-            show: shopDetails && shopDetails?.shop.addon_email_notification,
+            show: shopDetails && shopDetails?.addon_email_notification,
             keyName: 'addon_email_notification',
         },
+        // {
+        //     type: `warning`,
+        //     button_link: () => navigate(`${baseUrl}/settings/plan`),
+        //     is_custom_click: true,
+        //     button_text: `Upgrade Plan`,
+        //     notification_title: `Action Required: Choose a Plan Before May 31st`,
+        //     notification_description: `We’re updating our pricing plans. To ensure uninterrupted access to all features, please select a plan before May 31st. After this date, free access will no longer be available, and services may pause until a plan is chosen.`,
+        //     is_close: true,
+        //     show: shopDetails && !shopDetails.bannerDisplaySetting.plan_upgrade &&
+        //         [0].includes(Number(shopDetails.plan_type)) &&
+        //         ![
+        //             'affiliate', 'staff', 'plus_partner_sandbox',
+        //             'partner_test', 'developer_preview', 'cancelled',
+        //             'fraudulent', 'frozen'
+        //         ].includes(shopDetails.shopify_plan),
+        //     keyName: 'plan_upgrade',
+        // },
         {
             type: `info`,
             button_link: () => handleUpgradeNow('email-editor-template'),
@@ -127,30 +144,27 @@ const Notifications = () => {
                     handleConfirmation={handleConfirmation}
                 />
             ) : ""}
-
             {
                 notification.length > 0 ?
                     (notification || []).map((x, i) => {
                         return (
                             x.show ? (
                                 <React.Fragment key={i}>
-                                    <Layout.Section>
-                                        <Banner
-                                            title={x?.notification_title}
-                                            tone={x?.type}
-                                            onDismiss={x?.is_close ? () => onRemoveBanner(x?.keyName) : null}
-                                            action={
-                                                x.button_text ? {
-                                                    content: x.button_text,
-                                                    onAction: x.is_custom_click ? () => x.button_link() : null
-                                                }
-                                                    : ""}
-                                        >
-                                            <BlockStack gap={"100"}>
-                                                <span dangerouslySetInnerHTML={{ __html: x?.notification_description }} />
-                                            </BlockStack>
-                                        </Banner>
-                                    </Layout.Section>
+                                    <Banner
+                                        title={x?.notification_title}
+                                        tone={x?.type}
+                                        onDismiss={x?.is_close ? () => onRemoveBanner(x?.keyName) : null}
+                                        action={
+                                            x.button_text ? {
+                                                content: x.button_text,
+                                                onAction: x.is_custom_click ? () => x.button_link() : null
+                                            }
+                                                : ""}
+                                    >
+                                        <BlockStack gap={"100"}>
+                                            <span dangerouslySetInnerHTML={{ __html: x?.notification_description }} />
+                                        </BlockStack>
+                                    </Banner>
                                 </React.Fragment>
                             ) : ""
                         )

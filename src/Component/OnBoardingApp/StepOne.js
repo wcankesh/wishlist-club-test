@@ -1,6 +1,6 @@
 import React from 'react';
-import {BlockStack, Box, Card, InlineStack, Button, Text, InlineGrid, ButtonGroup, Icon} from "@shopify/polaris";
-import {baseUrl, openUrlInNewWindow} from "../../utils/Constant";
+import {BlockStack, Box, Button, Card, Icon, InlineGrid, InlineStack, Text} from "@shopify/polaris";
+import {baseUrl} from "../../utils/Constant";
 import qs from "qs";
 import {useNavigate} from "react-router-dom";
 import {StepOneImage} from "../../utils/AppImages";
@@ -53,9 +53,7 @@ const StepOne = ({step, setStep, urlParams, shopDetails}) => {
                                 </BlockStack>
                             </BlockStack>
                         </BlockStack>
-                        <div className={"onBoardingIcon"}>
-                           <LazyLoadImage src={StepOneImage} alt="Image" />
-                        </div>
+                        <div className={"onBoardingIcon"}><LazyLoadImage src={StepOneImage} alt={"Image"}/></div>
                     </InlineGrid>
 
                     <InlineStack align={"start"} gap={"200"} blockAlign={"center"}>

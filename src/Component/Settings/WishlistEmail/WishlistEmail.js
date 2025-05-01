@@ -3,7 +3,8 @@ import {
     Page, Layout, TextField, Text, Button, Card, BlockStack, InlineStack, Box, Divider, Badge,
     Checkbox, Select,
     Tabs,
-    PageActions
+    PageActions,
+    Grid
 } from "@shopify/polaris";
 import { apiService, baseUrl, capitalizeMessage, isChecked, toggleFlag, validateForm } from "../../../utils/Constant";
 import { useNavigate } from "react-router-dom"
@@ -16,6 +17,7 @@ import SwitchButton from "../../Comman/SwitchButton";
 import { Icons } from "../../../utils/Icons";
 import qs from "qs";
 import BackInStockEmail from '../../BackInStock/BackInStockEmail/BackInStockEmail';
+import { useSelector } from 'react-redux';
 
 const initialState = {
     subject: "",
@@ -36,6 +38,7 @@ const initialStateError = { from_email: "" };
 const WishlistEmail = () => {
     const navigate = useNavigate()
     const [selected, setSelected] = useState(0);
+    const shopDetails = useSelector(state => state.shopDetails);
     const [backInStockDesign, setBackInStockDesign] = useState(initialState);
     const [backInStockDesignError, setBackInStockDesignError] = useState(initialStateError);
     const [isLoading, setIsLoading] = useState(false)
@@ -44,10 +47,43 @@ const WishlistEmail = () => {
     const [message, setMessage] = useState("")
     const urlParams = new URLSearchParams(window.location.search);
     const urlStep = urlParams.get("step") || '0';
+    const [selectedOption, setSelectedOption] = useState(Number(urlStep));
     const [emailSetting, setEmailSetting] = useState(initialState);
     const [emailSettingError, setEmailSettingError] = useState(initialStateError);
     const [isSave, setIsSave] = useState(false);
-    const [selectedOption, setSelectedOption] = useState(Number(urlStep));
+    const [emailVeriMsg, setEmailVeriMsg] = useState({
+        id: 0,
+        email_verify_message: 'We have sent verification mail to your email. Please verify your email.',
+        email_body_text: "You have subscribed to the product to notify you whenever it's in stock. Please verify your email using the below button to get notified.",
+        email_button_text: 'Verify Email',
+    })
+
+    const EmailVerificationFields = [
+        {
+            label: "Email Verification Message",
+            field: "text",
+            name: "email_verify_message",
+            value: emailVeriMsg?.email_verify_message,
+            disabled: false,
+            helpText: <Text as={'span'}><strong>Note:</strong> This message will be displayed to the user on the website immediately after they signup for Back In Stock.</Text>,
+        },
+        {
+            label: "Email Body",
+            field: "text",
+            name: "email_body_text",
+            value: emailVeriMsg?.email_body_text,
+            disabled: shopDetails.plan_type < '5',
+            helpText: '',
+        },
+        {
+            label: "Verify Button Title",
+            field: "text",
+            name: "email_button_text",
+            value: emailVeriMsg?.email_button_text,
+            disabled: shopDetails.plan_type < '5',
+            helpText: '',
+        },
+    ];
     useEffect(() => {
         bisSetting()
     }, []);
@@ -236,6 +272,7 @@ const WishlistEmail = () => {
 
     useEffect(() => {
         EmailSetting()
+        getEmailVerification()
     }, []);
 
     const formValidate = (name, value) => {
@@ -379,28 +416,61 @@ const WishlistEmail = () => {
             id: 0,
             content: "Email Option",
             panelID: "design-content",
-            subTabs: [{ content: "From Email" }], // Default selected sub-tab
         },
         {
             id: 1,
             content: "Wishlist Alerts",
             panelID: "customisation-content",
-            subTabs: [{ content: "Email Template" }],
         },
         {
             id: 2,
             content: "Back In Stock Alerts",
             panelID: "back-in-stock-content",
-            subTabs: [
-                { content: "Product Page" },
-                { content: "Home Page" },
-                { content: "Collection Page" },
-                { content: "Subscriber Form" },
-                { content: "Subscriber Message" },
-            ],
+        },
+        {
+            id: 3,
+            content: "Email Verification Message",
+            panelID: "email-verification-message",
         },
     ];
 
+    const getEmailVerification = async () => {
+        const response = await apiService.getEmailVerification();
+        if (response.status === 200) {
+            setIsError(false)
+            setEmailVeriMsg((state) => ({
+                ...state,
+                id: response.data.id,
+                email_verify_message: response.data.email_verify_message,
+                email_body_text: response.data.email_body_text,
+                email_button_text: response.data.email_button_text,
+            }))
+        } else if (response.status === 500) {
+            setMessage(capitalizeMessage(response.message))
+            setIsErrorServer(true);
+        } else {
+            setMessage(capitalizeMessage(response.message))
+            setIsError(true)
+        }
+    }
+    const updateEmailVerification = async () => {
+        setIsSave(true)
+        let payload = { ...emailVeriMsg }
+        const response = await apiService.updateEmailVerification(payload)
+        if (response.status === 200) {
+            setIsError(false)
+            setMessage(capitalizeMessage(response.message))
+            getEmailVerification()
+            setIsSave(false)
+        } else if (response.status === 500) {
+            setMessage(capitalizeMessage(response.message))
+            setIsSave(false)
+        } else {
+            setMessage(capitalizeMessage(response.message))
+            setIsError(true)
+            setIsSave(false)
+        }
+    }
     return (
         <Page title={"Email Customisation"} backAction={{ content: 'Settings', onAction: onBack }}>
             <div className="sticky-component">
@@ -620,6 +690,44 @@ const WishlistEmail = () => {
                                 <>
                                     <BackInStockEmail />
                                 </>
+                            }
+                            {selectedOption == '3' &&
+                                <BlockStack gap={'300'}>
+                                    <Card >
+                                        <BlockStack gap={"400"}>
+                                            <BlockStack gap={'100'}>
+                                                <Text as={"span"} variant={"headingMd"}>{'Email Verification Message'}</Text>
+                                                <Text as={"span"} tone="subdued" variant="bodyMd" breakWord>
+                                                    {'Customers receive an email verification upon subscribing. Please compose the email verification note below.'}
+                                                </Text>
+                                            </BlockStack>
+                                            <Grid gap="4" columns={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 1 }} alignItems="end">
+                                                {(EmailVerificationFields || []).map((x, i) => {
+                                                    return (
+                                                        <React.Fragment key={i}>
+                                                            {x.field === 'text' ?
+                                                                <TextField
+                                                                    label={x.label}
+                                                                    value={x.value}
+                                                                    onChange={(value) => setEmailVeriMsg({ ...emailVeriMsg, [x.name]: value })}
+                                                                    disabled={x.disabled}
+                                                                    helpText={x.helpText}
+                                                                />
+                                                                : ''}
+                                                        </React.Fragment>
+                                                    )
+                                                })}
+                                            </Grid>
+                                        </BlockStack>
+                                        <InlineStack align={"end"}  >
+                                            <Box paddingBlock={400}>
+                                                <Button variant={"primary"} loading={isSave}
+                                                    onClick={updateEmailVerification}>Save</Button>
+                                            </Box>
+                                        </InlineStack>
+                                    </Card>
+                                </BlockStack>
+
                             }
                         </Layout.Section>
                     }

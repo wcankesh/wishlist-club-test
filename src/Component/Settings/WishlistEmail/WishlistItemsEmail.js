@@ -496,7 +496,7 @@ const WishlistItemsEmail = () => {
                                                         }
                                                     })
                                                 }}
-                                                min={1}
+
                                                 name={"add_to_cart_btn_border_size"}
                                             />
 
@@ -510,7 +510,7 @@ const WishlistItemsEmail = () => {
                                                     }
                                                 })}
                                                 suffix="PX"
-                                                min={1}
+
                                                 name={"add_to_cart_btn_vertical_padding"}
                                             />
                                             <TextField label="Left & Right padding"
@@ -523,7 +523,7 @@ const WishlistItemsEmail = () => {
                                                     }
                                                 })}
                                                 suffix="PX"
-                                                min={1}
+
                                                 name={"add_to_cart_btn_horizontal_padding"}
                                             />
 
@@ -571,7 +571,7 @@ const WishlistItemsEmail = () => {
                                                         }
                                                     })
                                                 }}
-                                                min={1}
+
                                                 name={"view_product_btn_border_size"}
                                             />
 

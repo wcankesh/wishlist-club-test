@@ -41,7 +41,6 @@ const upcomingList = [
 
 const Mailchimp = ({ MailchimpProps, currentType }) => {
     const { selectedOption, mailchimp, setMailchimp, MailchimpError, setMailchimpError } = MailchimpProps;
-    console.log("Mailchimp", mailchimp);
 
     const onChangeMailchimp = (name, value) => {
         let updatedState;
@@ -53,7 +52,6 @@ const Mailchimp = ({ MailchimpProps, currentType }) => {
             const errorMessage = formValidate(name, value, currentType);
             setMailchimpError({ ...MailchimpError, [name]: errorMessage });
         }
-        console.log("updatedState", updatedState);
         setMailchimp(updatedState);
     }
 

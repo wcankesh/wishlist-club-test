@@ -31,14 +31,13 @@ const keyFeature = [
 const keyTriggers = [
     {text: 'Wishlist Item Back in Stock'},
     {text: 'Price Drop on Wishlist Item'},
-];
-const upcomingList = [
     {text: 'Item Added to Wishlist'},
     {text: 'Item Removed from Wishlist'},
     {text: 'Wishlist Item Low in Stock'},
     {text: 'Wishlist Reminder'},
     {text: 'Abandoned Wishlist'},
-]
+];
+const upcomingList = []
 
 const Klaviyo = ({klaviyoProps,currentType}) => {
     const { selectedOption, klaviyo, setKlaviyo, klaviyoError, setKlaviyoError} = klaviyoProps;
@@ -91,18 +90,20 @@ const Klaviyo = ({klaviyoProps,currentType}) => {
                         })}
                     </List>
                 </BlockStack>
-                <BlockStack gap={'150'}>
-                    <Text as={'span'} variant={'headingMd'}>{`Will be Release soon`}</Text>
-                    <List type="number">
-                        {(upcomingList || []).map((x, i) => {
-                            return (
-                                <List.Item key={i}>
-                                    <Text as={'span'} breakWord variant={'bodySm'}>{x.text}</Text>
-                                </List.Item>
-                            )
-                        })}
-                    </List>
-                </BlockStack>
+                {upcomingList.length > 0 ? (
+                    <BlockStack gap={'150'}>
+                        <Text as={'span'} variant={'headingMd'}>{`Will be Release soon`}</Text>
+                        <List type="number">
+                            {(upcomingList || []).map((x, i) => {
+                                return (
+                                    <List.Item key={i}>
+                                        <Text as={'span'} breakWord variant={'bodySm'}>{x.text}</Text>
+                                    </List.Item>
+                                )
+                            })}
+                        </List>
+                    </BlockStack>
+                ) : ""}
             </BlockStack>
         )
     }

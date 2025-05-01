@@ -16,21 +16,20 @@ const DefaultLayout = ({ isLoading, setIsLoading }) => {
     const excludedRoutes = [
         `${baseUrl}/settings/email/email-customization`,
     ];
-    console.log("shopDetails", shopDetails);
 
     const isExcluded = excludedRoutes.includes(location.pathname);
 
     useEffect(() => {
-        if (shopDetails?.shop.upgrade == "0") {
+        if (shopDetails?.upgrade == "0") {
             document.body.classList.add('hide-popup-close-icon');
         }
-        if (shopDetails.plan_type == "0" || shopDetails?.shopis_older_shop == 1) {
+        if (shopDetails.plan_type == "0" || shopDetails?.is_older_shop == 1) {
             navigate(`${baseUrl}/settings/plan`)
         } else if (shopDetails.onboarding == 0) {
             navigate(`${baseUrl}/onboarding`)
         }
 
-    }, [])
+    }, [shopDetails])
 
     const onAuthorize = () => {
         setIsUpdateLoading(true)
@@ -46,13 +45,10 @@ const DefaultLayout = ({ isLoading, setIsLoading }) => {
         { label: 'Settings', destination: `${baseUrl}/settings` },
     ];
 
-
     useEffect(() => {
         const onCheckLCP = async (payload) => {
             try {
                 const response = await apiService.onCheckLCP(payload);
-                console.log("LCP", response);
-
             } catch (error) {
                 console.error(error);
             }
@@ -91,40 +87,29 @@ const DefaultLayout = ({ isLoading, setIsLoading }) => {
 
     return (
         <React.Fragment>
-            {shopDetails.onboarding == 0 ? "" : (
+            {shopDetails.onboarding != 0 && (
                 <NavMenu>
-                    {(navigationLinks || []).map((x, i) => (
-                        <Link to={x.destination} rel={i === 0 ? "dashboard" : ''} key={i} >
-                            {x.label}
-                        </Link>
-                    ))}
+                    {(navigationLinks || []).map((x, i) => {
+                        return (
+                            <Link to={x.destination} rel={i === 0 ? "dashboard" : ''} key={i} >
+                                {x.label}
+                            </Link>
+                        )
+                    })}
                 </NavMenu>
             )}
-
             <Frame>
                 <Outlet />
-
-                {shopDetails?.shop.upgrade == "0" ? (
-                    <Modal open={shopDetails?.shop.upgrade == "0"}>
+                {shopDetails?.upgrade == "0" && (
+                    <Modal open={shopDetails?.upgrade == "0"}>
                         <TitleBar title={"Authorize our latest app update"}>
                             <button variant="primary" loading={isUpdateLoading && ''}
                                 onClick={() => onAuthorize()}>{'Authorize'}</button>
                         </TitleBar>
-                        <Box padding={'400'}>
-                            <Text as={"span"}>Hey there,</Text>
-                            <br />
-                            <Text as={"span"}>
-                                Our app has been updated to align with the most recent changes in Shopify. To maintain
-                                your access to our review services, please authorize us from the <b>"Admin
-                                    Account"</b> to continue using our services. Please <Link
-                                        onClick={() => window.Beacon('toggle')} removeUnderline>contact us</Link> if you face
-                                any difficulty.
-                            </Text>
-                        </Box>
+                        <Box padding={'400'}> <Text as={"span"}>Hey there,</Text><br /><Text as={"span"}> Our app has been updated to align with the most recent changes in Shopify. To maintain your access to our review services, please authorize us from the <b>"Admin Account"</b> to continue using our services. Please <Link onClick={() => window.Beacon('toggle')} removeUnderline>contact us</Link> if you face any difficulty.</Text></Box>
                     </Modal>
-                ) : ''}
-
-                {!isExcluded ? (
+                )}
+                {!isExcluded && (
                     <FooterHelp>
                         <div className="FooterHelp__Content">
                             if you need any help, please &nbsp;
@@ -133,11 +118,11 @@ const DefaultLayout = ({ isLoading, setIsLoading }) => {
                             </Link>
                         </div>
                     </FooterHelp>
-                ) : ""}
+                )}
             </Frame>
         </React.Fragment>
     );
 };
 
-
+    
 export default DefaultLayout;

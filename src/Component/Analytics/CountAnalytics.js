@@ -44,31 +44,27 @@ const CountAnalytics = ({analytics, currency}) => {
                                                     <Card key={j} padding={"500"}>
                                                         <BlockStack gap={"100"}>
                                                             <Text variant={"headingSm"} as={"span"}
-                                                                  tone={"subdued"} fontWeight={"medium"}>
-                                                                {y.title}
-                                                            </Text>
+                                                                  tone={"subdued"}
+                                                                  fontWeight={"medium"}> {y.title} </Text>
                                                             <Text variant={"headingLg"} as={"span"}
-                                                                  fontWeight={"medium"}>
-                                                                {y.value ? y.value : 0}
-                                                            </Text>
+                                                                  fontWeight={"medium"}> {y.value ? y.value : 0} </Text>
                                                         </BlockStack>
                                                     </Card>
                                                 </Grid.Cell>
                                             )
-                                        })}
+                                        })
+                                        }
+
                                         {(x.analytics2 || []).map((z, k) => {
                                             return (
                                                 <Grid.Cell columnSpan={{xs: 6, sm: 3, md: 2, lg: 4, xl: 4}}>
                                                     <Card key={k} padding={"500"}>
                                                         <BlockStack gap={"100"}>
                                                             <Text variant={"headingSm"} as={"span"}
-                                                                  tone={"subdued"} fontWeight={"medium"}>
-                                                                {z.title}
-                                                            </Text>
+                                                                  tone={"subdued"}
+                                                                  fontWeight={"medium"}> {z.title} </Text>
                                                             <Text variant={"headingLg"} as={"span"}
-                                                                  fontWeight={"medium"}>
-                                                                {z.value ? z.value : 0}
-                                                            </Text>
+                                                                  fontWeight={"medium"}> {z.value ? z.value : 0} </Text>
                                                         </BlockStack>
                                                     </Card>
                                                 </Grid.Cell>

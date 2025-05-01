@@ -1,4 +1,4 @@
-import {Facebook, Instagram, LinkedIn, Pinterest, Telegram, Twitter} from "./AppImages";
+import { Facebook, Instagram, LinkedIn, Pinterest, Telegram, Twitter } from "./AppImages";
 import React from "react";
 import ApiService from "./ApiService";
 
@@ -14,12 +14,12 @@ export const openUrlInNewWindow = (url, target = "_blank") => {
     return url ? window.open(url, target) : console.error("URL is missing.");
 };
 
-export const facebookImage = (<img src={Facebook} width={12} alt={"facebook"}/>);
-export const instagramImage = (<img src={Instagram} width={12} alt={"instagram"}/>);
-export const twitterImage = (<img src={Twitter} width={12} alt={"twitter"}/>);
-export const telegramImage = (<img src={Telegram} width={12} alt={"telegram"}/>);
-export const linkedInImage = (<img src={LinkedIn} width={12} alt={"linkedIn"}/>);
-export const pinterestImage = (<img src={Pinterest} width={12} alt={"pinterest"}/>);
+export const facebookImage = (<img src={Facebook} width={12} alt={"facebook"} />);
+export const instagramImage = (<img src={Instagram} width={12} alt={"instagram"} />);
+export const twitterImage = (<img src={Twitter} width={12} alt={"twitter"} />);
+export const telegramImage = (<img src={Telegram} width={12} alt={"telegram"} />);
+export const linkedInImage = (<img src={LinkedIn} width={12} alt={"linkedIn"} />);
+export const pinterestImage = (<img src={Pinterest} width={12} alt={"pinterest"} />);
 
 export const validateForm = (formState, setError, formValidate) => {
     let validationErrors = {};
@@ -76,7 +76,7 @@ export const toggleFlag = (value, negate = false) => {
     return normalizedValue ? '0' : '1';
 };
 
-export const LabelWrapper = ({label}) => {
+export const LabelWrapper = ({ label }) => {
     return (
         <div className="Polaris-Labelled__LabelWrapper">
             <div className="Polaris-Label">
@@ -696,9 +696,9 @@ export const thankYouMessageTemplateJson = {
 };
 
 export const upgradePayload = {
-    new_wishlist_template : 1,
-    new_price_drop_template : 1,
-    new_restock_template : 1,
-    new_bis_template : 1,
-    new_thankyou_template : 1,
+    new_wishlist_template: 1,
+    new_price_drop_template: 1,
+    new_restock_template: 1,
+    new_bis_template: 1,
+    new_thankyou_template: 1,
 }
