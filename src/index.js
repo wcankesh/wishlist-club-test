@@ -5,13 +5,20 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {Provider} from 'react-redux';
 import store from "./store";
+import {PolarisProvider} from "./Component/Comman/PolarisProvider";
+import {BrowserRouter} from "react-router-dom";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-      <Provider store={store}>
-          <App/>
-      </Provider>
+      <PolarisProvider>
+          <Provider store={store}>
+              <BrowserRouter>
+                  <App/>
+              </BrowserRouter>
+          </Provider>
+      </PolarisProvider>
+
   </React.StrictMode>
 );
 

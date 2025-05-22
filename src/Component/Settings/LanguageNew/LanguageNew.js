@@ -46,7 +46,7 @@ const initialState = {
     success_message_bg_color: "#04AA6D",
     success_message_text_color: "#FFFFFF",
     error_message_bg_color: "#f00000",
-    error_message_text_color: "#FFFFFF\t",
+    error_message_text_color: "#FFFFFF",
 };
 const LanguageNew = forwardRef(({ setIsLoading }, ref) => {
     const navigate = useNavigate();

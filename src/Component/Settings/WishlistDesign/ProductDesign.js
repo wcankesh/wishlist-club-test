@@ -28,10 +28,7 @@ import { StarIcon } from '@shopify/polaris-icons';
 
 const ProductDesign = ({ wishlistSetting, setWishlistSetting, updateIcon, file, setFile, isSVGLoading, deleteIcon }) => {
     const [selected, setSelected] = useState(0);
-    const options = [
-        { label: 'Grid', value: '0' },
-        { label: 'List', value: '1' },
-    ];
+
     const btn_options = [
         { label: 'Left', value: '1' },
         { label: 'Right', value: '2' },
@@ -413,30 +410,7 @@ const ProductDesign = ({ wishlistSetting, setWishlistSetting, updateIcon, file, 
                                     </Box>
                                 </Fragment>
                             }
-                            {selected === 0 &&
-                                <Fragment>
-                                    <Divider />
-                                    <Box padding={"400"} >
-                                        <BlockStack gap={"400"}>
-                                            <Text as={"span"} variant={"headingMd"} fontWeight={"medium"}>Wishlist page layout</Text>
-                                            <FormLayout>
-                                                <Select
-                                                    options={options}
-                                                    value={wishlistSetting.layout_type.toString()}
-                                                    onChange={(value) => {
-                                                        handleChange({
-                                                            target: {
-                                                                name: "layout_type",
-                                                                value
-                                                            }
-                                                        })
-                                                    }}
-                                                />
-                                            </FormLayout>
-                                        </BlockStack>
-                                    </Box>
-                                </Fragment>
-                            }
+
                         </Card>
                     </Grid.Cell >
                     <Grid.Cell columnSpan={{ xs: 6, sm: 6, md: 6, lg: 8 }}>

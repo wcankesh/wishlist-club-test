@@ -10,6 +10,7 @@ import ProductDesign from "./ProductDesign";
 import CustomErrorBanner from "../../Comman/CustomErrorBanner";
 import GeneralNew from "../GeneralNew/GeneralNew";
 import LanguageNew from "../LanguageNew/LanguageNew";
+import WishlistPage from "./WishlistPage";
 const initialState = {
     button_type: "3",
     total_count: "1",
@@ -43,7 +44,10 @@ const initialState = {
     product_collection_button_text_after: "Add to Wishlist 2",
     product_collection_button_bg_color_after: "#e0b8c8",
     product_collection_button_border_color_after: "#ffffff",
-    icon: ""
+    icon: "",
+    grid_per_row: "4",
+    show_variant: 0,
+    variant_type: 'default'
 }
 const WishlistDesign = () => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -160,16 +164,22 @@ const WishlistDesign = () => {
             link: "admin/wishlist-design?step=1"
         },
         {
+            id: 'accepts-marketing-2',
+            content: 'Wishlist Page',
+            panelID: 'accepts-marketing-content-2',
+            link: "admin/wishlist-design?step=2"
+        },
+        {
             id: 'accepts-setting-1',
             content: 'General Settings',
             panelID: 'accepts-setting-content-1',
-            link: "admin/wishlist-design?step=2"
+            link: "admin/wishlist-design?step=3"
         },
         {
             id: 'accepts-Language-1',
             content: 'Language',
             panelID: 'accepts-Language-content-1',
-            link: "admin/wishlist-design?step=3"
+            link: "admin/wishlist-design?step=4"
         },
     ];
 
@@ -201,9 +211,14 @@ const WishlistDesign = () => {
                 );
             case 2:
                 return (
-                    <GeneralNew />
+                   <WishlistPage  wishlistSetting={wishlistSetting}
+                                  setWishlistSetting={setWishlistSetting}/>
                 );
             case 3:
+                return (
+                    <GeneralNew />
+                );
+            case 4:
                 return (
                     <LanguageNew ref={childRef} isLoading={isLoading} setIsLoading={setIsLoading} />
                 );
@@ -221,7 +236,7 @@ const WishlistDesign = () => {
         [],
     );
     const onSave = () => {
-        if (Number(urlStep) === 3) {
+        if (Number(urlStep) === 4) {
             handleButtonClick()
         } else {
             updateLauncher();
@@ -233,7 +248,7 @@ const WishlistDesign = () => {
             <Page
                 title="Wishlist Design"
                 primaryAction={
-                    selected !== 2
+                    selected !== 3
                         ? { content: "Save", onAction: onSave, loading: isLoading }
                         : undefined
                 }
@@ -250,10 +265,10 @@ const WishlistDesign = () => {
                     </Layout.Section>
                     {renderTabContent()}
                 </Layout>
-                {selected !== 2 && <PageActions
+                {selected !== 3 && <PageActions
                     primaryAction={{
                         content: 'Save',
-                        onAction: updateLauncher,
+                        onAction: onSave,
                         loading: isLoading
                     }}
                 />}
